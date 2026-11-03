@@ -5,11 +5,13 @@
   "scripts": {
     "start": "node tools/serve.js",
     "lan": "node tools/serve.js --lan",
-    "test": "node tools/test-lose.js && node tools/test-boosters.js && node tools/test-mechanics.js && node tools/check.js",
+    "test": "node tools/test-lose.js && node tools/test-boosters.js && node tools/test-mechanics.js && node tools/test-doc-examples.js && node tools/check.js",
     "check": "node tools/check.js",
     "export": "node tools/export-levels.js data/levels.json",
     "analyze": "node tools/analyze.js",
     "gen": "node tools/run-jobs.js",
-    "compare-bfs": "node tools/bfs-compare.js"
+    "compare-bfs": "node tools/bfs-compare.js",
+    "difficulty": "node tools/difficulty.js",
+    "order": "node tools/order.js"
   }
 }

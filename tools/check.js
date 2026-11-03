@@ -4,7 +4,7 @@
 // - lúc đầu không có sẵn dãy 3, chưa thua, chưa thắng
 // - không hai level nào trùng khung (kể cả xoay/lật)
 // - các bước hướng dẫn đi được, không dẫn tới thua; đi trọn thì phải thắng đúng số nước tối ưu
-// - tip là một câu chữ; chương phủ kín danh sách level, không chồng nhau
+// - tip là một câu chữ; các khối level phủ kín danh sách, không chồng nhau
 // - data/levels.json (dữ liệu cho Unity) khớp với level trong game
 const fs = require('fs');
 const { LEVELS_JSON, loadLogic, loadChapters, exportLevels, asDef, canon } = require('./lib');
@@ -47,11 +47,11 @@ LEVELS.forEach((raw, n) => {
 const CHAPTERS = loadChapters(ctx);
 let at = 0;
 for (const ch of CHAPTERS) {
-  if (ch.from !== at) fail(`chương "${ch.name}" bắt đầu ở level ${ch.from + 1}, đáng ra là ${at + 1}`);
-  if (ch.to < ch.from) fail(`chương "${ch.name}" rỗng`);
+  if (ch.from !== at) fail(`khối "${ch.name}" bắt đầu ở level ${ch.from + 1}, đáng ra là ${at + 1}`);
+  if (ch.to < ch.from) fail(`khối "${ch.name}" rỗng`);
   at = ch.to + 1;
 }
-if (at !== LEVELS.length) fail(`các chương kết thúc ở level ${at}, nhưng có ${LEVELS.length} level`);
+if (at !== LEVELS.length) fail(`các khối kết thúc ở level ${at}, nhưng có ${LEVELS.length} level`);
 
 // Dữ liệu cho Unity phải khớp với game: sửa level xong mà quên xuất lại thì báo
 let saved = null;
@@ -62,4 +62,4 @@ else if (JSON.stringify(JSON.parse(saved)) !== JSON.stringify(exportLevels(ctx))
 
 for (const n of notes) console.log('lưu ý:', n);
 if (errors.length) { for (const e of errors) console.log('LỖI:', e); process.exit(1); }
-console.log(`check: ${LEVELS.length} level, ${frames.size} khung khác nhau, ${CHAPTERS.length} chương, tất cả đều ổn`);
+console.log(`check: ${LEVELS.length} level, ${frames.size} khung khác nhau, ${CHAPTERS.length} khối, tất cả đều ổn`);

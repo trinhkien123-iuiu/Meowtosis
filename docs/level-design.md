@@ -2,7 +2,7 @@
 
 Tài liệu này ghi lại **cách làm level** cho Meowtosis: nguyên tắc, chỉ số đo, công cụ, từng bước, và những điều đã học được (kể cả các lần sai). Mục đích: người sau (hoặc chính mình sau vài tháng) làm thêm level mà không phải dò lại từ đầu, và khi chuyển sang Unity thì giữ nguyên được cách làm.
 
-Tài liệu liên quan: [unity-handoff.md](unity-handoff.md) (prototype có gì, chuyển sang Unity thế nào).
+Tài liệu liên quan: [mechanics.md](mechanics.md) (luật chuẩn của từng cơ chế), [unity-handoff.md](unity-handoff.md) (prototype có gì, chuyển sang Unity thế nào).
 
 ---
 
@@ -35,17 +35,27 @@ Tài liệu liên quan: [unity-handoff.md](unity-handoff.md) (prototype có gì,
 
 ## 3. Đường cong độ khó
 
-Trong mỗi chương, độ khó đi theo hình **răng cưa**: tăng dần, rồi thả một level dễ trên bàn lớn hơn (cho người chơi thở và làm quen kích thước mới), rồi lại tăng, cuối chương là một level "trùm".
+Level chia thành **7 khối theo cơ chế** (mảng `CHAPTERS`): cơ bản, hộp, màng + độc, ngủ + virus, vi khuẩn, trộn mọi cơ chế, nhiều màu. Bản đồ không hiện khối, chỉ một đường liền; level có yếu tố mới mang huy hiệu ở góc phải dưới (👆 hướng dẫn, 💡 mẹo, icon cơ chế, 🩷 / 💜 màu mới).
+
+Trong mỗi khối, level được **xếp từ dễ đến khó, xen kẽ cơ chế** (từ đợt 4, bằng `tools/order.js`):
+
+1. Khối chia thành **giai đoạn** theo cơ chế, ví dụ khối 3: màng → độc → màng + độc.
+2. Mỗi giai đoạn mở bằng level **nhập môn**: level có `tut`, hoặc mẹo "… màu cùng lúc".
+3. Sau đó luôn lấy level **dễ nhất** đang chơi được (cơ chế của nó đã mở).
+4. Chỉ sang cơ chế kế khi đã **luyện ít nhất 3 level**, và level dễ nhất còn lại khó hơn hẳn bài nhập môn kế tiếp (hơn 8 điểm). Level khó còn sót lại của cơ chế cũ sẽ thành **bài ôn trộn cơ chế** ở phía sau.
+5. Giai đoạn trộn (không có nhập môn riêng) mở sớm, nên cuối khối là các level khó nhất.
 
 ```text
-khó │                     ▲ trùm
-    │          ▲ bất ngờ  │
-    │     ▲    │     ▲    │
-    │  ▲  │  ▼ mở rộng    │
-    │▲ │  │  (bàn lớn, dễ)│
-    └┴─┴──┴──┴─────┴──────┴──▶ level trong chương
-     dạy luyện
+khó │                          ▲ trùm
+    │              ▲  ôn trộn  │
+    │         ▲    │  ▲   ▲    │
+    │    ▲    │  ▼ nhập môn kế │
+    │▲  luyện │   (dễ)         │
+    └┴────────┴───┴────────────┴──▶ level trong khối
+     nhập môn
 ```
+
+Độ khó dùng để xếp là **độ khó theo quyết định** (mục 4): bao nhiêu nước phải chọn đúng giữa nhiều nước đi được, có bao nhiêu nước dẫn vào ngõ cụt.
 
 | Nhịp | Level trông thế nào | Ví dụ |
 |---|---|---|
@@ -70,7 +80,10 @@ Công cụ (`tools/analyze.js`, `tools/gen.js`) tính các chỉ số dưới đ
 | `cụt` | Tỷ lệ trạng thái không còn đường thắng (chỉ tính được khi duyệt hết) | Level "bẫy" |
 | `thắng / thua` | Tỷ lệ khi bấm ngẫu nhiên 300 ván | Chỉ phân biệt được level nhỏ |
 | `mẹo` (`tricks`) | Số loại mẹo trong lời giải: thay thế, khử 3, ô độc, đánh thức dây chuyền, virus ăn mèo, diệt virus, khử 3 vi khuẩn | Yếu tố bất ngờ |
-| `khó` | `par×0.6 + (1−thắng)×3 + cụt×3 + (tỷ lệ nước đầu không tối ưu)×2` | Sắp thứ tự trong chương |
+| `bitsOpt` | Đi dọc lời giải tối ưu, mỗi bước cộng log2(số nước đi được / số nước vẫn tối ưu) (`lib.decisionBits`) | Phải nghĩ bao nhiêu để giữ 3 sao |
+| `bitsWin` | Như trên nhưng với số nước còn thắng được | Rủi ro sa vào ngõ cụt. Bàn lớn thường ra gần 0 vì bộ giải không kịp chứng minh ngõ cụt trong 800 ms |
+| **điểm xếp** | `bitsOpt + 2×bitsWin + 0,3×par` (`tools/order.js`) | **Xếp level từ dễ đến khó** trong khối (từ đợt 4) |
+| `khó` | `par×0.6 + (1−thắng)×3 + cụt×3 + (tỷ lệ nước đầu không tối ưu)×2` | Chỉ số cũ của bộ sinh; ít phân biệt được bàn lớn |
 | `bất ngờ` | `bẫy×3 + (tỷ lệ nước đầu không tối ưu)×2 + mẹo + min(thừa,3)×0.5` | Chọn level có "aha" |
 | sự kiện | `push` đẩy, `longPush` đẩy dãy ≥2, `replace` thay thế, `clear` khử 3, `toxic` vào ô độc, `wake` đánh thức, `chainWake` thức dây chuyền (≥2 con trong một nước), `wakeUse` vuốt một con lúc đầu đang ngủ (đánh thức là cần thiết), `spread` virus lan, `eaten` virus ăn mèo, `virusDie` diệt virus, `germDie` diệt khuẩn, `germClear` khử 3 vi khuẩn | Biết cơ chế có thật sự cần không |
 
@@ -92,6 +105,8 @@ Mọi công cụ đọc luật **thẳng từ khối `// ==LOGIC==` của game**
 | `bfs-compare.js` | So bộ giải A* của game với BFS gốc (cùng số nước tối ưu) |
 | `export-levels.js` | Xuất level + chương + `par` + lời giải ra `data/levels.json` (`npm run export`) |
 | `serve.js` | Máy chủ chơi thử (`npm start`, `npm run lan`, thêm `--port=` để đổi cổng) |
+| `difficulty.js` | Đo độ khó theo quyết định của mọi level, song song, nhớ kết quả trong `jobs/difficulty.json` (`npm run difficulty`; chỉ đo level mới hoặc vừa sửa) |
+| `order.js` | Sắp level từ dễ đến khó trong từng khối (mục 3). `npm run order` chỉ in đề xuất; `node tools/order.js --write` ghi vào game và lưu bảng cũ → mới ở `jobs/order-mapping.json` |
 | `test-lose.js`, `test-boosters.js`, `test-mechanics.js` | Test luật: thua khi tuyệt chủng, booster, các cơ chế |
 | `jobs/*.json` | Các job đã dùng (giữ lại để sinh lại hoặc làm tiếp); `jobs/picks*.json` là ứng viên đã đo lại khi máy rảnh |
 | `jobs/out/` | Kết quả từng lần chạy: `<job>.txt` (đọc được) và `<job>.json`; `jobs/run*.log` là log tương ứng |
@@ -126,9 +141,10 @@ Mọi công cụ đọc luật **thẳng từ khối `// ==LOGIC==` của game**
 4. **Sinh:** `npm run gen -- tools/jobs/<tên>.json` → `tools/jobs/out/<tên>.txt` (dễ đọc) và `.json`. Đọc dòng "bị loại" để chỉnh job nếu ra ít ứng viên (ví dụ toàn "quá dài" thì thêm mèo).
 5. **Chọn tay:** trong mỗi job, chọn ứng viên theo: đúng nhịp cần, `bất ngờ` cao (với level bất ngờ) hoặc `thừa = 0` và nước đầu dễ (với level mở rộng), khung đẹp/dễ nhìn trên điện thoại (rộng ≤ 5 cột).
 6. **Tự chơi thử** từng level đã chọn trong trình duyệt; nếu cảm giác sai thì bỏ, đừng tin chỉ số tuyệt đối.
-7. **Chèn vào `LEVELS`** đúng chỗ trong chương, viết chú thích một dòng (hình khung · nhịp · mẹo). Thêm `tut` hoặc `tip` nếu là yếu tố mới. Sửa `CHAPTERS`.
-8. **Xuất và kiểm tra:** `npm run export` (ghi `data/levels.json` cho Unity) rồi `npm test` (ba file test luật + `check.js`). Tất cả phải qua.
-9. **Ghi nhật ký** vào mục 8 của tài liệu này: đợt nào, thêm gì, vì sao.
+7. **Chèn vào `LEVELS`** vào đúng khối (vị trí trong khối không quan trọng), viết chú thích một dòng (hình khung · cơ chế · mẹo). Thêm `tut` hoặc `tip` nếu là yếu tố mới. Sửa `from`/`to` của `CHAPTERS`.
+8. **Xếp lại:** `npm run difficulty`, rồi `npm run order` để xem đề xuất, rồi `node tools/order.js --write`. Mẹo "lần đầu gặp màu" và "bàn đông mèo" tự chuyển sang đúng level gặp đầu tiên; mẹo khác phải tự xem lại lời có còn đúng không.
+9. **Xuất và kiểm tra:** `npm run export` (ghi `data/levels.json` cho Unity) rồi `npm test`. Tất cả phải qua. Xem khung các level mới trên trình duyệt.
+10. **Ghi nhật ký** vào mục 8 của tài liệu này: đợt nào, thêm gì, vì sao.
 
 ---
 
@@ -147,6 +163,7 @@ Mọi công cụ đọc luật **thẳng từ khối `// ==LOGIC==` của game**
 | Mở rộng lên bàn 4×4–5×6: BFS chạm trần 80.000 trạng thái | Đổi bộ giải sang **A\***: mỗi nước sinh đúng một mèo nên "số mèo còn thiếu" là ước lượng không vượt quá thực tế → vẫn ra số nước tối ưu; level 21 từ 817 ms xuống 6 ms. Đã so khớp với BFS trên cả 36 level cũ (`bfs-compare.js`) |
 | Bàn lớn ít mèo: hàng chục nước, không gian nổ | Bàn lớn phải nhiều mèo đặt sẵn (nguyên tắc 8) |
 | Hộp mục tiêu trên bàn lớn: BFS tìm "trạng thái kín ổ" không đủ sâu | Lấy trạng thái kín ổ bằng các ván chơi ngẫu nhiên, ưu tiên đặt hộp ở ô lúc đầu trống hoặc khác màu |
+| Khung level 16, 26, 27, 28, 37, 57, 58 vẽ méo (đường chéo, mất viền) | Hàm vẽ viền chỉ giữ một cạnh đi ra ở mỗi đỉnh; chỗ hai lỗ (hoặc lỗ và phần ngoài) chạm nhau ở một góc có hai cạnh nên bị ghi đè. Đã sửa: giữ mọi cạnh, ở góc chạm chéo luôn rẽ trái. **Mỗi đợt level mới phải xem khung trên trình duyệt**, máy kiểm tra không thấy lỗi hình |
 
 ---
 
@@ -162,6 +179,8 @@ Mọi công cụ đọc luật **thẳng từ khối `// ==LOGIC==` của game**
 - Mốc: bàn lớn nhất 4×4 (14 ô), nhiều nhất 3 mèo đặt sẵn, `par` 1–11.
 
 ### Đợt 2 — mở rộng lên 61 level, 6 chương (2026-11-03)
+
+> Số level trong đợt này là số thứ tự **lúc đó**; đợt 4 đã xếp lại, xem bảng đối chiếu ở đợt 4.
 
 **Yêu cầu:** thêm level với nhiều mèo hơn, bàn rộng hơn, vẫn có yếu tố bất ngờ, đi từ dễ đến khó để người chơi quen dần với yếu tố mới.
 
@@ -233,3 +252,83 @@ Mỗi chương: level nhỏ để dạy và luyện, rồi thả xuống một b
 - Hai bản cũ trong `prototype/archive/` dùng khoá lưu riêng để không ghi đè tiến độ game chính.
 - Thêm `package.json` (`npm start/test/export`), `data/levels.json` cho Unity; `check.js` báo lỗi khi file này cũ hơn game.
 - Ban đầu chặn Shikacat và mp3 Mixkit trong `.gitignore` vì repo GitHub đang công khai; cùng ngày, theo ý chủ repo (repo cá nhân, phi thương mại), bỏ chặn để lưu đủ asset trong git. Repo cần chuyển sang riêng tư trước khi đẩy lên.
+
+### Đợt 3 — sửa khung, mèo hồng và tím, chương 7 (2026-11-03)
+
+> Số level trong đợt này là số thứ tự **lúc đó**; đợt 4 đã xếp lại, xem bảng đối chiếu ở đợt 4.
+
+**Yêu cầu:** sửa các bàn bị méo khung; thêm mèo màu khác ở các màn sau; viết luật chuẩn của mọi cơ chế.
+
+**Làm gì:**
+1. **Sửa khung méo** ở level 16, 26, 27, 28, 37, 57, 58 (xem bài học ở mục 7). Đã xem lại cả 7 bàn trên trình duyệt.
+2. **Màu mới:** bản export Shikacat có 12 màu mèo, mỗi màu có mèo, mèo lúc thắng và hộp; đã chép cả 12 vào `prototype/shikacat/cats`. Dùng thêm `D` hồng và `E` tím. Hai màu này khác hẳn đỏ, xanh, vàng và không lẫn với vi khuẩn hay ô độc. Hình tự vẽ khi thiếu ảnh: hồng là trái tim, tím là lục giác. Tiếng mèo: hồng cao hơn (×1,26), tím trầm hơn (×0,78). Bảng chọn màu của Đột biến xếp lưới 2 cột khi có hơn 2 màu.
+3. **Chương 7 "Đủ sắc màu"** (level 62–69, lúc đầu tên "Bạn mới"), sinh bằng `tools/jobs/colors-c7.json`:
+
+| Level | Khung | Mèo | `par` | Nhịp | Điểm nhấn |
+|---|---|---|---|---|---|
+| 62 | 4×3 | 7 | 4 | dạy | Lần đầu 4 màu cùng lúc, chỉ 1 bé hồng; có `tip` |
+| 63 | 4×4 | 10 | 6 | bất ngờ | 4 màu, phải thay thế |
+| 64 | 4×5 | 11 | 7 | luyện | 4 màu + 3 hộp (có hộp hồng) |
+| 65 | 4×5 | 10 | 10 | bất ngờ | 4 màu + mèo ngủ hồng + virus; chỉ 1/22 nước đầu tối ưu |
+| 66 | 4×4 | 9 | 5 | dạy | Lần đầu 5 màu cùng lúc, chỉ 1 bé tím; có `tip` |
+| 67 | 5×5 | 12 | 7 | tổng hợp | 5 màu + màng + ô độc |
+| 68 | 5×5 | 11 | 10 | tổng hợp | 5 màu + vi khuẩn + virus |
+| 69 | 5×6 | 15 | 12 | trùm cuối | 5 màu, đủ cơ chế; phải dùng mèo vừa thức, virus ăn 3 con trên đường giải |
+
+4. **Luật chuẩn:** viết [mechanics.md](mechanics.md). Mọi ví dụ trong đó được kiểm bằng `tools/test-doc-examples.js` (nằm trong `npm test`). Thẻ hướng dẫn virus trong game thêm câu "virus mới sinh cũng lan, diệt từ đuôi lên".
+
+**Những gì học được trong đợt này:**
+- Viết ví dụ luật thì phải chạy thử: 2 trong 3 ví dụ đầu tiên viết sai vì quên rằng khử 3 chạy trước đánh thức. Đó cũng là một luật hay bị hỏi, nên đã thành ví dụ N5.
+- Nhiều màu hơn thì mỗi màu ít con hơn: level nhập môn màu mới nên chỉ có 1 bé màu đó để người chơi thấy ngay luật tuyệt chủng.
+- Với 4–5 màu, các job đòi `twist` cho bàn 4×4 bị loại nhiều vì "không có mẹo": nhiều màu thì ít khi buộc phải thay thế hay khử. Cần chạy nhiều seed hơn.
+5. **Rải màu mới sang các chương khác:** đổi trọn một màu ở 13 level không có hướng dẫn: 19, 26 (chương 2); 31, 35, 37 (chương 3); 40, 42, 47 (chương 4); 50, 53 (chương 5); 57, 58, 59 (chương 6). Hồng đi với xanh và vàng (đổi đỏ → hồng), tím đi với đỏ và vàng (đổi xanh → tím); level 57 đổi cả hai. Không dùng tím ở level có virus. Mèo hồng gặp lần đầu ở level 19, mèo tím ở level 31, cả hai có `tip`. Chương 7 đổi tên thành "Đủ sắc màu", mẹo ở 62 và 66 nói về "lần đầu 4 / 5 màu cùng lúc". Đã so trước/sau: đúng 13 level đổi, `par` và lời giải giữ nguyên; chơi thử cả 13 trên giao diện.
+
+**Thêm bài học:**
+- **Đổi trọn một màu là cách an toàn để tăng đa dạng hình ảnh:** lời giải giữ nguyên, không cần sinh lại. Muốn tăng độ khó thì phải thêm màu (như chương 7), không phải đổi màu.
+- Không đổi màu ở level có `tut`, vì lời thoại hướng dẫn gọi tên màu ("vuốt mèo xanh...").
+- Đổi màu làm mất sao đã đạt ở level đó, vì prototype lưu tiến độ theo nội dung level (bản Unity cần `id` cố định).
+- Tìm dòng level trong file bằng chuỗi con dễ khớp nhầm: `'AB#', '#.#'` của level 50 khớp cả dòng level 30. Đã phát hiện nhờ so trước/sau và sửa lại; lần sau nên tìm theo cả mảng `rows` đầy đủ.
+
+### Đợt 4 — bỏ chia chương trên bản đồ, xếp lại từ dễ đến khó (2026-11-03)
+
+**Yêu cầu:** bỏ việc chia chương trên bản đồ, đánh dấu yếu tố mới bằng huy hiệu góc phải dưới để dễ test; xếp level từ dễ đến khó nhưng vẫn giữ khối theo cơ chế, chơi đủ lâu một cơ chế rồi mới sang cơ chế mới, rồi trộn.
+
+**Làm gì:**
+1. **Bản đồ:** một đường liền 69 nút, không còn khung chương. Huy hiệu góc phải dưới: icon cơ chế ở level đầu tiên của nó, 🩷 / 💜 lần đầu gặp mèo hồng / tím, 👆 level có hướng dẫn, 💡 level có mẹo. Thẻ chi tiết level ghi rõ yếu tố mới thay cho tên chương. `CHAPTERS` vẫn giữ, giờ là **khối** dùng để xếp level và xuất dữ liệu.
+2. **Thước đo độ khó mới** (`lib.decisionBits`, `tools/difficulty.js`): đếm số bit quyết định dọc lời giải (mục 4). Đo cả 69 level song song mất vài phút.
+3. **Xếp lại** bằng `tools/order.js` (mục 3): nhập môn → luyện ít nhất 3 level → cơ chế kế → trộn, trong mỗi khối từ dễ đến khó. Chạy lại lần hai không đổi gì (thứ tự đã ổn định).
+4. Sửa mẹo bàn 5×5: "lớn nhất" thành "đông mèo nhất", vì giờ trước nó đã có các bàn 5×5 khác.
+
+**Bảng đối chiếu số cũ → mới** (level không có trong bảng giữ nguyên số): 5→8, 6→5, 8→9, 9→12, 11→14, 12→11, 13→6, 14→13, 18→19, 19→18, 20→21, 21→25, 22→24, 24→28, 25→26, 26→20, 27→22, 28→27, 34→37, 35→34, 37→35, 40→41, 41→40, 42→46, 43→42, 44→43, 46→44, 47→48, 48→47, 53→54, 54→53, 55→57, 56→59, 57→55, 58→56, 59→58, 63→64, 64→63.
+
+**Thứ tự mới, theo khối** (`*` = nhập môn, `|` = mở cơ chế kế):
+
+```text
+1 Cơ bản       1* 2* 3 | 4* 5 6 7 8 9 10 11 | 12* 13 14 15 16
+2 Hộp          17* 18 19 … 28
+3 Màng + độc   29* 30 31 32 | 33* 34 | 35 36 (trộn) 37 (độc, khó nhất)
+4 Ngủ + virus  38* 39 40 41 | 42* 43 44 45 | 46 (ôn ngủ) 47 (trộn) 48 (virus, khó nhất)
+5 Vi khuẩn     49* 50 51 | 52 53 (trộn) 54 (khó nhất)
+6 Trộn         55 … 61
+7 Nhiều màu    62* 63 64 65 | 66* 67 68 69
+```
+
+**Những gì học được:**
+- Xếp thuần theo giai đoạn thì cứng: một level "chỉ cần đẩy" nhưng dài 10 nước bị kéo lên vị trí 4. Xếp thuần theo độ khó thì mất nhịp dạy. Cách xen kẽ (mục 3) giữ được cả hai.
+- `bitsWin` gần như bằng 0 ở bàn lớn vì bộ giải không kịp chứng minh ngõ cụt; tạm dựa vào `bitsOpt`. Muốn chính xác hơn thì tăng thời gian giải trong `difficulty.js` (chạy lâu hơn).
+- Tiến độ lưu theo nội dung level nên xếp lại không làm mất sao.
+- Sau đó, theo yêu cầu: bàn đông mèo đầu tiên (level 6) chuyển xuống sau vuông 3×3, thành level 10 (level 7–10 cũ thành 6–9). Ghi ở `AFTER` trong `tools/order.js` nên chạy xếp lại vẫn giữ.
+- Viết script dài trong `node -e "..."` trên Git Bash thì backtick bị shell hiểu thành lệnh: viết ra file .js rồi chạy.
+
+### Đợt 5 — hiệu ứng mới, mèo ngủ "say như hòn đá" (2026-11-03)
+
+**Hiệu ứng:** đẩy (con mẹ chồm tới, dãy dồn rồi nảy), hồn mèo mắt @@ bay lên từ ô độc, mắt @@ và sao bay vòng khi bị đẩy khỏi hộp đúng màu, virus đớp mèo. Sửa vệt bóng sáng lòi ra ngoài của vi khuẩn và trái tim (mỗi hình một vị trí vệt sáng).
+
+**Đổi luật mèo ngủ:** trước đây mèo ngủ bị đẩy và bị bản sao đè lên như mèo thường, nên người chơi có thể xoá mèo ngủ mà không cần đánh thức. Đã thử hai phương án trên bản sao luật với 12 level có mèo ngủ: (1) chỉ cấm đè lên: không level nào đổi số nước; (2) cấm cả đẩy lẫn đè lên: chỉ một level tăng từ 9 lên 10 nước. Chủ dự án chọn **(2): mèo ngủ say như hòn đá**. Dãy đẩy chạm mèo ngủ thì dừng như gặp tường, nên bản sao thay con kề. Mèo ngủ vẫn chết vì khử 3, ô độc, virus. Thẻ hướng dẫn mèo ngủ có thêm ảnh minh hoạ; ví dụ N4, N6 trong `mechanics.md`.
+
+**Xếp lại** sau khi đo lại 12 level có mèo ngủ (độ khó đổi theo luật mới). Cũ → mới: 40→41, 41→46, 46→40, 58→59, 59→60, 60→58. Mẹo thức dây chuyền giờ ở level 41.
+
+**Bài học:**
+- Đổi luật thì phải đo lại độ khó của các level dính tới luật đó: `difficulty.json` nhớ theo nội dung level nên không tự biết luật đã đổi. Xoá các mục liên quan rồi chạy lại `npm run difficulty`.
+- Đặt tên lớp CSS cho hiệu ứng thì rà trùng tên trước: lớp `ghost` của hồn mèo từng trùng nút "Bản đồ" trên bảng thắng.
+

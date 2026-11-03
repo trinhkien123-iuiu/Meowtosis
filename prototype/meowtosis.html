@@ -119,6 +119,40 @@
   .body.sq-y { animation: sqy .3s ease-out; }
   @keyframes sqx { 35% { transform: scale(1.24, .8); } }
   @keyframes sqy { 35% { transform: scale(.8, 1.24); } }
+  /* Đẩy: con đẩy chồm tới, con bị đẩy dồn lại rồi nảy về. --px/--py lệch theo hướng đẩy, --sx/--sy co giãn,
+     --d trễ theo vị trí trong dãy (con xa nảy sau) */
+  .cell.shove .lean { animation: shove .32s ease-out; }
+  @keyframes shove { 40% { transform: translate(var(--px), var(--py)) scale(var(--sx), var(--sy)); } }
+  .cell.pushed .body { animation: bumped .42s ease-out var(--d, 0s) both; }
+  @keyframes bumped { 40% { transform: translate(var(--px), var(--py)) scale(var(--sx), var(--sy)); }
+    75% { transform: translate(calc(var(--px) * -.35), calc(var(--py) * -.35)); } }
+  /* Bị đẩy khỏi hộp đúng màu: lắc lư, mắt @@, sao bay vòng trên đầu */
+  .cell.dazed .lean { animation: wobble .42s ease-in-out 3; }
+  @keyframes wobble { 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+  .swirl { transform-box: fill-box; transform-origin: center; animation: spin .55s linear infinite; }
+  /* Sao chạy trên elip trên đầu: vòng ra trước thì to hơn, ra sau thì nhỏ lại */
+  .orbit-star { animation: orbit 1s linear infinite; }
+  @keyframes orbit { 0%, 100% { transform: translate(30px, 0); } 12.5% { transform: translate(21px, 6px) scale(1.1); }
+    25% { transform: translate(0, 9px) scale(1.2); } 37.5% { transform: translate(-21px, 6px) scale(1.1); } 50% { transform: translate(-30px, 0); }
+    62.5% { transform: translate(-21px, -6px) scale(.85); } 75% { transform: translate(0, -9px) scale(.72); } 87.5% { transform: translate(21px, -6px) scale(.85); } }
+  .dizzy-fx { animation: fade .35s ease-in 1.3s forwards; }
+  /* Virus ăn mèo: virus chồm tới, hai hàm răng tím đớp lại, mèo tím tái rồi bị nuốt mất */
+  .cell.lunge .lean { animation: lunge .34s ease-in-out; }
+  @keyframes lunge { 45% { transform: translate(var(--px), var(--py)) scale(1.2); } }
+  .cell.eaten .body { animation: eaten .44s ease-in forwards; }
+  @keyframes eaten { 30% { transform: scale(1.08) rotate(-9deg); filter: sepia(1) hue-rotate(225deg) saturate(2.6); }
+    55% { transform: scale(.85) rotate(9deg); filter: sepia(1) hue-rotate(225deg) saturate(2.6); }
+    to { transform: scale(.05) rotate(30deg); opacity: 0; filter: sepia(1) hue-rotate(225deg) saturate(2.6); } }
+  .jaw { transform-box: fill-box; }
+  .jaw.top { animation: jaw-top .46s cubic-bezier(.5, 0, .6, 1) forwards; }
+  .jaw.bot { animation: jaw-bot .46s cubic-bezier(.5, 0, .6, 1) forwards; }
+  @keyframes jaw-top { from { transform: translateY(-30px); opacity: 0; } 20% { opacity: 1; } 55% { transform: translateY(3px); } 70% { transform: none; opacity: 1; } to { opacity: 0; } }
+  @keyframes jaw-bot { from { transform: translateY(30px); opacity: 0; } 20% { opacity: 1; } 55% { transform: translateY(-3px); } 70% { transform: none; opacity: 1; } to { opacity: 0; } }
+  /* Mèo chết trên ô độc: hồn mèo trắng mờ có vầng hào quang bay lên, lắc nhẹ */
+  .soul-fx { transform-box: fill-box; transform-origin: center; animation: ghost-up 1.4s ease-out forwards; }
+  .soul-fx .soul { filter: brightness(2.3) saturate(0) drop-shadow(0 0 6px #fff); opacity: .72; }
+  @keyframes ghost-up { 0% { transform: translateY(8px) scale(.8); opacity: 0; } 15% { opacity: 1; } 45% { transform: translate(-7px, -38px) scale(.82); }
+    75% { transform: translate(6px, -64px) scale(.78); opacity: .8; } 100% { transform: translate(-2px, -88px) scale(.72); opacity: 0; } }
   .cell.pop .body { animation: burst .3s ease-in forwards; }
   @keyframes burst { 35% { transform: scale(1.32); opacity: 1; } to { transform: scale(.1); opacity: 0; } }
   .cell.nope .body { animation: nope .32s; }
@@ -139,8 +173,32 @@
   @keyframes wiggle { from { transform: rotate(-10deg); } to { transform: rotate(12deg); } }
   #layer.happy .jelly { animation: hop .45s ease-in-out 3; }
   @keyframes hop { 50% { transform: translateY(-14px) scale(1.06, .94); } }
-  #layer.sad .jelly { animation: none; transform: translateY(5px) scale(1.05, .9); }
-  #layer.sad .eyes { animation: none; transform: scaleY(.55); }
+  /* Thua: không bóp dẹt nữa; mặt bất lực (mắt nhắm cong, miệng mếu) và giọt mồ hôi chảy bên trán */
+  .cell.sorry .eyes, .cell.sorry .mouth, .cell.faceoff .eyes, .cell.faceoff .mouth { visibility: hidden; }   /* chỉ con đang có mặt vẽ đè */
+  .sweat { transform-box: fill-box; transform-origin: 50% 0; animation: sweat 1.7s ease-in infinite; }
+  @keyframes sweat { 0% { transform: translateY(-3px) scale(.5); opacity: 0; } 20% { transform: none; opacity: 1; }
+    75% { transform: translateY(6px) scale(1, 1.08); opacity: 1; } 100% { transform: translateY(9px); opacity: 0; } }
+  /* Mèo lúc rảnh (idle): mỗi động tác là một lớp trên ô, chạy trên .lean (gốc ở chân); mặt vẽ đè nằm trong .idlefx */
+  .cell.idle-look-l .lean { animation: look-l 1.7s ease-in-out; }
+  .cell.idle-look-r .lean { animation: look-r 1.7s ease-in-out; }
+  @keyframes look-l { 20%, 55% { transform: rotate(-9deg) translateX(-2px); } 75% { transform: rotate(3deg); } }
+  @keyframes look-r { 20%, 55% { transform: rotate(9deg) translateX(2px); } 75% { transform: rotate(-3deg); } }
+  .cell.idle-turn .lean { animation: turn 2.2s ease-in-out; }
+  @keyframes turn { 15%, 80% { transform: scaleX(-1); } }
+  .cell.idle-yawn .lean { animation: yawn 1.5s ease-in-out; }
+  @keyframes yawn { 30%, 70% { transform: scale(.95, 1.08) translateY(-2px); } }
+  .yawnmouth { transform-box: fill-box; transform-origin: center top; animation: yawnmouth 1.5s ease-in-out both; }
+  @keyframes yawnmouth { 0%, 100% { transform: scale(.2); } 30%, 70% { transform: none; } }
+  .cell.idle-stretch .lean { animation: stretch 1.1s ease-in-out; }
+  @keyframes stretch { 25% { transform: scale(.93, 1.1) translateY(-2px); } 55% { transform: scale(1.08, .92); } 78% { transform: scale(.98, 1.03); } }
+  .cell.idle-nuzzle .lean { animation: nuzzle 1.7s ease-in-out; }
+  @keyframes nuzzle { 25%, 75% { transform: translate(var(--px), var(--py)) rotate(var(--rot)); } }
+  .cell.idle-pet .lean { animation: pet .5s ease-out; }
+  @keyframes pet { 40% { transform: translateY(-9px) scale(1.04, .96); } 75% { transform: scale(1.06, .94); } }
+  .idlefx.blink { transform-box: fill-box; transform-origin: center; animation: lid .22s ease-in-out both; }
+  @keyframes lid { 0%, 100% { opacity: 0; transform: scaleY(.3); } 30%, 70% { opacity: 1; transform: none; } }
+  .heart-up { transform-box: fill-box; transform-origin: center; animation: heart-up 1.3s ease-out forwards; }
+  @keyframes heart-up { 0% { transform: translateY(4px) scale(.4); opacity: 0; } 25% { opacity: 1; transform: scale(1.1); } 100% { transform: translateY(-34px) scale(.9); opacity: 0; } }
 
   .bub { animation: rise 2.2s ease-in infinite; }
   @keyframes rise { 0% { transform: translateY(8px) scale(.5); opacity: 0; } 30% { opacity: .9; } 100% { transform: translateY(-24px) scale(1); opacity: 0; } }
@@ -260,21 +318,14 @@
   .meter { height: 14px; margin-top: 8px; border-radius: 99px; background: rgba(0,0,0,.3); overflow: hidden; box-shadow: inset 0 2px 3px rgba(0,0,0,.35); }
   .meter i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #ff7eb6, #ffc53d);
     box-shadow: inset 0 3px 0 rgba(255,255,255,.35); transition: width .8s cubic-bezier(.3, .7, .4, 1); }
-  .chapter .meter { height: 8px; margin: 6px 4px 0; }
   .playnext { height: 62px; border: 3px solid #fff; border-radius: 22px; font: inherit; font-size: 21px; font-weight: 800; line-height: 1.05; color: #5a2a00; cursor: pointer;
     background: linear-gradient(#fff3a6, #ffc53d); box-shadow: 0 5px 0 var(--gold-dark), 0 10px 22px rgba(0,0,0,.35); animation: breathe-btn 1.8s ease-in-out infinite; }
   .playnext small { display: block; font-size: 13.5px; font-weight: 700; opacity: .8; }
   .playnext:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--gold-dark); }
   @keyframes breathe-btn { 50% { transform: scale(1.025); } }
-  .chapter { padding: 14px 12px 6px; border-radius: 24px; background: rgba(255,255,255,.07); border: 2px solid rgba(255,255,255,.1); }
-  .chapter.locked { opacity: .5; }
-  .chhead { display: flex; align-items: center; gap: 10px; }
-  .chhead .ic { flex: none; width: 46px; height: 46px; border-radius: 15px; display: grid; place-items: center; font-size: 25px; background: rgba(0,0,0,.24); }
-  .chhead h3 { margin: 0; font-size: 18px; line-height: 1.15; }
-  .chhead small { display: block; color: var(--muted); font-size: 12.5px; font-weight: 600; }
-  .chhead .prog { margin-left: auto; text-align: right; font-size: 15px; font-weight: 800; line-height: 1.2; white-space: nowrap; }
-  .chhead .prog small { color: #ffe27a; font-size: 13px; font-weight: 800; }
-  .path { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 22px; }
+  .chapter { padding: 6px 12px 6px; border-radius: 24px; background: rgba(255,255,255,.07); border: 2px solid rgba(255,255,255,.1); }
+  .tag[hidden] { display: none; }
+  .path { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 8px; }
   .path svg.roads { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
   .road { fill: none; stroke: rgba(0,0,0,.25); stroke-width: 16; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
   .road.walked { stroke: #ffc53d; stroke-width: 6; stroke-dasharray: 1 13; }
@@ -325,6 +376,8 @@
   <radialGradient id="g-A" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffc4cc"/><stop offset=".45" stop-color="#ff5d73"/><stop offset="1" stop-color="#cf3350"/></radialGradient>
   <radialGradient id="g-B" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#cfe0ff"/><stop offset=".45" stop-color="#4f8dff"/><stop offset="1" stop-color="#2b5ccc"/></radialGradient>
   <radialGradient id="g-C" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff8c4"/><stop offset=".45" stop-color="#ffd23f"/><stop offset="1" stop-color="#e2a400"/></radialGradient>
+  <radialGradient id="g-D" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffd6f3"/><stop offset=".45" stop-color="#ff7ad9"/><stop offset="1" stop-color="#d23fa8"/></radialGradient>
+  <radialGradient id="g-E" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#e3dbff"/><stop offset=".45" stop-color="#8f74ff"/><stop offset="1" stop-color="#5a3fd1"/></radialGradient>
   <radialGradient id="g-G" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#e2ffc4"/><stop offset=".45" stop-color="#84db4c"/><stop offset="1" stop-color="#3f9a1e"/></radialGradient>
   <radialGradient id="g-V" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#f1deff"/><stop offset=".45" stop-color="#b56cff"/><stop offset="1" stop-color="#6b2fb5"/></radialGradient>
   <linearGradient id="g-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3b98f"/><stop offset="1" stop-color="#c47d52"/></linearGradient>
@@ -408,7 +461,7 @@
 // ==LOGIC==
 // Ký hiệu ô trong rows:
 //   # ngoài cơ thể     . ô trống            ~ ô độc (tế bào vào là chết, không cần lấp)
-//   A B C tế bào       a b c tế bào đang ngủ  G vi khuẩn
+//   A B C D E mèo đỏ, xanh, vàng, hồng, tím      a b c d e mèo đang ngủ      G vi khuẩn
 //   ^ v < > virus, mũi tên là hướng nó lan
 // Trường thêm: goal = vòng mục tiêu (chữ cái = vòng cần tế bào màu đó, . = không có vòng);
 // oneway = [[hàng, cột, hướng]]: màng giữa ô đó và ô kề theo hướng, chỉ cho đi qua theo hướng ấy;
@@ -419,92 +472,105 @@
 // Mỗi level một hình thân riêng (không trùng kể cả khi xoay/lật). Mọi level đều phải lấp kín, nên không dùng
 // các khung không bao giờ lấp kín được như vòng khuyên và chữ C (tối đa 6 tế bào).
 const LEVELS = [
-  { rows: ['A.'], tut: [[0, 0, 'right', 'Vuốt mèo đỏ sang phải: nó nhân đôi và lấp ô trống!']] },                 // thanh 2 ô
-  { rows: ['AB.'], tut: [[0, 0, 'right', 'Ô bên cạnh có mèo: vuốt vào thì cả dãy bị đẩy đi']] },                 // thanh 3 ô
-  ['.B', '.A'],                                      // vuông 2×2
-  { rows: ['.B.', '#A#'], tut: [                                                                                    // chữ T
+  // ── Khối 1 · Phòng nuôi cấy: Chia, đẩy, thay thế, khử 3 (level 1–16)
+  { rows: ['A.'], tut: [
+    [0, 0, 'right', 'Vuốt mèo đỏ sang phải: nó nhân đôi và lấp ô trống!']] },  // thanh 2 ô
+  { rows: ['AB.'], tut: [
+    [0, 0, 'right', 'Ô bên cạnh có mèo: vuốt vào thì cả dãy bị đẩy đi']] },  // thanh 3 ô
+  ['.B', '.A'],                                             // vuông 2×2
+  { rows: ['.B.', '#A#'], tut: [
     [0, 1, 'left', 'Vuốt mèo xanh sang trái để nhân đôi'],
     [1, 1, 'up', 'Phía trên hết chỗ để đẩy: bản sao đỏ sẽ thay thế mèo xanh'],
     [0, 0, 'right', 'Đẩy cả dãy sang phải để lấp ô cuối']] },
-  ['A#.', 'B..'],                                    // chữ U
-  ['#A#', '...', '#B#'],                             // dấu cộng
-  ['B..', 'A..'],                                    // chữ nhật 2×3
-  ['.#B', '...', '.#A'],                             // chữ H
-  { rows: ['.B#', '..#', 'A..'], tut: [                                                                             // chữ L dày
+  ['#A#', '...', '#B#'],                                    // dấu cộng
+  ['B..', 'A..'],                                           // chữ nhật 2×3
+  ['A#.', 'B..'],                                           // chữ U
+  ['.#B', '...', '.#A'],                                    // chữ H
+  ['..A', '...', 'B..'],                                    // vuông 3×3
+  { rows: ['#AA#', 'C.BB', 'CAA.', '.CB#'], tip: 'Ổ to hơn, đông mèo hơn: nhìn cả dãy trước khi vuốt nhé!' },  // 4×4 khuyết góc · mở rộng
+  ['C..A', '....', '##.#', '...B'],                         // 4×4 thắt eo
+  { rows: ['.B#', '..#', 'A..'], tut: [
     [0, 1, 'down', 'Màn này phải dọn chỗ: xếp 3 mèo xanh thẳng hàng'],
     [0, 1, 'left', 'Thêm một mèo xanh nữa'],
     [0, 0, 'down', 'Sắp đủ rồi'],
     [0, 1, 'down', '3 mèo xanh thẳng hàng sẽ biến mất! Rồi tự lấp kín nốt nhé']] },
-  ['..A', '...', 'B..'],                             // vuông 3×3
-  ['BC..', '.#..', '.A..'],                          // 3×4 khuyết một ô
-  ['C..A', '....', '##.#', '...B'],                  // 4×4 thắt eo
-  // Bàn lớn, nhiều mèo: mở bằng một bàn dễ cho quen kích thước, rồi tới các mẹo, cuối chương là level trùm
-  { rows: ['#AA#', 'C.BB', 'CAA.', '.CB#'], tip: 'Ổ to hơn, đông mèo hơn: nhìn cả dãy trước khi vuốt nhé!' },     // 4×4 khuyết góc · mở rộng
-  ['CBB.', '.#..', '..AA', '#C.A'],                  // 4×4 hai lỗ · bất ngờ: phải thay thế mèo của mình
-  ['.AA#', 'BBA.', 'B#.A', '..B.'],                  // 4×4 · bất ngờ: tự khử 3 mèo để có chỗ
-  ['BAB#A', '#BA..', 'A#.#A', '.ABB#', '..#B.'],     // 5×5 lỗ chỗ · trùm chương: khử 3 + thay thế
-  // Level "vào vị trí": vẫn phải lấp kín, thêm điều kiện mọi ô mục tiêu có tế bào đúng màu
-  { rows: ['AB..'], goal: ['..B.'], tut: [                                                                         // thanh 4 ô · nhập môn
+  ['CBB.', '.#..', '..AA', '#C.A'],                         // 4×4 hai lỗ · bất ngờ: phải thay thế mèo của mình
+  ['BC..', '.#..', '.A..'],                                 // 3×4 khuyết một ô
+  ['.AA#', 'BBA.', 'B#.A', '..B.'],                         // 4×4 · bất ngờ: tự khử 3 mèo để có chỗ
+  ['BAB#A', '#BA..', 'A#.#A', '.ABB#', '..#B.'],            // 5×5 lỗ chỗ · trùm chương: khử 3 + thay thế
+  // ── Khối 2 · Vào vị trí: Hộp mục tiêu (level 17–28)
+  { rows: ['AB..'], goal: ['..B.'], tut: [
     [0, 0, 'right', 'Đẩy mèo xanh vào hộp xanh'],
     [0, 2, 'right', 'Lấp nốt ô cuối: vừa kín ổ vừa đúng hộp!']] },
-  { rows: ['A..', '.B#'], goal: ['..A', '...'] },                                       // chữ L
-  { rows: ['A...', '#.B#'], goal: ['...B', '..A.'] },                                   // chữ T rộng
-  { rows: ['B..#', '#.A.'], goal: ['..B.', '.A..'] },                                   // bậc thang
-  { rows: ['...B', 'A...'], goal: ['..BA', '....'] },                                   // chữ nhật 2×4
-  { rows: ['#..#', '.B.A', '#.A#'], goal: ['..A.', '...B', '..A.'] },                   // chữ thập rộng
-  { rows: ['#.B#', '....', '...A'], goal: ['....', 'B.A.', '....'] },                   // cái cốc
-  { rows: ['..#', 'B.A', '#.C'], goal: ['C..', '.A.', '..B'] },                         // chữ S
-  { rows: ['.#..', '.A..', '.#..', 'C..B'], goal: ['....', '....', '..BB', '..B.'] },   // 4×4 hai lỗ
-  { rows: ['AB.C', '.CC#', '#B#B', 'A.A.'], goal: ['....', 'B...', '.C..', '.A..'] },   // 4×4 lỗ chỗ · mở rộng
-  { rows: ['ABC.', 'C#.C', 'AA#B', 'A.#.', 'C..B'], goal: ['.A..', '...B', '....', '....', '.C..'] },               // 4×5 · bất ngờ
-  { rows: ['AB.C.', 'C.C#.', 'B.#.#', '#.CBB', 'CAA.A'], goal: ['.....', '.A...', '...B.', '.B.A.', '.....'] },     // 5×5 · trùm chương
-  // Cơ chế mới: mỗi cơ chế một level nhập môn có hướng dẫn, rồi các level khó dần, cuối cùng một level tổng hợp
-  { rows: ['A.#', '#B.'], oneway: [[0, 1, 'left']], tut: [                                                        // chữ S nhỏ · màng nhập môn
+  { rows: ['D...', '#.B#'], goal: ['...B', '..D.'], tip: 'Mèo hồng đến chơi! Hộp hồng cần mèo hồng, và màu nào cũng phải giữ lại ít nhất 1 con.' },  // chữ T rộng · mèo hồng đầu tiên
+  { rows: ['A..', '.B#'], goal: ['..A', '...'] },           // chữ L
+  { rows: ['DB.C', '.CC#', '#B#B', 'D.D.'], goal: ['....', 'B...', '.C..', '.D..'] },  // 4×4 lỗ chỗ · mở rộng
+  { rows: ['B..#', '#.A.'], goal: ['..B.', '.A..'] },       // bậc thang
+  { rows: ['ABC.', 'C#.C', 'AA#B', 'A.#.', 'C..B'], goal: ['.A..', '...B', '....', '....', '.C..'] },  // 4×5 · bất ngờ
+  { rows: ['#.B#', '....', '...A'], goal: ['....', 'B.A.', '....'] },  // cái cốc
+  { rows: ['#..#', '.B.A', '#.A#'], goal: ['..A.', '...B', '..A.'] },  // chữ thập rộng
+  { rows: ['...B', 'A...'], goal: ['..BA', '....'] },       // chữ nhật 2×4
+  { rows: ['.#..', '.A..', '.#..', 'C..B'], goal: ['....', '....', '..BB', '..B.'] },  // 4×4 hai lỗ
+  { rows: ['AB.C.', 'C.C#.', 'B.#.#', '#.CBB', 'CAA.A'], goal: ['.....', '.A...', '...B.', '.B.A.', '.....'] },  // 5×5 · trùm chương
+  { rows: ['..#', 'B.A', '#.C'], goal: ['C..', '.A.', '..B'] },  // chữ S
+  // ── Khối 3 · Màng và độc: Màng một chiều, ô độc (level 29–37)
+  { rows: ['A.#', '#B.'], oneway: [[0, 1, 'left']], tut: [
     [1, 1, 'up', 'Mũi tên chỉ sang trái: mèo đỏ không vuốt sang phải qua màng được. Dùng mèo xanh!'],
     [1, 1, 'right', 'Lấp nốt ô cuối']] },
-  { rows: ['#..', 'AB#', '#.#'], oneway: [[1, 1, 'up']] },                               // chữ F · màng một chiều
-  { rows: ['...', '.A.', '#B#'], oneway: [[1, 0, 'right'], [0, 2, 'down']] },             // chữ T béo · màng
-  { rows: ['..A#', '.#B.', 'CABA', 'CB#.'], oneway: [[1, 2, 'up'], [1, 0, 'down']] },     // 4×4 lỗ chỗ · màng trên bàn lớn
-  { rows: ['AB~', '#.#', '#.#'], tut: [                                                                            // chữ T cao · ô độc
+  { rows: ['#..', 'AB#', '#.#'], oneway: [[1, 1, 'up']] },  // chữ F · màng một chiều
+  { rows: ['...', '.A.', '#E#'], oneway: [[1, 0, 'right'], [0, 2, 'down']], tip: 'Mèo tím đến chơi! Như mọi màu khác, phải giữ lại ít nhất 1 con.' },  // chữ T béo · màng · mèo tím đầu tiên
+  { rows: ['..A#', '.#B.', 'CABA', 'CB#.'], oneway: [[1, 2, 'up'], [1, 0, 'down']] },  // 4×4 lỗ chỗ · màng trên bàn lớn
+  { rows: ['AB~', '#.#', '#.#'], tut: [
     [0, 1, 'down', 'Nhân đôi mèo xanh xuống dưới'],
     [0, 0, 'right', 'Đẩy mèo xanh vào ô độc: nó chết và nhường chỗ'],
     [0, 1, 'down', 'Lấp nốt ô cuối. Ô độc không cần lấp!']] },
-  ['~..~.', 'B..A.'],                                                                     // chữ nhật 2×5 · ô độc
-  ['C.~C', 'A.A.', 'A#.A', 'BB~C', '.B.#'],                                               // 4×5 · ô độc trên bàn lớn
-  { rows: ['.AA.', 'C#..', 'BACB', '#C~B', 'A.#.'], oneway: [[4, 0, 'right'], [0, 0, 'down']] },                   // 4×5 · màng + độc
-  { rows: ['#C.CA', '.BA#A', '.BB#.', '~~#B#', '.AC.C'], oneway: [[0, 3, 'right'], [1, 0, 'right'], [3, 0, 'up']] }, // 5×5 · trùm chương
-  { rows: ['B##', 'A.#', '#a.'], tut: [                                                                            // chữ W · mèo ngủ nhập môn
+  ['C.~C', 'D.D.', 'D#.D', 'BB~C', '.B.#'],                 // 4×5 · ô độc trên bàn lớn
+  { rows: ['#C.CA', '.EA#A', '.EE#.', '~~#E#', '.AC.C'], oneway: [[0, 3, 'right'], [1, 0, 'right'], [3, 0, 'up']] },  // 5×5 · trùm chương
+  { rows: ['.AA.', 'C#..', 'BACB', '#C~B', 'A.#.'], oneway: [[4, 0, 'right'], [0, 0, 'down']] },  // 4×5 · màng + độc
+  ['~..~.', 'B..A.'],                                       // chữ nhật 2×5 · ô độc
+  // ── Khối 4 · Ngủ và virus: Tế bào ngủ, virus (level 38–48)
+  { rows: ['B##', 'A.#', '#a.'], tut: [
     [1, 0, 'right', 'Đưa mèo đỏ tới cạnh mèo đỏ đang ngủ để đánh thức nó'],
     [2, 1, 'right', 'Mèo vừa thức dậy đã vuốt được rồi!']] },
-  ['.B.', '.a#', 'A##'],                                                                  // tam giác · tế bào ngủ
-  ['b.A..', '.B#..'],                                                                     // 2×5 khuyết · tế bào ngủ
+  ['.B.', '.a#', 'A##'],                                    // tam giác · tế bào ngủ
+  ['C.C#', '.cBB', 'd.DB', 'bD.D', '#...'],                 // 4×5 · mèo ngủ trên bàn lớn
   { rows: ['.A.B.', '.bb.b', '#.A.#'], tip: 'Ba bé ngủ đều là mèo xanh. Một bé thức dậy sẽ đánh thức luôn bé nằm sát bên!' },  // 5×3 · thức dây chuyền
-  ['C.C#', '.cBB', 'a.AB', 'bA.A', '#...'],                                               // 4×5 · mèo ngủ trên bàn lớn
-  { rows: ['.#', 'A#', 'B#', '>.'], tut: [                                                                        // chữ L dài · virus nhập môn
+  { rows: ['.#', 'A#', 'B#', '>.'], tut: [
     [1, 0, 'up', 'Vuốt một nước: sau mỗi lượt, virus lan thêm 1 ô theo mũi tên'],
     [2, 0, 'down', 'Phía dưới hết chỗ: bản sao xanh thay thế virus'],
     [3, 0, 'right', 'Diệt nốt virus còn lại']] },
-  ['~<.AB'],                                                                              // thanh 5 ô · virus
-  ['A.B', '...', '>.#'],                                                                  // 3×3 thiếu góc · virus
+  ['~<.AB'],                                                // thanh 5 ô · virus
   { rows: ['#A..', '#A.B', 'C<Cv', 'A.#B'], tip: 'Hai virus, hai hướng: mỗi con lan theo mũi tên của riêng nó.' },  // 4×4 · hai virus
-  ['.ABC', '.B.A', 'B#..', '...C', '^.CA'],                                               // 4×5 · bất ngờ: để virus ăn bớt mèo
-  ['BAAC.', '#AB.C', '#C^.#', '...a#', '#Ab.B'],                                          // 5×5 · trùm chương: phải dùng mèo vừa thức + virus
-  { rows: ['GA', '.#'], kill: 'G', tut: [                                                                           // chữ L nhỏ · diệt khuẩn nhập môn
+  ['A.B', '...', '>.#'],                                    // 3×3 thiếu góc · virus
+  ['e.A..', '.E#..'],                                       // 2×5 khuyết · tế bào ngủ
+  ['BAAC.', '#AB.C', '#C^.#', '...a#', '#Ab.B'],            // 5×5 · trùm chương: phải dùng mèo vừa thức + virus
+  ['.DBC', '.B.D', 'B#..', '...C', '^.CD'],                 // 4×5 · bất ngờ: để virus ăn bớt mèo
+  // ── Khối 5 · Diệt khuẩn: Diệt khuẩn (level 49–54)
+  { rows: ['GA', '.#'], kill: 'G', tut: [
     [0, 1, 'left', 'Hết chỗ để đẩy: bản sao đỏ thay thế vi khuẩn'],
     [0, 0, 'down', 'Lấp nốt ô trống để thắng']] },
-  { rows: ['AB#', '#.#', '#.G'], kill: 'G' },                                             // chữ Z · diệt khuẩn
-  { rows: ['.GG.', 'AAB#', 'GCB#'], kill: 'G', tip: 'Mẹo: vi khuẩn cũng vuốt được. Cho chúng nhân lên đủ 3 con thẳng hàng là bị khử!' },           // 4×3 · khử 3 vi khuẩn
-  { rows: ['.A.#', 'B.~G', '#..G'], kill: 'G' },                                          // 3×4 lệch · diệt khuẩn + ô độc
-  { rows: ['AC.B', '.AB#', 'AGA#', '..G.', '.C.B'], kill: 'G' },                          // 4×5 · vi khuẩn trên bàn lớn
-  { rows: ['BGC.', '##G.', '.AAv', '#B.A'], kill: 'G' },                                  // 4×4 · vi khuẩn + virus
-  // Đại gia đình: bàn 5×5 – 5×6, đông mèo, trộn mọi cơ chế đã học
-  { rows: ['CCAAB', '..A.C', 'CAB..', 'CB#..', 'BABC#'], tip: 'Ổ mèo lớn nhất từ trước tới giờ! Đẩy cả dãy để lấp chỗ trống.' },  // 5×5 · mở rộng
-  { rows: ['BA##', '..~#', '..a.'], oneway: [[2, 2, 'left']] },                           // bậc thang · tổng hợp
-  { rows: ['BCB~C', '..B~A', 'A#.BC', '...#A', '#C#AC'], goal: ['.....', 'B....', '..B..', '..B..', '.....'] },   // 5×5 · hộp + độc
-  { rows: ['.#BAA', '.A.#.', 'B##Ab', 'B.aCC', '..BC.'], oneway: [[1, 4, 'down'], [4, 2, 'left'], [4, 2, 'right']] },  // 5×5 · ngủ + màng
-  { rows: ['.B#C#', '#ACG.', 'B..C#', '.<ABG', 'A#B.A'], kill: 'G' },                     // 5×5 · virus + vi khuẩn
-  { rows: ['C...B', 'C#B.B', '.BAbA', 'aCGv.', '#A.A~'], oneway: [[1, 4, 'up']], kill: 'G' },     // 5×5 · đủ cơ chế, bất ngờ: dẫn virus vào ô độc
-  { rows: ['#.aC#', '#>BBA', 'Cb.B.', '.G#A#', 'B.B.A', '~#.CA'], oneway: [[1, 3, 'up']], kill: 'G' },  // 5×6 · trùm cuối
+  { rows: ['AE#', '#.#', '#.G'], kill: 'G' },               // chữ Z · diệt khuẩn
+  { rows: ['.GG.', 'AAB#', 'GCB#'], kill: 'G', tip: 'Mẹo: vi khuẩn cũng vuốt được. Cho chúng nhân lên đủ 3 con thẳng hàng là bị khử!' },  // 4×3 · khử 3 vi khuẩn
+  { rows: ['.A.#', 'B.~G', '#..G'], kill: 'G' },            // 3×4 lệch · diệt khuẩn + ô độc
+  { rows: ['BGC.', '##G.', '.AAv', '#B.A'], kill: 'G' },    // 4×4 · vi khuẩn + virus
+  { rows: ['DC.B', '.DB#', 'DGD#', '..G.', '.C.B'], kill: 'G' },  // 4×5 · vi khuẩn trên bàn lớn
+  // ── Khối 6 · Đại gia đình: Bàn lớn, đông mèo, mọi cơ chế (level 55–61)
+  { rows: ['ECE~C', '..E~D', 'D#.EC', '...#D', '#C#DC'], goal: ['.....', 'E....', '..E..', '..E..', '.....'] },  // 5×5 · hộp + độc
+  { rows: ['.#EAA', '.A.#.', 'E##Ae', 'E.aCC', '..EC.'], oneway: [[1, 4, 'down'], [4, 2, 'left'], [4, 2, 'right']] },  // 5×5 · ngủ + màng
+  { rows: ['CCAAB', '..A.C', 'CAB..', 'CB#..', 'BABC#'], tip: 'Ổ mèo đông nhất từ trước tới giờ! Đẩy cả dãy để lấp chỗ trống.' },  // 5×5 · mở rộng
+  { rows: ['C...B', 'C#B.B', '.BAbA', 'aCGv.', '#A.A~'], oneway: [[1, 4, 'up']], kill: 'G' },  // 5×5 · đủ cơ chế, bất ngờ: dẫn virus vào ô độc
+  { rows: ['.B#C#', '#DCG.', 'B..C#', '.<DBG', 'D#B.D'], kill: 'G' },  // 5×5 · virus + vi khuẩn
+  { rows: ['BA##', '..~#', '..a.'], oneway: [[2, 2, 'left']] },  // bậc thang · tổng hợp
+  { rows: ['#.aC#', '#>BBA', 'Cb.B.', '.G#A#', 'B.B.A', '~#.CA'], oneway: [[1, 3, 'up']], kill: 'G' },  // 5×6 · trùm chương
+  // ── Khối 7 · Đủ sắc màu: 4 rồi 5 màu cùng lúc (level 62–cuối)
+  { rows: ['B.DA', '#BCA', '.C#.'], tip: 'Lần đầu 4 màu cùng lúc! Chỉ có 1 bé hồng: đừng để bé bị thay thế, hết màu hồng là thua.' },  // 4×3 · lần đầu 4 màu
+  { rows: ['C.#.', 'CBCA', 'B.BA', 'D#A#', '.D..'], goal: ['...C', '....', '....', '....', 'D.A.'] },  // 4×5 · 4 màu + hộp
+  ['B.BA', 'CB#.', 'DD.A', 'CA..'],                         // 4×4 · 4 màu, bất ngờ
+  ['C.B.', '.AB#', '>d.D', 'A#.A', '..CB'],                 // 4×5 · 4 màu + mèo ngủ + virus
+  { rows: ['#ABA', '.#..', 'DCCB', 'D.#E'], tip: 'Giờ đủ 5 màu cùng lúc! Bé tím chỉ có 1, giữ bé thật kỹ!' },  // 4×4 · lần đầu 5 màu
+  { rows: ['..BB#', '..A##', 'BA#.#', 'DC~AD', '#.CEE'], oneway: [[3, 1, 'down'], [0, 0, 'down']] },  // 5×5 · 5 màu + màng + độc
+  { rows: ['ECB.G', '.A.#.', 'E#DD#', 'C#A#B', '.G.<A'], kill: 'G' },  // 5×5 · 5 màu + vi khuẩn + virus
+  { rows: ['##CBC', 'C#AA.', '..Bev', 'BD..E', '..G#E', '~#DAd'], oneway: [[2, 1, 'down']], kill: 'G' },  // 5×6 · trùm cuối, 5 màu
 ];
 
 const DIRS = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
@@ -634,22 +700,24 @@ function resolve(level, placed, born, nextId) {
 }
 
 // Vuốt tế bào `from` theo `dir`. Bản sao vào ô kề; nếu ô kề có tế bào thì đẩy cả dãy tới ô trống gần nhất
-// theo hướng đó, không còn ô trống thì bản sao thay thế tế bào kề. Sau đó kết thúc lượt (resolve).
-// Trả null nếu không vuốt được (tế bào ngủ, virus, ra ngoài, hoặc thay thế một tế bào cùng màu).
+// theo hướng đó, không còn ô trống (gặp mép, lỗ, màng chặn hoặc mèo ngủ) thì bản sao thay thế tế bào kề.
+// Mèo ngủ say như hòn đá: không bị đẩy, không bị đè lên. Sau đó kết thúc lượt (resolve).
+// Trả null nếu không vuốt được (tế bào ngủ, virus, ra ngoài, thay thế một tế bào cùng màu hoặc một mèo ngủ).
 function swipe(level, cells, from, dir, newId = -1) {
   const parent = cells[from];
   const to = step(level, from, dir);
   if (!parent || parent.sleep || parent.color === 'V' || to < 0) return null;
   const chain = [];
   let k = to;
-  while (k >= 0 && cells[k]) { chain.push(k); k = step(level, k, dir); }
+  while (k >= 0 && cells[k] && !cells[k].sleep) { chain.push(k); k = step(level, k, dir); }
+  if (k >= 0 && cells[k]) k = -1;                    // dãy chạm mèo ngủ: như chạm tường, không còn chỗ đẩy
   const next = cells.slice();
   let pushed = false, replaced = null;
   if (k >= 0) {
     for (let i = chain.length - 1; i >= 0; i--) next[step(level, chain[i], dir)] = cells[chain[i]];
     pushed = chain.length > 0;
   } else {
-    if (cells[to].color === parent.color) return null;
+    if (cells[to].color === parent.color || cells[to].sleep) return null;
     replaced = cells[to];
   }
   next[to] = { color: parent.color, id: newId };
@@ -746,8 +814,9 @@ function solve(level, start, maxNodes = 80000, maxMs = Infinity) {
 // ---------------------------------------------------------------------------
 const SZ = 90;
 const COLORS = { A: ['#ff5d73', '#a82640'], B: ['#4f8dff', '#1f469e'], C: ['#ffd23f', '#b88300'],
+  D: ['#ff7ad9', '#a32f8a'], E: ['#8f74ff', '#3f2a9e'],
   G: ['#84db4c', '#2f7a14'], V: ['#b56cff', '#55208f'] };           // [màu chính, màu viền]; thân dùng gradient #g-X
-const NAMES = { A: 'đỏ', B: 'xanh', C: 'vàng', G: 'vi khuẩn' };
+const NAMES = { A: 'đỏ', B: 'xanh', C: 'vàng', D: 'hồng', E: 'tím', G: 'vi khuẩn' };
 const ANGLE = { right: 0, down: 90, left: 180, up: 270 };
 const LOOK = { right: [1, 0], left: [-1, 0], up: [0, -1], down: [0, 1] };
 const MAX_HEARTS = 3, REGEN_MS = 10 * 60 * 1000;             // hết tim thì cứ 10 phút hồi 1 tim
@@ -797,11 +866,14 @@ const MECHANICS = [
       'Ô độc không cần lấp kín. Dùng nó để loại bớt tế bào, nhưng coi chừng làm một màu tuyệt chủng.'],
     demos: [{ def: ['ABB~'], from: 0, dir: 'right', cap: 'Tế bào xanh bị đẩy vào ô độc và chết' }] },
   { key: 'sleep', icon: '💤', title: 'Tế bào ngủ', fresh: true, has: lv => lv.init.some(c => c && c.sleep),
-    points: ['Tế bào ngủ (nhắm mắt, có chữ z) không chia được, nhưng vẫn bị đẩy, bị thay thế và bị khử như thường.',
-      'Có tế bào cùng màu đang thức đứng cạnh thì nó thức dậy và chia được.'],
-    demos: [{ def: ['A.', '.a'], from: 0, dir: 'right', cap: 'Bản sao đỏ đứng cạnh nên tế bào ngủ thức dậy' }] },
+    points: ['Mèo ngủ (nhắm mắt, có chữ z) say như hòn đá: không chia được, không bị đẩy, không bị bản sao đè lên.',
+      'Dãy bị đẩy gặp mèo ngủ thì dừng lại như gặp tường, nên bản sao sẽ thay thế con kề.',
+      'Có mèo cùng màu đang thức đứng cạnh thì nó thức dậy và chia được. Khử 3, ô độc và virus vẫn giết được mèo ngủ.'],
+    demos: [{ def: ['A.', '.a'], from: 0, dir: 'right', cap: 'Bản sao đỏ đứng cạnh nên tế bào ngủ thức dậy' },
+      { def: ['ABc', 'B..'], from: 0, dir: 'right', cap: 'Dãy chạm mèo ngủ thì dừng như gặp tường: bản sao thay con kề' }] },
   { key: 'virus', icon: '🦠', title: 'Virus', fresh: true, has: hasVirus,
     points: ['Virus không vuốt được. Sau mỗi lượt của bạn, mỗi virus lan thêm 1 ô theo hướng mắt nó nhìn: vào ô trống hoặc ăn tế bào ở đó.',
+      'Virus mới sinh cũng lan y như con gốc. Dãy virus nối đuôi thì con đầu lan; diệt con đầu thì con sau ăn lại ngay, nên hãy diệt từ đuôi lên.',
       'Virus không bị khử 3. Diệt nó bằng cách cho bản sao thay thế nó, hoặc đẩy nó vào ô độc.',
       'Ô có virus không tính là đã lấp.'],
     demos: [{ def: ['>.A'], from: 2, dir: 'left', cap: 'Bạn vuốt xong, virus lan sang và ăn bản sao' },
@@ -820,14 +892,16 @@ const save = { level: 0, hearts: MAX_HEARTS, heartAt: null, seen: [], muted: fal
 save.boosters = { ...START_BOOSTERS, ...save.boosters };
 const persist = () => store.set(save);
 
-// Chương trên màn tổng quan, theo chỉ số level (từ 0). Chương cuối kéo tới level cuối cùng.
+// Các khối level theo cơ chế, theo chỉ số level (từ 0); khối cuối kéo tới level cuối cùng. Bản đồ không hiện khối
+// (một đường liền); khối dùng để sắp level từ dễ đến khó trong từng khối (tools/order.js) và xuất dữ liệu cho Unity.
 const CHAPTERS = [
   { name: 'Phòng nuôi cấy', icon: '🧪', note: 'Chia, đẩy, thay thế, khử 3', from: 0, to: 15 },
   { name: 'Vào vị trí', icon: '🎯', note: 'Hộp mục tiêu', from: 16, to: 27 },
   { name: 'Màng và độc', icon: '🚪', note: 'Màng một chiều, ô độc', from: 28, to: 36 },
   { name: 'Ngủ và virus', icon: '🦠', note: 'Tế bào ngủ, virus', from: 37, to: 47 },
   { name: 'Diệt khuẩn', icon: '🧫', note: 'Diệt khuẩn', from: 48, to: 53 },
-  { name: 'Đại gia đình', icon: '🏠', note: 'Bàn lớn, đông mèo, mọi cơ chế', from: 54, to: LEVELS.length - 1 },
+  { name: 'Đại gia đình', icon: '🏠', note: 'Bàn lớn, đông mèo, mọi cơ chế', from: 54, to: 60 },
+  { name: 'Đủ sắc màu', icon: '🌈', note: '4 rồi 5 màu cùng lúc', from: 61, to: LEVELS.length - 1 },
 ];
 
 // Kết quả lưu theo nội dung level (khung, mèo, hộp, màng), không theo số thứ tự, để chèn thêm level không làm lệch sao.
@@ -860,13 +934,23 @@ const parOf = i => solutionOf(i).par;
 const starsFor = (moves, par) => !par || moves <= par ? 3 : moves <= par + 2 ? 2 : 1;
 const starRow = n => [1, 2, 3].map(k => `<span class="${k <= n ? 'on' : ''}">★</span>`).join('');
 
-// Level đầu tiên dạy mỗi cơ chế: gắn huy hiệu trên bản đồ
+// Huy hiệu góc phải dưới nút level trên bản đồ, để biết yếu tố mới nằm ở đâu: level đầu tiên của mỗi cơ chế,
+// lần đầu gặp mèo hồng / mèo tím, level có hướng dẫn tương tác (👆) hoặc mẹo đầu màn (💡).
 const FIRST = new Map();
 LEVELS.forEach((def, i) => {
   const lv = parseLevel(def);
   for (const m of MECHANICS) if ((m.fresh || m.key === 'target') && !FIRST.has(m.key) && m.has(lv, i)) FIRST.set(m.key, i);
+  for (const [col, icon, text] of [['D', '🩷', 'Mèo hồng'], ['E', '💜', 'Mèo tím']])
+    if (!FIRST.has(col) && lv.colors.includes(col)) FIRST.set(col, { i, icon, text });
 });
-const newIcons = i => MECHANICS.filter(m => FIRST.get(m.key) === i).map(m => m.icon).join('');
+function newLabels(i) {
+  const def = LEVELS[i], out = MECHANICS.filter(m => FIRST.get(m.key) === i).map(m => ({ icon: m.icon, text: m.title }));
+  for (const col of ['D', 'E']) { const f = FIRST.get(col); if (f && f.i === i) out.push(f); }
+  if (!Array.isArray(def) && def.tut) out.push({ icon: '👆', text: 'Có hướng dẫn' });
+  if (!Array.isArray(def) && def.tip) out.push({ icon: '💡', text: 'Có mẹo' });
+  return out;
+}
+const newIcons = i => newLabels(i).slice(0, 2).map(l => l.icon).join('');
 
 // history: mỗi mục { cells, spent, reset } với spent là booster đã dùng ở nước đó (hoàn tác thì trả lại),
 // reset đánh dấu lần bấm "Chơi lại" (số lần vuốt tính từ đó).
@@ -972,7 +1056,7 @@ const sfx = (() => {
   }
   // Tiếng mèo thật từ Mixkit (sfx/, giấy phép miễn phí, xem sfx/NGUON.txt): mỗi lần chia chọn ngẫu nhiên một tiếng,
   // không lặp tiếng vừa phát; mỗi màu một giọng nhờ đổi cao độ. Thiếu file thì dùng tiếng mèo tổng hợp ở trên.
-  const PITCH = { A: 1, B: .86, C: 1.16, G: 1.08 };
+  const PITCH = { A: 1, B: .86, C: 1.16, D: 1.26, E: .78, G: 1.08 };
   const meows = ['meow-sweet', 'meow-attention', 'meow-hungry', 'meow-cartoon'].map(n => {
     const el = new Audio(`sfx/${n}.mp3`);
     el.preload = 'auto';
@@ -1023,6 +1107,11 @@ const sfx = (() => {
     wake(color) { realMeow(color, { vol: .55, up: 1.15 }) || meow(color, true); },
     ding() { clip('box', { vol: .8, rate: rnd(1, 1.2) }) || notes([988, 1480], .07, { vol: .09 }); },
     nope() { angryMeow() || clip('mistake', { vol: .6 }) || tone(160, 110, .13, { type: 'square', vol: .05 }); },
+    // Chạm (không vuốt) vào mèo: meo khẽ, cao hơn một chút
+    pet(color) { realMeow(color, { vol: .35, up: 1.12 }) || meow(color, true); },
+    // Chạm vào virus: tiếng ọ ọ khàn; vi khuẩn: tiếng bóp nhũn (không phải mèo nên không kêu meo)
+    grumble() { tone(170, 80, .2, { type: 'sawtooth', vol: .05 }); tone(230, 120, .14, { type: 'square', vol: .03, at: .07 }); hiss(.09, { freq: 900, vol: .05 }); },
+    squish() { tone(430, 250, .09, { vol: .09 }); tone(260, 520, .08, { type: 'triangle', vol: .05, at: .06 }); },
     booster() { notes([784, 988, 1175, 1568], .05, { vol: .1 }); hiss(.45, { freq: 6500, vol: .03 }); },
     revive() { notes([523, 659, 784, 1047, 1319], .07, { type: 'triangle', vol: .12 }); },
     // Xu chạm ô đếm: "ting" hai nốt, cao dần theo số xu đã về; đủ xu thì "ka-ching"
@@ -1211,11 +1300,15 @@ const FLOWER = (() => {
   return d + ' Z';
 })();
 const SPIKES = Array.from({ length: 24 }, (_, k) => pt(SZ / 2, Math.PI * k / 12, k % 2 ? 30 : 40).replace(' ', ',')).join(' ');
+const HEX = Array.from({ length: 6 }, (_, k) => pt(SZ / 2, Math.PI * k / 3 + Math.PI / 6, 38).replace(' ', ',')).join(' ');
+const HEART = `M45 78 C12 56 6 34 20 22 C31 13 41 18 45 27 C49 18 59 13 70 22 C84 34 78 56 45 78 Z`;
 
 function cellShape(c) {
   const m = SZ / 2, fill = `url(#g-${c.color})`, dark = COLORS[c.color][1];
   if (c.color === 'B') return `<rect x="${m - 35}" y="${m - 35}" width="70" height="70" rx="24" fill="${fill}" stroke="${dark}" stroke-width="3"/>`;
   if (c.color === 'C') return `<path d="${FLOWER}" fill="${fill}" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>`;
+  if (c.color === 'D') return `<path d="${HEART}" fill="${fill}" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>`;
+  if (c.color === 'E') return `<polygon points="${HEX}" fill="${fill}" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>`;
   if (c.color === 'V') return `<polygon class="spikes" points="${SPIKES}" fill="${fill}" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>`;
   if (c.color === 'G') return `<path class="flag" d="M${m - 31} ${m + 8} q-12 2 -13 15 M${m + 31} ${m - 8} q12 -2 13 -15" stroke="${dark}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
     <rect x="${m - 34}" y="${m - 22}" width="68" height="44" rx="22" fill="${fill}" stroke="${dark}" stroke-width="3"/>`;
@@ -1237,14 +1330,40 @@ function face(c, delay) {
     <path d="M${m - 9} ${m + 13} l3 -4 l3 4 l3 -4 l3 4 l3 -4" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`;
   if (c.color === 'G') return `${eyes}<path d="M${m - 7} ${m + 10} q7 4 13 -3" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
   return `${eyes}<ellipse cx="${m - 21}" cy="${m + 8}" rx="5" ry="3" fill="#ff8fb5" opacity=".75"/><ellipse cx="${m + 21}" cy="${m + 8}" rx="5" ry="3" fill="#ff8fb5" opacity=".75"/>
-    <path d="M${m - 6} ${m + 8} q6 6 12 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    <path class="mouth" d="M${m - 6} ${m + 8} q6 6 12 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
 }
 
-// Loài A/B/C dùng mèo Shikacat (mắt sao khi vào đúng hộp hoặc khi thắng); vi khuẩn và virus vẫn tự vẽ.
-// Thiếu ảnh (thư mục shikacat không nằm trong git) thì quay về kẹo dẻo tự vẽ.
-const CAT = { A: 'Red', B: 'Blue', C: 'Yellow' };
+// Loài A–E dùng mèo Shikacat (mắt sao khi vào đúng hộp hoặc khi thắng); vi khuẩn và virus vẫn tự vẽ.
+// Thiếu ảnh nào trong thư mục shikacat thì cả game quay về kẹo dẻo tự vẽ. Bản export có 12 màu mèo, mới dùng 5:
+// bỏ các màu dễ lẫn (WarmPink giống đỏ, Orange giống vàng, Green/Lime giống vi khuẩn và ô độc, các màu xanh giống B).
+const CAT = { A: 'Red', B: 'Blue', C: 'Yellow', D: 'Pink', E: 'Purple' };
 let catArt = true;
 const catSrc = (col, happy = false) => `${ART}cats/Image_Cat_${CAT[col]}${happy ? 'EndGame' : ''}.png`;
+
+// Vẽ đè lên mặt mèo (mặt bất lực, chớp mắt, ngáp...). Ảnh Shikacat không tách mắt, miệng: phủ mắt và miệng bằng
+// đúng màu lông (lấy mẫu từ ảnh, vị trí đo trên ảnh 565×681) rồi vẽ lên; mặt kẹo tự vẽ thì ẩn mắt, miệng bằng CSS
+// (lớp .sorry / .faceoff trên ô).
+const FUR = { A: ['#fd8265', '#9c0f0f'], B: ['#388bde', '#123f8f'], C: ['#f9da83', '#7a3104'], D: ['#f5a7d2', '#5d031c'], E: ['#886dce', '#2b0a63'] };
+function faceOf(c) {
+  const m = SZ / 2, art = !!(catArt && CAT[c.color]);
+  const [fur, ink] = art ? FUR[c.color] : ['', '#2b0f2e'];
+  const [xl, xr, ey, mx, my] = art ? [m - 15, m + 10.7, m - 18.3, m - 2.3, m - 12.6] : [m - 11, m + 11, m - 4, m, m + 10];
+  return { art, fur, ink, xl, xr, ey, mx, my, w: art ? 6 : 7 };
+}
+const coverEyes = f => f.art ? `<ellipse cx="${f.xl}" cy="${f.ey}" rx="8.2" ry="7.6" fill="${f.fur}"/><ellipse cx="${f.xr}" cy="${f.ey}" rx="8.2" ry="7.6" fill="${f.fur}"/>` : '';
+const coverMouth = f => f.art ? `<ellipse cx="${f.mx}" cy="${f.my + .4}" rx="4.6" ry="2.4" fill="${f.fur}"/>` : '';
+// Mắt nhắm: `bend` âm là cong lên (∩, bất lực), dương là cong xuống (‿, thư thái)
+const shutEyes = (f, bend) => `<path d="M${f.xl - f.w} ${f.ey + 1} q${f.w} ${bend} ${f.w * 2} 0 M${f.xr - f.w} ${f.ey + 1} q${f.w} ${bend} ${f.w * 2} 0"
+  stroke="${f.ink}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+
+// Mặt bất lực khi thua, như emoji cười gượng đổ mồ hôi: mắt nhắm cong, miệng mếu, giọt mồ hôi bên trán.
+function sadFace(c) {
+  const m = SZ / 2, f = faceOf(c), { ink, mx, my } = f;
+  return `<g class="sadface">${coverEyes(f)}${coverMouth(f)}${shutEyes(f, -7)}
+    <path d="M${mx - 3.5} ${my + 1.5} q3.5 -3.4 7 0" stroke="${ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <g transform="translate(${m - 29} ${m - 33})"><g class="sweat"><path d="M0 -8 C3.5 -3 6 1 6 4 A6 6 0 0 1 -6 4 C-6 1 -3.5 -3 0 -8 Z" fill="#8fd3ff" stroke="#2d7fd1" stroke-width="1.6"/>
+      <ellipse cx="-2" cy="2.5" rx="1.5" ry="2.4" fill="#fff" opacity=".85"/></g></g></g>`;
+}
 
 // Mèo ngủ: bịt mắt có in hai mắt nhắm, đặt đúng chỗ mắt trong ảnh
 function sleepMask(m) {
@@ -1252,12 +1371,20 @@ function sleepMask(m) {
     <path d="M${m - 20} ${m - 21} q5 5 10 0 M${m + 5} ${m - 21} q5 5 10 0" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
 }
 
+// Vệt bóng sáng góc trên trái theo từng hình (lệch so với tâm ô: dx, dy, bán trục rx, ry, góc nghiêng):
+// viên nang vi khuẩn dẹt và trái tim có đỉnh thấp nên vệt sáng phải hạ xuống, không thì lòi ra ngoài thân.
+const SHINE = { G: [-15, -11, 10, 4.5, -18], D: [-16, -16, 9, 5, -40] };
+function shine(color) {
+  const [dx, dy, rx, ry, a] = SHINE[color] || [-13, -20, 11, 5.5, -32], x = SZ / 2 + dx, y = SZ / 2 + dy;
+  return `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#fff" opacity=".6" transform="rotate(${a} ${x} ${y})"/>`;
+}
+
 // Một tế bào, gốc toạ độ ở góc ô: bóng đổ, thân (mèo hoặc kẹo), chữ z khi ngủ. .lean để nghiêng theo hướng vuốt.
 function cellBody(c) {
   const m = SZ / 2, d = ((Math.abs(c.id) * .73) % 5).toFixed(2);
   const art = catArt && CAT[c.color]
     ? `<image class="cat" href="${catSrc(c.color)}" x="${m - 35}" y="${m - 43}" width="70" height="84"/>${c.sleep ? sleepMask(m) : ''}`
-    : `${cellShape(c)}<ellipse cx="${m - 13}" cy="${m - 20}" rx="11" ry="5.5" fill="#fff" opacity=".6" transform="rotate(-32 ${m - 13} ${m - 20})"/>${face(c, d)}`;
+    : `${cellShape(c)}${shine(c.color)}${face(c, d)}`;
   return `<g class="body"><g class="lean"><g class="jelly" style="animation-delay:-${(d * .55).toFixed(2)}s">
       <ellipse cx="${m}" cy="${m + 38}" rx="25" ry="5" fill="#0a1450" opacity=".25"/>
       ${art}
@@ -1271,11 +1398,12 @@ const icon = col => `<svg viewBox="-4 -6 98 104">${cellBody({ color: col, id: 1,
 // Đường viền liền bao quanh cả thân: lần theo cạnh biên của các ô (cả mép ngoài lẫn lỗ bên trong), nới ra `grow`,
 // rồi bo tròn mọi góc. Cạnh được đi theo chiều kim đồng hồ quanh từng ô nên thân luôn nằm bên phải hướng đi:
 // pháp tuyến hướng ra ngoài của cạnh hướng (dx, dy) là (dy, -dx); rẽ phải là góc lồi, rẽ trái là góc lõm.
-// Các level không có chỗ hai ô chỉ chạm nhau ở góc, nên mỗi điểm chỉ có một cạnh đi ra.
+// Chỗ hai lỗ (hoặc một lỗ và phần ngoài) chỉ chạm nhau ở một góc thì điểm đó có hai cạnh đi ra: luôn rẽ trái
+// để mỗi lỗ là một vòng riêng, không vòng nào cắt chéo sang vòng khác.
 function outlinePath(lv, grow, rConvex, rConcave) {
   const at = (r, c) => r >= 0 && c >= 0 && r < lv.h && c < lv.w && lv.slot[r * lv.w + c];
   const next = new Map();
-  const edge = (x1, y1, x2, y2) => next.set(`${x1},${y1}`, [x2, y2]);
+  const edge = (x1, y1, x2, y2) => { const k = `${x1},${y1}`; if (!next.has(k)) next.set(k, []); next.get(k).push([x2, y2]); };
   for (let r = 0; r < lv.h; r++) for (let c = 0; c < lv.w; c++) {
     if (!at(r, c)) continue;
     if (!at(r - 1, c)) edge(c, r, c + 1, r);
@@ -1285,15 +1413,20 @@ function outlinePath(lv, grow, rConvex, rConcave) {
   }
   let d = '';
   while (next.size) {
-    // Gom một vòng kín, chỉ giữ các điểm đổi hướng
+    // Gom một vòng kín, chỉ giữ các điểm đổi hướng. Bắt đầu ở điểm chỉ có một cạnh đi ra để hướng rẽ luôn xác định.
     const loop = [];
-    let key = next.keys().next().value;
-    while (next.has(key)) {
-      const [x, y] = key.split(',').map(Number), to = next.get(key);
-      next.delete(key);
-      loop.push([x, y, to[0] - x, to[1] - y]);
+    const start = [...next].find(([, outs]) => outs.length === 1)?.[0] ?? next.keys().next().value;
+    let key = start, dx = 0, dy = 0;
+    do {
+      const [x, y] = key.split(',').map(Number), outs = next.get(key);
+      // Rẽ trái: tích có hướng của hướng đến và hướng đi âm (toạ độ màn hình, trục y hướng xuống)
+      const k = Math.max(0, outs.findIndex(([tx, ty]) => dx * (ty - y) - dy * (tx - x) < 0));
+      const [to] = outs.splice(outs.length > 1 ? k : 0, 1);
+      if (!outs.length) next.delete(key);
+      dx = to[0] - x; dy = to[1] - y;
+      loop.push([x, y, dx, dy]);
       key = `${to[0]},${to[1]}`;
-    }
+    } while (key !== start && next.has(key));
     const corners = loop.filter((p, k) => { const q = loop[(k + loop.length - 1) % loop.length]; return q[2] !== p[2] || q[3] !== p[3]; });
     // Nới góc ra theo tổng hai pháp tuyến; bo góc lồi lớn, góc lõm nhỏ (không quá nửa cạnh kề)
     const pts = corners.map((p, k) => {
@@ -1541,6 +1674,161 @@ function sync(view, born = null, keep = []) {
 const pop = list => { for (const c of list) nodes.get(c.id)?.classList.add('pop'); };
 const slotOf = (view, c) => view.indexOf(c);
 
+// Chạy một hiệu ứng CSS trên một con, lệch theo hướng `dir`: dist đơn vị, co dọc hướng còn `squash`, trễ `delay` giây.
+function act(id, cls, dir, dist = 6, delay = 0, squash = .86) {
+  const g = nodes.get(id);
+  if (!g) return;
+  const [dx, dy] = LOOK[dir] || [0, 0], wide = 2 - squash;
+  g.style.setProperty('--px', `${dx * dist}px`);
+  g.style.setProperty('--py', `${dy * dist}px`);
+  g.style.setProperty('--sx', dx ? squash : wide);
+  g.style.setProperty('--sy', dy ? squash : wide);
+  g.style.setProperty('--d', `${delay}s`);
+  jolt(g, cls);
+}
+
+// Một nhóm SVG tạm trên lớp phủ tại ô i, tự gỡ sau `ms`
+function overlayAt(i, html, ms) {
+  const [x, y] = pos(i), el = document.createElementNS(NS, 'g');
+  el.setAttribute('transform', `translate(${x} ${y})`);
+  el.innerHTML = html;
+  overlay.appendChild(el);
+  setTimeout(() => el.remove(), ms);
+}
+
+// Mắt @@ xoay tròn đè lên đúng chỗ mắt (ảnh mèo Shikacat hoặc kẹo tự vẽ): dùng cho mèo choáng và hồn mèo
+function swirlEyes() {
+  const m = SZ / 2, eyes = catArt ? [[m - 15, m - 20], [m + 10, m - 20]] : [[m - 11, m - 4], [m + 11, m - 4]];
+  return eyes.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="9" fill="#fff"/>
+    <text class="swirl" x="${x}" y="${y + 6}" font-size="18" font-weight="800" text-anchor="middle" fill="#2b0f2e">@</text>`).join('');
+}
+
+// Hồn mèo mắt @@ bay lên khỏi ô độc
+function ghost(i, c) {
+  const m = SZ / 2, art = catArt && CAT[c.color]
+    ? `<image class="soul" href="${catSrc(c.color)}" x="${m - 35}" y="${m - 43}" width="70" height="84"/>`
+    : `<g class="soul">${cellShape(c)}</g>`;
+  overlayAt(i, `<g class="soul-fx"><ellipse cx="${m}" cy="${m - 47}" rx="17" ry="5" fill="none" stroke="#fff6a0" stroke-width="3.5"/>${art}${swirlEyes()}</g>`, 1500);
+}
+
+// Hai hàm răng tím đớp lại ở ô i
+const TEETH = Array.from({ length: 6 }, (_, k) => `L${14 + k * 11 + 5.5} 56 L${14 + (k + 1) * 11} 45`).join(' ');
+function chomp(i) {
+  const jaw = `<path d="M6 45 A39 39 0 0 1 84 45 Z" fill="#b56cff" stroke="#55208f" stroke-width="3"/><path d="M14 45 ${TEETH} Z" fill="#fff" stroke="#55208f" stroke-width="1.5" stroke-linejoin="round"/>`;
+  overlayAt(i, `<g class="jaw top">${jaw}</g><g class="jaw bot"><g transform="rotate(180 45 45)">${jaw}</g></g>`, 520);
+}
+
+// Bị đẩy khỏi hộp đúng màu: mắt @@ và ba ngôi sao bay vòng trên đầu, đi theo con mèo
+const STAR = Array.from({ length: 10 }, (_, k) => pt(0, -Math.PI / 2 + k * Math.PI / 5, k % 2 ? 3.2 : 8).replace(' ', ',')).join(' ');
+function dizzy(id) {
+  const g = nodes.get(id);
+  if (!g) return;
+  const m = SZ / 2, el = document.createElementNS(NS, 'g');
+  el.setAttribute('class', 'dizzy-fx');
+  el.innerHTML = swirlEyes() + `<g transform="translate(${m} ${m - 44})">` + [0, 1, 2].map(k =>
+      `<polygon class="orbit-star" style="animation-delay:-${(k / 3).toFixed(2)}s" points="${STAR}" fill="#ffe27a" stroke="#b88300" stroke-width="1.5"/>`).join('') + '</g>';
+  (g.querySelector('.lean') || g).appendChild(el);   // trong lớp lắc lư để mắt @@ đi theo đầu
+  jolt(g, 'dazed');
+  setTimeout(() => el.remove(), 1700);
+}
+
+// ---------------------------------------------------------------------------
+// Mèo lúc rảnh: cứ ~1,3 giây có thể chọn một con đang thức cho làm một động tác (chớp mắt, ngó quanh, quay đầu,
+// ngáp, vươn vai, dụi con bên cạnh). Không chạy khi đang vuốt, đang diễn hoạt, đang chọn booster, đã thắng/thua,
+// trang bị ẩn hoặc máy bật "giảm chuyển động". Vuốt một nước là dừng hết (stopIdle).
+// ---------------------------------------------------------------------------
+const IDLE = ['idle-look-l', 'idle-look-r', 'idle-turn', 'idle-yawn', 'idle-stretch', 'idle-nuzzle', 'idle-pet', 'faceoff'];
+const calm = matchMedia('(prefers-reduced-motion: reduce)');
+const cellG = i => cells[i] && nodes.get(cells[i].id);
+const isCat = i => { const c = cells[i]; return !!c && !c.sleep && level.colors.includes(c.color); };
+const freeCats = () => cells.map((_, i) => (isCat(i) && cellG(i) && !cellG(i).dataset.idle ? i : -1)).filter(i => i >= 0);
+
+// Cho con ở ô i làm động tác `cls` trong `ms`, kèm mặt vẽ đè `face` (nếu có); hết giờ thì trả về như cũ
+function idleAct(i, cls, ms, face = '', faceCls = '') {
+  const g = cellG(i), lean = g && g.querySelector('.lean');
+  if (!lean) return;
+  g.dataset.idle = '1';
+  if (cls) jolt(g, cls);
+  let el = null;
+  if (face) {
+    lean.insertAdjacentHTML('beforeend', `<g class="idlefx ${faceCls}">${face}</g>`);
+    el = lean.lastElementChild;
+    if (!catArt) g.classList.add('faceoff');
+  }
+  setTimeout(() => {
+    el?.remove();
+    if (cls) g.classList.remove(cls);
+    if (face) g.classList.remove('faceoff');
+    delete g.dataset.idle;
+  }, ms);
+}
+function stopIdle() {
+  for (const el of layer.querySelectorAll('.idlefx')) el.remove();
+  for (const g of layer.querySelectorAll('[data-idle]')) { g.classList.remove(...IDLE); delete g.dataset.idle; }
+}
+
+const idle = {
+  // Chớp mắt (mặt kẹo tự vẽ đã tự chớp bằng CSS); đôi khi chớp hai cái
+  blink(i) {
+    if (!catArt) return idle.look(i);
+    const f = faceOf(cells[i]), lids = coverEyes(f) + shutEyes(f, 4);
+    idleAct(i, '', 240, lids, 'blink');
+    if (Math.random() < .35) setTimeout(() => { if (cellG(i) && !busy) idleAct(i, '', 240, lids, 'blink'); }, 320);
+  },
+  look(i) { idleAct(i, Math.random() < .5 ? 'idle-look-l' : 'idle-look-r', 1750); },
+  turn(i) { idleAct(i, 'idle-turn', 2250); },
+  // Ngáp: mắt nhắm thư thái, miệng há tròn có lưỡi hồng, thân vươn cao
+  yawn(i) {
+    const f = faceOf(cells[i]), r = f.art ? 4.2 : 5.5;
+    idleAct(i, 'idle-yawn', 1550, coverEyes(f) + coverMouth(f) + shutEyes(f, 4)
+      + `<g class="yawnmouth"><ellipse cx="${f.mx}" cy="${f.my + r}" rx="${r}" ry="${r * 1.2}" fill="#6b1420" stroke="${f.ink}" stroke-width="1.2"/>
+        <ellipse cx="${f.mx}" cy="${f.my + r * 1.75}" rx="${r * .6}" ry="${r * .45}" fill="#ff8fb5"/></g>`);
+  },
+  stretch(i) { idleAct(i, 'idle-stretch', 1150); },
+  // Dụi nhau: hai con kề nhau cùng nghiêng vào nhau, nhắm mắt thư thái, một trái tim bay lên giữa hai con
+  nuzzle(i) {
+    const pals = Object.keys(DIRS).map(d => [d, step(level, i, d)]).filter(([, j]) => j >= 0 && isCat(j) && !cellG(j).dataset.idle);
+    if (!pals.length) return idle.look(i);
+    const [d, j] = pals[Math.floor(Math.random() * pals.length)], [dx, dy] = LOOK[d];
+    for (const [k, s] of [[i, 1], [j, -1]]) {
+      const g = cellG(k), f = faceOf(cells[k]);
+      g.style.setProperty('--px', `${dx * s * 5}px`);
+      g.style.setProperty('--py', `${dy * s * 4}px`);
+      g.style.setProperty('--rot', `${dx * s * 8}deg`);
+      idleAct(k, 'idle-nuzzle', 1750, coverEyes(f) + shutEyes(f, 4));
+    }
+    const [x1, y1] = pos(i), [x2, y2] = pos(j), el = document.createElementNS(NS, 'g');
+    el.setAttribute('transform', `translate(${(x1 + x2) / 2 + SZ / 2} ${(y1 + y2) / 2 + SZ / 2 - 30}) scale(1.5)`);
+    el.innerHTML = '<path class="heart-up" d="M0 4 C-7 -2 -7 -9 -2.5 -9 C-1 -9 0 -7.5 0 -6.5 C0 -7.5 1 -9 2.5 -9 C7 -9 7 -2 0 4 Z" fill="#ff7eb6" stroke="#b5306f" stroke-width="1.2"/>';
+    setTimeout(() => { overlay.appendChild(el); setTimeout(() => el.remove(), 1350); }, 350);
+  },
+};
+
+// Chạm (không vuốt) vào một con mèo: nảy lên, nhắm mắt cười, kêu meo khẽ
+function pet(i) {
+  if (!isCat(i) || cellG(i).dataset.idle && cellG(i).classList.contains('idle-pet')) return;
+  stopIdleAt(i);
+  const f = faceOf(cells[i]);
+  idleAct(i, 'idle-pet', 520, coverEyes(f) + shutEyes(f, 4));
+  sfx.pet(cells[i].color);
+}
+function stopIdleAt(i) {
+  const g = cellG(i);
+  if (!g) return;
+  for (const el of g.querySelectorAll('.idlefx')) el.remove();
+  g.classList.remove(...IDLE);
+  delete g.dataset.idle;
+}
+
+setInterval(() => {
+  if (screen !== 'game' || !level || busy || gesture || mode || solved || lost || document.hidden || calm.matches) return;
+  if (Math.random() < .3) return;
+  const free = freeCats();
+  if (!free.length) return;
+  const i = free[Math.floor(Math.random() * free.length)], r = Math.random();
+  (r < .34 ? idle.blink : r < .56 ? idle.look : r < .68 ? idle.turn : r < .79 ? idle.yawn : r < .9 ? idle.stretch : idle.nuzzle)(i);
+}, 1300);
+
 // Đếm tế bào từng loài theo những gì đang hiện trên bàn; vi khuẩn và virus đếm riêng.
 function renderSpecies() {
   const count = col => shown.filter(c => c && c.color === col).length;
@@ -1598,7 +1886,7 @@ function update() {
   });
   if (solved && !wasSolved) celebrate();
   if (lost && !wasLost) mourn();
-  if (!lost) layer.classList.remove('sad');
+  if (!lost) { layer.classList.remove('sad'); for (const f of layer.querySelectorAll('.sadface')) f.remove(); for (const g of layer.querySelectorAll('.sorry')) g.classList.remove('sorry'); }
   renderSpecies();
   renderTasks();
   renderBoosters();
@@ -1680,6 +1968,10 @@ function celebrate() {
 
 function mourn() {
   layer.classList.add('sad');
+  for (const c of cells) {
+    const lean = c && !c.sleep && level.colors.includes(c.color) && nodes.get(c.id)?.querySelector('.lean');   // mèo ngủ đã bịt mắt
+    if (lean && !lean.querySelector('.sadface')) { lean.insertAdjacentHTML('beforeend', sadFace(c)); nodes.get(c.id).classList.add('sorry'); }
+  }
   jolt(stage, 'shake');
   sfx.lose();
   buzz(60);
@@ -1688,6 +1980,7 @@ function mourn() {
 // Áp một nước (vuốt hoặc booster) theo từng chặng có hiệu ứng: bản sao mọc ra và dãy trượt, tế bào bị thay thế vỡ,
 // ô độc bốc khói, bộ 3 nổ tung, virus lan và ăn tế bào, tế bào ngủ thức dậy. Thua thì trừ 1 tim.
 async function commit(res, spent = null, info = {}) {
+  stopIdle();
   nextId = res.nextId;
   history.push({ cells, spent });
   const before = cells;
@@ -1706,13 +1999,24 @@ async function commit(res, spent = null, info = {}) {
   if (info.meow) sfx.divide(info.meow);
   if (info.mutated) nodes.get(res.born[0])?.classList.add('mutated');
   if (res.pushed) sfx.push();
+  if (info.dir && res.pushed) {
+    // Con mẹ chồm tới; cả dãy bị đẩy dồn lại rồi nảy về, con càng xa càng nảy sau
+    act(before[info.from].id, 'shove', info.dir, 7, 0, .9);
+    let k = 0;
+    for (let i = step(level, info.from, info.dir); i >= 0 && before[i]; i = step(level, i, info.dir)) act(before[i].id, 'pushed', info.dir, 6, .1 + .05 * k++);
+    // Mèo đang đứng đúng hộp mà bị đẩy ra khỏi hộp: choáng
+    if (level.hasTarget) res.moved.forEach((c, now) => {
+      const was = c ? before.indexOf(c) : -1;
+      if (was >= 0 && was !== now && level.target[was] === c.color && level.target[now] !== c.color) setTimeout(() => dizzy(c.id), 230);
+    });
+  }
   if (gone.length) { pop(gone); fx.burst(bornAt, COLORS[gone[0].color][0], 9); sfx.replace(); }
   if (res.removed.length) {
     await wait(220);
     pop(res.removed);
     const poisoned = res.removed.filter(c => level.toxic[slotOf(res.moved, c)]);
     const cleared = res.removed.filter(c => !poisoned.includes(c));
-    for (const c of poisoned) fx.smoke(slotOf(res.moved, c));
+    for (const c of poisoned) { const i = slotOf(res.moved, c); fx.smoke(i); if (level.colors.includes(c.color)) ghost(i, c); }
     if (poisoned.length) sfx.toxic();
     for (const c of cleared) { const i = slotOf(res.moved, c); fx.burst(i, COLORS[c.color][0]); fx.ring(i, COLORS[c.color][0]); }
     if (cleared.length) {
@@ -1726,15 +2030,22 @@ async function commit(res, spent = null, info = {}) {
   sync(res.cleared);
   if (res.spread.length) {
     await wait(res.removed.length ? 80 : 240);
-    pop(res.eaten);
+    if (res.eaten.length) {
+      // Virus chồm tới, hàm răng đớp, con mồi tím tái rồi bị nuốt; xong mới hiện virus mới ở ô đó
+      for (const [, from] of res.spread) { const v = res.cleared[from]; if (v) act(v.id, 'lunge', v.dir, 12); }
+      for (const c of res.eaten) { chomp(slotOf(res.cleared, c)); act(c.id, 'eaten'); }
+      sfx.eat();
+      buzz(18);
+      await wait(300);
+    }
     sync(res.infected, new Map(res.spread), res.eaten);
     for (const c of res.eaten) fx.splat(slotOf(res.cleared, c));
-    res.eaten.length ? sfx.eat() : sfx.push();
-    await wait(340);
+    if (!res.eaten.length) sfx.push();
+    await wait(res.eaten.length ? 260 : 340);
   }
   if (res.poisoned.length) {
     pop(res.poisoned);
-    for (const c of res.poisoned) fx.smoke(slotOf(res.infected, c));
+    for (const c of res.poisoned) { const i = slotOf(res.infected, c); fx.smoke(i); if (level.colors.includes(c.color)) ghost(i, c); }
     sfx.toxic();
     await wait(330);
   }
@@ -1760,13 +2071,16 @@ function play(from, dir) {
 
 // Chạm vào thứ không vuốt được: tế bào lắc đầu, kêu "bụp"
 function refuse(i, msg) {
-  const g = cells[i] && nodes.get(cells[i].id);
+  const c = cells[i], g = c && nodes.get(c.id);
   if (g) jolt(g, 'nope');
-  sfx.nope();
+  if (c && c.color === 'V') sfx.grumble();
+  else if (c && c.color === level.kill) sfx.squish();
+  else sfx.nope();
   toast(msg);
 }
 
 function restore(state) {
+  stopIdle();
   cells = state;
   if (mode) { mode = null; toast('', 0); }
   overlay.innerHTML = '';
@@ -1799,9 +2113,11 @@ function drawMode() {
     const [x, y] = pos(mode.cell);
     const others = level.colors.filter(col => col !== cells[mode.cell].color);
     out += `<rect x="${x + 2}" y="${y + 2}" width="${SZ - 4}" height="${SZ - 4}" rx="22" fill="#10206b" opacity=".82"/>`;
+    // Tối đa 2 màu thì xếp một hàng, nhiều hơn thì lưới 2 cột cho khỏi tràn ra ngoài ô
+    const cols = Math.min(2, others.length), rows = Math.ceil(others.length / cols);
     others.forEach((col, k) => {
-      const cx = x + (k - (others.length - 1) / 2) * 42;
-      out += `<g class="pick" data-pick="${col}" transform="translate(${cx + SZ * .22} ${y + SZ * .22}) scale(.56)">${cellBody({ color: col, id: 1 })}</g>`;
+      const cx = x + (k % cols - (cols - 1) / 2) * 42, cy = y + (Math.floor(k / cols) - (rows - 1) / 2) * 42;
+      out += `<g class="pick" data-pick="${col}" transform="translate(${cx + SZ * .22} ${cy + SZ * .22}) scale(.56)">${cellBody({ color: col, id: 1 })}</g>`;
     });
   } else if (mode.kind === 'clone' && mode.from != null) {
     out += mark(mode.from, 'mark sel');
@@ -1956,18 +2272,16 @@ function renderHome() {
   $('overallStars').textContent = `${Math.round(done / n * 100)}%`;
   $('overallBar').style.width = `${done / n * 100}%`;
   $('playNext').innerHTML = nx < 0 ? '🏆 Đã qua hết!<small>Chơi lại để gom đủ 3 sao</small>'
-    : `▶ ${done ? 'Chơi tiếp' : 'Bắt đầu'}<small>Level ${nx + 1} · ${CHAPTERS.find(c => nx >= c.from && nx <= c.to).name}</small>`;
-  $('chapters').innerHTML = CHAPTERS.map((ch, k) => chapterHtml(ch, k, nx)).join('');
+    : `▶ ${done ? 'Chơi tiếp' : 'Bắt đầu'}<small>Level ${nx + 1}</small>`;
+  $('chapters').innerHTML = mapHtml(nx);
   $('unlockAll').textContent = save.unlockAll ? 'Khoá lại theo thứ tự (bản thử)' : 'Mở khoá tất cả level (bản thử)';
   $('unlockAll').hidden = !LOCK_IN_ORDER;
 }
 
-// Các level của một chương xếp kiểu rắn bò, 4 nút một hàng: hàng chẵn trái sang phải, hàng lẻ ngược lại.
-// Con đường mờ nối mọi nút; đoạn chấm vàng là quãng đã đi tới.
-function chapterHtml(ch, k, nx) {
-  const ids = [];
-  for (let i = ch.from; i <= ch.to; i++) ids.push(i);
-  const doneN = ids.filter(isDone).length, stars = ids.reduce((s, i) => s + starsOf(i), 0);
+// Mọi level trên một con đường liền (không chia chương), xếp kiểu rắn bò, 4 nút một hàng: hàng chẵn trái sang phải,
+// hàng lẻ ngược lại. Con đường mờ nối mọi nút; đoạn chấm vàng là quãng đã đi tới.
+function mapHtml(nx) {
+  const ids = LEVELS.map((_, i) => i);
   const rows = Math.ceil(ids.length / 4);
   const cellOf = j => { const r = Math.floor(j / 4); return [r, r % 2 ? 3 - j % 4 : j % 4]; };
   const pts = ids.map((_, j) => { const [r, c] = cellOf(j); return `${c * 100 + 50},${r * 100 + 50}`; });
@@ -1982,10 +2296,7 @@ function chapterHtml(ch, k, nx) {
       (badge ? `<span class="new">${badge}</span>` : '') +
       (state === 'cur' ? `<svg class="marker" viewBox="-6 -10 102 108">${cellBody({ color: 'A', id: 3 })}</svg>` : '') + '</button>';
   }).join('');
-  return `<section class="chapter${unlocked(ch.from) ? '' : ' locked'}">
-    <div class="chhead"><span class="ic">${ch.icon}</span><div><small>Chương ${k + 1}</small><h3>${ch.name}</h3><small>${ch.note}</small></div>
-      <div class="prog">${doneN}/${ids.length}<small>⭐ ${stars}/${ids.length * 3}</small></div></div>
-    <div class="meter"><i style="width:${doneN / ids.length * 100}%"></i></div>
+  return `<section class="chapter">
     <div class="path" style="grid-template-rows:repeat(${rows}, 112px)">
       <svg class="roads" viewBox="0 0 400 ${rows * 100}" preserveAspectRatio="none"><polyline class="road" points="${pts.join(' ')}"/>` +
       (reached > 1 ? `<polyline class="road walked" points="${pts.slice(0, reached).join(' ')}"/>` : '') + `</svg>
@@ -1994,8 +2305,9 @@ function chapterHtml(ch, k, nx) {
 
 // Thẻ chi tiết level: ảnh thu nhỏ của bàn, mục tiêu, cơ chế, kỷ lục và mốc 3 sao.
 function openSheet(i) {
-  const lv = parseLevel(LEVELS[i]), k = CHAPTERS.findIndex(c => i >= c.from && i <= c.to), d = record(i), par = parOf(i);
-  $('shChapter').textContent = `Chương ${k + 1} · ${CHAPTERS[k].name}`;
+  const lv = parseLevel(LEVELS[i]), d = record(i), par = parOf(i), news = newLabels(i);
+  $('shChapter').textContent = news.map(l => `${l.icon} ${l.text}`).join(' · ');
+  $('shChapter').hidden = !news.length;
   $('shTitle').textContent = `Level ${i + 1}`;
   $('shPreview').innerHTML = boardSvg(lv, lv.init);
   $('shGoal').textContent = goalOf(lv);
@@ -2080,6 +2392,7 @@ board.addEventListener('pointerdown', ev => {
     return;
   }
   sfx.tap();
+  stopIdleAt(i);                                     // để con này nghiêng theo tay vuốt, không bị động tác rảnh đè
   gesture = { from: i, x: pt.x, y: pt.y, dir: null };
   try { board.setPointerCapture(ev.pointerId); } catch (e) { /* con trỏ đã nhả trước khi bắt */ }
 });
@@ -2098,6 +2411,7 @@ board.addEventListener('pointerup', () => {
   overlay.innerHTML = '';
   lookAt(from, null);
   if (dir) play(from, dir);
+  else pet(from);                                    // chạm mà không vuốt: vuốt ve
 });
 board.addEventListener('pointercancel', () => { if (gesture) lookAt(gesture.from, null); gesture = null; overlay.innerHTML = ''; });
 

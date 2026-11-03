@@ -1,0 +1,1048 @@
+[
+ {
+  "job": "c7-a hồng nhập môn",
+  "def": {
+   "rows": [
+    "..#C",
+    "#BDC",
+    "A.BA"
+   ]
+  },
+  "par": 3,
+  "ms": 0,
+  "cats": 7,
+  "slots": 10,
+  "first": 12,
+  "firstOk": 9,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 6.39,
+  "surprise": 2.42,
+  "feats": "push1"
+ },
+ {
+  "job": "c7-a hồng nhập môn",
+  "def": {
+   "rows": [
+    ".BAC",
+    "D.AC",
+    ".B#."
+   ]
+  },
+  "par": 5,
+  "ms": 21,
+  "cats": 7,
+  "slots": 11,
+  "first": 14,
+  "firstOk": 12,
+  "firstOpt": 11,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 6.39,
+  "surprise": 2.36,
+  "feats": "push3 replace1"
+ },
+ {
+  "job": "c7-a hồng nhập môn",
+  "def": {
+   "rows": [
+    "B#.C",
+    ".C#D",
+    ".AAB"
+   ]
+  },
+  "par": 3,
+  "ms": 0,
+  "cats": 7,
+  "slots": 10,
+  "first": 12,
+  "firstOk": 8,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 5.95,
+  "surprise": 2.33,
+  "feats": "push1 longPush1"
+ },
+ {
+  "job": "c7-a hồng nhập môn",
+  "def": {
+   "rows": [
+    "D#..",
+    "ACB.",
+    "C#BA"
+   ]
+  },
+  "par": 3,
+  "ms": 1,
+  "cats": 7,
+  "slots": 10,
+  "first": 12,
+  "firstOk": 10,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 6.23,
+  "surprise": 2.17,
+  "feats": "push3"
+ },
+ {
+  "job": "c7-a hồng nhập môn b",
+  "def": {
+   "rows": [
+    "B.DA",
+    "#BCA",
+    ".C#."
+   ]
+  },
+  "par": 4,
+  "ms": 8,
+  "cats": 7,
+  "slots": 10,
+  "first": 14,
+  "firstOk": 12,
+  "firstOpt": 7,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 6.4,
+  "surprise": 2.93,
+  "feats": "replace1"
+ },
+ {
+  "job": "c7-a hồng nhập môn b",
+  "def": {
+   "rows": [
+    "D...",
+    "BB.A",
+    "#CCA"
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 7,
+  "slots": 11,
+  "first": 12,
+  "firstOk": 8,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 6.67,
+  "surprise": 2.33,
+  "feats": "push2 longPush1"
+ },
+ {
+  "job": "c7-a hồng nhập môn b",
+  "def": {
+   "rows": [
+    ".#.C",
+    "BCDA",
+    ".A#B"
+   ]
+  },
+  "par": 3,
+  "ms": 2,
+  "cats": 7,
+  "slots": 10,
+  "first": 17,
+  "firstOk": 15,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 6.19,
+  "surprise": 1.88,
+  "feats": "push1"
+ },
+ {
+  "job": "c7-a hồng nhập môn b",
+  "def": {
+   "rows": [
+    "#DBA",
+    "ACB.",
+    "#.C."
+   ]
+  },
+  "par": 3,
+  "ms": 1,
+  "cats": 7,
+  "slots": 10,
+  "first": 16,
+  "firstOk": 13,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 5.77,
+  "surprise": 1.81,
+  "feats": "push1 longPush1"
+ },
+ {
+  "job": "c7-b 4 màu bàn lớn b",
+  "def": {
+   "rows": [
+    "B.BA",
+    "CB#.",
+    "DD.A",
+    "CA.."
+   ]
+  },
+  "par": 6,
+  "ms": 5,
+  "cats": 10,
+  "slots": 15,
+  "first": 20,
+  "firstOk": 16,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.2,
+  "surprise": 3.7,
+  "feats": "push3 longPush1 replace1"
+ },
+ {
+  "job": "c7-b 4 màu bàn lớn b",
+  "def": {
+   "rows": [
+    "BC.B",
+    "CDDB",
+    "##A.",
+    ".AA."
+   ]
+  },
+  "par": 5,
+  "ms": 3,
+  "cats": 10,
+  "slots": 14,
+  "first": 16,
+  "firstOk": 14,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.75,
+  "surprise": 3.63,
+  "feats": "push3 longPush2 replace1"
+ },
+ {
+  "job": "c7-b 4 màu bàn lớn b",
+  "def": {
+   "rows": [
+    "..BB",
+    "#B.C",
+    "AACA",
+    ".DD."
+   ]
+  },
+  "par": 6,
+  "ms": 22,
+  "cats": 10,
+  "slots": 15,
+  "first": 19,
+  "firstOk": 15,
+  "firstOpt": 8,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.76,
+  "surprise": 3.29,
+  "feats": "push3 longPush3 replace1"
+ },
+ {
+  "job": "c7-b 4 màu bàn lớn b",
+  "def": {
+   "rows": [
+    ".DB.",
+    "ADAC",
+    "#AC.",
+    ".BB#"
+   ]
+  },
+  "par": 5,
+  "ms": 21,
+  "cats": 10,
+  "slots": 14,
+  "first": 23,
+  "firstOk": 21,
+  "firstOpt": 9,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.2,
+  "surprise": 2.98,
+  "feats": "push2 replace1"
+ },
+ {
+  "job": "c7-c 4 màu + hộp b",
+  "def": {
+   "rows": [
+    "C.#.",
+    "CBCA",
+    "B.BA",
+    "D#A#",
+    ".D.."
+   ],
+   "goal": [
+    "...C",
+    "....",
+    "....",
+    "....",
+    "D.A."
+   ]
+  },
+  "par": 7,
+  "ms": 130,
+  "cats": 11,
+  "slots": 17,
+  "first": 20,
+  "firstOk": 14,
+  "firstOpt": 8,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.4,
+  "surprise": 3.6,
+  "feats": "push3 longPush1 replace1"
+ },
+ {
+  "job": "c7-d 4 màu + ngủ + virus",
+  "def": {
+   "rows": [
+    "#C..",
+    "..BA",
+    "BA<A",
+    ".C.d",
+    "#BD."
+   ]
+  },
+  "par": 9,
+  "ms": 165,
+  "cats": 10,
+  "slots": 18,
+  "first": 24,
+  "firstOk": 18,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.32,
+  "surprise": 6.17,
+  "feats": "push5 longPush2 replace3 wake1 wakeUse1 spread2 eaten1 virusDie3"
+ },
+ {
+  "job": "c7-d 4 màu + ngủ + virus",
+  "def": {
+   "rows": [
+    "AC##",
+    "d.DA",
+    "Cv..",
+    ".B..",
+    ".BAB"
+   ]
+  },
+  "par": 9,
+  "ms": 73,
+  "cats": 10,
+  "slots": 18,
+  "first": 22,
+  "firstOk": 20,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.31,
+  "surprise": 5.68,
+  "feats": "push4 replace3 wake1 wakeUse1 spread2 eaten1 virusDie3"
+ },
+ {
+  "job": "c7-d 4 màu + ngủ + virus",
+  "def": {
+   "rows": [
+    ".CAA",
+    "D..#",
+    "vd.C",
+    "AB.B",
+    ".B.."
+   ]
+  },
+  "par": 10,
+  "ms": 218,
+  "cats": 10,
+  "slots": 19,
+  "first": 20,
+  "firstOk": 16,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.5,
+  "surprise": 5.6,
+  "feats": "push2 longPush1 replace3 wake1 wakeUse1 spread2 eaten1 virusDie3"
+ },
+ {
+  "job": "c7-d 4 màu + ngủ + virus",
+  "def": {
+   "rows": [
+    ".#D.",
+    ".B..",
+    "Ad^.",
+    "CAB.",
+    "A.CB"
+   ]
+  },
+  "par": 9,
+  "ms": 103,
+  "cats": 10,
+  "slots": 19,
+  "first": 22,
+  "firstOk": 16,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 10.31,
+  "surprise": 4.73,
+  "feats": "push4 longPush3 replace3 wake1 wakeUse1 spread2 virusDie3"
+ },
+ {
+  "job": "c7-d 4 màu + ngủ + virus b",
+  "def": {
+   "rows": [
+    ".A#.",
+    "CBv.",
+    "D#d.",
+    "A..#",
+    "BABC"
+   ]
+  },
+  "par": 8,
+  "ms": 232,
+  "cats": 10,
+  "slots": 17,
+  "first": 19,
+  "firstOk": 4,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.69,
+  "surprise": 6.76,
+  "feats": "push2 longPush2 replace3 wake1 wakeUse1 spread1 virusDie2"
+ },
+ {
+  "job": "c7-d 4 màu + ngủ + virus b",
+  "def": {
+   "rows": [
+    "C.B.",
+    ".AB#",
+    ">d.D",
+    "A#.A",
+    "..CB"
+   ]
+  },
+  "par": 10,
+  "ms": 36,
+  "cats": 10,
+  "slots": 18,
+  "first": 22,
+  "firstOk": 17,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.91,
+  "surprise": 6.59,
+  "feats": "push3 replace3 wake1 wakeUse1 spread2 eaten2 virusDie3"
+ },
+ {
+  "job": "c7-d 4 màu + ngủ + virus b",
+  "def": {
+   "rows": [
+    "AC#C",
+    "#..B",
+    ">.AD",
+    "d...",
+    "BB#A"
+   ]
+  },
+  "par": 10,
+  "ms": 122,
+  "cats": 10,
+  "slots": 17,
+  "first": 17,
+  "firstOk": 15,
+  "firstOpt": 8,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 10.06,
+  "surprise": 5.91,
+  "feats": "push2 replace5 wake1 wakeUse1 spread3 eaten2 virusDie4"
+ },
+ {
+  "job": "c7-d 4 màu + ngủ + virus b",
+  "def": {
+   "rows": [
+    "..CB",
+    ".B##",
+    "CA.<",
+    "dAB.",
+    "A.D."
+   ]
+  },
+  "par": 10,
+  "ms": 83,
+  "cats": 10,
+  "slots": 18,
+  "first": 22,
+  "firstOk": 19,
+  "firstOpt": 9,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.18,
+  "surprise": 5.59,
+  "feats": "push4 longPush3 replace4 wake1 wakeUse1 spread3 eaten2 virusDie4"
+ },
+ {
+  "job": "c7-e tím nhập môn",
+  "def": {
+   "rows": [
+    "...#",
+    "AA#E",
+    "C#BD",
+    "B.DC"
+   ]
+  },
+  "par": 5,
+  "ms": 13,
+  "cats": 9,
+  "slots": 13,
+  "first": 16,
+  "firstOk": 15,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.25,
+  "surprise": 2.94,
+  "feats": "push2 replace1"
+ },
+ {
+  "job": "c7-e tím nhập môn",
+  "def": {
+   "rows": [
+    "#.#D",
+    "DEBC",
+    "#B.C",
+    "AA.."
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 9,
+  "slots": 13,
+  "first": 17,
+  "firstOk": 12,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 6.67,
+  "surprise": 2.18,
+  "feats": "push2 longPush2"
+ },
+ {
+  "job": "c7-e tím nhập môn",
+  "def": {
+   "rows": [
+    "B#..",
+    "..C#",
+    "BDD#",
+    "ECAA"
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 9,
+  "slots": 13,
+  "first": 18,
+  "firstOk": 13,
+  "firstOpt": 7,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 6.62,
+  "surprise": 2.06,
+  "feats": "push3 longPush1"
+ },
+ {
+  "job": "c7-e tím nhập môn",
+  "def": {
+   "rows": [
+    "#DA.",
+    "ABC#",
+    "DB#.",
+    "CE.."
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 9,
+  "slots": 13,
+  "first": 22,
+  "firstOk": 20,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 7.02,
+  "surprise": 1.91,
+  "feats": "push1 longPush1"
+ },
+ {
+  "job": "c7-e tím nhập môn b",
+  "def": {
+   "rows": [
+    "#ABA",
+    ".#..",
+    "DCCB",
+    "D.#E"
+   ]
+  },
+  "par": 5,
+  "ms": 8,
+  "cats": 9,
+  "slots": 13,
+  "first": 16,
+  "firstOk": 11,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.25,
+  "surprise": 3.69,
+  "feats": "push1 replace1"
+ },
+ {
+  "job": "c7-e tím nhập môn b",
+  "def": {
+   "rows": [
+    "C.C#",
+    ".##A",
+    "BE.A",
+    "DD.B"
+   ]
+  },
+  "par": 5,
+  "ms": 21,
+  "cats": 9,
+  "slots": 13,
+  "first": 15,
+  "firstOk": 11,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.33,
+  "surprise": 3.63,
+  "feats": "push2 replace1"
+ },
+ {
+  "job": "c7-e tím nhập môn b",
+  "def": {
+   "rows": [
+    "A.A.",
+    "C#EB",
+    "DC#B",
+    ".D.#"
+   ]
+  },
+  "par": 6,
+  "ms": 21,
+  "cats": 9,
+  "slots": 13,
+  "first": 16,
+  "firstOk": 12,
+  "firstOpt": 10,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 7.35,
+  "surprise": 3.5,
+  "feats": "replace2"
+ },
+ {
+  "job": "c7-e tím nhập môn b",
+  "def": {
+   "rows": [
+    ".B#.",
+    "C#D.",
+    "B.CD",
+    "AAE#"
+   ]
+  },
+  "par": 5,
+  "ms": 13,
+  "cats": 9,
+  "slots": 13,
+  "first": 18,
+  "firstOk": 16,
+  "firstOpt": 10,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 6.83,
+  "surprise": 2.72,
+  "feats": "push2 replace1"
+ },
+ {
+  "job": "c7-f 5 màu + màng + độc",
+  "def": {
+   "rows": [
+    "..BB#",
+    "..A##",
+    "BA#.#",
+    "DC~AD",
+    "#.CEE"
+   ],
+   "oneway": [
+    [
+     3,
+     1,
+     "down"
+    ],
+    [
+     0,
+     0,
+     "down"
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 40,
+  "cats": 12,
+  "slots": 18,
+  "first": 24,
+  "firstOk": 23,
+  "firstOpt": 12,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.18,
+  "surprise": 2.63,
+  "feats": "push4 longPush1 toxic1"
+ },
+ {
+  "job": "c7-f 5 màu + màng + độc b",
+  "def": {
+   "rows": [
+    "..BB#",
+    "..A##",
+    "BA#.#",
+    "DC~AD",
+    "#.CEE"
+   ],
+   "oneway": [
+    [
+     3,
+     1,
+     "down"
+    ],
+    [
+     0,
+     0,
+     "down"
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 40,
+  "cats": 12,
+  "slots": 18,
+  "first": 24,
+  "firstOk": 23,
+  "firstOpt": 12,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.18,
+  "surprise": 2.63,
+  "feats": "push4 longPush1 toxic1"
+ },
+ {
+  "job": "c7-g 5 màu + khuẩn + virus",
+  "def": {
+   "rows": [
+    "ABEE.",
+    "#.A#G",
+    "D.^AD",
+    ".C.#C",
+    ".B.G#"
+   ],
+   "kill": "G"
+  },
+  "par": 11,
+  "ms": 352,
+  "cats": 11,
+  "slots": 21,
+  "first": 28,
+  "firstOk": 4,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 11.53,
+  "surprise": 8,
+  "feats": "push2 longPush1 replace5 spread2 eaten1 virusDie3 germDie2"
+ },
+ {
+  "job": "c7-g 5 màu + khuẩn + virus",
+  "def": {
+   "rows": [
+    "ECB.G",
+    ".A.#.",
+    "E#DD#",
+    "C#A#B",
+    ".G.<A"
+   ],
+   "kill": "G"
+  },
+  "par": 10,
+  "ms": 83,
+  "cats": 11,
+  "slots": 20,
+  "first": 24,
+  "firstOk": 16,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.5,
+  "surprise": 6,
+  "feats": "push2 longPush1 replace6 spread3 eaten1 virusDie4 germDie2"
+ },
+ {
+  "job": "c7-g 5 màu + khuẩn + virus",
+  "def": {
+   "rows": [
+    "E.>DE",
+    "..#.G",
+    "C###A",
+    "AACDG",
+    "BB#.."
+   ],
+   "kill": "G"
+  },
+  "par": 11,
+  "ms": 51,
+  "cats": 11,
+  "slots": 20,
+  "first": 28,
+  "firstOk": 24,
+  "firstOpt": 9,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.96,
+  "surprise": 5.79,
+  "feats": "push1 longPush1 replace5 spread2 eaten2 virusDie3 germDie2"
+ },
+ {
+  "job": "c7-g 5 màu + khuẩn + virus",
+  "def": {
+   "rows": [
+    "#EA#C",
+    "#E...",
+    "CBB..",
+    "AGA.^",
+    ".DDG#"
+   ],
+   "kill": "G"
+  },
+  "par": 11,
+  "ms": 128,
+  "cats": 11,
+  "slots": 21,
+  "first": 31,
+  "firstOk": 23,
+  "firstOpt": 12,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.83,
+  "surprise": 5.5,
+  "feats": "push4 longPush1 replace6 spread3 eaten1 virusDie4 germDie2"
+ },
+ {
+  "job": "c7-g 5 màu + khuẩn + virus b",
+  "def": {
+   "rows": [
+    "ECB.G",
+    ".A.#.",
+    "E#DD#",
+    "C#A#B",
+    ".G.<A"
+   ],
+   "kill": "G"
+  },
+  "par": 10,
+  "ms": 81,
+  "cats": 11,
+  "slots": 20,
+  "first": 24,
+  "firstOk": 16,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.5,
+  "surprise": 6,
+  "feats": "push2 longPush1 replace6 spread3 eaten1 virusDie4 germDie2"
+ },
+ {
+  "job": "c7-g 5 màu + khuẩn + virus b",
+  "def": {
+   "rows": [
+    "#EGG#",
+    "BDBDE",
+    "A.C.C",
+    "v.A#.",
+    "A.#.."
+   ],
+   "kill": "G"
+  },
+  "par": 11,
+  "ms": 194,
+  "cats": 11,
+  "slots": 21,
+  "first": 31,
+  "firstOk": 27,
+  "firstOpt": 12,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.83,
+  "surprise": 5.11,
+  "feats": "push1 longPush1 replace4 spread1 eaten1 virusDie2 germDie2"
+ },
+ {
+  "job": "c7-g 5 màu + khuẩn + virus b",
+  "def": {
+   "rows": [
+    "#AE#C",
+    "..A.C",
+    "D#D#A",
+    ">G#.B",
+    "#B.GE"
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 80,
+  "cats": 11,
+  "slots": 19,
+  "first": 25,
+  "firstOk": 22,
+  "firstOpt": 11,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.52,
+  "surprise": 4.98,
+  "feats": "push2 longPush1 replace4 spread1 eaten1 virusDie2 germDie2"
+ },
+ {
+  "job": "c7-g 5 màu + khuẩn + virus b",
+  "def": {
+   "rows": [
+    "AB#G#",
+    "CABEE",
+    "..D#G",
+    ".>A.#",
+    "C..D."
+   ],
+   "kill": "G"
+  },
+  "par": 11,
+  "ms": 12,
+  "cats": 11,
+  "slots": 21,
+  "first": 29,
+  "firstOk": 27,
+  "firstOpt": 12,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.77,
+  "surprise": 4.88,
+  "feats": "push1 replace5 spread2 eaten1 virusDie3 germDie2"
+ },
+ {
+  "job": "c7-h trùm cuối 5 màu",
+  "def": {
+   "rows": [
+    "##CBC",
+    "C#AA.",
+    "..Bev",
+    "BD..E",
+    "..G#E",
+    "~#DAd"
+   ],
+   "oneway": [
+    [
+     2,
+     1,
+     "down"
+    ]
+   ],
+   "kill": "G"
+  },
+  "par": 12,
+  "ms": 87,
+  "cats": 15,
+  "slots": 24,
+  "first": 32,
+  "firstOk": 14,
+  "firstOpt": 7,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 11.76,
+  "surprise": 7.75,
+  "feats": "push2 longPush1 replace5 wake1 wakeUse1 spread3 eaten3 virusDie4 germDie1"
+ },
+ {
+  "job": "c7-h trùm cuối 5 màu b",
+  "def": {
+   "rows": [
+    "#EAAC",
+    "#BD#A",
+    "C.#.#",
+    "BCe.D",
+    "#E~v.",
+    ".B.Gd"
+   ],
+   "oneway": [
+    [
+     5,
+     4,
+     "up"
+    ]
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 217,
+  "cats": 15,
+  "slots": 23,
+  "first": 29,
+  "firstOk": 23,
+  "firstOpt": 7,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.92,
+  "surprise": 5.64,
+  "feats": "push2 longPush1 replace3 wake1 wakeUse1 spread1 eaten1 virusDie2 germDie1"
+ },
+ {
+  "job": "c7-h trùm cuối 5 màu b",
+  "def": {
+   "rows": [
+    "B>dB.",
+    "A~..#",
+    ".#.C.",
+    "DAE.C",
+    "#GBeA",
+    "##ECD"
+   ],
+   "oneway": [
+    [
+     2,
+     2,
+     "up"
+    ]
+   ],
+   "kill": "G"
+  },
+  "par": 11,
+  "ms": 24,
+  "cats": 15,
+  "slots": 24,
+  "first": 37,
+  "firstOk": 32,
+  "firstOpt": 16,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.74,
+  "surprise": 5.54,
+  "feats": "push7 longPush3 replace4 wake1 wakeUse1 spread2 eaten2 virusDie3 germDie1"
+ }
+]

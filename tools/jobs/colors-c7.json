@@ -1,0 +1,342 @@
+[
+ {
+  "name": "c7-a hồng nhập môn",
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AABBCCD",
+  "min": 3,
+  "max": 5,
+  "ms": 120000,
+  "seed": 7001,
+  "top": 4
+ },
+ {
+  "name": "c7-a hồng nhập môn b",
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AABBCCD",
+  "min": 3,
+  "max": 5,
+  "ms": 120000,
+  "seed": 90001,
+  "top": 4
+ },
+ {
+  "name": "c7-b 4 màu bàn lớn",
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AAABBBCCDD",
+  "min": 5,
+  "max": 8,
+  "twist": true,
+  "ms": 120000,
+  "seed": 7014,
+  "top": 4
+ },
+ {
+  "name": "c7-b 4 màu bàn lớn b",
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AAABBBCCDD",
+  "min": 5,
+  "max": 8,
+  "twist": true,
+  "ms": 120000,
+  "seed": 97920,
+  "top": 4
+ },
+ {
+  "name": "c7-c 4 màu + hộp",
+  "shape": {
+   "w": 4,
+   "h": 5,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AAABBBCCCDD",
+  "mode": "target",
+  "targets": 3,
+  "min": 6,
+  "max": 9,
+  "twist": true,
+  "ms": 120000,
+  "seed": 7027,
+  "top": 4
+ },
+ {
+  "name": "c7-c 4 màu + hộp b",
+  "shape": {
+   "w": 4,
+   "h": 5,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AAABBBCCCDD",
+  "mode": "target",
+  "targets": 3,
+  "min": 6,
+  "max": 9,
+  "twist": true,
+  "ms": 120000,
+  "seed": 105839,
+  "top": 4
+ },
+ {
+  "name": "c7-d 4 màu + ngủ + virus",
+  "shape": {
+   "w": 4,
+   "h": 5,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AAABBBCCDd",
+  "virus": 1,
+  "need": [
+   "wakeUse",
+   "virus"
+  ],
+  "min": 7,
+  "max": 10,
+  "twist": true,
+  "ms": 120000,
+  "seed": 7040,
+  "top": 4
+ },
+ {
+  "name": "c7-d 4 màu + ngủ + virus b",
+  "shape": {
+   "w": 4,
+   "h": 5,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AAABBBCCDd",
+  "virus": 1,
+  "need": [
+   "wakeUse",
+   "virus"
+  ],
+  "min": 7,
+  "max": 10,
+  "twist": true,
+  "ms": 120000,
+  "seed": 113758,
+  "top": 4
+ },
+ {
+  "name": "c7-e tím nhập môn",
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AABBCCDDE",
+  "min": 4,
+  "max": 7,
+  "ms": 120000,
+  "seed": 7053,
+  "top": 4
+ },
+ {
+  "name": "c7-e tím nhập môn b",
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AABBCCDDE",
+  "min": 4,
+  "max": 7,
+  "ms": 120000,
+  "seed": 121677,
+  "top": 4
+ },
+ {
+  "name": "c7-f 5 màu + màng + độc",
+  "shape": {
+   "w": 5,
+   "h": 5,
+   "holes": [
+    3,
+    6
+   ]
+  },
+  "toxic": 1,
+  "membranes": 2,
+  "cells": "AAABBBCCDDEE",
+  "need": [
+   "toxic"
+  ],
+  "min": 7,
+  "max": 10,
+  "twist": true,
+  "maxMs": 400,
+  "ms": 120000,
+  "seed": 7066,
+  "top": 4
+ },
+ {
+  "name": "c7-f 5 màu + màng + độc b",
+  "shape": {
+   "w": 5,
+   "h": 5,
+   "holes": [
+    3,
+    6
+   ]
+  },
+  "toxic": 1,
+  "membranes": 2,
+  "cells": "AAABBBCCDDEE",
+  "need": [
+   "toxic"
+  ],
+  "min": 7,
+  "max": 10,
+  "twist": true,
+  "maxMs": 400,
+  "ms": 120000,
+  "seed": 129596,
+  "top": 4
+ },
+ {
+  "name": "c7-g 5 màu + khuẩn + virus",
+  "shape": {
+   "w": 5,
+   "h": 5,
+   "holes": [
+    3,
+    6
+   ]
+  },
+  "cells": "GGAAABBCCDDEE",
+  "virus": 1,
+  "mode": "kill",
+  "need": [
+   "virus"
+  ],
+  "min": 8,
+  "max": 11,
+  "twist": true,
+  "maxMs": 400,
+  "ms": 120000,
+  "seed": 7079,
+  "top": 4
+ },
+ {
+  "name": "c7-g 5 màu + khuẩn + virus b",
+  "shape": {
+   "w": 5,
+   "h": 5,
+   "holes": [
+    3,
+    6
+   ]
+  },
+  "cells": "GGAAABBCCDDEE",
+  "virus": 1,
+  "mode": "kill",
+  "need": [
+   "virus"
+  ],
+  "min": 8,
+  "max": 11,
+  "twist": true,
+  "maxMs": 400,
+  "ms": 120000,
+  "seed": 137515,
+  "top": 4
+ },
+ {
+  "name": "c7-h trùm cuối 5 màu",
+  "shape": {
+   "w": 5,
+   "h": 6,
+   "holes": [
+    5,
+    8
+   ]
+  },
+  "toxic": 1,
+  "membranes": 1,
+  "virus": 1,
+  "cells": "GAAABBBCCCDDEEde",
+  "mode": "kill",
+  "need": [
+   "wakeUse",
+   "virus"
+  ],
+  "min": 9,
+  "max": 13,
+  "twist": true,
+  "maxMs": 500,
+  "ms": 120000,
+  "seed": 7092,
+  "top": 4
+ },
+ {
+  "name": "c7-h trùm cuối 5 màu b",
+  "shape": {
+   "w": 5,
+   "h": 6,
+   "holes": [
+    5,
+    8
+   ]
+  },
+  "toxic": 1,
+  "membranes": 1,
+  "virus": 1,
+  "cells": "GAAABBBCCCDDEEde",
+  "mode": "kill",
+  "need": [
+   "wakeUse",
+   "virus"
+  ],
+  "min": 9,
+  "max": 13,
+  "twist": true,
+  "maxMs": 500,
+  "ms": 120000,
+  "seed": 145434,
+  "top": 4
+ }
+]

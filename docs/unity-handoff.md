@@ -2,7 +2,7 @@
 
 Prototype HTML (`prototype/meowtosis.html`) là bản **đặc tả chơi được** của Meowtosis. Tài liệu này ghi lại prototype có những gì, phần nào dùng lại nguyên được trong bản Unity, phần nào chỉ để tham khảo, phần nào phải bỏ, và cách chuyển để không mất gì.
 
-> Cập nhật lần cuối: 2026-11-03 · 61 level · 6 chương · repo riêng `D:\GitHub\Meowtosis` (GitHub `trinhkien123-iuiu/Meowtosis`)
+> Cập nhật lần cuối: 2026-11-03 · 69 level · 7 chương · repo riêng `D:\GitHub\Meowtosis` (GitHub `trinhkien123-iuiu/Meowtosis`)
 
 ---
 
@@ -28,7 +28,7 @@ Prototype HTML (`prototype/meowtosis.html`) là bản **đặc tả chơi đư�
 
 | Nhóm | Gồm | Cách dùng ở Unity |
 |---|---|---|
-| **Dùng nguyên** | Dữ liệu 61 level, luật chơi, lời thoại hướng dẫn, các con số cân bằng (tim, sao, xu, booster), tiếng mèo Mixkit, phông Baloo 2 | Xuất ra file dữ liệu, nhập vào Unity; luật chép sang C# |
+| **Dùng nguyên** | Dữ liệu 69 level, luật chơi, lời thoại hướng dẫn, các con số cân bằng (tim, sao, xu, booster), tiếng mèo Mixkit, phông Baloo 2 | Xuất ra file dữ liệu, nhập vào Unity; luật chép sang C# |
 | **Dùng làm đặc tả** | Bố cục màn hình, luồng chơi, hướng dẫn tương tác, danh sách VFX/SFX, cách vẽ khung bàn chơi, hình kẹo dẻo tự vẽ | Quay video/chụp màn hình từng màn; đội art, UI, VFX làm lại theo |
 | **Phải bỏ** | Toàn bộ asset Shikacat; âm thanh tổng hợp bằng Web Audio; code giao diện HTML/SVG | Thay bằng art, âm thanh và UI của team |
 
@@ -45,8 +45,8 @@ Mỗi level là một phần tử trong mảng `LEVELS` (khối `// ==LOGIC==` c
 | `#` | Ngoài cơ thể (không phải ô) |
 | `.` | Ô trống |
 | `~` | Ô độc (không cần lấp) |
-| `A` `B` `C` | Mèo đỏ, xanh, vàng |
-| `a` `b` `c` | Mèo ngủ (màu tương ứng) |
+| `A` `B` `C` `D` `E` | Mèo đỏ, xanh, vàng, hồng, tím (hồng từ level 18, tím từ level 31; 4–5 màu cùng lúc từ level 62) |
+| `a` `b` `c` `d` `e` | Mèo ngủ (màu tương ứng) |
 | `G` | Vi khuẩn |
 | `^` `v` `<` `>` | Virus, mũi tên là hướng lan |
 
@@ -68,16 +68,17 @@ Ví dụ level 17 (nhập môn hộp mục tiêu):
   [0, 2, 'right', 'Lấp nốt ô cuối: vừa kín ổ vừa đúng hộp!']] }
 ```
 
-Chương được khai báo riêng trong mảng `CHAPTERS` (theo chỉ số level):
+Level chia thành các **khối theo cơ chế**, khai báo trong mảng `CHAPTERS` (theo chỉ số level). Bản đồ không hiện khối, chỉ một đường liền; level có yếu tố mới mang huy hiệu ở góc phải dưới. Trong mỗi khối, level xếp từ dễ đến khó bằng `tools/order.js` (xem [level-design.md §3](level-design.md#3-đường-cong-độ-khó)):
 
-| Chương | Level | Nội dung |
+| Khối | Level | Nội dung |
 |---|---|---|
-| 1 · Phòng nuôi cấy | 1–16 | Chia, đẩy, thay thế, khử 3; bàn lớn từ level 13 |
+| 1 · Phòng nuôi cấy | 1–16 | Chia, đẩy, thay thế, khử 3; bàn đông mèo từ level 10 |
 | 2 · Vào vị trí | 17–28 | Hộp mục tiêu |
 | 3 · Màng và độc | 29–37 | Màng một chiều, ô độc |
 | 4 · Ngủ và virus | 38–48 | Mèo ngủ (cả thức dây chuyền), virus (cả hai virus) |
 | 5 · Diệt khuẩn | 49–54 | Diệt khuẩn (cả khử 3 vi khuẩn) |
 | 6 · Đại gia đình | 55–61 | Bàn 5×5–5×6, đông mèo, trộn mọi cơ chế |
+| 7 · Đủ sắc màu | 62–69 | Lần đầu 4 màu (level 62) rồi 5 màu (level 66) cùng lúc |
 
 ### 3.2 Xuất ra JSON
 
@@ -114,13 +115,15 @@ tut 0 2 right  Lấp nốt ô cuối: vừa kín ổ vừa đúng hộp!
 ```
 
 Ghi chú:
-- **`id` cố định.** Prototype hiện lưu tiến độ theo *nội dung* level, vì chưa có id. Bản Unity nên có id riêng để sửa nội dung level mà không mất sao của người chơi.
+- **`id` cố định.** Prototype hiện lưu tiến độ theo *nội dung* level, vì chưa có id: sửa hay đổi màu một level là sao đã đạt ở level đó mất (đã xảy ra khi đổi màu 13 level). Bản Unity nên có id riêng để sửa nội dung level mà không mất sao của người chơi.
 - **Lời thoại nên tách ra bảng dịch** (`tut` chỉ giữ khoá), để làm đa ngôn ngữ về sau.
 - **Đưa vào test `LevelCatalogTests`:** mọi level giải được, `par` khớp bộ giải, các bước `tut` đi được và (nếu đi trọn) dẫn tới thắng đúng bằng `par`, hai level không trùng khung (kể cả xoay/lật).
 
 ---
 
 ## 4. Luật chơi: chép sang C#
+
+Luật đầy đủ của từng cơ chế, kèm ví dụ đã được test, nằm ở [mechanics.md](mechanics.md). Mục này chỉ tóm tắt để chép code.
 
 Luật nằm trọn trong khối `// ==LOGIC==`, viết bằng hàm thuần (không đụng giao diện), nên chép sang tầng **Domain** C# gần như 1–1.
 
@@ -136,7 +139,7 @@ Luật nằm trọn trong khối `// ==LOGIC==`, viết bằng hàm thuần (kh�
 | `solve` | A* tìm lời giải ngắn nhất (Gợi ý, tính `par`). Ước lượng = số mèo còn thiếu để kín ổ (không tính virus, vi khuẩn); mỗi nước chỉ sinh một mèo nên ước lượng không vượt thực tế và lời giải vẫn ngắn nhất | `Solver` (chạy nền, có giới hạn trạng thái) |
 
 **Thứ tự kết thúc một lượt** (phải giữ đúng, nếu không level sẽ lệch lời giải):
-1. Đặt bản sao: chia vào ô trống; ô kề có mèo thì đẩy cả dãy tới ô trống gần nhất; không còn ô trống thì bản sao **thay thế** ô kề (thay thế cùng màu = nước không hợp lệ).
+1. Đặt bản sao: chia vào ô trống; ô kề có mèo thì đẩy cả dãy tới ô trống gần nhất; không còn ô trống (gặp mép, lỗ, màng chặn hoặc mèo ngủ) thì bản sao **thay thế** ô kề. Mèo ngủ không bị đẩy, không bị thay thế; thay thế cùng màu hoặc đè lên mèo ngủ = nước không hợp lệ.
 2. Ô độc giết mọi thứ đang đứng trên nó.
 3. Khử mọi dãy ≥ 3 cùng màu (mèo ngủ cũng tính, virus không tính).
 4. Mỗi virus lan 1 ô theo hướng của nó: vào ô trống hoặc ăn mèo; không đi vào virus khác, bị màng chặn.
@@ -164,8 +167,8 @@ Luật nằm trọn trong khối `// ==LOGIC==`, viết bằng hàm thuần (kh�
 
 **Onboarding (3 lớp):**
 1. **Thẻ hướng dẫn** hiện lần đầu gặp mỗi cơ chế (`MECHANICS`): ảnh trước/sau một lần vuốt, ảnh "sau" do chính luật tính ra.
-2. **Hướng dẫn tương tác** ở 10 level (1, 2, 4, 9, 17, 29, 33, 38, 43, 49): làm tối bàn trừ ô cần chú ý, bàn tay chỉ hướng vuốt, bong bóng lời thoại; chỉ nhận đúng nước được chỉ; hoàn tác thì lùi bước.
-3. **Mẹo đầu màn** (`tip`) ở 5 level có yếu tố mới nhỏ (13 bàn lớn, 41 thức dây chuyền, 46 hai virus, 51 khử 3 vi khuẩn, 55 bàn 5×5): chỉ là bong bóng lời thoại, không khoá nước.
+2. **Hướng dẫn tương tác** ở 10 level (1, 2, 4, 12, 17, 29, 33, 38, 42, 49): làm tối bàn trừ ô cần chú ý, bàn tay chỉ hướng vuốt, bong bóng lời thoại; chỉ nhận đúng nước được chỉ; hoàn tác thì lùi bước.
+3. **Mẹo đầu màn** (`tip`) ở 9 level có yếu tố mới nhỏ (10 bàn đông mèo, 18 mèo hồng, 31 mèo tím, 41 thức dây chuyền, 44 hai virus, 51 khử 3 vi khuẩn, 57 bàn đông mèo nhất, 62 bốn màu, 66 năm màu): chỉ là bong bóng lời thoại, không khoá nước.
 
 ---
 
@@ -184,7 +187,7 @@ Luật nằm trọn trong khối `// ==LOGIC==`, viết bằng hàm thuần (kh�
 
 | Hạng mục | Prototype đang dùng | Cần cho bản Unity |
 |---|---|---|
-| Mèo 3 màu | Mèo Shikacat đỏ/xanh/vàng | Mèo của team, **mỗi màu một đặc điểm riêng ngoài màu** (nơ, tai, hoa văn) để người mù màu phân biệt được |
+| Mèo 5 màu | Mèo Shikacat đỏ/xanh/vàng/hồng/tím (bản export có 12 màu; bỏ các màu dễ lẫn với nhau hoặc với vi khuẩn, ô độc) | Mèo của team, **mỗi màu một đặc điểm riêng ngoài màu** (nơ, tai, hoa văn) để người mù màu phân biệt được |
 | Mèo vui | Mèo mắt sao/mắt tim (Shikacat) | Biểu cảm khi vào đúng hộp và khi thắng |
 | Mèo ngủ | Mèo xám + bịt mắt vẽ thêm | Mèo ngủ **giữ nguyên màu**, nhắm mắt + chữ z |
 | Virus, vi khuẩn | Tự vẽ (quả cầu gai, viên nang có râu) | Vẽ lại cùng phong cách |
@@ -199,8 +202,9 @@ Luật nằm trọn trong khối `// ==LOGIC==`, viết bằng hàm thuần (kh�
 
 | Sự kiện | Prototype | Bản Unity |
 |---|---|---|
-| Mèo chia (ngẫu nhiên, cao độ theo màu) | 4 file Mixkit, đổi cao độ: xanh ×0,86, đỏ ×1, vàng ×1,16 | Giữ hoặc thu thêm biến thể |
+| Mèo chia (ngẫu nhiên, cao độ theo màu) | 4 file Mixkit, đổi cao độ: tím ×0,78, xanh ×0,86, đỏ ×1, vàng ×1,16, hồng ×1,26 | Giữ hoặc thu thêm biến thể |
 | Mèo giận (nước không hợp lệ) | Mixkit | Giữ |
+| Chạm virus / vi khuẩn (không vuốt được) | Tổng hợp Web Audio: virus kêu ọ ọ khàn, vi khuẩn kêu bóp nhũn (không dùng tiếng mèo) | Sound designer làm file thật |
 | Nút, popup, thắng, thua, nhạc nền, vào đúng hộp, khử 3 | Shikacat | **Thay** |
 | Đẩy, thay thế, ô độc, virus ăn, thức dậy, booster, hồi sinh, xu bay, ka-ching | Tổng hợp Web Audio | Sound designer làm file thật |
 
@@ -212,15 +216,18 @@ Luật nằm trọn trong khối `// ==LOGIC==`, viết bằng hàm thuần (kh�
 |---|---|
 | Chia | Mèo mẹ co giãn theo hướng vuốt; bản sao bật ra (đàn hồi) |
 | Khử 3 | Mèo vỡ thành giọt màu, sóng tròn, chữ "Khử 3!", rung bàn |
-| Ô độc | Khói xanh bốc lên; bọt sủi liên tục trên ô |
-| Virus ăn | Vệt tím bắn ra; gai virus xoay chậm |
+| Ô độc | Khói xanh bốc lên; bọt sủi liên tục trên ô; mèo chết trên ô độc thì hồn mèo trắng mờ mắt @@, có vầng hào quang, bay lên, lắc lư |
+| Virus ăn | Virus nguồn chồm tới; hai hàm răng tím đớp lại trên con mồi; con mồi tím tái, xoay, bị nuốt; xong mới hiện virus mới; vệt tím bắn ra; gai virus xoay chậm |
+| Đẩy | Con mẹ chồm tới theo hướng vuốt; cả dãy bị đẩy dồn lại rồi nảy về, con càng xa càng nảy sau |
+| Bị đẩy khỏi hộp đúng màu | Mắt @@ xoay, 3 ngôi sao chạy vòng elip trên đầu (to khi ra trước, nhỏ khi ra sau), thân lắc lư |
 | Thức dậy | Lấp lánh, nảy lên, chữ z biến mất |
 | Vào đúng hộp | Hộp sáng lên, lấp lánh, mèo đổi mắt sao |
 | Thắng | Pháo giấy, cả ổ mèo nhảy + mắt sao; sao bay vào bảng thắng |
-| Thua | Rung bàn, mèo xụ xuống |
+| Thua | Rung bàn; mèo đang thức đổi sang mặt bất lực (mắt nhắm cong, miệng mếu) và giọt mồ hôi chảy bên trán, không bóp dẹt thân |
 | Booster | Đột biến: vòng cầu vồng · Cấy ghép: vệt sáng bay tới ô đích · Hồi sinh: loé vàng, sao bay lên, tim bay về |
 | Xu | 4–12 đồng bay theo đường cong từ bảng thắng lên ô xu; ô xu nảy và đếm dần |
-| Mèo lúc nghỉ | Thở phập phồng, chớp mắt; nghiêng người theo hướng vuốt |
+| Mèo lúc nghỉ | Thở phập phồng; cứ ~1,3 giây có thể chọn ngẫu nhiên một con đang rảnh cho: chớp mắt (đôi khi chớp hai cái), ngó nghiêng, quay đầu sang hướng kia, ngáp (mắt nhắm, miệng há có lưỡi), vươn vai, dụi con bên cạnh (hai con nghiêng vào nhau, trái tim bay lên). Dừng hết khi vuốt; tắt khi máy bật giảm chuyển động. **Bản Unity nên thêm** liếm tay, vẫy đuôi, giật tai: cần hình động riêng (ảnh tĩnh không làm đẹp được) |
+| Chạm vào mèo (không vuốt) | Nảy lên, nhắm mắt cười, kêu meo khẽ |
 | Hướng dẫn | Làm tối theo hình khung, bàn tay lướt, vệt chấm chạy |
 
 ---
@@ -283,11 +290,11 @@ Nằm ở `tools/` (đường dẫn tương đối, chạy bằng Node ở thư 
 |---|---|
 | Mọi level cùng mục tiêu **lấp kín**; cơ chế chỉ thêm điều kiện | Góp ý playtest: đổi mục tiêu giữa chừng làm người chơi ngợp |
 | Bảng nhiệm vụ luôn hiện (`Lấp kín 3/9 · Hộp 1/2 · Vi khuẩn còn 2`) | Người chơi luôn biết còn thiếu gì |
-| Mỗi level một khung riêng (61 khung, không trùng kể cả xoay/lật) | Mỗi màn có cảm giác mới |
+| Mỗi level một khung riêng (69 khung, không trùng kể cả xoay/lật) | Mỗi màn có cảm giác mới |
 | Không dùng khung vòng khuyên, chữ C | Không bao giờ lấp kín được (tối đa 6 mèo) |
 | Màu là danh tính, trạng thái báo bằng kênh khác | Mèo ngủ bị xám làm người chơi không biết màu |
 | Khử 3 và ô độc được dạy bằng hướng dẫn tương tác thay vì level nhỏ riêng | Trên khung nhỏ, lời giải ngắn nhất không bao giờ cần chúng (chúng làm mất mèo) |
-| Hướng dẫn đi trọn lời giải phải bằng `par` (riêng level 9 chỉ dẫn 4/8 nước đầu, phần còn lại người chơi tự làm) | Người làm theo luôn được 3 sao |
+| Hướng dẫn đi trọn lời giải phải bằng `par` (riêng level 12 chỉ dẫn 4/8 nước đầu, phần còn lại người chơi tự làm) | Người làm theo luôn được 3 sao |
 | Tên game Meowtosis | Gợi mèo + nguyên phân, tách khỏi tên Mitoosis của Le Slo (game lấy cảm hứng cơ chế) |
 | Bàn lớn (4×4 – 5×6) luôn có nhiều mèo đặt sẵn | Mỗi nước chỉ sinh một mèo: bàn lớn ít mèo thì dài lê thê và bộ giải không kham nổi |
-| Mỗi chương đi theo nhịp dạy → luyện → mở rộng → bất ngờ → trùm | Người chơi quen dần rồi mới gặp mẹo; chi tiết ở [level-design.md](level-design.md) |
+| Trong mỗi khối: dạy → luyện ít nhất 3 level → cơ chế kế → trộn; level xếp từ dễ đến khó theo độ khó quyết định | Người chơi quen dần rồi mới gặp mẹo; chi tiết ở [level-design.md](level-design.md) |

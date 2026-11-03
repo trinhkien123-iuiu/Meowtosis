@@ -1,0 +1,59 @@
+== c7-a hồng nhập môn (22 ứng viên) · bị loại: {}
+  {"rows":["..#C","#BDC","A.BA"]} par=3 ms=0 mèo=7 ô=10 đầu=12/9/2 cụt=? thừa=0 khó=6.39 bấtngờ=2.42 [push1]
+  {"rows":[".BAC","D.AC",".B#."]} par=5 ms=21 mèo=7 ô=11 đầu=14/12/11 cụt=? thừa=1 khó=6.39 bấtngờ=2.36 [push3 replace1]
+  {"rows":["B#.C",".C#D",".AAB"]} par=3 ms=0 mèo=7 ô=10 đầu=12/8/4 cụt=? thừa=0 khó=5.95 bấtngờ=2.33 [push1 longPush1]
+  {"rows":["D#..","ACB.","C#BA"]} par=3 ms=1 mèo=7 ô=10 đầu=12/10/2 cụt=? thừa=0 khó=6.23 bấtngờ=2.17 [push3]
+== c7-a hồng nhập môn b (22 ứng viên) · bị loại: {}
+  {"rows":["B.DA","#BCA",".C#."]} par=4 ms=8 mèo=7 ô=10 đầu=14/12/7 cụt=? thừa=1 khó=6.4 bấtngờ=2.93 [replace1]
+  {"rows":["D...","BB.A","#CCA"]} par=4 ms=1 mèo=7 ô=11 đầu=12/8/4 cụt=? thừa=0 khó=6.67 bấtngờ=2.33 [push2 longPush1]
+  {"rows":[".#.C","BCDA",".A#B"]} par=3 ms=2 mèo=7 ô=10 đầu=17/15/4 cụt=? thừa=0 khó=6.19 bấtngờ=1.88 [push1]
+  {"rows":["#DBA","ACB.","#.C."]} par=3 ms=1 mèo=7 ô=10 đầu=16/13/6 cụt=? thừa=0 khó=5.77 bấtngờ=1.81 [push1 longPush1]
+== c7-b 4 màu bàn lớn b (9 ứng viên) · bị loại: {"không có mẹo":682,"quá ngắn":54748,"nước đầu dễ đoán":2}
+  {"rows":["B.BA","CB#.","DD.A","CA.."]} par=6 ms=5 mèo=10 ô=15 đầu=20/16/4 cụt=? thừa=1 khó=8.2 bấtngờ=3.7 [push3 longPush1 replace1]
+  {"rows":["BC.B","CDDB","##A.",".AA."]} par=5 ms=3 mèo=10 ô=14 đầu=16/14/2 cụt=? thừa=1 khó=7.75 bấtngờ=3.63 [push3 longPush2 replace1]
+  {"rows":["..BB","#B.C","AACA",".DD."]} par=6 ms=22 mèo=10 ô=15 đầu=19/15/8 cụt=? thừa=1 khó=7.76 bấtngờ=3.29 [push3 longPush3 replace1]
+  {"rows":[".DB.","ADAC","#AC.",".BB#"]} par=5 ms=21 mèo=10 ô=14 đầu=23/21/9 cụt=? thừa=1 khó=7.2 bấtngờ=2.98 [push2 replace1]
+== c7-e tím nhập môn (80 ứng viên) · bị loại: {}
+  {"rows":["...#","AA#E","C#BD","B.DC"]} par=5 ms=13 mèo=9 ô=13 đầu=16/15/6 cụt=? thừa=1 khó=7.25 bấtngờ=2.94 [push2 replace1]
+  {"rows":["#.#D","DEBC","#B.C","AA.."]} par=4 ms=1 mèo=9 ô=13 đầu=17/12/6 cụt=? thừa=0 khó=6.67 bấtngờ=2.18 [push2 longPush2]
+  {"rows":["B#..","..C#","BDD#","ECAA"]} par=4 ms=1 mèo=9 ô=13 đầu=18/13/7 cụt=? thừa=0 khó=6.62 bấtngờ=2.06 [push3 longPush1]
+  {"rows":["#DA.","ABC#","DB#.","CE.."]} par=4 ms=1 mèo=9 ô=13 đầu=22/20/4 cụt=? thừa=0 khó=7.02 bấtngờ=1.91 [push1 longPush1]
+== c7-d 4 màu + ngủ + virus (8 ứng viên) · bị loại: {"thiếu wakeUse":1110,"quá giới hạn giải":167,"quá dài":32,"thiếu virus":29,"giải chậm":8,"nước đầu dễ đoán":1}
+  {"rows":["#C..","..BA","BA<A",".C.d","#BD."]} par=9 ms=165 mèo=10 ô=18 đầu=24/18/1 cụt=? thừa=1 khó=10.32 bấtngờ=6.17 [push5 longPush2 replace3 wake1 wakeUse1 spread2 eaten1 virusDie3]
+  {"rows":["AC##","d.DA","Cv..",".B..",".BAB"]} par=9 ms=73 mèo=10 ô=18 đầu=22/20/1 cụt=? thừa=1 khó=10.31 bấtngờ=5.68 [push4 replace3 wake1 wakeUse1 spread2 eaten1 virusDie3]
+  {"rows":[".CAA","D..#","vd.C","AB.B",".B.."]} par=10 ms=218 mèo=10 ô=19 đầu=20/16/5 cụt=? thừa=1 khó=10.5 bấtngờ=5.6 [push2 longPush1 replace3 wake1 wakeUse1 spread2 eaten1 virusDie3]
+  {"rows":[".#D.",".B..","Ad^.","CAB.","A.CB"]} par=9 ms=103 mèo=10 ô=19 đầu=22/16/1 cụt=? thừa=0 khó=10.31 bấtngờ=4.73 [push4 longPush3 replace3 wake1 wakeUse1 spread2 virusDie3]
+== c7-b 4 màu bàn lớn (0 ứng viên) · bị loại: {"không có mẹo":1579,"quá ngắn":1030}
+== c7-e tím nhập môn b (80 ứng viên) · bị loại: {}
+  {"rows":["#ABA",".#..","DCCB","D.#E"]} par=5 ms=8 mèo=9 ô=13 đầu=16/11/6 cụt=? thừa=1 khó=7.25 bấtngờ=3.69 [push1 replace1]
+  {"rows":["C.C#",".##A","BE.A","DD.B"]} par=5 ms=21 mèo=9 ô=13 đầu=15/11/5 cụt=? thừa=1 khó=7.33 bấtngờ=3.63 [push2 replace1]
+  {"rows":["A.A.","C#EB","DC#B",".D.#"]} par=6 ms=21 mèo=9 ô=13 đầu=16/12/10 cụt=? thừa=2 khó=7.35 bấtngờ=3.5 [replace2]
+  {"rows":[".B#.","C#D.","B.CD","AAE#"]} par=5 ms=13 mèo=9 ô=13 đầu=18/16/10 cụt=? thừa=1 khó=6.83 bấtngờ=2.72 [push2 replace1]
+== c7-d 4 màu + ngủ + virus b (5 ứng viên) · bị loại: {"thiếu wakeUse":1353,"quá giới hạn giải":159,"giải chậm":7,"quá dài":40,"nước đầu dễ đoán":8,"thiếu virus":55}
+  {"rows":[".A#.","CBv.","D#d.","A..#","BABC"]} par=8 ms=232 mèo=10 ô=17 đầu=19/4/1 cụt=? thừa=1 khó=9.69 bấtngờ=6.76 [push2 longPush2 replace3 wake1 wakeUse1 spread1 virusDie2]
+  {"rows":["C.B.",".AB#",">d.D","A#.A","..CB"]} par=10 ms=36 mèo=10 ô=18 đầu=22/17/1 cụt=? thừa=2 khó=10.91 bấtngờ=6.59 [push3 replace3 wake1 wakeUse1 spread2 eaten2 virusDie3]
+  {"rows":["AC#C","#..B",">.AD","d...","BB#A"]} par=10 ms=122 mèo=10 ô=17 đầu=17/15/8 cụt=? thừa=3 khó=10.06 bấtngờ=5.91 [push2 replace5 wake1 wakeUse1 spread3 eaten2 virusDie4]
+  {"rows":["..CB",".B##","CA.<","dAB.","A.D."]} par=10 ms=83 mèo=10 ô=18 đầu=22/19/9 cụt=? thừa=2 khó=10.18 bấtngờ=5.59 [push4 longPush3 replace4 wake1 wakeUse1 spread3 eaten2 virusDie4]
+== c7-c 4 màu + hộp b (1 ứng viên) · bị loại: {"không có mẹo":36,"giải chậm":1,"quá giới hạn giải":33}
+  {"rows":["C.#.","CBCA","B.BA","D#A#",".D.."],"goal":["...C","....","....","....","D.A."]} par=7 ms=130 mèo=11 ô=17 đầu=20/14/8 cụt=? thừa=1 khó=8.4 bấtngờ=3.6 [push3 longPush1 replace1]
+== c7-c 4 màu + hộp (0 ứng viên) · bị loại: {"không có mẹo":38,"quá giới hạn giải":33}
+== c7-f 5 màu + màng + độc b (1 ứng viên) · bị loại: {"thiếu toxic":986,"quá giới hạn giải":241,"quá ngắn":97,"giải chậm":1,"quá dài":3}
+  {"rows":["..BB#","..A##","BA#.#","DC~AD","#.CEE"],"oneway":[[3,1,"down"],[0,0,"down"]]} par=7 ms=40 mèo=12 ô=18 đầu=24/23/12 cụt=? thừa=1 khó=8.18 bấtngờ=2.63 [push4 longPush1 toxic1]
+== c7-g 5 màu + khuẩn + virus (18 ứng viên) · bị loại: {"quá dài":16,"thiếu virus":132,"quá giới hạn giải":58,"nước đầu dễ đoán":8}
+  {"rows":["ABEE.","#.A#G","D.^AD",".C.#C",".B.G#"],"kill":"G"} par=11 ms=352 mèo=11 ô=21 đầu=28/4/1 cụt=? thừa=1 khó=11.53 bấtngờ=8 [push2 longPush1 replace5 spread2 eaten1 virusDie3 germDie2]
+  {"rows":["ECB.G",".A.#.","E#DD#","C#A#B",".G.<A"],"kill":"G"} par=10 ms=83 mèo=11 ô=20 đầu=24/16/6 cụt=? thừa=1 khó=10.5 bấtngờ=6 [push2 longPush1 replace6 spread3 eaten1 virusDie4 germDie2]
+  {"rows":["E.>DE","..#.G","C###A","AACDG","BB#.."],"kill":"G"} par=11 ms=51 mèo=11 ô=20 đầu=28/24/9 cụt=? thừa=2 khó=10.96 bấtngờ=5.79 [push1 longPush1 replace5 spread2 eaten2 virusDie3 germDie2]
+  {"rows":["#EA#C","#E...","CBB..","AGA.^",".DDG#"],"kill":"G"} par=11 ms=128 mèo=11 ô=21 đầu=31/23/12 cụt=? thừa=1 khó=10.83 bấtngờ=5.5 [push4 longPush1 replace6 spread3 eaten1 virusDie4 germDie2]
+== c7-f 5 màu + màng + độc (1 ứng viên) · bị loại: {"thiếu toxic":1019,"quá giới hạn giải":233,"quá ngắn":95,"giải chậm":3,"quá dài":3}
+  {"rows":["..BB#","..A##","BA#.#","DC~AD","#.CEE"],"oneway":[[3,1,"down"],[0,0,"down"]]} par=7 ms=40 mèo=12 ô=18 đầu=24/23/12 cụt=? thừa=1 khó=8.18 bấtngờ=2.63 [push4 longPush1 toxic1]
+== c7-h trùm cuối 5 màu b (2 ứng viên) · bị loại: {"quá giới hạn giải":161,"thiếu wakeUse":190,"quá ngắn":210,"thiếu virus":9}
+  {"rows":["#EAAC","#BD#A","C.#.#","BCe.D","#E~v.",".B.Gd"],"oneway":[[5,4,"up"]],"kill":"G"} par=9 ms=217 mèo=15 ô=23 đầu=29/23/7 cụt=? thừa=1 khó=9.92 bấtngờ=5.64 [push2 longPush1 replace3 wake1 wakeUse1 spread1 eaten1 virusDie2 germDie1]
+  {"rows":["B>dB.","A~..#",".#.C.","DAE.C","#GBeA","##ECD"],"oneway":[[2,2,"up"]],"kill":"G"} par=11 ms=24 mèo=15 ô=24 đầu=37/32/16 cụt=? thừa=2 khó=10.74 bấtngờ=5.54 [push7 longPush3 replace4 wake1 wakeUse1 spread2 eaten2 virusDie3 germDie1]
+== c7-h trùm cuối 5 màu (1 ứng viên) · bị loại: {"quá giới hạn giải":152,"quá ngắn":222,"thiếu wakeUse":204,"thiếu virus":6,"giải chậm":4}
+  {"rows":["##CBC","C#AA.","..Bev","BD..E","..G#E","~#DAd"],"oneway":[[2,1,"down"]],"kill":"G"} par=12 ms=87 mèo=15 ô=24 đầu=32/14/7 cụt=? thừa=3 khó=11.76 bấtngờ=7.75 [push2 longPush1 replace5 wake1 wakeUse1 spread3 eaten3 virusDie4 germDie1]
+== c7-g 5 màu + khuẩn + virus b (26 ứng viên) · bị loại: {"thiếu virus":139,"quá giới hạn giải":73,"quá dài":15,"nước đầu dễ đoán":12}
+  {"rows":["ECB.G",".A.#.","E#DD#","C#A#B",".G.<A"],"kill":"G"} par=10 ms=81 mèo=11 ô=20 đầu=24/16/6 cụt=? thừa=1 khó=10.5 bấtngờ=6 [push2 longPush1 replace6 spread3 eaten1 virusDie4 germDie2]
+  {"rows":["#EGG#","BDBDE","A.C.C","v.A#.","A.#.."],"kill":"G"} par=11 ms=194 mèo=11 ô=21 đầu=31/27/12 cụt=? thừa=1 khó=10.83 bấtngờ=5.11 [push1 longPush1 replace4 spread1 eaten1 virusDie2 germDie2]
+  {"rows":["#AE#C","..A.C","D#D#A",">G#.B","#B.GE"],"kill":"G"} par=9 ms=80 mèo=11 ô=19 đầu=25/22/11 cụt=? thừa=1 khó=9.52 bấtngờ=4.98 [push2 longPush1 replace4 spread1 eaten1 virusDie2 germDie2]
+  {"rows":["AB#G#","CABEE","..D#G",".>A.#","C..D."],"kill":"G"} par=11 ms=12 mèo=11 ô=21 đầu=29/27/12 cụt=? thừa=1 khó=10.77 bấtngờ=4.88 [push1 replace5 spread2 eaten1 virusDie3 germDie2]
+XONG 16 job

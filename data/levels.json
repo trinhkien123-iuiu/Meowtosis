@@ -121,38 +121,6 @@
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
-   "A#.",
-   "B.."
-  ],
-  "par": 4,
-  "solution": [
-   [
-    1,
-    0,
-    "right"
-   ],
-   [
-    0,
-    0,
-    "down"
-   ],
-   [
-    1,
-    1,
-    "right"
-   ],
-   [
-    1,
-    2,
-    "up"
-   ]
-  ]
- },
- {
-  "index": 6,
-  "chapter": 1,
-  "chapterName": "Phòng nuôi cấy",
-  "rows": [
    "#A#",
    "...",
    "#B#"
@@ -182,7 +150,7 @@
   ]
  },
  {
-  "index": 7,
+  "index": 6,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -210,6 +178,38 @@
     1,
     1,
     "up"
+   ],
+   [
+    1,
+    2,
+    "up"
+   ]
+  ]
+ },
+ {
+  "index": 7,
+  "chapter": 1,
+  "chapterName": "Phòng nuôi cấy",
+  "rows": [
+   "A#.",
+   "B.."
+  ],
+  "par": 4,
+  "solution": [
+   [
+    1,
+    0,
+    "right"
+   ],
+   [
+    0,
+    0,
+    "down"
+   ],
+   [
+    1,
+    1,
+    "right"
    ],
    [
     1,
@@ -273,6 +273,168 @@
  },
  {
   "index": 9,
+  "chapter": 1,
+  "chapterName": "Phòng nuôi cấy",
+  "rows": [
+   "..A",
+   "...",
+   "B.."
+  ],
+  "par": 10,
+  "solution": [
+   [
+    2,
+    0,
+    "up"
+   ],
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    1,
+    2,
+    "left"
+   ],
+   [
+    1,
+    1,
+    "down"
+   ],
+   [
+    2,
+    1,
+    "left"
+   ],
+   [
+    1,
+    0,
+    "right"
+   ],
+   [
+    2,
+    0,
+    "up"
+   ],
+   [
+    1,
+    1,
+    "right"
+   ],
+   [
+    2,
+    1,
+    "up"
+   ],
+   [
+    1,
+    2,
+    "down"
+   ]
+  ]
+ },
+ {
+  "index": 10,
+  "chapter": 1,
+  "chapterName": "Phòng nuôi cấy",
+  "rows": [
+   "#AA#",
+   "C.BB",
+   "CAA.",
+   ".CB#"
+  ],
+  "tip": "Ổ to hơn, đông mèo hơn: nhìn cả dãy trước khi vuốt nhé!",
+  "par": 4,
+  "solution": [
+   [
+    1,
+    0,
+    "right"
+   ],
+   [
+    2,
+    1,
+    "down"
+   ],
+   [
+    3,
+    2,
+    "left"
+   ],
+   [
+    2,
+    0,
+    "right"
+   ]
+  ]
+ },
+ {
+  "index": 11,
+  "chapter": 1,
+  "chapterName": "Phòng nuôi cấy",
+  "rows": [
+   "C..A",
+   "....",
+   "##.#",
+   "...B"
+  ],
+  "par": 10,
+  "solution": [
+   [
+    0,
+    3,
+    "left"
+   ],
+   [
+    0,
+    3,
+    "down"
+   ],
+   [
+    0,
+    0,
+    "right"
+   ],
+   [
+    0,
+    1,
+    "down"
+   ],
+   [
+    1,
+    1,
+    "right"
+   ],
+   [
+    1,
+    2,
+    "down"
+   ],
+   [
+    1,
+    3,
+    "left"
+   ],
+   [
+    2,
+    2,
+    "down"
+   ],
+   [
+    3,
+    3,
+    "left"
+   ],
+   [
+    3,
+    1,
+    "left"
+   ]
+  ]
+ },
+ {
+  "index": 12,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -351,70 +513,66 @@
   ]
  },
  {
-  "index": 10,
+  "index": 13,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
-   "..A",
-   "...",
-   "B.."
+   "CBB.",
+   ".#..",
+   "..AA",
+   "#C.A"
   ],
-  "par": 10,
+  "par": 9,
   "solution": [
    [
-    2,
-    0,
-    "up"
-   ],
-   [
-    0,
-    2,
-    "down"
-   ],
-   [
-    1,
-    2,
-    "left"
-   ],
-   [
-    1,
-    1,
-    "down"
-   ],
-   [
-    2,
-    1,
-    "left"
-   ],
-   [
-    1,
-    0,
-    "right"
-   ],
-   [
-    2,
-    0,
-    "up"
-   ],
-   [
-    1,
+    3,
     1,
     "right"
    ],
    [
+    3,
     2,
+    "up"
+   ],
+   [
+    2,
+    2,
+    "right"
+   ],
+   [
     1,
+    2,
+    "right"
+   ],
+   [
+    1,
+    3,
     "up"
    ],
    [
     1,
     2,
     "down"
+   ],
+   [
+    2,
+    3,
+    "left"
+   ],
+   [
+    2,
+    1,
+    "left"
+   ],
+   [
+    2,
+    0,
+    "up"
    ]
   ]
  },
  {
-  "index": 11,
+  "index": 14,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -472,164 +630,6 @@
    [
     2,
     3,
-    "up"
-   ]
-  ]
- },
- {
-  "index": 12,
-  "chapter": 1,
-  "chapterName": "Phòng nuôi cấy",
-  "rows": [
-   "C..A",
-   "....",
-   "##.#",
-   "...B"
-  ],
-  "par": 10,
-  "solution": [
-   [
-    0,
-    3,
-    "left"
-   ],
-   [
-    0,
-    3,
-    "down"
-   ],
-   [
-    0,
-    0,
-    "right"
-   ],
-   [
-    0,
-    1,
-    "down"
-   ],
-   [
-    1,
-    1,
-    "right"
-   ],
-   [
-    1,
-    2,
-    "down"
-   ],
-   [
-    1,
-    3,
-    "left"
-   ],
-   [
-    2,
-    2,
-    "down"
-   ],
-   [
-    3,
-    3,
-    "left"
-   ],
-   [
-    3,
-    1,
-    "left"
-   ]
-  ]
- },
- {
-  "index": 13,
-  "chapter": 1,
-  "chapterName": "Phòng nuôi cấy",
-  "rows": [
-   "#AA#",
-   "C.BB",
-   "CAA.",
-   ".CB#"
-  ],
-  "tip": "Ổ to hơn, đông mèo hơn: nhìn cả dãy trước khi vuốt nhé!",
-  "par": 4,
-  "solution": [
-   [
-    1,
-    0,
-    "right"
-   ],
-   [
-    2,
-    1,
-    "down"
-   ],
-   [
-    3,
-    2,
-    "left"
-   ],
-   [
-    2,
-    0,
-    "right"
-   ]
-  ]
- },
- {
-  "index": 14,
-  "chapter": 1,
-  "chapterName": "Phòng nuôi cấy",
-  "rows": [
-   "CBB.",
-   ".#..",
-   "..AA",
-   "#C.A"
-  ],
-  "par": 9,
-  "solution": [
-   [
-    3,
-    1,
-    "right"
-   ],
-   [
-    3,
-    2,
-    "up"
-   ],
-   [
-    2,
-    2,
-    "right"
-   ],
-   [
-    1,
-    2,
-    "right"
-   ],
-   [
-    1,
-    3,
-    "up"
-   ],
-   [
-    1,
-    2,
-    "down"
-   ],
-   [
-    2,
-    3,
-    "left"
-   ],
-   [
-    2,
-    1,
-    "left"
-   ],
-   [
-    2,
-    0,
     "up"
    ]
   ]
@@ -806,6 +806,48 @@
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
+   "D...",
+   "#.B#"
+  ],
+  "goal": [
+   "...B",
+   "..D."
+  ],
+  "tip": "Mèo hồng đến chơi! Hộp hồng cần mèo hồng, và màu nào cũng phải giữ lại ít nhất 1 con.",
+  "par": 5,
+  "solution": [
+   [
+    1,
+    2,
+    "up"
+   ],
+   [
+    0,
+    2,
+    "right"
+   ],
+   [
+    0,
+    0,
+    "right"
+   ],
+   [
+    0,
+    1,
+    "down"
+   ],
+   [
+    1,
+    1,
+    "right"
+   ]
+  ]
+ },
+ {
+  "index": 19,
+  "chapter": 2,
+  "chapterName": "Vào vị trí",
+  "rows": [
    "A..",
    ".B#"
   ],
@@ -838,33 +880,27 @@
   ]
  },
  {
-  "index": 19,
+  "index": 20,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
-   "A...",
-   "#.B#"
+   "DB.C",
+   ".CC#",
+   "#B#B",
+   "D.D."
   ],
   "goal": [
-   "...B",
-   "..A."
+   "....",
+   "B...",
+   ".C..",
+   ".D.."
   ],
-  "par": 5,
+  "par": 4,
   "solution": [
    [
-    1,
-    2,
-    "up"
-   ],
-   [
     0,
-    2,
-    "right"
-   ],
-   [
-    0,
-    0,
-    "right"
+    3,
+    "left"
    ],
    [
     0,
@@ -872,14 +908,19 @@
     "down"
    ],
    [
-    1,
-    1,
+    3,
+    0,
     "right"
+   ],
+   [
+    1,
+    2,
+    "left"
    ]
   ]
  },
  {
-  "index": 20,
+  "index": 21,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -930,131 +971,59 @@
   ]
  },
  {
-  "index": 21,
-  "chapter": 2,
-  "chapterName": "Vào vị trí",
-  "rows": [
-   "...B",
-   "A..."
-  ],
-  "goal": [
-   "..BA",
-   "...."
-  ],
-  "par": 10,
-  "solution": [
-   [
-    1,
-    0,
-    "right"
-   ],
-   [
-    1,
-    1,
-    "up"
-   ],
-   [
-    0,
-    3,
-    "left"
-   ],
-   [
-    0,
-    2,
-    "down"
-   ],
-   [
-    1,
-    2,
-    "left"
-   ],
-   [
-    0,
-    1,
-    "right"
-   ],
-   [
-    0,
-    2,
-    "down"
-   ],
-   [
-    1,
-    0,
-    "right"
-   ],
-   [
-    0,
-    3,
-    "left"
-   ],
-   [
-    1,
-    3,
-    "up"
-   ]
-  ]
- },
- {
   "index": 22,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
-   "#..#",
-   ".B.A",
-   "#.A#"
+   "ABC.",
+   "C#.C",
+   "AA#B",
+   "A.#.",
+   "C..B"
   ],
   "goal": [
-   "..A.",
+   ".A..",
    "...B",
-   "..A."
+   "....",
+   "....",
+   ".C.."
   ],
-  "par": 9,
+  "par": 7,
   "solution": [
    [
-    2,
-    2,
-    "left"
-   ],
-   [
-    1,
-    1,
-    "right"
-   ],
-   [
-    2,
-    1,
-    "up"
-   ],
-   [
-    1,
-    2,
-    "down"
-   ],
-   [
-    1,
-    3,
-    "left"
-   ],
-   [
-    2,
-    2,
-    "up"
-   ],
-   [
-    1,
+    0,
     0,
     "right"
    ],
    [
-    1,
+    0,
+    2,
+    "down"
+   ],
+   [
+    0,
     2,
     "right"
    ],
    [
-    2,
-    1,
+    0,
+    3,
+    "down"
+   ],
+   [
+    4,
+    3,
+    "left"
+   ],
+   [
+    4,
+    0,
     "right"
+   ],
+   [
+    4,
+    1,
+    "up"
    ]
   ]
  },
@@ -1126,16 +1095,77 @@
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
-   "..#",
-   "B.A",
-   "#.C"
+   "#..#",
+   ".B.A",
+   "#.A#"
   ],
   "goal": [
-   "C..",
-   ".A.",
-   "..B"
+   "..A.",
+   "...B",
+   "..A."
   ],
   "par": 9,
+  "solution": [
+   [
+    2,
+    2,
+    "left"
+   ],
+   [
+    1,
+    1,
+    "right"
+   ],
+   [
+    2,
+    1,
+    "up"
+   ],
+   [
+    1,
+    2,
+    "down"
+   ],
+   [
+    1,
+    3,
+    "left"
+   ],
+   [
+    2,
+    2,
+    "up"
+   ],
+   [
+    1,
+    0,
+    "right"
+   ],
+   [
+    1,
+    2,
+    "right"
+   ],
+   [
+    2,
+    1,
+    "right"
+   ]
+  ]
+ },
+ {
+  "index": 25,
+  "chapter": 2,
+  "chapterName": "Vào vị trí",
+  "rows": [
+   "...B",
+   "A..."
+  ],
+  "goal": [
+   "..BA",
+   "...."
+  ],
+  "par": 10,
   "solution": [
    [
     1,
@@ -1145,47 +1175,52 @@
    [
     1,
     1,
-    "down"
-   ],
-   [
-    1,
-    2,
-    "left"
-   ],
-   [
-    2,
-    2,
-    "up"
-   ],
-   [
-    2,
-    1,
-    "right"
-   ],
-   [
-    1,
-    1,
-    "down"
-   ],
-   [
-    1,
-    2,
-    "left"
-   ],
-   [
-    2,
-    1,
     "up"
    ],
    [
     0,
-    1,
+    3,
     "left"
+   ],
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    1,
+    2,
+    "left"
+   ],
+   [
+    0,
+    1,
+    "right"
+   ],
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    1,
+    0,
+    "right"
+   ],
+   [
+    0,
+    3,
+    "left"
+   ],
+   [
+    1,
+    3,
+    "up"
    ]
   ]
  },
  {
-  "index": 25,
+  "index": 26,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1260,104 +1295,7 @@
   ]
  },
  {
-  "index": 26,
-  "chapter": 2,
-  "chapterName": "Vào vị trí",
-  "rows": [
-   "AB.C",
-   ".CC#",
-   "#B#B",
-   "A.A."
-  ],
-  "goal": [
-   "....",
-   "B...",
-   ".C..",
-   ".A.."
-  ],
-  "par": 4,
-  "solution": [
-   [
-    0,
-    3,
-    "left"
-   ],
-   [
-    0,
-    1,
-    "down"
-   ],
-   [
-    3,
-    0,
-    "right"
-   ],
-   [
-    1,
-    2,
-    "left"
-   ]
-  ]
- },
- {
   "index": 27,
-  "chapter": 2,
-  "chapterName": "Vào vị trí",
-  "rows": [
-   "ABC.",
-   "C#.C",
-   "AA#B",
-   "A.#.",
-   "C..B"
-  ],
-  "goal": [
-   ".A..",
-   "...B",
-   "....",
-   "....",
-   ".C.."
-  ],
-  "par": 7,
-  "solution": [
-   [
-    0,
-    0,
-    "right"
-   ],
-   [
-    0,
-    2,
-    "down"
-   ],
-   [
-    0,
-    2,
-    "right"
-   ],
-   [
-    0,
-    3,
-    "down"
-   ],
-   [
-    4,
-    3,
-    "left"
-   ],
-   [
-    4,
-    0,
-    "right"
-   ],
-   [
-    4,
-    1,
-    "up"
-   ]
-  ]
- },
- {
-  "index": 28,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1420,6 +1358,69 @@
     0,
     4,
     "down"
+   ]
+  ]
+ },
+ {
+  "index": 28,
+  "chapter": 2,
+  "chapterName": "Vào vị trí",
+  "rows": [
+   "..#",
+   "B.A",
+   "#.C"
+  ],
+  "goal": [
+   "C..",
+   ".A.",
+   "..B"
+  ],
+  "par": 9,
+  "solution": [
+   [
+    1,
+    0,
+    "right"
+   ],
+   [
+    1,
+    1,
+    "down"
+   ],
+   [
+    1,
+    2,
+    "left"
+   ],
+   [
+    2,
+    2,
+    "up"
+   ],
+   [
+    2,
+    1,
+    "right"
+   ],
+   [
+    1,
+    1,
+    "down"
+   ],
+   [
+    1,
+    2,
+    "left"
+   ],
+   [
+    2,
+    1,
+    "up"
+   ],
+   [
+    0,
+    1,
+    "left"
    ]
   ]
  },
@@ -1513,7 +1514,7 @@
   "rows": [
    "...",
    ".A.",
-   "#B#"
+   "#E#"
   ],
   "oneway": [
    [
@@ -1527,6 +1528,7 @@
     "down"
    ]
   ],
+  "tip": "Mèo tím đến chơi! Như mọi màu khác, phải giữ lại ít nhất 1 con.",
   "par": 9,
   "solution": [
    [
@@ -1690,76 +1692,9 @@
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
-   "~..~.",
-   "B..A."
-  ],
-  "par": 11,
-  "solution": [
-   [
-    1,
-    0,
-    "right"
-   ],
-   [
-    1,
-    1,
-    "up"
-   ],
-   [
-    1,
-    0,
-    "right"
-   ],
-   [
-    1,
-    3,
-    "left"
-   ],
-   [
-    1,
-    2,
-    "up"
-   ],
-   [
-    0,
-    1,
-    "down"
-   ],
-   [
-    1,
-    1,
-    "right"
-   ],
-   [
-    0,
-    2,
-    "left"
-   ],
-   [
-    0,
-    1,
-    "down"
-   ],
-   [
-    1,
-    2,
-    "left"
-   ],
-   [
-    1,
-    4,
-    "up"
-   ]
-  ]
- },
- {
-  "index": 35,
-  "chapter": 3,
-  "chapterName": "Màng và độc",
-  "rows": [
    "C.~C",
-   "A.A.",
-   "A#.A",
+   "D.D.",
+   "D#.D",
    "BB~C",
    ".B.#"
   ],
@@ -1804,6 +1739,83 @@
     4,
     1,
     "right"
+   ]
+  ]
+ },
+ {
+  "index": 35,
+  "chapter": 3,
+  "chapterName": "Màng và độc",
+  "rows": [
+   "#C.CA",
+   ".EA#A",
+   ".EE#.",
+   "~~#E#",
+   ".AC.C"
+  ],
+  "oneway": [
+   [
+    0,
+    3,
+    "right"
+   ],
+   [
+    1,
+    0,
+    "right"
+   ],
+   [
+    3,
+    0,
+    "up"
+   ]
+  ],
+  "par": 9,
+  "solution": [
+   [
+    1,
+    2,
+    "up"
+   ],
+   [
+    0,
+    3,
+    "right"
+   ],
+   [
+    1,
+    4,
+    "down"
+   ],
+   [
+    1,
+    2,
+    "left"
+   ],
+   [
+    0,
+    1,
+    "down"
+   ],
+   [
+    2,
+    2,
+    "left"
+   ],
+   [
+    4,
+    2,
+    "left"
+   ],
+   [
+    3,
+    3,
+    "down"
+   ],
+   [
+    2,
+    0,
+    "up"
    ]
   ]
  },
@@ -1879,48 +1891,48 @@
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
-   "#C.CA",
-   ".BA#A",
-   ".BB#.",
-   "~~#B#",
-   ".AC.C"
+   "~..~.",
+   "B..A."
   ],
-  "oneway": [
-   [
-    0,
-    3,
-    "right"
-   ],
-   [
-    1,
-    0,
-    "right"
-   ],
-   [
-    3,
-    0,
-    "up"
-   ]
-  ],
-  "par": 9,
+  "par": 11,
   "solution": [
    [
     1,
+    0,
+    "right"
+   ],
+   [
+    1,
+    1,
+    "up"
+   ],
+   [
+    1,
+    0,
+    "right"
+   ],
+   [
+    1,
+    3,
+    "left"
+   ],
+   [
+    1,
     2,
     "up"
    ],
    [
     0,
-    3,
+    1,
+    "down"
+   ],
+   [
+    1,
+    1,
     "right"
    ],
    [
-    1,
-    4,
-    "down"
-   ],
-   [
-    1,
+    0,
     2,
     "left"
    ],
@@ -1930,23 +1942,13 @@
     "down"
    ],
    [
-    2,
+    1,
     2,
     "left"
    ],
    [
+    1,
     4,
-    2,
-    "left"
-   ],
-   [
-    3,
-    3,
-    "down"
-   ],
-   [
-    2,
-    0,
     "up"
    ]
   ]
@@ -2026,55 +2028,58 @@
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
-   "b.A..",
-   ".B#.."
+   "C.C#",
+   ".cBB",
+   "d.DB",
+   "bD.D",
+   "#..."
   ],
   "par": 9,
   "solution": [
    [
     1,
-    1,
-    "left"
-   ],
-   [
-    0,
     2,
-    "left"
-   ],
-   [
-    0,
-    1,
-    "down"
-   ],
-   [
-    0,
-    0,
-    "right"
-   ],
-   [
-    1,
-    1,
-    "left"
-   ],
-   [
-    1,
-    0,
     "up"
    ],
    [
     0,
+    0,
+    "right"
+   ],
+   [
+    1,
     1,
     "right"
    ],
    [
-    0,
-    4,
+    2,
+    3,
+    "left"
+   ],
+   [
+    3,
+    3,
     "down"
    ],
    [
-    0,
-    3,
+    2,
+    2,
     "down"
+   ],
+   [
+    2,
+    0,
+    "up"
+   ],
+   [
+    1,
+    2,
+    "down"
+   ],
+   [
+    4,
+    3,
+    "left"
    ]
   ]
  },
@@ -2132,66 +2137,6 @@
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
-   "C.C#",
-   ".cBB",
-   "a.AB",
-   "bA.A",
-   "#..."
-  ],
-  "par": 9,
-  "solution": [
-   [
-    1,
-    2,
-    "up"
-   ],
-   [
-    0,
-    0,
-    "right"
-   ],
-   [
-    1,
-    1,
-    "right"
-   ],
-   [
-    2,
-    3,
-    "left"
-   ],
-   [
-    3,
-    3,
-    "down"
-   ],
-   [
-    2,
-    2,
-    "down"
-   ],
-   [
-    2,
-    0,
-    "up"
-   ],
-   [
-    1,
-    2,
-    "down"
-   ],
-   [
-    4,
-    3,
-    "left"
-   ]
-  ]
- },
- {
-  "index": 43,
-  "chapter": 4,
-  "chapterName": "Ngủ và virus",
-  "rows": [
    ".#",
    "A#",
    "B#",
@@ -2237,7 +2182,7 @@
   ]
  },
  {
-  "index": 44,
+  "index": 43,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2253,6 +2198,56 @@
    [
     0,
     2,
+    "left"
+   ]
+  ]
+ },
+ {
+  "index": 44,
+  "chapter": 4,
+  "chapterName": "Ngủ và virus",
+  "rows": [
+   "#A..",
+   "#A.B",
+   "C<Cv",
+   "A.#B"
+  ],
+  "tip": "Hai virus, hai hướng: mỗi con lan theo mũi tên của riêng nó.",
+  "par": 7,
+  "solution": [
+   [
+    2,
+    2,
+    "right"
+   ],
+   [
+    3,
+    3,
+    "up"
+   ],
+   [
+    3,
+    0,
+    "right"
+   ],
+   [
+    2,
+    2,
+    "left"
+   ],
+   [
+    3,
+    0,
+    "up"
+   ],
+   [
+    1,
+    3,
+    "left"
+   ],
+   [
+    0,
+    3,
     "left"
    ]
   ]
@@ -2310,43 +2305,115 @@
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
-   "#A..",
-   "#A.B",
-   "C<Cv",
-   "A.#B"
+   "e.A..",
+   ".E#.."
   ],
-  "tip": "Hai virus, hai hướng: mỗi con lan theo mũi tên của riêng nó.",
-  "par": 7,
+  "par": 9,
   "solution": [
    [
-    2,
-    2,
-    "right"
+    1,
+    1,
+    "left"
    ],
    [
-    3,
-    3,
-    "up"
-   ],
-   [
-    3,
     0,
-    "right"
-   ],
-   [
-    2,
     2,
     "left"
    ],
    [
-    3,
+    0,
+    1,
+    "down"
+   ],
+   [
+    0,
+    0,
+    "right"
+   ],
+   [
+    1,
+    1,
+    "left"
+   ],
+   [
+    1,
     0,
     "up"
+   ],
+   [
+    0,
+    1,
+    "right"
+   ],
+   [
+    0,
+    4,
+    "down"
+   ],
+   [
+    0,
+    3,
+    "down"
+   ]
+  ]
+ },
+ {
+  "index": 47,
+  "chapter": 4,
+  "chapterName": "Ngủ và virus",
+  "rows": [
+   "BAAC.",
+   "#AB.C",
+   "#C^.#",
+   "...a#",
+   "#Ab.B"
+  ],
+  "par": 10,
+  "solution": [
+   [
+    0,
+    0,
+    "right"
+   ],
+   [
+    0,
+    1,
+    "down"
+   ],
+   [
+    3,
+    1,
+    "left"
+   ],
+   [
+    1,
+    4,
+    "left"
    ],
    [
     1,
     3,
-    "left"
+    "down"
+   ],
+   [
+    2,
+    1,
+    "right"
+   ],
+   [
+    2,
+    2,
+    "down"
+   ],
+   [
+    3,
+    3,
+    "down"
+   ],
+   [
+    1,
+    1,
+    "right"
    ],
    [
     0,
@@ -2356,15 +2423,15 @@
   ]
  },
  {
-  "index": 47,
+  "index": 48,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
-   ".ABC",
-   ".B.A",
+   ".DBC",
+   ".B.D",
    "B#..",
    "...C",
-   "^.CA"
+   "^.CD"
   ],
   "par": 11,
   "solution": [
@@ -2426,66 +2493,6 @@
   ]
  },
  {
-  "index": 48,
-  "chapter": 4,
-  "chapterName": "Ngủ và virus",
-  "rows": [
-   "BAAC.",
-   "#AB.C",
-   "#C^.#",
-   "...a#",
-   "#Ab.B"
-  ],
-  "par": 9,
-  "solution": [
-   [
-    2,
-    1,
-    "right"
-   ],
-   [
-    4,
-    1,
-    "right"
-   ],
-   [
-    4,
-    2,
-    "up"
-   ],
-   [
-    3,
-    3,
-    "up"
-   ],
-   [
-    2,
-    1,
-    "down"
-   ],
-   [
-    3,
-    1,
-    "left"
-   ],
-   [
-    1,
-    4,
-    "left"
-   ],
-   [
-    1,
-    4,
-    "up"
-   ],
-   [
-    0,
-    4,
-    "left"
-   ]
-  ]
- },
- {
   "index": 49,
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
@@ -2527,7 +2534,7 @@
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
   "rows": [
-   "AB#",
+   "AE#",
    "#.#",
    "#.G"
   ],
@@ -2665,9 +2672,64 @@
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
   "rows": [
-   "AC.B",
-   ".AB#",
-   "AGA#",
+   "BGC.",
+   "##G.",
+   ".AAv",
+   "#B.A"
+  ],
+  "kill": "G",
+  "par": 8,
+  "solution": [
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    1,
+    2,
+    "right"
+   ],
+   [
+    1,
+    3,
+    "down"
+   ],
+   [
+    3,
+    2,
+    "right"
+   ],
+   [
+    3,
+    3,
+    "up"
+   ],
+   [
+    2,
+    3,
+    "left"
+   ],
+   [
+    3,
+    1,
+    "up"
+   ],
+   [
+    0,
+    0,
+    "right"
+   ]
+  ]
+ },
+ {
+  "index": 54,
+  "chapter": 5,
+  "chapterName": "Diệt khuẩn",
+  "rows": [
+   "DC.B",
+   ".DB#",
+   "DGD#",
    "..G.",
    ".C.B"
   ],
@@ -2722,17 +2784,91 @@
   ]
  },
  {
-  "index": 54,
-  "chapter": 5,
-  "chapterName": "Diệt khuẩn",
+  "index": 55,
+  "chapter": 6,
+  "chapterName": "Đại gia đình",
   "rows": [
-   "BGC.",
-   "##G.",
-   ".AAv",
-   "#B.A"
+   "ECE~C",
+   "..E~D",
+   "D#.EC",
+   "...#D",
+   "#C#DC"
   ],
-  "kill": "G",
-  "par": 8,
+  "goal": [
+   ".....",
+   "E....",
+   "..E..",
+   "..E..",
+   "....."
+  ],
+  "par": 7,
+  "solution": [
+   [
+    0,
+    0,
+    "down"
+   ],
+   [
+    0,
+    1,
+    "right"
+   ],
+   [
+    2,
+    4,
+    "left"
+   ],
+   [
+    4,
+    1,
+    "up"
+   ],
+   [
+    3,
+    1,
+    "left"
+   ],
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    1,
+    0,
+    "right"
+   ]
+  ]
+ },
+ {
+  "index": 56,
+  "chapter": 6,
+  "chapterName": "Đại gia đình",
+  "rows": [
+   ".#EAA",
+   ".A.#.",
+   "E##Ae",
+   "E.aCC",
+   "..EC."
+  ],
+  "oneway": [
+   [
+    1,
+    4,
+    "down"
+   ],
+   [
+    4,
+    2,
+    "left"
+   ],
+   [
+    4,
+    2,
+    "right"
+   ]
+  ],
+  "par": 9,
   "solution": [
    [
     0,
@@ -2742,42 +2878,47 @@
    [
     1,
     2,
-    "right"
+    "left"
    ],
    [
     1,
+    0,
+    "up"
+   ],
+   [
+    2,
     3,
     "down"
    ],
    [
     3,
+    4,
+    "left"
+   ],
+   [
+    4,
     2,
     "right"
-   ],
-   [
-    3,
-    3,
-    "up"
-   ],
-   [
-    2,
-    3,
-    "left"
    ],
    [
     3,
     1,
-    "up"
+    "down"
+   ],
+   [
+    4,
+    1,
+    "left"
    ],
    [
     0,
-    0,
-    "right"
+    4,
+    "down"
    ]
   ]
  },
  {
-  "index": 55,
+  "index": 57,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -2787,7 +2928,7 @@
    "CB#..",
    "BABC#"
   ],
-  "tip": "Ổ mèo lớn nhất từ trước tới giờ! Đẩy cả dãy để lấp chỗ trống.",
+  "tip": "Ổ mèo đông nhất từ trước tới giờ! Đẩy cả dãy để lấp chỗ trống.",
   "par": 7,
   "solution": [
    [
@@ -2828,7 +2969,136 @@
   ]
  },
  {
-  "index": 56,
+  "index": 58,
+  "chapter": 6,
+  "chapterName": "Đại gia đình",
+  "rows": [
+   "C...B",
+   "C#B.B",
+   ".BAbA",
+   "aCGv.",
+   "#A.A~"
+  ],
+  "oneway": [
+   [
+    1,
+    4,
+    "up"
+   ]
+  ],
+  "kill": "G",
+  "par": 9,
+  "solution": [
+   [
+    4,
+    3,
+    "up"
+   ],
+   [
+    3,
+    3,
+    "left"
+   ],
+   [
+    3,
+    1,
+    "right"
+   ],
+   [
+    3,
+    2,
+    "down"
+   ],
+   [
+    2,
+    2,
+    "left"
+   ],
+   [
+    2,
+    2,
+    "up"
+   ],
+   [
+    1,
+    2,
+    "right"
+   ],
+   [
+    1,
+    3,
+    "up"
+   ],
+   [
+    0,
+    2,
+    "left"
+   ]
+  ]
+ },
+ {
+  "index": 59,
+  "chapter": 6,
+  "chapterName": "Đại gia đình",
+  "rows": [
+   ".B#C#",
+   "#DCG.",
+   "B..C#",
+   ".<DBG",
+   "D#B.D"
+  ],
+  "kill": "G",
+  "par": 9,
+  "solution": [
+   [
+    4,
+    4,
+    "up"
+   ],
+   [
+    4,
+    2,
+    "up"
+   ],
+   [
+    2,
+    0,
+    "right"
+   ],
+   [
+    0,
+    3,
+    "down"
+   ],
+   [
+    2,
+    2,
+    "right"
+   ],
+   [
+    2,
+    1,
+    "down"
+   ],
+   [
+    4,
+    0,
+    "up"
+   ],
+   [
+    1,
+    1,
+    "right"
+   ],
+   [
+    0,
+    1,
+    "left"
+   ]
+  ]
+ },
+ {
+  "index": 60,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -2893,269 +3163,6 @@
   ]
  },
  {
-  "index": 57,
-  "chapter": 6,
-  "chapterName": "Đại gia đình",
-  "rows": [
-   "BCB~C",
-   "..B~A",
-   "A#.BC",
-   "...#A",
-   "#C#AC"
-  ],
-  "goal": [
-   ".....",
-   "B....",
-   "..B..",
-   "..B..",
-   "....."
-  ],
-  "par": 7,
-  "solution": [
-   [
-    0,
-    0,
-    "down"
-   ],
-   [
-    0,
-    1,
-    "right"
-   ],
-   [
-    2,
-    4,
-    "left"
-   ],
-   [
-    4,
-    1,
-    "up"
-   ],
-   [
-    3,
-    1,
-    "left"
-   ],
-   [
-    0,
-    2,
-    "down"
-   ],
-   [
-    1,
-    0,
-    "right"
-   ]
-  ]
- },
- {
-  "index": 58,
-  "chapter": 6,
-  "chapterName": "Đại gia đình",
-  "rows": [
-   ".#BAA",
-   ".A.#.",
-   "B##Ab",
-   "B.aCC",
-   "..BC."
-  ],
-  "oneway": [
-   [
-    1,
-    4,
-    "down"
-   ],
-   [
-    4,
-    2,
-    "left"
-   ],
-   [
-    4,
-    2,
-    "right"
-   ]
-  ],
-  "par": 9,
-  "solution": [
-   [
-    0,
-    2,
-    "down"
-   ],
-   [
-    1,
-    2,
-    "left"
-   ],
-   [
-    1,
-    0,
-    "up"
-   ],
-   [
-    2,
-    3,
-    "down"
-   ],
-   [
-    3,
-    4,
-    "left"
-   ],
-   [
-    4,
-    2,
-    "right"
-   ],
-   [
-    3,
-    1,
-    "down"
-   ],
-   [
-    4,
-    1,
-    "left"
-   ],
-   [
-    0,
-    4,
-    "down"
-   ]
-  ]
- },
- {
-  "index": 59,
-  "chapter": 6,
-  "chapterName": "Đại gia đình",
-  "rows": [
-   ".B#C#",
-   "#ACG.",
-   "B..C#",
-   ".<ABG",
-   "A#B.A"
-  ],
-  "kill": "G",
-  "par": 9,
-  "solution": [
-   [
-    4,
-    4,
-    "up"
-   ],
-   [
-    4,
-    2,
-    "up"
-   ],
-   [
-    2,
-    0,
-    "right"
-   ],
-   [
-    0,
-    3,
-    "down"
-   ],
-   [
-    2,
-    2,
-    "right"
-   ],
-   [
-    2,
-    1,
-    "down"
-   ],
-   [
-    4,
-    0,
-    "up"
-   ],
-   [
-    1,
-    1,
-    "right"
-   ],
-   [
-    0,
-    1,
-    "left"
-   ]
-  ]
- },
- {
-  "index": 60,
-  "chapter": 6,
-  "chapterName": "Đại gia đình",
-  "rows": [
-   "C...B",
-   "C#B.B",
-   ".BAbA",
-   "aCGv.",
-   "#A.A~"
-  ],
-  "oneway": [
-   [
-    1,
-    4,
-    "up"
-   ]
-  ],
-  "kill": "G",
-  "par": 9,
-  "solution": [
-   [
-    3,
-    1,
-    "right"
-   ],
-   [
-    3,
-    2,
-    "down"
-   ],
-   [
-    2,
-    4,
-    "left"
-   ],
-   [
-    4,
-    3,
-    "up"
-   ],
-   [
-    2,
-    4,
-    "down"
-   ],
-   [
-    2,
-    2,
-    "right"
-   ],
-   [
-    1,
-    3,
-    "up"
-   ],
-   [
-    0,
-    4,
-    "left"
-   ],
-   [
-    0,
-    2,
-    "left"
-   ]
-  ]
- },
- {
   "index": 61,
   "chapter": 6,
   "chapterName": "Đại gia đình",
@@ -3178,24 +3185,24 @@
   "par": 12,
   "solution": [
    [
+    1,
+    2,
+    "left"
+   ],
+   [
     5,
     4,
     "left"
    ],
    [
-    1,
     4,
-    "down"
+    2,
+    "right"
    ],
    [
-    2,
+    5,
     3,
-    "down"
-   ],
-   [
-    2,
-    4,
-    "left"
+    "up"
    ],
    [
     2,
@@ -3208,23 +3215,99 @@
     "right"
    ],
    [
-    3,
+    1,
+    4,
+    "left"
+   ],
+   [
+    1,
+    2,
+    "down"
+   ],
+   [
+    2,
     1,
     "down"
    ],
    [
+    2,
     0,
-    3,
+    "right"
+   ],
+   [
+    1,
+    2,
     "left"
    ],
    [
     2,
     1,
     "up"
+   ]
+  ]
+ },
+ {
+  "index": 62,
+  "chapter": 7,
+  "chapterName": "Đủ sắc màu",
+  "rows": [
+   "B.DA",
+   "#BCA",
+   ".C#."
+  ],
+  "tip": "Lần đầu 4 màu cùng lúc! Chỉ có 1 bé hồng: đừng để bé bị thay thế, hết màu hồng là thua.",
+  "par": 4,
+  "solution": [
+   [
+    0,
+    0,
+    "right"
    ],
    [
     1,
+    2,
+    "right"
+   ],
+   [
     1,
+    3,
+    "down"
+   ],
+   [
+    2,
+    1,
+    "left"
+   ]
+  ]
+ },
+ {
+  "index": 63,
+  "chapter": 7,
+  "chapterName": "Đủ sắc màu",
+  "rows": [
+   "C.#.",
+   "CBCA",
+   "B.BA",
+   "D#A#",
+   ".D.."
+  ],
+  "goal": [
+   "...C",
+   "....",
+   "....",
+   "....",
+   "D.A."
+  ],
+  "par": 7,
+  "solution": [
+   [
+    0,
+    0,
+    "right"
+   ],
+   [
+    1,
+    2,
     "right"
    ],
    [
@@ -3233,7 +3316,383 @@
     "up"
    ],
    [
+    3,
+    0,
+    "down"
+   ],
+   [
+    2,
+    3,
+    "left"
+   ],
+   [
     1,
+    2,
+    "down"
+   ],
+   [
+    4,
+    2,
+    "right"
+   ]
+  ]
+ },
+ {
+  "index": 64,
+  "chapter": 7,
+  "chapterName": "Đủ sắc màu",
+  "rows": [
+   "B.BA",
+   "CB#.",
+   "DD.A",
+   "CA.."
+  ],
+  "par": 6,
+  "solution": [
+   [
+    0,
+    3,
+    "left"
+   ],
+   [
+    2,
+    1,
+    "down"
+   ],
+   [
+    3,
+    1,
+    "right"
+   ],
+   [
+    3,
+    0,
+    "right"
+   ],
+   [
+    2,
+    3,
+    "left"
+   ],
+   [
+    3,
+    3,
+    "up"
+   ]
+  ]
+ },
+ {
+  "index": 65,
+  "chapter": 7,
+  "chapterName": "Đủ sắc màu",
+  "rows": [
+   "C.B.",
+   ".AB#",
+   ">d.D",
+   "A#.A",
+   "..CB"
+  ],
+  "par": 10,
+  "solution": [
+   [
+    3,
+    0,
+    "up"
+   ],
+   [
+    4,
+    3,
+    "left"
+   ],
+   [
+    4,
+    1,
+    "left"
+   ],
+   [
+    3,
+    3,
+    "left"
+   ],
+   [
+    4,
+    2,
+    "up"
+   ],
+   [
+    0,
+    2,
+    "right"
+   ],
+   [
+    0,
+    0,
+    "right"
+   ],
+   [
+    0,
+    0,
+    "down"
+   ],
+   [
+    0,
+    1,
+    "down"
+   ],
+   [
+    2,
+    2,
+    "up"
+   ]
+  ]
+ },
+ {
+  "index": 66,
+  "chapter": 7,
+  "chapterName": "Đủ sắc màu",
+  "rows": [
+   "#ABA",
+   ".#..",
+   "DCCB",
+   "D.#E"
+  ],
+  "tip": "Giờ đủ 5 màu cùng lúc! Bé tím chỉ có 1, giữ bé thật kỹ!",
+  "par": 5,
+  "solution": [
+   [
+    2,
+    1,
+    "down"
+   ],
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    3,
+    1,
+    "left"
+   ],
+   [
+    2,
+    0,
+    "up"
+   ],
+   [
+    3,
+    3,
+    "up"
+   ]
+  ]
+ },
+ {
+  "index": 67,
+  "chapter": 7,
+  "chapterName": "Đủ sắc màu",
+  "rows": [
+   "..BB#",
+   "..A##",
+   "BA#.#",
+   "DC~AD",
+   "#.CEE"
+  ],
+  "oneway": [
+   [
+    3,
+    1,
+    "down"
+   ],
+   [
+    0,
+    0,
+    "down"
+   ]
+  ],
+  "par": 7,
+  "solution": [
+   [
+    1,
+    2,
+    "left"
+   ],
+   [
+    3,
+    0,
+    "right"
+   ],
+   [
+    3,
+    1,
+    "up"
+   ],
+   [
+    4,
+    3,
+    "up"
+   ],
+   [
+    4,
+    2,
+    "left"
+   ],
+   [
+    3,
+    0,
+    "up"
+   ],
+   [
+    0,
+    1,
+    "left"
+   ]
+  ]
+ },
+ {
+  "index": 68,
+  "chapter": 7,
+  "chapterName": "Đủ sắc màu",
+  "rows": [
+   "ECB.G",
+   ".A.#.",
+   "E#DD#",
+   "C#A#B",
+   ".G.<A"
+  ],
+  "kill": "G",
+  "par": 10,
+  "solution": [
+   [
+    0,
+    0,
+    "right"
+   ],
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    1,
+    2,
+    "left"
+   ],
+   [
+    3,
+    4,
+    "down"
+   ],
+   [
+    4,
+    4,
+    "left"
+   ],
+   [
+    3,
+    2,
+    "down"
+   ],
+   [
+    4,
+    2,
+    "left"
+   ],
+   [
+    3,
+    0,
+    "down"
+   ],
+   [
+    0,
+    3,
+    "right"
+   ],
+   [
+    0,
+    4,
+    "down"
+   ]
+  ]
+ },
+ {
+  "index": 69,
+  "chapter": 7,
+  "chapterName": "Đủ sắc màu",
+  "rows": [
+   "##CBC",
+   "C#AA.",
+   "..Bev",
+   "BD..E",
+   "..G#E",
+   "~#DAd"
+  ],
+  "oneway": [
+   [
+    2,
+    1,
+    "down"
+   ]
+  ],
+  "kill": "G",
+  "par": 12,
+  "solution": [
+   [
+    3,
+    4,
+    "left"
+   ],
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    5,
+    2,
+    "up"
+   ],
+   [
+    3,
+    1,
+    "down"
+   ],
+   [
+    3,
+    0,
+    "down"
+   ],
+   [
+    2,
+    3,
+    "left"
+   ],
+   [
+    2,
+    1,
+    "left"
+   ],
+   [
+    1,
+    3,
+    "right"
+   ],
+   [
+    1,
+    4,
+    "down"
+   ],
+   [
+    3,
+    3,
+    "right"
+   ],
+   [
+    3,
+    4,
+    "down"
+   ],
+   [
+    5,
     3,
     "right"
    ]

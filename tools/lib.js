@@ -195,6 +195,36 @@ function firstMoves(ctx, lv, par, nodes = 30000, maxMs = 1000) {
   return { first, firstOk, firstOpt };
 }
 
+// Độ khó theo quyết định: đi dọc một lời giải tối ưu, ở mỗi bước đếm số nước đi được (n), số nước còn thắng được (ok)
+// và số nước vẫn tối ưu (opt). bitsWin = Σ log2(n/ok): rủi ro sa vào ngõ cụt; bitsOpt = Σ log2(n/opt): phải nghĩ bao
+// nhiêu để giữ 3 sao. Level dài nhưng nước nào cũng đúng thì điểm thấp; level ngắn mà toàn bẫy thì điểm cao.
+// Giải không kịp maxMs thì coi như còn thắng được (không phạt oan).
+function decisionBits(ctx, lv, path, maxMs = 250) {
+  let c = lv.init, left = path.length, bitsWin = 0, bitsOpt = 0, id = lv.nextId;
+  for (const [f, d] of path) {
+    const seen = new Set();
+    let n = 0, ok = 0, opt = 0;
+    for (const [f2, d2] of ctx.allMoves(lv, c)) {
+      const r = ctx.swipe(lv, c, f2, d2);
+      if (!r) continue;
+      const k = ctx.keyOf(r.cells);
+      if (seen.has(k)) continue;
+      seen.add(k);
+      n++;
+      if (ctx.isLost(lv, r.cells)) continue;
+      const p = ctx.solve(lv, r.cells, 80000, maxMs);
+      if (p || ctx.solve.cut) { ok++; if (p && p.length === left - 1) opt++; }
+    }
+    bitsWin += Math.log2(n / Math.max(ok, 1));
+    bitsOpt += Math.log2(n / Math.max(opt, 1));
+    const r = ctx.swipe(lv, c, f, d, id);
+    c = r.cells;
+    id = r.nextId;
+    left--;
+  }
+  return { bitsWin: +bitsWin.toFixed(2), bitsOpt: +bitsOpt.toFixed(2) };
+}
+
 // Điểm độ khó (để sắp thứ tự trong chương) và điểm bất ngờ (nước đầu "hiển nhiên" thường sai, lời giải cần mẹo).
 // Mẹo: thay thế, khử 3, ô độc, đánh thức dây chuyền, virus ăn mèo, diệt virus, khử 3 vi khuẩn.
 // extra: số nước phải tiêu thêm ngoài số mèo còn thiếu (nước "lùi một bước để tiến hai bước").
@@ -225,4 +255,4 @@ function analyze(ctx, def, opts = {}) {
 }
 
 module.exports = { GAME, LEVELS_JSON, loadLogic, loadChapters, exportLevels, asDef, canon, rng, events, featString,
-  explore, firstMoves, randomPlay, census, scores, analyze };
+  explore, firstMoves, decisionBits, randomPlay, census, scores, analyze };

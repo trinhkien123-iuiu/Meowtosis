@@ -1,7 +1,7 @@
 # Meowtosis
 Game Ý tưởng mưới
 
-Game giải đố vuốt cho mèo nhân đôi, lấp kín ổ (cảm hứng cơ chế từ *Mitoosis* của Le Slo). Hiện là prototype web, 61 level, 6 chương; bản hoàn chỉnh sẽ làm bằng Unity trong cùng repo.
+Game giải đố vuốt cho mèo nhân đôi, lấp kín ổ (cảm hứng cơ chế từ *Mitoosis* của Le Slo). Hiện là prototype web, 69 level xếp từ dễ đến khó theo 7 khối cơ chế; bản hoàn chỉnh sẽ làm bằng Unity trong cùng repo.
 
 ## Chạy (cần Node.js, không cần cài gói)
 
@@ -13,6 +13,7 @@ Game giải đố vuốt cho mèo nhân đôi, lấp kín ổ (cảm hứng cơ 
 | `npm run export` | Xuất level ra `data/levels.json` (dữ liệu cho Unity) |
 | `npm run analyze` | Bảng chỉ số độ khó |
 | `npm run gen -- tools/jobs/<file>.json` | Sinh level mới |
+| `npm run difficulty`, `npm run order` | Đo độ khó, xem thứ tự dễ → khó đề xuất (`node tools/order.js --write` để ghi) |
 
 ## Cấu trúc
 
@@ -20,7 +21,7 @@ Game giải đố vuốt cho mèo nhân đôi, lấp kín ổ (cảm hứng cơ 
 prototype/   game web meowtosis.html, sfx/, archive/ (bản cũ), shikacat/ (asset tạm)
 tools/       bộ giải, bộ sinh level, test, máy chủ
 data/        levels.json xuất từ game
-docs/        unity-handoff.md, level-design.md
+docs/        mechanics.md (luật chuẩn mọi cơ chế), unity-handoff.md, level-design.md
 unity/       (sẽ tạo) project Unity
 ```
 
