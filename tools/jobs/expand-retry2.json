@@ -1,0 +1,3 @@
+[
+ {"name": "c3-d trùm chương 3", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "toxic": 2, "membranes": 2, "cells": "AAAABBBBCCCC", "need": ["oneway", "toxic"], "min": 8, "max": 12, "twist": true, "nodes": 15000, "ms": 180000, "seed": 134, "top": 5}
+]

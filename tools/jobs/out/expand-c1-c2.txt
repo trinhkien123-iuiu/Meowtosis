@@ -1,0 +1,22 @@
+== c1-a ổ đông, dễ (86 ứng viên) · bị loại: {"thiếu longPush":1357,"quá dài":1}
+  {"rows":["#AA#","C.BB","CAA.",".CB#"]} par=4 ms=3 mèo=10 ô=13 đầu=16/15/5 cụt=? thừa=1 khó=6.75 bấtngờ=3.06 [push2 longPush1 replace1]
+  {"rows":[".BB.","BAC#","ACAA","##.C"]} par=4 ms=1 mèo=10 ô=13 đầu=18/17/6 cụt=? thừa=1 khó=6.71 bấtngờ=3 [push2 longPush1 replace1]
+  {"rows":[".AA#","AABB",".#.C","CBC#"]} par=4 ms=2 mèo=10 ô=13 đầu=14/14/4 cụt=? thừa=1 khó=6.79 bấtngờ=2.93 [push1 longPush1 replace1]
+  {"rows":["A.CA","CBAA","B.#C",".B.#"]} par=5 ms=10 mèo=10 ô=14 đầu=19/19/6 cụt=? thừa=1 khó=7.37 bấtngờ=2.87 [push2 longPush1 replace1]
+  {"rows":["AABA","#CC.","AB#C","#..B"]} par=4 ms=3 mèo=10 ô=13 đầu=17/16/7 cụt=? thừa=1 khó=6.58 bấtngờ=2.85 [push2 longPush1 replace1]
+== c1-b 4x4 thay thế (9 ứng viên) · bị loại: {"thiếu replace":3601,"giải chậm":8,"nước đầu dễ đoán":46}
+  {"rows":["CBB.",".#..","..AA","#C.A"]} par=9 ms=66 mèo=7 ô=14 đầu=11/9/3 cụt=? thừa=2 khó=9.85 bấtngờ=4 [push2 replace2]
+  {"rows":["#..A",".BBA","..CC","..#A"]} par=8 ms=26 mèo=7 ô=14 đầu=13/9/5 cụt=? thừa=1 khó=9.03 bấtngờ=3.65 [push3 longPush1 replace1]
+  {"rows":["#BA.",".BAA","CC#.","...."]} par=9 ms=46 mèo=7 ô=14 đầu=12/11/4 cụt=? thừa=2 khó=9.73 bấtngờ=3.58 [push3 longPush2 replace2]
+  {"rows":["ACAA",".C.#","..#.","BB.."]} par=8 ms=8 mèo=7 ô=14 đầu=11/8/5 cụt=? thừa=1 khó=8.89 bấtngờ=3.41 [push3 longPush1 replace1]
+  {"rows":[".C..","CA#.","AA.B","...B"]} par=9 ms=26 mèo=7 ô=15 đầu=14/13/4 cụt=? thừa=1 khó=9.83 bấtngờ=3.14 [push4 longPush3 replace1]
+== c1-c khử 3 bàn lớn (0 ứng viên) · bị loại: {"quá ngắn":381,"thiếu clear":258,"quá giới hạn giải":9,"giải chậm":23}
+== c1-d trùm chương 1 (0 ứng viên) · bị loại: {"quá giới hạn giải":12,"quá ngắn":37,"thiếu clear":12,"giải chậm":1}
+== c2-a hộp bàn lớn, dễ (11 ứng viên) · bị loại: {"không tìm được trạng thái kín":34,"quá dài":3,"quá giới hạn giải":1,"giải chậm":1}
+  {"rows":["C#AC","AA#B","B.#.","BC.."],"goal":["....","....","C...","C..B"]} par=6 ms=156 mèo=9 ô=13 đầu=15/15/6 cụt=? thừa=2 khó=7.8 bấtngờ=3.2 [push2 longPush1 replace2]
+  {"rows":["A.BC",".C#C",".#AA","B..B"],"goal":["B.C.","C...","....","...."]} par=6 ms=93 mèo=9 ô=14 đầu=15/14/5 cụt=? thừa=1 khó=7.93 bấtngờ=3.03 [push1 replace1]
+  {"rows":["B.#.","AC.C","C.#B","#ABA"],"goal":["....","...B","...A",".B.."]} par=5 ms=31 mèo=9 ô=13 đầu=17/15/7 cụt=? thừa=1 khó=7.18 bấtngờ=3.03 [push1 longPush1 replace1]
+  {"rows":["CACA","B#B.",".C#.","A#B."],"goal":["....","...C","C...","...B"]} par=5 ms=16 mèo=9 ô=13 đầu=14/13/6 cụt=? thừa=1 khó=7.12 bấtngờ=2.86 [push1 replace1]
+  {"rows":["AB.C",".CC#","#B#B","A.A."],"goal":["....","B...",".C..",".A.."]} par=4 ms=35 mèo=9 ô=13 đầu=14/12/3 cụt=? thừa=0 khó=6.97 bấtngờ=2 [push3 longPush2]
+== c2-b hộp 4x5 (0 ứng viên) · bị loại: {"không tìm được trạng thái kín":696,"giải chậm":1}
+== c2-c trùm chương 2 (0 ứng viên) · bị loại: {"không tìm được trạng thái kín":343,"quá ngắn":20}

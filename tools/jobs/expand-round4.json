@@ -1,0 +1,8 @@
+[
+ {"name": "c4-e trùm chương 4 (dùng mèo thức)", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "AAAABBBCCCab", "virus": 1, "need": ["wakeUse", "virus"], "min": 9, "max": 12, "twist": true, "maxMs": 400, "ms": 150000, "seed": 501, "top": 5},
+ {"name": "c4-e trùm chương 4 (dùng mèo thức) b", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "AAAABBBCCCab", "virus": 1, "need": ["wakeUse", "virus"], "min": 9, "max": 12, "twist": true, "maxMs": 400, "ms": 150000, "seed": 502, "top": 5},
+ {"name": "c6-e đủ cơ chế (dùng mèo thức)", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAABBBBCCCab", "mode": "kill", "need": ["wakeUse", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 400, "ms": 150000, "seed": 503, "top": 5},
+ {"name": "c6-e đủ cơ chế (dùng mèo thức) b", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAABBBBCCCbbb", "mode": "kill", "need": ["wakeUse", "chainWake", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 400, "ms": 150000, "seed": 504, "top": 5},
+ {"name": "c6-f trùm cuối 5x6 (dùng mèo thức)", "shape": {"w": 5, "h": 6, "holes": [5, 8]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAAABBBBBCCCab", "mode": "kill", "need": ["wakeUse", "virus"], "min": 10, "max": 13, "twist": true, "maxMs": 400, "ms": 150000, "seed": 505, "top": 5},
+ {"name": "c6-f trùm cuối 5x6 (dùng mèo thức) b", "shape": {"w": 5, "h": 6, "holes": [5, 8]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAAABBBBBCCCab", "mode": "kill", "need": ["wakeUse", "virus"], "min": 10, "max": 13, "twist": true, "maxMs": 400, "ms": 150000, "seed": 506, "top": 5}
+]

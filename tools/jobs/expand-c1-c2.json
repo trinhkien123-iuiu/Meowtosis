@@ -1,0 +1,9 @@
+[
+ {"name": "c1-a ổ đông, dễ", "shape": {"w": 4, "h": 4, "holes": [1, 3]}, "cells": "AAAABBBCCC", "need": ["longPush"], "min": 3, "max": 5, "ms": 60000, "seed": 11, "top": 5},
+ {"name": "c1-b 4x4 thay thế", "shape": {"w": 4, "h": 4, "holes": [0, 2]}, "cells": "AAABBCC", "need": ["replace"], "min": 7, "max": 10, "twist": true, "ms": 60000, "seed": 12, "top": 5},
+ {"name": "c1-c khử 3 bàn lớn", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "AAAABBBBCCC", "need": ["clear"], "min": 8, "max": 11, "twist": true, "ms": 90000, "seed": 13, "top": 5},
+ {"name": "c1-d trùm chương 1", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "AAAABBBBCCCCC", "need": ["clear", "replace"], "min": 9, "max": 12, "twist": true, "maxMs": 500, "ms": 120000, "seed": 14, "top": 5},
+ {"name": "c2-a hộp bàn lớn, dễ", "shape": {"w": 4, "h": 4, "holes": [1, 3]}, "cells": "AAABBBCCC", "mode": "target", "targets": 3, "min": 4, "max": 6, "ms": 60000, "seed": 21, "top": 5},
+ {"name": "c2-b hộp 4x5", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "AAAABBBCCCC", "mode": "target", "targets": 3, "min": 7, "max": 10, "twist": true, "ms": 90000, "seed": 22, "top": 5},
+ {"name": "c2-c trùm chương 2", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "AAAABBBBCCCCC", "mode": "target", "targets": 4, "min": 9, "max": 12, "twist": true, "maxMs": 500, "ms": 120000, "seed": 23, "top": 5}
+]

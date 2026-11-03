@@ -1,0 +1,6 @@
+== c6-b hộp + độc (1 ứng viên) · bị loại: {"quá giới hạn giải":45,"quá ngắn":36,"giải chậm":12,"thiếu toxic":48,"không tìm được trạng thái kín":8}
+  {"rows":["BCB~C","..B~A","A#.BC","...#A","#C#AC"],"goal":[".....","B....","..B..","..B..","....."]} par=7 ms=46 mèo=13 ô=19 đầu=20/14/8 cụt=? thừa=1 khó=8.4 bấtngờ=3.6 [push3 longPush1 toxic1]
+== c6-b hộp + độc (2) (1 ứng viên) · bị loại: {"quá ngắn":32,"quá giới hạn giải":44,"không tìm được trạng thái kín":17,"thiếu toxic":46,"giải chậm":16}
+  {"rows":["BCB~C","..B~A","A#.BC","...#A","#C#AC"],"goal":[".....","B....","..B..","..B..","....."]} par=7 ms=36 mèo=13 ô=19 đầu=20/14/8 cụt=? thừa=1 khó=8.4 bấtngờ=3.6 [push3 longPush1 toxic1]
+== c6-c ngủ + màng (0 ứng viên) · bị loại: {"quá giới hạn giải":29,"màng không đổi gì":31,"không có mẹo":8,"thiếu wake":24,"quá ngắn":8}
+== c6-c ngủ + màng (2) (0 ứng viên) · bị loại: {"màng không đổi gì":26,"quá giới hạn giải":30,"quá ngắn":4,"thiếu wake":19,"không có mẹo":6,"nước đầu dễ đoán":1}

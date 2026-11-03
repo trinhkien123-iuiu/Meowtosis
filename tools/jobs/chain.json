@@ -1,0 +1,5 @@
+[
+ {"name": "chain 4x3", "shape": {"w": 4, "h": 3, "holes": [0, 2]}, "cells": "ABbbb", "need": ["chainWake", "wakeUse"], "min": 3, "max": 6, "ms": 40000, "seed": 401, "top": 6},
+ {"name": "chain 3x4", "shape": {"w": 3, "h": 4, "holes": [0, 2]}, "cells": "ABbbb", "need": ["chainWake", "wakeUse"], "min": 3, "max": 6, "ms": 40000, "seed": 402, "top": 6},
+ {"name": "chain 5x3", "shape": {"w": 5, "h": 3, "holes": [2, 4]}, "cells": "AABbbb", "need": ["chainWake", "wakeUse"], "min": 4, "max": 7, "ms": 40000, "seed": 403, "top": 6}
+]

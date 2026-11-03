@@ -1,0 +1,6 @@
+[
+ {"name": "c6-f trùm cuối 5x6 a", "shape": {"w": 5, "h": 6, "holes": [5, 8]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAAABBBBBCCCab", "mode": "kill", "need": ["wakeUse", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 500, "ms": 180000, "seed": 601, "top": 4},
+ {"name": "c6-f trùm cuối 5x6 b", "shape": {"w": 5, "h": 6, "holes": [5, 8]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAAABBBBBCCCab", "mode": "kill", "need": ["wakeUse", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 500, "ms": 180000, "seed": 7919, "top": 4},
+ {"name": "c6-f trùm cuối 5x6 c", "shape": {"w": 5, "h": 6, "holes": [6, 9]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAABBBBBCCCab", "mode": "kill", "need": ["wakeUse", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 500, "ms": 180000, "seed": 104729, "top": 4},
+ {"name": "c6-f trùm cuối 5x6 d", "shape": {"w": 5, "h": 6, "holes": [6, 9]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAABBBBBCCCab", "mode": "kill", "need": ["wakeUse", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 500, "ms": 180000, "seed": 31337, "top": 4}
+]

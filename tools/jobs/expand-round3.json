@@ -1,0 +1,6 @@
+[
+ {"name": "c1-c khử 3, 2 màu (4x4)", "shape": {"w": 4, "h": 4, "holes": [0, 2]}, "cells": "AAAABBBB", "need": ["clear"], "min": 6, "max": 10, "twist": true, "ms": 120000, "seed": 301, "top": 5},
+ {"name": "c1-c khử 3, 2 màu (4x5)", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "AAAAABBBBB", "need": ["clear"], "min": 7, "max": 11, "twist": true, "ms": 120000, "seed": 302, "top": 5},
+ {"name": "c1-d trùm, 2 màu (5x5)", "shape": {"w": 5, "h": 5, "holes": [4, 7]}, "cells": "AAAAAABBBBBB", "need": ["clear"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 303, "top": 5},
+ {"name": "c1-d trùm, 2 màu (5x5) b", "shape": {"w": 5, "h": 5, "holes": [4, 7]}, "cells": "AAAAAABBBBBB", "need": ["clear"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 304, "top": 5}
+]

@@ -1,0 +1,119 @@
+[
+ {
+  "job": "c1-c khử 3, 2 màu (4x4)",
+  "def": {
+   "rows": [
+    ".AA#",
+    "BBA.",
+    "B#.A",
+    "..B."
+   ]
+  },
+  "par": 9,
+  "ms": 69,
+  "cats": 8,
+  "slots": 14,
+  "first": 11,
+  "firstOk": 11,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 10.04,
+  "surprise": 4.14,
+  "feats": "push4 longPush2 clear1 cleared3"
+ },
+ {
+  "job": "c1-c khử 3, 2 màu (4x4)",
+  "def": {
+   "rows": [
+    "BB#A",
+    "BBA.",
+    "#AA.",
+    "...."
+   ]
+  },
+  "par": 9,
+  "ms": 9,
+  "cats": 8,
+  "slots": 14,
+  "first": 7,
+  "firstOk": 7,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 9.54,
+  "surprise": 3.64,
+  "feats": "push4 longPush3 clear1 cleared3"
+ },
+ {
+  "job": "c1-c khử 3, 2 màu (4x4)",
+  "def": {
+   "rows": [
+    "BAA.",
+    "B.AA",
+    "..#.",
+    "B.B."
+   ]
+  },
+  "par": 10,
+  "ms": 5,
+  "cats": 8,
+  "slots": 15,
+  "first": 9,
+  "firstOk": 9,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 10.11,
+  "surprise": 3.61,
+  "feats": "push2 longPush2 clear1 cleared3"
+ },
+ {
+  "job": "c1-d trùm, 2 màu (5x5) b",
+  "def": {
+   "rows": [
+    "BAB#A",
+    "#BA..",
+    "A#.#A",
+    ".ABB#",
+    "..#B."
+   ]
+  },
+  "par": 11,
+  "ms": 373,
+  "cats": 12,
+  "slots": 19,
+  "first": 15,
+  "firstOk": 6,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 4,
+  "difficulty": 11.2,
+  "surprise": 6.9,
+  "feats": "push4 longPush3 replace1 clear1 cleared3"
+ },
+ {
+  "job": "c1-d trùm, 2 màu (5x5) b",
+  "def": {
+   "rows": [
+    ".B.BB",
+    "#.A##",
+    "B.A##",
+    "AA..#",
+    "AAB.B"
+   ]
+  },
+  "par": 10,
+  "ms": 358,
+  "cats": 12,
+  "slots": 19,
+  "first": 14,
+  "firstOk": 11,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 10.29,
+  "surprise": 4.43,
+  "feats": "push5 longPush3 clear1 cleared3"
+ }
+]

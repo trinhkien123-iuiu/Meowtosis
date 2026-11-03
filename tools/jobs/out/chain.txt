@@ -1,0 +1,19 @@
+== chain 4x3 (8 ứng viên) · bị loại: {"quá dài":2318,"thiếu chainWake":269,"không giải được":93,"thiếu wakeUse":36}
+  {"rows":["b#b.","...b","BA.#"]} par=6 ms=3 mèo=5 ô=10 đầu=5/3/1 cụt=? thừa=1 khó=8.2 bấtngờ=5.3 [push2 replace1 wake2 chainWake1 wakeUse1]
+  {"rows":[".bb.",".#..","#bAB"]} par=6 ms=2 mèo=5 ô=10 đầu=5/3/1 cụt=? thừa=1 khó=8.2 bấtngờ=5.3 [push2 longPush1 replace1 wake2 chainWake1 wakeUse1]
+  {"rows":["b.AB",".bb#","...#"]} par=6 ms=5 mèo=5 ô=10 đầu=4/3/1 cụt=? thừa=1 khó=8.1 bấtngờ=4.75 [push2 replace1 wake2 chainWake1 wakeUse1]
+  {"rows":["...b","b.B.","b##A"]} par=6 ms=1 mèo=5 ô=10 đầu=4/3/3 cụt=? thừa=1 khó=7.1 bấtngờ=3.75 [push2 replace1 wake3 chainWake1 wakeUse1]
+  {"rows":["#.b.","..b#","B.Ab"]} par=6 ms=4 mèo=5 ô=10 đầu=5/5/3 cụt=? thừa=1 khó=7.4 bấtngờ=3.3 [push2 replace1 wake2 chainWake1 wakeUse1]
+  {"rows":["b.##","A..b",".B.b"]} par=5 ms=1 mèo=5 ô=10 đầu=6/5/2 cụt=? thừa=0 khó=7.33 bấtngờ=2.83 [push2 wake3 chainWake1 wakeUse1]
+== chain 3x4 (4 ứng viên) · bị loại: {"thiếu chainWake":396,"quá dài":2265,"thiếu wakeUse":22,"không giải được":107}
+  {"rows":[".B#","bA#","...",".bb"]} par=6 ms=6 mèo=5 ô=10 đầu=5/4/1 cụt=? thừa=1 khó=8.2 bấtngờ=4.7 [push4 longPush1 replace1 wake3 chainWake1 wakeUse1]
+  {"rows":["#bb","...",".A#","B.b"]} par=6 ms=5 mèo=5 ô=10 đầu=5/4/2 cụt=? thừa=1 khó=7.8 bấtngờ=4.3 [push2 replace1 wake2 chainWake1 wakeUse1]
+  {"rows":["b..",".A.",".bb","B.#"]} par=6 ms=1 mèo=5 ô=11 đầu=6/6/5 cụt=? thừa=0 khó=6.93 bấtngờ=1.33 [wake2 chainWake1 wakeUse1]
+  {"rows":["#.B","bb#",".A.","..b"]} par=5 ms=0 mèo=5 ô=10 đầu=5/5/5 cụt=? thừa=0 khó=5.88 bấtngờ=1 [wake2 chainWake1 wakeUse1]
+== chain 5x3 (11 ứng viên) · bị loại: {"quá dài":317,"quá giới hạn giải":34,"không giải được":23,"thiếu chainWake":192,"thiếu wakeUse":20}
+  {"rows":[".b#b.","Ab..A","..#B#"]} par=7 ms=8 mèo=6 ô=12 đầu=6/5/2 cụt=? thừa=1 khó=8.53 bấtngờ=4.33 [push1 replace1 wake2 chainWake1 wakeUse1]
+  {"rows":["b...B","..AA.","#bb##"]} par=7 ms=9 mèo=6 ô=12 đầu=6/5/3 cụt=? thừa=1 khó=8.2 bấtngờ=4 [push4 longPush1 replace1 wake3 chainWake1 wakeUse1]
+  {"rows":["#B.#b","#.b.b",".A.#A"]} par=6 ms=5 mèo=6 ô=11 đầu=6/6/2 cụt=? thừa=1 khó=7.93 bấtngờ=3.83 [push2 replace1 wake3 chainWake1 wakeUse1]
+  {"rows":[".bb.#","BAb.A","#.#.."]} par=7 ms=7 mèo=6 ô=12 đầu=8/7/6 cụt=? thừa=1 khó=7.7 bấtngờ=3.38 [push4 longPush2 replace1 wake2 chainWake1 wakeUse1]
+  {"rows":["A.B#.","bb...",".##bA"]} par=7 ms=16 mèo=6 ô=12 đầu=6/6/4 cụt=? thừa=1 khó=7.87 bấtngờ=3.17 [push4 longPush1 replace1 wake3 chainWake1 wakeUse2]
+  {"rows":[".A.B.",".bb.b","#.A.#"]} par=7 ms=36 mèo=6 ô=13 đầu=9/9/1 cụt=? thừa=0 khó=8.98 bấtngờ=2.78 [push3 longPush2 wake3 chainWake1 wakeUse3]

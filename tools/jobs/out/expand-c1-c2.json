@@ -1,0 +1,377 @@
+[
+ {
+  "job": "c1-a ổ đông, dễ",
+  "def": {
+   "rows": [
+    "#AA#",
+    "C.BB",
+    "CAA.",
+    ".CB#"
+   ]
+  },
+  "par": 4,
+  "ms": 3,
+  "cats": 10,
+  "slots": 13,
+  "first": 16,
+  "firstOk": 15,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 6.75,
+  "surprise": 3.06,
+  "feats": "push2 longPush1 replace1"
+ },
+ {
+  "job": "c1-a ổ đông, dễ",
+  "def": {
+   "rows": [
+    ".BB.",
+    "BAC#",
+    "ACAA",
+    "##.C"
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 10,
+  "slots": 13,
+  "first": 18,
+  "firstOk": 17,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 6.71,
+  "surprise": 3,
+  "feats": "push2 longPush1 replace1"
+ },
+ {
+  "job": "c1-a ổ đông, dễ",
+  "def": {
+   "rows": [
+    ".AA#",
+    "AABB",
+    ".#.C",
+    "CBC#"
+   ]
+  },
+  "par": 4,
+  "ms": 2,
+  "cats": 10,
+  "slots": 13,
+  "first": 14,
+  "firstOk": 14,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 6.79,
+  "surprise": 2.93,
+  "feats": "push1 longPush1 replace1"
+ },
+ {
+  "job": "c1-a ổ đông, dễ",
+  "def": {
+   "rows": [
+    "A.CA",
+    "CBAA",
+    "B.#C",
+    ".B.#"
+   ]
+  },
+  "par": 5,
+  "ms": 10,
+  "cats": 10,
+  "slots": 14,
+  "first": 19,
+  "firstOk": 19,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.37,
+  "surprise": 2.87,
+  "feats": "push2 longPush1 replace1"
+ },
+ {
+  "job": "c1-a ổ đông, dễ",
+  "def": {
+   "rows": [
+    "AABA",
+    "#CC.",
+    "AB#C",
+    "#..B"
+   ]
+  },
+  "par": 4,
+  "ms": 3,
+  "cats": 10,
+  "slots": 13,
+  "first": 17,
+  "firstOk": 16,
+  "firstOpt": 7,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 6.58,
+  "surprise": 2.85,
+  "feats": "push2 longPush1 replace1"
+ },
+ {
+  "job": "c1-b 4x4 thay thế",
+  "def": {
+   "rows": [
+    "CBB.",
+    ".#..",
+    "..AA",
+    "#C.A"
+   ]
+  },
+  "par": 9,
+  "ms": 66,
+  "cats": 7,
+  "slots": 14,
+  "first": 11,
+  "firstOk": 9,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 9.85,
+  "surprise": 4,
+  "feats": "push2 replace2"
+ },
+ {
+  "job": "c1-b 4x4 thay thế",
+  "def": {
+   "rows": [
+    "#..A",
+    ".BBA",
+    "..CC",
+    "..#A"
+   ]
+  },
+  "par": 8,
+  "ms": 26,
+  "cats": 7,
+  "slots": 14,
+  "first": 13,
+  "firstOk": 9,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.03,
+  "surprise": 3.65,
+  "feats": "push3 longPush1 replace1"
+ },
+ {
+  "job": "c1-b 4x4 thay thế",
+  "def": {
+   "rows": [
+    "#BA.",
+    ".BAA",
+    "CC#.",
+    "...."
+   ]
+  },
+  "par": 9,
+  "ms": 46,
+  "cats": 7,
+  "slots": 14,
+  "first": 12,
+  "firstOk": 11,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 9.73,
+  "surprise": 3.58,
+  "feats": "push3 longPush2 replace2"
+ },
+ {
+  "job": "c1-b 4x4 thay thế",
+  "def": {
+   "rows": [
+    "ACAA",
+    ".C.#",
+    "..#.",
+    "BB.."
+   ]
+  },
+  "par": 8,
+  "ms": 8,
+  "cats": 7,
+  "slots": 14,
+  "first": 11,
+  "firstOk": 8,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.89,
+  "surprise": 3.41,
+  "feats": "push3 longPush1 replace1"
+ },
+ {
+  "job": "c1-b 4x4 thay thế",
+  "def": {
+   "rows": [
+    ".C..",
+    "CA#.",
+    "AA.B",
+    "...B"
+   ]
+  },
+  "par": 9,
+  "ms": 26,
+  "cats": 7,
+  "slots": 15,
+  "first": 14,
+  "firstOk": 13,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.83,
+  "surprise": 3.14,
+  "feats": "push4 longPush3 replace1"
+ },
+ {
+  "job": "c2-a hộp bàn lớn, dễ",
+  "def": {
+   "rows": [
+    "C#AC",
+    "AA#B",
+    "B.#.",
+    "BC.."
+   ],
+   "goal": [
+    "....",
+    "....",
+    "C...",
+    "C..B"
+   ]
+  },
+  "par": 6,
+  "ms": 156,
+  "cats": 9,
+  "slots": 13,
+  "first": 15,
+  "firstOk": 15,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 7.8,
+  "surprise": 3.2,
+  "feats": "push2 longPush1 replace2"
+ },
+ {
+  "job": "c2-a hộp bàn lớn, dễ",
+  "def": {
+   "rows": [
+    "A.BC",
+    ".C#C",
+    ".#AA",
+    "B..B"
+   ],
+   "goal": [
+    "B.C.",
+    "C...",
+    "....",
+    "...."
+   ]
+  },
+  "par": 6,
+  "ms": 93,
+  "cats": 9,
+  "slots": 14,
+  "first": 15,
+  "firstOk": 14,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.93,
+  "surprise": 3.03,
+  "feats": "push1 replace1"
+ },
+ {
+  "job": "c2-a hộp bàn lớn, dễ",
+  "def": {
+   "rows": [
+    "B.#.",
+    "AC.C",
+    "C.#B",
+    "#ABA"
+   ],
+   "goal": [
+    "....",
+    "...B",
+    "...A",
+    ".B.."
+   ]
+  },
+  "par": 5,
+  "ms": 31,
+  "cats": 9,
+  "slots": 13,
+  "first": 17,
+  "firstOk": 15,
+  "firstOpt": 7,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.18,
+  "surprise": 3.03,
+  "feats": "push1 longPush1 replace1"
+ },
+ {
+  "job": "c2-a hộp bàn lớn, dễ",
+  "def": {
+   "rows": [
+    "CACA",
+    "B#B.",
+    ".C#.",
+    "A#B."
+   ],
+   "goal": [
+    "....",
+    "...C",
+    "C...",
+    "...B"
+   ]
+  },
+  "par": 5,
+  "ms": 16,
+  "cats": 9,
+  "slots": 13,
+  "first": 14,
+  "firstOk": 13,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.12,
+  "surprise": 2.86,
+  "feats": "push1 replace1"
+ },
+ {
+  "job": "c2-a hộp bàn lớn, dễ",
+  "def": {
+   "rows": [
+    "AB.C",
+    ".CC#",
+    "#B#B",
+    "A.A."
+   ],
+   "goal": [
+    "....",
+    "B...",
+    ".C..",
+    ".A.."
+   ]
+  },
+  "par": 4,
+  "ms": 35,
+  "cats": 9,
+  "slots": 13,
+  "first": 14,
+  "firstOk": 12,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 6.97,
+  "surprise": 2,
+  "feats": "push3 longPush2"
+ }
+]

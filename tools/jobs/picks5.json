@@ -1,0 +1,6 @@
+[
+ {"rows":["#.aC#","#>BBA","Cb.B.",".G#A#","B.B.A","~#.CA"],"oneway":[[1,3,"up"]],"kill":"G"},
+ {"rows":["A#C#.","...CA","#~<AB","aBB#B",".CAb#","B...G"],"oneway":[[3,1,"left"]],"kill":"G"},
+ {"rows":["#.A#A",".#b.B","^Ba.C","#BB#A",".#.~C","GCBAA"],"oneway":[[5,2,"up"]],"kill":"G"},
+ {"rows":["CbCA.","#.AB#","BaBGA","#B#B.",">.C~.",".AA#."],"oneway":[[0,2,"left"]],"kill":"G"}
+]

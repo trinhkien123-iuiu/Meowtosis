@@ -1,0 +1,6 @@
+[
+ {"name": "c6-b hộp + độc", "shape": {"w": 5, "h": 5, "holes": [2, 5]}, "toxic": 2, "cells": "AAAABBBBCCCCC", "mode": "target", "targets": 3, "need": ["toxic"], "min": 7, "max": 11, "twist": true, "maxMs": 500, "nodes": 12000, "ms": 200000, "seed": 162, "top": 5},
+ {"name": "c6-b hộp + độc (2)", "shape": {"w": 5, "h": 5, "holes": [2, 5]}, "toxic": 2, "cells": "AAAABBBBCCCCC", "mode": "target", "targets": 3, "need": ["toxic"], "min": 7, "max": 11, "twist": true, "maxMs": 500, "nodes": 12000, "ms": 200000, "seed": 262, "top": 5},
+ {"name": "c6-c ngủ + màng", "shape": {"w": 5, "h": 5, "holes": [2, 5]}, "membranes": 2, "cells": "AAAABBBBCCCab", "need": ["wake", "oneway"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "nodes": 12000, "ms": 200000, "seed": 163, "top": 5},
+ {"name": "c6-c ngủ + màng (2)", "shape": {"w": 5, "h": 5, "holes": [2, 5]}, "membranes": 2, "cells": "AAAABBBBCCCab", "need": ["wake", "oneway"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "nodes": 12000, "ms": 200000, "seed": 263, "top": 5}
+]

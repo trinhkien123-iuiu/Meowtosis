@@ -1,0 +1,15 @@
+[
+ {"rows":[".A.B.",".bb.b","#.A.#"]},
+ {"rows":["ABC.","C#.C","AA#B","A.#.","C..B"],"goal":[".A..","...B","....","....",".C.."]},
+ {"rows":["AB.C.","C.C#.","B.#.#","#.CBB","CAA.A"],"goal":[".....",".A...","...B.",".B.A.","....."]},
+ {"rows":["#C.CA",".BA#A",".BB#.","~~#B#",".AC.C"],"oneway":[[0,3,"right"],[1,0,"right"],[3,0,"up"]]},
+ {"rows":["CC...","###.B","~ABCB","A~##.","AC#AB"],"oneway":[[3,1,"down"],[1,3,"right"],[1,4,"down"]]},
+ {"rows":["B.#CA","C..AB","~ABC#","...#.","#A~BC"],"oneway":[[0,1,"left"],[2,1,"left"],[3,1,"right"]]},
+ {"rows":[".A.B#","CB..A","A#B#A","#CB#.","Ca.b."],"oneway":[[4,2,"left"],[3,1,"down"],[4,0,"right"]]},
+ {"rows":[".#BAA",".A.#.","B##Ab","B.aCC","..BC."],"oneway":[[1,4,"down"],[4,2,"left"],[4,2,"right"]]},
+ {"rows":["b.#BA","..Ba#",".#B.A",".B#CC","C.A#A"],"oneway":[[1,0,"right"],[2,3,"right"],[3,0,"right"]]},
+ {"rows":[".B#C#","#ACG.","B..C#",".<ABG","A#B.A"],"kill":"G"},
+ {"rows":["b.~GC","A#AB#","B.>Ba","AC.C.",".#BA#"],"oneway":[[2,3,"down"]],"kill":"G"},
+ {"rows":["CbCA.","#.AB#","BaBGA","#B#B.",">.C~.",".AA#."],"oneway":[[0,2,"left"]],"kill":"G"},
+ {"rows":["BCB~C","..B~A","A#.BC","...#A","#C#AC"],"goal":[".....","B....","..B..","..B..","....."]}
+]

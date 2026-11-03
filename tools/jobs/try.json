@@ -1,0 +1,3 @@
+[
+ {"name": "thu 4x4 7 meo", "shape": {"w": 4, "h": 4, "holes": [0, 2]}, "cells": "AAABBCC", "min": 5, "max": 10, "twist": true, "ms": 20000, "seed": 1, "top": 4}
+]

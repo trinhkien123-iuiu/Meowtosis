@@ -1,0 +1,62 @@
+#   khung ô   mèo  màu cơ chế        par  ms    trạng thái  cụt   nước đầu  thắng  thua   khó    bất ngờ  sự kiện
+1   2×1   2   1    1   -             1    1     2           0.00  1/1/1     1.00   0.00   0.6    0        
+2   3×1   3   2    2   -             1    0     4           0.00  3/2/2     0.70   0.30   2.16   1.67     
+3   2×2   4   2    2   -             2    0     18          0.00  4/2/2     0.29   0.71   4.34   2.5      
+4   3×2   4   2    2   -             3    0     16          0.00  4/2/2     0.07   0.93   5.59   4        replace1
+5   3×2   5   2    2   -             4    0     11          0.00  3/1/1     0.03   0.97   6.63   4.83     replace1
+6   3×3   5   2    2   -             4    1     20          0.00  2/2/2     0.10   0.90   5.11   1.5      replace1
+7   3×2   6   2    2   -             5    1     360         0.00  4/2/2     0.07   0.93   6.79   4        push1 replace1
+8   3×3   7   2    2   -             8    1     655         0.00  2/2/2     0.00   0.99   7.8    2.5      push2 replace3
+9   3×3   7   2    2   -             8    2     1119        0.00  4/4/4     0.00   0.99   7.8    2.5      replace3
+10  3×3   9   2    2   -             10   6     10913       0.00  4/4/4     0.00   1.00   9      2.5      push2 replace3
+11  4×3   11  3    3   -             10   9     20000+      ?     6/5/4     0.00   1.00   9.67   3.17     push2 longPush1 replace2
+12  4×4   13  3    3   -             10   7     20000+      ?     5/5/3     0.00   0.98   9.8    0.8      push2 longPush1
+13  4×4   13  10   3   -             4    1     20000+      ?     16/15/5   0.00   0.98   6.77   3.06     push2 longPush1 replace1
+14  4×4   14  7    3   -             9    28    20000+      ?     11/9/3    0.00   1.00   9.85   4        push2 replace2
+15  4×4   14  8    2   -             9    28    20000+      ?     11/11/2   0.00   1.00   10.04  4.14     push4 longPush2 clear1 cleared3
+16  5×5   19  12   2   -             11   308   20000+      ?     15/7/3    0.00   0.47   11.2   6.7      push4 longPush3 replace1 clear1 cleared3
+17  4×1   4   2    2   hộp           2    0     8           0.00  3/2/2     0.22   0.78   4.21   1.67     push1 longPush1
+18  3×2   5   2    2   hộp           4    1     66          0.00  4/4/2     0.03   0.97   6.3    2.5      replace1
+19  4×2   6   2    2   hộp           5    0     215         0.00  3/3/2     0.03   0.96   6.58   2.17     replace1
+20  4×2   6   2    2   hộp           7    1     246         0.00  4/4/2     0.00   0.99   8.2    3.5      push1 replace3
+21  4×2   8   2    2   hộp           10   9     3931        0.00  4/4/2     0.00   0.94   10     3.5      push2 longPush2 replace4
+22  4×3   8   3    2   hộp           9    24    3730        0.00  7/7/2     0.00   0.87   9.83   3.93     push3 longPush1 replace4
+23  4×3   10  2    2   hộp           9    5     20000+      ?     4/4/3     0.00   0.96   8.9    2        push2 replace1
+24  3×3   7   3    3   hộp           9    28    6456        0.00  6/4/1     0.00   1.00   10.07  5.17     push1 replace5
+25  4×4   14  3    3   hộp           11   9     20000+      ?     6/6/4     0.00   1.00   10.27  0.67     push3 longPush1
+26  4×4   13  9    3   hộp           4    27    20000+      ?     14/12/3   0.00   0.82   6.97   2        push3 longPush2
+27  4×5   17  11   3   hộp           7    24    20000+      ?     17/14/5   0.00   0.96   8.61   3.44     push2 longPush2 replace1
+28  5×5   21  13   3   hộp           9    234   20000+      ?     25/12/8   0.00   0.88   9.76   4.42     push3 longPush1 replace1
+29  3×2   4   2    2   màng          2    0     5           0.00  2/2/2     0.77   0.23   1.89   0        
+30  3×3   5   2    2   màng          4    0     30          0.00  4/2/2     0.07   0.93   6.18   4        replace1
+31  3×3   7   2    2   màng          9    3     1093        0.00  4/3/1     0.00   0.99   9.9    5.75     push2 replace1 clear1 cleared3
+32  4×4   13  8    3   màng          7    23    20000+      ?     13/13/2   0.00   0.97   8.89   3.69     push2 replace2
+33  3×3   4   2    2   độc           3    1     9           0.00  4/2/1     0.05   0.95   6.14   4.5      push1 toxic1
+34  5×2   8   2    2   độc           11   4     1876        0.09  5/4/2     0.00   0.95   11.06  6.3      push4 longPush1 replace1 clear1 cleared3 toxic1
+35  4×5   16  10   3   độc           8    115   20000+      ?     14/14/6   0.00   0.56   8.94   4.14     push3 longPush1 replace1 toxic1
+36  4×5   16  10   3   màng,độc      8    74    20000+      ?     16/16/6   0.00   0.95   9.05   4.25     push3 longPush3 replace1 toxic1
+37  5×5   18  12   3   màng,độc      9    239   20000+      ?     17/13/7   0.00   0.97   9.58   5.38     push3 longPush1 replace2 toxic1
+38  3×3   5   3    2   ngủ           2    1     12          0.33  3/1/1     0.17   0.83   6.03   3.33     wake1 wakeUse1
+39  3×3   6   3    2   ngủ           4    1     205         0.05  4/4/2     0.03   0.97   6.45   2.5      replace1 wake1 wakeUse1
+40  5×2   9   3    2   ngủ           9    2     5937        0.05  4/3/3     0.00   0.77   9.05   3.75     push2 longPush2 replace3 wake1 wakeUse1
+41  5×3   13  6    2   ngủ           7    30    20000+      ?     9/9/1     0.00   0.98   8.98   2.78     push3 longPush2 wake3 chainWake1 wakeUse3
+42  4×5   18  11   3   ngủ           9    72    20000+      ?     15/15/5   0.00   0.94   9.73   3.33     push3 longPush1 replace2 wake2 wakeUse2
+43  2×4   5   2    2   virus         3    1     24          0.00  4/3/2     0.09   0.91   5.52   3.75     replace1 virusDie1
+44  5×1   4   2    2   độc,virus     2    1     8           0.00  3/2/2     0.17   0.83   4.35   3.67     push2 toxic2 spread1 virusDie2
+45  3×3   8   2    2   virus         7    3     5436        0.00  4/4/1     0.00   0.99   8.7    4        push1 replace3 spread1 virusDie2
+46  4×4   13  7    3   virus         7    1     20000+      ?     13/10/1   0.00   0.99   9.05   6.04     push1 longPush1 replace3 spread1 eaten1 virusDie3
+47  4×5   19  9    3   virus         11   15    20000+      ?     20/20/6   0.00   1.00   11     4.9      push4 longPush1 replace5 spread4 eaten1 virusDie5
+48  5×5   20  12   3   ngủ,virus     9    3     20000+      ?     18/17/1   0.00   0.88   10.29  5.56     push2 replace3 wake2 wakeUse1 spread2 eaten1 virusDie3
+49  2×2   3   1    1   khuẩn         2    0     7           0.00  3/2/1     0.41   0.59   4.3    3.33     replace1 germDie1
+50  3×3   5   2    2   khuẩn         4    0     21          0.00  4/2/1     0.03   0.97   6.82   4.5      replace2 germDie1
+51  4×3   10  5    3   khuẩn         7    20    20000+      ?     16/11/6   0.00   1.00   8.45   6.19     push3 replace2 clear1 cleared3 germDie4 germClear1
+52  4×3   9   2    2   độc,khuẩn     8    5     7731        0.03  7/7/2     0.00   0.92   9.33   2.93     push2 replace3 germDie2
+53  4×5   18  9    3   khuẩn         9    5     20000+      ?     27/25/7   0.00   0.97   9.88   2.7      push3 longPush2 replace2 germDie2
+54  4×4   13  6    3   virus,khuẩn   8    13    20000+      ?     17/15/1   0.00   1.00   9.68   5.74     push3 longPush3 replace4 spread1 eaten1 virusDie2 germDie2
+55  5×5   23  16   3   -             7    1     20000+      ?     32/32/9   0.00   0.96   8.64   1.44     push4 longPush3
+56  4×3   8   3    2   màng,độc,ngủ  9    6     1282        0.39  4/2/2     0.00   0.97   10.56  5        push1 replace4 wake1 wakeUse1
+57  5×5   19  13   3   hộp,độc       7    29    20000+      ?     20/15/8   0.00   0.73   8.4    3.45     push3 longPush1 toxic1
+58  5×5   21  13   3   màng,ngủ      9    47    20000+      ?     17/14/6   0.00   0.88   9.69   3.32     push3 longPush1 replace1 wake1 wakeUse1
+59  5×5   20  11   3   virus,khuẩn   9    86    20000+      ?     30/27/9   0.00   0.83   9.8    3.7      push3 longPush2 replace4 spread1 virusDie2 germDie2
+60  5×5   22  13   3   màng,độc,ngủ,virus,khuẩn9    3     20000+      ?     29/16/1   0.00   0.99   10.33  6.28     push5 longPush3 replace1 toxic5 wake1 wakeUse1 spread4 virusDie5 germDie1
+61  5×6   23  14   3   màng,độc,ngủ,virus,khuẩn12   48    20000+      ?     26/22/11  0.00   0.88   11.35  6.12     push4 replace5 wake1 wakeUse1 spread3 eaten3 virusDie4 germDie1

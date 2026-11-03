@@ -1,0 +1,6 @@
+[
+ {"name": "c1-c khử 3 bàn lớn", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "AAABBBBCCC", "need": ["clear"], "min": 6, "max": 10, "twist": true, "nodes": 15000, "ms": 120000, "seed": 113, "top": 5},
+ {"name": "c1-d trùm chương 1", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "AAAABBBBCCCC", "need": ["clear"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "nodes": 15000, "ms": 150000, "seed": 114, "top": 5},
+ {"name": "c2-b hộp 4x5", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "AAAABBBCCCC", "mode": "target", "targets": 3, "min": 7, "max": 10, "twist": true, "nodes": 15000, "ms": 120000, "seed": 122, "top": 5},
+ {"name": "c2-c trùm chương 2", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "AAAABBBBCCCCC", "mode": "target", "targets": 4, "min": 8, "max": 12, "twist": true, "maxMs": 500, "nodes": 15000, "ms": 150000, "seed": 123, "top": 5}
+]

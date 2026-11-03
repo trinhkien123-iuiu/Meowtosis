@@ -1,0 +1,20 @@
+[
+ {"rows":["#AA#","C.BB","CAA.",".CB#"]},
+ {"rows":["CBB.",".#..","..AA","#C.A"]},
+ {"rows":["AB.C",".CC#","#B#B","A.A."],"goal":["....","B...",".C..",".A.."]},
+ {"rows":["..A#",".#B.","CABA","CB#."],"oneway":[[1,2,"up"],[1,0,"down"]]},
+ {"rows":["C.~C","A.A.","A#.A","BB~C",".B.#"]},
+ {"rows":[".AA.","C#..","BACB","#C~B","A.#."],"oneway":[[4,0,"right"],[0,0,"down"]]},
+ {"rows":["CAb#","CbA.","..B.","#bCA"]},
+ {"rows":["b.b.","Cb.#","CAB#","ACA."]},
+ {"rows":["..CA",".##C","Ab.B","A.BB","..ca"]},
+ {"rows":["#A..","#A.B","C<Cv","A.#B"]},
+ {"rows":["#A.C",".AB<","CB#A",".#.^"]},
+ {"rows":[".ABC",".B.A","B#..","...C","^.CA"]},
+ {"rows":["A#bC#","C.v#.","B..#.","A..BB","A.ACa"]},
+ {"rows":[".GG.","AAB#","GCB#"],"kill":"G"},
+ {"rows":["AC.B",".AB#","AGA#","..G.",".C.B"],"kill":"G"},
+ {"rows":["BGC.","##G.",".AAv","#B.A"],"kill":"G"},
+ {"rows":["GC#.",".AGv",".B.B","#AA#"],"kill":"G"},
+ {"rows":["CCAAB","..A.C","CAB..","CB#..","BABC#"]}
+]

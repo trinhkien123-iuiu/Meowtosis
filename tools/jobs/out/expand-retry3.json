@@ -1,0 +1,64 @@
+[
+ {
+  "job": "c6-b hộp + độc",
+  "def": {
+   "rows": [
+    "BCB~C",
+    "..B~A",
+    "A#.BC",
+    "...#A",
+    "#C#AC"
+   ],
+   "goal": [
+    ".....",
+    "B....",
+    "..B..",
+    "..B..",
+    "....."
+   ]
+  },
+  "par": 7,
+  "ms": 46,
+  "cats": 13,
+  "slots": 19,
+  "first": 20,
+  "firstOk": 14,
+  "firstOpt": 8,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.4,
+  "surprise": 3.6,
+  "feats": "push3 longPush1 toxic1"
+ },
+ {
+  "job": "c6-b hộp + độc (2)",
+  "def": {
+   "rows": [
+    "BCB~C",
+    "..B~A",
+    "A#.BC",
+    "...#A",
+    "#C#AC"
+   ],
+   "goal": [
+    ".....",
+    "B....",
+    "..B..",
+    "..B..",
+    "....."
+   ]
+  },
+  "par": 7,
+  "ms": 36,
+  "cats": 13,
+  "slots": 19,
+  "first": 20,
+  "firstOk": 14,
+  "firstOpt": 8,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.4,
+  "surprise": 3.6,
+  "feats": "push3 longPush1 toxic1"
+ }
+]

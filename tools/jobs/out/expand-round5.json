@@ -1,0 +1,134 @@
+[
+ {
+  "job": "c6-f trùm cuối 5x6 b",
+  "def": {
+   "rows": [
+    "#.A#A",
+    ".#b.B",
+    "^Ba.C",
+    "#BB#A",
+    ".#.~C",
+    "GCBAA"
+   ],
+   "oneway": [
+    [
+     5,
+     2,
+     "up"
+    ]
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 197,
+  "cats": 15,
+  "slots": 23,
+  "first": 24,
+  "firstOk": 22,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.07,
+  "surprise": 4.42,
+  "feats": "push1 replace4 wake1 wakeUse1 spread1 virusDie2 germDie1"
+ },
+ {
+  "job": "c6-f trùm cuối 5x6 c",
+  "def": {
+   "rows": [
+    "#.aC#",
+    "#>BBA",
+    "Cb.B.",
+    ".G#A#",
+    "B.B.A",
+    "~#.CA"
+   ],
+   "oneway": [
+    [
+     1,
+     3,
+     "up"
+    ]
+   ],
+   "kill": "G"
+  },
+  "par": 12,
+  "ms": 78,
+  "cats": 14,
+  "slots": 23,
+  "first": 26,
+  "firstOk": 20,
+  "firstOpt": 11,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 11.35,
+  "surprise": 7.35,
+  "feats": "push4 replace5 wake28 chainWake9 wakeUse1 spread3 eaten3 virusDie4 germDie1"
+ },
+ {
+  "job": "c6-f trùm cuối 5x6 c",
+  "def": {
+   "rows": [
+    "A#C#.",
+    "...CA",
+    "#~<AB",
+    "aBB#B",
+    ".CAb#",
+    "B...G"
+   ],
+   "oneway": [
+    [
+     3,
+     1,
+     "left"
+    ]
+   ],
+   "kill": "G"
+  },
+  "par": 10,
+  "ms": 229,
+  "cats": 14,
+  "slots": 24,
+  "first": 27,
+  "firstOk": 20,
+  "firstOpt": 13,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 10.04,
+  "surprise": 4.81,
+  "feats": "push3 longPush2 replace3 toxic3 wake1 wakeUse1 spread4 virusDie5 germDie1"
+ },
+ {
+  "job": "c6-f trùm cuối 5x6 c",
+  "def": {
+   "rows": [
+    "B#.#A",
+    "CB.>~",
+    "BAAG.",
+    ".#BC.",
+    "aBC#.",
+    "#.b#A"
+   ],
+   "oneway": [
+    [
+     5,
+     2,
+     "up"
+    ]
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 15,
+  "cats": 14,
+  "slots": 23,
+  "first": 30,
+  "firstOk": 28,
+  "firstOpt": 14,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 9.47,
+  "surprise": 4.27,
+  "feats": "push3 longPush3 replace1 toxic6 wake1 wakeUse1 spread5 virusDie6 germDie1"
+ }
+]

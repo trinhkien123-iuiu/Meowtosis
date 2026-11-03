@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Mitoosis Prototype</title>
+<style>
+  :root { --bg: #2a0f2e; --panel: #43204a; --text: #fbeefc; --muted: #c9a7cf; --accent: #ff9ec7; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; background: radial-gradient(circle at 50% 35%, #5a2a66, var(--bg) 70%); color: var(--text);
+    font-family: system-ui, "Segoe UI", Roboto, sans-serif; overscroll-behavior: none; }
+  body { display: flex; justify-content: center; }
+  #app { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 10px;
+    padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); user-select: none; -webkit-user-select: none; }
+  header { display: flex; align-items: center; gap: 8px; }
+  header h1 { flex: 1; margin: 0; text-align: center; font-size: 18px; letter-spacing: .2em; font-weight: 500; cursor: pointer; }
+  header small { display: block; font-size: 12px; color: var(--muted); letter-spacing: 0; margin-top: 2px; }
+  .nav { width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--panel); color: var(--text); font-size: 18px; cursor: pointer; }
+  .nav:disabled { opacity: .3; cursor: default; }
+  .hud { display: flex; align-items: center; justify-content: space-between; min-height: 24px; font-size: 12.5px; color: var(--muted); }
+  .hearts { font-size: 22px; letter-spacing: 3px; line-height: 1; color: #ff5f8f; }
+  .hearts span { display: inline-block; }
+  .hearts .empty { color: #6d4a74; }
+  .hearts .hit { animation: hit .7s ease-out; }
+  @keyframes hit { 30% { transform: scale(1.7); color: #fff; } }
+  .goalbar { display: flex; align-items: center; gap: 10px; background: var(--panel); border-radius: 14px; padding: 8px 8px 8px 12px;
+    font-size: 14px; line-height: 1.35; }
+  .goalbar span { flex: 1; }
+  .goalbar small { display: block; color: var(--muted); font-size: 12px; }
+  .goalbar button { border: 0; border-radius: 12px; padding: 9px 11px; background: #5b2c63; color: var(--text); font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+  #board { width: 100%; max-height: 52vh; display: block; touch-action: none; }
+  .cell { transition: transform .2s ease-out; }
+  .cell.pop { animation: pop .32s ease-in forwards; }
+  .cell.born .body { animation: born .2s ease-out; }
+  @keyframes pop { to { opacity: 0; } }
+  @keyframes born { from { transform: scale(.55); } }
+  .body { transform-box: fill-box; transform-origin: center; transition: opacity .35s, filter .35s; }
+  .cell.asleep .body { opacity: .5; filter: saturate(.25); }
+  .zz { display: none; }
+  .cell.asleep .zz { display: inline; }
+  .ring { fill-opacity: .25; stroke-width: 4; stroke-dasharray: 215 49; stroke-linecap: round; transition: stroke-width .2s; }
+  .ring.ok { stroke-dasharray: none; stroke-width: 6; }
+  .mark { fill: none; stroke: #fff; stroke-width: 3; stroke-dasharray: 7 6; animation: blink .8s ease-in-out infinite alternate; }
+  .mark.sel { stroke-dasharray: none; stroke-width: 5; animation: none; }
+  @keyframes blink { from { opacity: .3; } }
+  .pick { cursor: pointer; }
+  .species { display: flex; justify-content: center; gap: 18px; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .species span { display: flex; align-items: center; gap: 6px; transition: opacity .2s; }
+  .species i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid; }
+  .species .low { color: var(--accent); font-weight: 700; }
+  .species .gone { opacity: .35; text-decoration: line-through; }
+  .species .enemy { color: var(--muted); }
+  .toast { min-height: 18px; text-align: center; font-size: 13px; color: var(--accent); }
+  .boosters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .boosters button { position: relative; height: 54px; border: 0; border-radius: 16px; background: #5b2c63; color: var(--text); font-size: 12.5px;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+  .boosters .ic { font-size: 19px; line-height: 1; }
+  .boosters b { position: absolute; top: -6px; right: -4px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px;
+    background: #ff7aa8; color: #3a0f30; font-size: 12px; display: grid; place-items: center; }
+  .boosters button.on { background: var(--accent); color: #3a0f30; box-shadow: 0 0 0 3px #fff inset; }
+  .boosters button:disabled { opacity: .35; cursor: default; }
+  .actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .actions button { height: 46px; border: 0; border-radius: 23px; background: var(--panel); color: var(--text); font-size: 14px; cursor: pointer; }
+  .actions button:disabled { opacity: .35; cursor: default; }
+  .credit { margin: 0; text-align: center; font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+  .debug { align-self: center; border: 0; background: none; color: var(--muted); font-size: 11.5px; text-decoration: underline; cursor: pointer; padding: 0; }
+  .banner { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; transform: translateY(110%);
+    transition: transform .3s; pointer-events: none; }
+  .banner.show { transform: none; pointer-events: auto; }
+  .banner .bar { width: 100%; max-width: 480px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); padding: 12px 16px; border-radius: 16px;
+    background: #ff7aa8; color: #3a0f30; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-weight: 700; }
+  .banner button { border: 0; border-radius: 12px; padding: 10px 16px; background: #fff; color: #3a0f30; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .banner button:disabled { opacity: .45; cursor: default; }
+  #lost .bar { flex-direction: column; align-items: stretch; background: #3b3550; color: var(--text); box-shadow: 0 0 0 2px #8a7fb0 inset; }
+  #lost .bar div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .modal { position: fixed; inset: 0; z-index: 5; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(20, 6, 24, .86); }
+  .modal.show { display: flex; }
+  .card { width: 100%; max-width: 360px; max-height: 100%; overflow: auto; padding: 20px 18px; border-radius: 20px; background: var(--panel); }
+  .card h2 { margin: 8px 0; font-size: 20px; }
+  .card .primary { width: 100%; height: 46px; border: 0; border-radius: 14px; background: var(--accent); color: #3a0f30; font-weight: 700; font-size: 15px; cursor: pointer; }
+  #nohearts .card { max-width: 320px; text-align: center; }
+  #nohearts .big { font-size: 44px; }
+  #nohearts p { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  #learn { z-index: 7; }
+  .tag { display: inline-block; padding: 3px 8px; border-radius: 8px; background: var(--accent); color: #3a0f30; font-size: 11.5px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase; }
+  .tag.plain { background: #5b2c63; color: var(--text); }
+  .demo { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 10px 0 4px; }
+  .demo svg { width: 42%; height: auto; max-height: 130px; }
+  .demo b { font-size: 22px; color: var(--muted); }
+  .demo-cap { margin: 0 0 6px; text-align: center; font-size: 12px; color: var(--muted); }
+  #learnPoints { margin: 10px 0 16px; padding-left: 18px; font-size: 14px; line-height: 1.5; }
+  #learnPoints li + li { margin-top: 4px; }
+  .learnhead { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); }
+  .levelhead { display: flex; justify-content: space-between; align-items: center; }
+  .levelhead button { width: 36px; height: 36px; border: 0; border-radius: 50%; background: #5b2c63; color: var(--text); font-size: 16px; cursor: pointer; }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 8px; }
+  .grid button { aspect-ratio: 1; border: 0; border-radius: 12px; background: #5b2c63; color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0; }
+  .grid button small { font-size: 11px; font-weight: 400; min-height: 13px; }
+  .grid button.cur { background: var(--accent); color: #3a0f30; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <button class="nav" id="prev" aria-label="Level trước">‹</button>
+    <h1 id="title" title="Chọn level">MITOOSIS<small id="sub"></small></h1>
+    <button class="nav" id="next" aria-label="Level sau">›</button>
+  </header>
+  <div class="hud"><span class="hearts" id="hearts" aria-label="Tim"></span><span id="regen"></span></div>
+  <div class="goalbar"><span><b id="goal"></b><small id="goalNote"></small></span><button id="rules">Luật chơi</button></div>
+  <svg id="board"></svg>
+  <div class="species" id="species"></div>
+  <div class="toast" id="toast"></div>
+  <div class="boosters">
+    <button id="b-mutate" title="Đổi màu một tế bào"><span class="ic">🧬</span>Đột biến<b></b></button>
+    <button id="b-clone" title="Cấy bản sao vào ô trống bất kỳ"><span class="ic">💉</span>Cấy ghép<b></b></button>
+    <button id="b-revive" title="Khi thua: quay lại trước nước thua, không mất tim"><span class="ic">✨</span>Hồi sinh<b></b></button>
+  </div>
+  <div class="actions">
+    <button id="undo">Hoàn tác</button>
+    <button id="reset">Chơi lại</button>
+    <button id="hint">Gợi ý</button>
+  </div>
+  <p class="credit">Prototype dựng lại cơ chế của <i>Mitoosis</i> (Le Slo): phân chia, đẩy, thay thế, khử 3 cùng màu và vòng mục tiêu.
+    Level, tim, booster, màng một chiều, ô độc, tế bào ngủ, virus và diệt khuẩn là phần tự thiết kế.</p>
+  <button class="debug" id="refillAll">Nạp lại tim và booster (bản thử)</button>
+</div>
+<div class="banner" id="solved"><div class="bar"><span id="solvedText"></span><button id="continue">Tiếp tục</button></div></div>
+<div class="banner" id="lost"><div class="bar"><span id="lostText"></span>
+  <div><button id="lostRevive"></button><button id="lostReset">Chơi lại</button></div></div></div>
+<div class="modal" id="nohearts"><div class="card"><div class="big">💔</div><h2>Hết tim</h2><p id="nhText"></p>
+  <button class="primary" id="refill">Nạp đầy tim (bản thử)</button></div></div>
+<div class="modal" id="learn"><div class="card">
+  <div class="learnhead"><span class="tag" id="learnTag"></span><span id="learnStep"></span></div>
+  <h2 id="learnTitle"></h2>
+  <div id="learnDemo"></div>
+  <ul id="learnPoints"></ul>
+  <button class="primary" id="learnOk"></button>
+</div></div>
+<div class="modal" id="levels"><div class="card">
+  <div class="levelhead"><h2>Chọn level</h2><button id="levelsClose" aria-label="Đóng">✕</button></div>
+  <div class="grid" id="levelGrid"></div>
+</div></div>
+
+<script>
+'use strict';
+// ==LOGIC==
+// Ký hiệu ô trong rows:
+//   # ngoài cơ thể     . ô trống            ~ ô độc (tế bào vào là chết, không cần lấp)
+//   A B C tế bào       a b c tế bào đang ngủ  G vi khuẩn
+//   ^ v < > virus, mũi tên là hướng nó lan
+// Trường thêm: goal = vòng mục tiêu (chữ cái = vòng cần tế bào màu đó, . = không có vòng);
+// oneway = [[hàng, cột, hướng]]: màng giữa ô đó và ô kề theo hướng, chỉ cho đi qua theo hướng ấy;
+// kill = màu cần diệt sạch (level diệt khuẩn).
+// Mỗi level một hình thân riêng. Vòng khuyên và chữ C không bao giờ lấp kín được (tối đa 6 tế bào),
+// nên vòng khuyên chỉ dùng cho level mục tiêu.
+const LEVELS = [
+  ['A.'],                                            // thanh 2 ô
+  ['AB.'],                                           // thanh 3 ô
+  ['.B', '.A'],                                      // vuông 2×2
+  ['.B.', '#A#'],                                    // chữ T
+  ['A#.', 'B..'],                                    // chữ U
+  ['#A#', '...', '#B#'],                             // dấu cộng
+  ['B..', 'A..'],                                    // chữ nhật 2×3
+  ['.#B', '...', '.#A'],                             // chữ H
+  ['.B#', '..#', 'A..'],                             // chữ L dày
+  ['..A', '...', 'B..'],                             // vuông 3×3
+  ['BC..', '.#..', '.A..'],                          // 3×4 khuyết một ô
+  ['C..A', '....', '##.#', '...B'],                  // 4×4 thắt eo
+  // Level "vào vị trí": thắng khi mọi vòng tròn có tế bào đúng màu
+  { rows: ['A..', '.B#'], goal: ['..A', '...'] },                                       // chữ L
+  { rows: ['A...', '#.B#'], goal: ['...B', '..A.'] },                                   // chữ T rộng
+  { rows: ['B..#', '#.A.'], goal: ['..B.', '.A..'] },                                   // bậc thang
+  { rows: ['...B', 'A...'], goal: ['..BA', '....'] },                                   // chữ nhật 2×4
+  { rows: ['#..#', '.B.A', '#.A#'], goal: ['..A.', '...B', '..A.'] },                   // chữ thập rộng
+  { rows: ['A..', '.#.', '.B.'], goal: ['..B', '..A', '...'] },                         // vòng khuyên
+  { rows: ['..#', 'B.A', '#.C'], goal: ['C..', '.A.', '..B'] },                         // chữ S
+  { rows: ['.#A.', '....', '.#..', '.B.C'], goal: ['A...', '.A..', '....', '.C..'] },   // 4×4 hai lỗ
+  // Cơ chế mới: mỗi cơ chế một level nhập môn rồi một level khó hơn, cuối cùng một level tổng hợp
+  { rows: ['#..', 'AB#', '#.#'], oneway: [[1, 1, 'up']] },                               // chữ F · màng một chiều
+  { rows: ['...', '.A.', '#B#'], oneway: [[1, 0, 'right'], [0, 2, 'down']] },             // chữ T béo · màng
+  ['AB~', '#.#', '#.#'],                                                                  // chữ T cao · ô độc
+  ['~..~.', 'B..A.'],                                                                     // chữ nhật 2×5 · ô độc
+  ['.B.', '.a#', 'A##'],                                                                  // tam giác · tế bào ngủ
+  ['b.A..', '.B#..'],                                                                     // 2×5 khuyết · tế bào ngủ
+  ['~<.AB'],                                                                              // thanh 5 ô · virus
+  ['A.B', '...', '>.#'],                                                                  // 3×3 thiếu góc · virus
+  { rows: ['.G#', '#A#', '#G.'], kill: 'G' },                                             // chữ Z · diệt khuẩn
+  { rows: ['.A.#', 'B.~G', '#..G'], kill: 'G' },                                          // 3×4 lệch · diệt khuẩn + ô độc
+  { rows: ['BA##', '..~#', '..a.'], oneway: [[2, 2, 'left']] },                           // bậc thang · tổng hợp
+];
+
+const DIRS = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
+const OPPOSITE = { up: 'down', down: 'up', left: 'right', right: 'left' };
+const VIRUS = { '^': 'up', v: 'down', '<': 'left', '>': 'right' };
+const ARROW = { up: '^', down: 'v', left: '<', right: '>' };
+
+function parseLevel(def) {
+  const d = Array.isArray(def) ? { rows: def } : def;
+  const h = d.rows.length, w = d.rows[0].length;
+  const level = { h, w, slot: [], toxic: [], init: [], target: [], oneway: [], blocked: new Set(), kill: d.kill || null };
+  let id = 0;
+  for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) {
+    const ch = d.rows[r][c], t = d.goal ? d.goal[r][c] : '.';
+    level.slot.push(ch !== '#');
+    level.toxic.push(ch === '~');
+    let cell = null;
+    if (VIRUS[ch]) cell = { color: 'V', dir: VIRUS[ch], id: id++ };
+    else if (/[A-Z]/.test(ch)) cell = { color: ch, id: id++ };
+    else if (/[a-z]/.test(ch)) cell = { color: ch.toUpperCase(), sleep: true, id: id++ };
+    level.init.push(cell);
+    level.target.push(/[A-Z]/.test(t) ? t : null);
+  }
+  // Màng cho đi i -> j theo `dir`, chặn chiều ngược lại
+  for (const [r, c, dir] of d.oneway || []) {
+    const i = r * w + c, j = (r + DIRS[dir][0]) * w + c + DIRS[dir][1];
+    level.oneway.push([i, j, dir]);
+    level.blocked.add(j + OPPOSITE[dir]);
+  }
+  level.nextId = id;
+  level.hasTarget = level.target.some(Boolean);
+  level.colors = [...new Set(level.init.filter(c => c && c.color !== 'V' && c.color !== level.kill).map(c => c.color))];
+  level.init = wake(level, level.init);
+  return level;
+}
+
+// Ô kế tiếp theo hướng; -1 nếu ra ngoài bàn, ngoài cơ thể, hoặc bị màng chặn.
+function step(level, i, dir) {
+  const r = Math.floor(i / level.w) + DIRS[dir][0], c = i % level.w + DIRS[dir][1];
+  if (r < 0 || c < 0 || r >= level.h || c >= level.w) return -1;
+  const j = r * level.w + c;
+  return level.slot[j] && !level.blocked.has(i + dir) ? j : -1;
+}
+
+// Các ô kề (bỏ qua màng), dùng để đánh thức tế bào ngủ.
+function near(level, i) {
+  const out = [];
+  for (const dir in DIRS) {
+    const r = Math.floor(i / level.w) + DIRS[dir][0], c = i % level.w + DIRS[dir][1];
+    if (r >= 0 && c >= 0 && r < level.h && c < level.w && level.slot[r * level.w + c]) out.push(r * level.w + c);
+  }
+  return out;
+}
+
+// Mọi dãy ngang/dọc từ 3 tế bào cùng màu trở lên. Virus không tạo dãy.
+function findRuns(level, cells) {
+  const out = new Set();
+  const colorAt = i => cells[i] && cells[i].color !== 'V' ? cells[i].color : null;
+  const scan = (start, stride, count) => {
+    let runStart = 0;
+    for (let k = 1; k <= count; k++) {
+      const prev = colorAt(start + (k - 1) * stride);
+      const cur = k < count ? colorAt(start + k * stride) : null;
+      if (cur && cur === prev) continue;
+      if (prev && k - runStart >= 3) for (let j = runStart; j < k; j++) out.add(start + j * stride);
+      runStart = k;
+    }
+  };
+  for (let r = 0; r < level.h; r++) scan(r * level.w, 1, level.w);
+  for (let c = 0; c < level.w; c++) scan(c, level.w, level.h);
+  return [...out];
+}
+
+// Giết mọi tế bào đang đứng trên ô độc, ghi chúng vào `dead`.
+function poison(level, cells, dead) {
+  let out = cells;
+  level.toxic.forEach((t, i) => {
+    if (!t || !out[i]) return;
+    if (out === cells) out = cells.slice();
+    dead.push(out[i]);
+    out[i] = null;
+  });
+  return out;
+}
+
+// Tế bào ngủ thức dậy khi đứng cạnh một tế bào cùng màu đang thức (lan dây chuyền).
+function wake(level, cells) {
+  let out = cells;
+  for (let changed = true; changed;) {
+    changed = false;
+    for (let i = 0; i < out.length; i++) {
+      const c = out[i];
+      if (!c || !c.sleep || !near(level, i).some(j => out[j] && !out[j].sleep && out[j].color === c.color)) continue;
+      if (out === cells) out = cells.slice();
+      out[i] = { ...c, sleep: false };
+      changed = true;
+    }
+  }
+  return out;
+}
+
+// Kết thúc một lượt sau khi bản sao đã vào chỗ: ô độc giết, khử 3, virus lan (vào ô trống hoặc ăn tế bào),
+// ô độc giết tiếp, rồi tế bào ngủ thức dậy. Trả từng chặng để giao diện diễn hoạt.
+function resolve(level, placed, born, nextId) {
+  const removed = [];
+  let cells = poison(level, placed, removed);
+  const runs = findRuns(level, cells);
+  if (runs.length) {
+    cells = cells.slice();
+    for (const i of runs) { removed.push(cells[i]); cells[i] = null; }
+  }
+  const cleared = cells;
+  const viruses = [], spread = [], eaten = [];
+  cells.forEach((c, i) => { if (c && c.color === 'V') viruses.push(i); });
+  if (viruses.length) cells = cells.slice();
+  for (const i of viruses) {
+    const j = step(level, i, cells[i].dir);
+    if (j < 0 || (cells[j] && cells[j].color === 'V')) continue;
+    if (cells[j]) eaten.push(cells[j]);
+    cells[j] = { color: 'V', dir: cells[i].dir, id: nextId++ };
+    spread.push([cells[j].id, i]);
+  }
+  const infected = cells;
+  const poisoned = [];
+  cells = wake(level, poison(level, cells, poisoned));
+  return { moved: placed, removed, cleared, spread, eaten, infected, poisoned, cells, born, nextId };
+}
+
+// Vuốt tế bào `from` theo `dir`. Bản sao vào ô kề; nếu ô kề có tế bào thì đẩy cả dãy tới ô trống gần nhất
+// theo hướng đó, không còn ô trống thì bản sao thay thế tế bào kề. Sau đó kết thúc lượt (resolve).
+// Trả null nếu không vuốt được (tế bào ngủ, virus, ra ngoài, hoặc thay thế một tế bào cùng màu).
+function swipe(level, cells, from, dir, newId = -1) {
+  const parent = cells[from];
+  const to = step(level, from, dir);
+  if (!parent || parent.sleep || parent.color === 'V' || to < 0) return null;
+  const chain = [];
+  let k = to;
+  while (k >= 0 && cells[k]) { chain.push(k); k = step(level, k, dir); }
+  const next = cells.slice();
+  let pushed = false, replaced = null;
+  if (k >= 0) {
+    for (let i = chain.length - 1; i >= 0; i--) next[step(level, chain[i], dir)] = cells[chain[i]];
+    pushed = chain.length > 0;
+  } else {
+    if (cells[to].color === parent.color) return null;
+    replaced = cells[to];
+  }
+  next[to] = { color: parent.color, id: newId };
+  return { ...resolve(level, next, [newId, from], newId + 1), pushed, replaced };
+}
+
+// Booster Đột biến: đổi một tế bào sang màu loài khác. Không cho đổi tế bào cuối cùng của một loài.
+function mutate(level, cells, i, color, newId = -1) {
+  const c = cells[i];
+  if (!c || c.color === 'V' || c.color === color || !level.colors.includes(color)) return null;
+  if (level.colors.includes(c.color) && !cells.some((o, j) => j !== i && o && o.color === c.color)) return null;
+  const next = cells.slice();
+  next[i] = { color, id: newId };
+  return resolve(level, next, [newId, i], newId + 1);
+}
+
+// Booster Cấy ghép: bản sao của tế bào `from` mọc ở một ô trống bất kỳ (trừ ô độc), không đẩy gì.
+function transplant(level, cells, from, to, newId = -1) {
+  const c = cells[from];
+  if (!c || c.color === 'V' || !level.slot[to] || level.toxic[to] || cells[to]) return null;
+  const next = cells.slice();
+  next[to] = { color: c.color, id: newId };
+  return resolve(level, next, [newId, from], newId + 1);
+}
+
+// Lấp kín: mọi ô (trừ ô độc) có tế bào không phải virus.
+const isFull = (level, cells) => level.slot.every((s, i) => !s || level.toxic[i] || (cells[i] && cells[i].color !== 'V'));
+const keyOf = cells => cells.map(c => !c ? '.' : c.color === 'V' ? ARROW[c.dir] : c.sleep ? c.color.toLowerCase() : c.color).join('');
+
+// Các loài có mặt lúc đầu nhưng nay không còn tế bào nào (kể cả đang ngủ). Có loài tuyệt chủng là thua.
+const extinct = (level, cells) => level.colors.filter(col => !cells.some(c => c && c.color === col));
+const isLost = (level, cells) => extinct(level, cells).length > 0;
+// Diệt khuẩn: hết vi khuẩn. Mục tiêu: mọi vòng đúng màu. Còn lại: lấp kín.
+const isComplete = (level, cells) => level.kill ? !cells.some(c => c && c.color === level.kill)
+  : level.hasTarget ? level.target.every((t, i) => !t || (cells[i] && cells[i].color === t))
+  : isFull(level, cells);
+const isWon = (level, cells) => isComplete(level, cells) && !isLost(level, cells);
+
+function allMoves(level, cells) {
+  const moves = [];
+  cells.forEach((c, i) => { if (c && !c.sleep && c.color !== 'V') for (const dir in DIRS) moves.push([i, dir]); });
+  return moves;
+}
+
+// BFS (bỏ qua id): chuỗi vuốt ngắn nhất để thắng mà không loài nào tuyệt chủng;
+// null nếu đã thua hoặc không tìm thấy trong giới hạn.
+function solve(level, start, maxNodes = 80000) {
+  if (isLost(level, start)) return null;
+  if (isComplete(level, start)) return [];
+  const startKey = keyOf(start);
+  const parent = new Map([[startKey, null]]);
+  const queue = [start];
+  for (let q = 0; q < queue.length && parent.size < maxNodes; q++) {
+    const cells = queue[q], key = keyOf(cells);
+    for (const [from, dir] of allMoves(level, cells)) {
+      const res = swipe(level, cells, from, dir);
+      if (!res) continue;
+      const k2 = keyOf(res.cells);
+      if (parent.has(k2)) continue;
+      parent.set(k2, [key, from, dir]);
+      if (isLost(level, res.cells)) continue;
+      if (isComplete(level, res.cells)) {
+        const path = [];
+        for (let k = k2; parent.get(k); k = parent.get(k)[0]) path.unshift(parent.get(k).slice(1));
+        return path;
+      }
+      queue.push(res.cells);
+    }
+  }
+  return null;
+}
+// ==/LOGIC==
+
+// ---------------------------------------------------------------------------
+// Giao diện: mỗi tế bào là một nhóm SVG giữ nguyên qua các lượt để trượt mượt khi bị đẩy
+// ---------------------------------------------------------------------------
+const SZ = 90;
+const COLORS = { A: ['#ff7a6b', '#c9473d'], B: ['#7fa8ff', '#4567c9'], C: ['#f2d05a', '#b58f1c'],
+  G: ['#93dd6c', '#3f8a2c'], V: ['#c9a6e8', '#6a3f8f'] };
+const NAMES = { A: 'đỏ', B: 'xanh', C: 'vàng', G: 'vi khuẩn' };
+const ANGLE = { right: 0, down: 90, left: 180, up: 270 };
+const MAX_HEARTS = 3, REGEN_MS = 10 * 60 * 1000;             // hết tim thì cứ 10 phút hồi 1 tim
+const START_BOOSTERS = { mutate: 3, clone: 3, revive: 3 };
+const BOOSTER_NAMES = { mutate: 'Đột biến', clone: 'Cấy ghép', revive: 'Hồi sinh' };
+const $ = id => document.getElementById(id);
+const board = $('board');
+const NS = 'http://www.w3.org/2000/svg';
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const hasVirus = lv => lv.init.some(c => c && c.color === 'V');
+const store = {
+  get() { try { return JSON.parse(localStorage.getItem('meowtosis-archive-truoc-visual')) || {}; } catch (e) { return {}; } },
+  set(v) { try { localStorage.setItem('meowtosis-archive-truoc-visual', JSON.stringify(v)); } catch (e) { /* bỏ qua */ } },
+};
+
+// ---------------------------------------------------------------------------
+// Thẻ hướng dẫn: hiện lần đầu gặp mỗi cơ chế. Mỗi demo là một level nhỏ + một lần vuốt;
+// ảnh "sau" do chính luật chơi tính ra nên luôn khớp với game.
+// ---------------------------------------------------------------------------
+const MECHANICS = [
+  { key: 'divide', icon: '👆', title: 'Phân chia', has: () => true,
+    points: ['Vuốt một tế bào: nó nhân đôi, bản sao chui vào ô bên cạnh theo hướng vuốt.', 'Lấp kín cơ thể sinh vật để qua màn.'],
+    demos: [{ def: ['A.'], from: 0, dir: 'right' }] },
+  { key: 'push', icon: '➡️', title: 'Đẩy', has: (lv, i) => i >= 1,
+    points: ['Ô bên cạnh đã có tế bào thì cả dãy bị đẩy tới ô trống gần nhất theo hướng vuốt.'],
+    demos: [{ def: ['AB.'], from: 0, dir: 'right' }] },
+  { key: 'replace', icon: '🔁', title: 'Thay thế và tuyệt chủng', has: (lv, i) => i >= 2,
+    points: ['Không còn ô trống theo hướng vuốt thì bản sao thay thế tế bào bên cạnh.',
+      'Màu nào mất hết tế bào là thua và mất 1 tim.'],
+    demos: [{ def: ['ABB'], from: 0, dir: 'right', cap: 'Hết chỗ: bản sao đỏ thay thế xanh' },
+      { def: ['AB'], from: 1, dir: 'left', cap: 'Đỏ không còn con nào: thua' }] },
+  { key: 'clear', icon: '💥', title: 'Khử 3', has: (lv, i) => i >= 3,
+    points: ['3 tế bào cùng màu thẳng hàng (ngang hoặc dọc) sẽ biến mất.', 'Khử hết một màu cũng là thua.'],
+    demos: [{ def: ['AA.B'], from: 1, dir: 'right' }] },
+  { key: 'target', icon: '🎯', title: 'Vòng mục tiêu', has: lv => lv.hasTarget,
+    points: ['Đưa tế bào đúng màu vào mọi vòng tròn để qua màn.', 'Các ô khác không cần lấp kín.'],
+    demos: [{ def: { rows: ['AB.'], goal: ['..B'] }, from: 1, dir: 'right' }] },
+  { key: 'oneway', icon: '🚪', title: 'Màng một chiều', fresh: true, has: lv => lv.oneway.length > 0,
+    points: ['Tế bào chỉ đi qua màng theo chiều mũi tên.',
+      'Chiều ngược lại màng như bức tường: không chia qua được, dãy bị đẩy dừng ở màng nên bản sao sẽ thay thế.'],
+    demos: [{ def: { rows: ['.BA'], oneway: [[0, 2, 'left']] }, from: 2, dir: 'left', cap: 'Cùng chiều mũi tên: đẩy qua được' },
+      { def: { rows: ['AB.'], oneway: [[0, 2, 'left']] }, from: 0, dir: 'right', cap: 'Ngược chiều: bị chặn nên thay thế' }] },
+  { key: 'toxic', icon: '☠️', title: 'Ô độc', fresh: true, has: lv => lv.toxic.some(Boolean),
+    points: ['Tế bào nào vào ô độc sẽ chết ngay, kể cả khi bị đẩy vào.',
+      'Ô độc không cần lấp kín. Dùng nó để loại bớt tế bào, nhưng coi chừng làm một màu tuyệt chủng.'],
+    demos: [{ def: ['ABB~'], from: 0, dir: 'right', cap: 'Tế bào xanh bị đẩy vào ô độc và chết' }] },
+  { key: 'sleep', icon: '💤', title: 'Tế bào ngủ', fresh: true, has: lv => lv.init.some(c => c && c.sleep),
+    points: ['Tế bào ngủ (mờ, có chữ z) không chia được, nhưng vẫn bị đẩy, bị thay thế và bị khử như thường.',
+      'Có tế bào cùng màu đang thức đứng cạnh thì nó thức dậy và chia được.'],
+    demos: [{ def: ['A.', '.a'], from: 0, dir: 'right', cap: 'Bản sao đỏ đứng cạnh nên tế bào ngủ thức dậy' }] },
+  { key: 'virus', icon: '🦠', title: 'Virus', fresh: true, has: hasVirus,
+    points: ['Virus không vuốt được. Sau mỗi lượt của bạn, mỗi virus lan thêm 1 ô theo mũi tên: vào ô trống hoặc ăn tế bào ở đó.',
+      'Virus không bị khử 3. Diệt nó bằng cách cho bản sao thay thế nó, hoặc đẩy nó vào ô độc.',
+      'Ô có virus không tính là đã lấp.'],
+    demos: [{ def: ['>.A'], from: 2, dir: 'left', cap: 'Bạn vuốt xong, virus lan sang và ăn bản sao' },
+      { def: ['A>'], from: 0, dir: 'right', cap: 'Hết chỗ đẩy: bản sao thay thế virus' }] },
+  { key: 'kill', icon: '🧫', title: 'Diệt khuẩn', fresh: true, has: lv => !!lv.kill,
+    points: ['Mục tiêu: làm vi khuẩn xanh lá biến mất hết, các màu khác vẫn phải còn sống.',
+      'Vi khuẩn cũng vuốt được và bị khử khi đủ 3 thẳng hàng: hãy cho nó nhân lên rồi khử luôn.'],
+    demos: [{ def: { rows: ['GG.A'], kill: 'G' }, from: 1, dir: 'right' }] },
+];
+
+// Tiến độ lưu trên máy: level đang chơi, số tim, mốc bắt đầu hồi tim, số booster, cơ chế đã xem hướng dẫn.
+const save = { level: 0, hearts: MAX_HEARTS, heartAt: null, seen: [], ...store.get() };
+save.boosters = { ...START_BOOSTERS, ...save.boosters };
+const persist = () => store.set(save);
+
+// history: mỗi mục { cells, spent } với spent là booster đã dùng ở nước đó (hoàn tác thì trả lại).
+// mode: booster đang chọn, { kind: 'mutate', cell } hoặc { kind: 'clone', from }.
+let index = 0, level, cells, history, nextId, busy = false, solved = false, lost = false, gesture = null, mode = null;
+let layer, overlay, nodes = new Map(), shown = [];
+
+// ---------------------------------------------------------------------------
+// Tim: thua mất 1 tim; dưới mức tối đa thì hồi dần theo thời gian thực
+// ---------------------------------------------------------------------------
+function regen() {
+  let changed = false;
+  while (save.hearts < MAX_HEARTS && save.heartAt && Date.now() - save.heartAt >= REGEN_MS) {
+    save.hearts++;
+    save.heartAt += REGEN_MS;
+    changed = true;
+  }
+  if (save.hearts >= MAX_HEARTS && save.heartAt) { save.heartAt = null; changed = true; }
+  if (changed) persist();
+  return changed;
+}
+
+function setHearts(n) {
+  if (n < save.hearts && save.hearts === MAX_HEARTS) save.heartAt = Date.now();
+  save.hearts = Math.max(0, Math.min(MAX_HEARTS, n));
+  if (save.hearts === MAX_HEARTS) save.heartAt = null;
+  persist();
+}
+
+const outOfHearts = () => save.hearts === 0 && !lost;
+const clock = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+
+function renderHearts(hit = -1) {
+  $('hearts').innerHTML = Array.from({ length: MAX_HEARTS }, (_, k) =>
+    `<span class="${k < save.hearts ? '' : 'empty'}${k === hit ? ' hit' : ''}">♥</span>`).join('');
+}
+
+function renderClock() {
+  const left = save.heartAt ? clock(save.heartAt + REGEN_MS - Date.now()) : '';
+  $('regen').textContent = save.hearts < MAX_HEARTS ? `+1 tim sau ${left}` : 'Tim đầy';
+  $('nhText').textContent = `Tim tiếp theo sau ${left}`;
+  $('nohearts').classList.toggle('show', outOfHearts());
+}
+
+// ---------------------------------------------------------------------------
+// Vẽ: dùng chung cho bàn chơi và ảnh minh hoạ trong thẻ hướng dẫn
+// ---------------------------------------------------------------------------
+const pos = (i, lv = level) => [(i % lv.w) * SZ, Math.floor(i / lv.w) * SZ];
+
+// Hình một tế bào, gốc toạ độ ở góc ô.
+function cellBody(c) {
+  const [light, dark] = COLORS[c.color];
+  const m = SZ / 2;
+  if (c.color === 'V') {
+    let pts = '';
+    for (let k = 0; k < 24; k++) {
+      const a = Math.PI * k / 12, r = k % 2 ? 29 : 39;
+      pts += `${(m + r * Math.cos(a)).toFixed(1)},${(m + r * Math.sin(a)).toFixed(1)} `;
+    }
+    return `<g class="body"><polygon points="${pts}" fill="${light}" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>
+      <path transform="rotate(${ANGLE[c.dir]} ${m} ${m})" d="M${m - 11} ${m - 12} L${m + 15} ${m} L${m - 11} ${m + 12} Z" fill="${dark}"/></g>`;
+  }
+  if (c.color === 'G') {
+    return `<g class="body"><g transform="rotate(-25 ${m} ${m})">
+      <path d="M${m - 32} ${m} q-10 -6 -8 -18 M${m + 32} ${m} q10 6 8 18" stroke="${dark}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <rect x="${m - 32}" y="${m - 18}" width="64" height="36" rx="18" fill="${light}" stroke="${dark}" stroke-width="4"/>
+      <circle cx="${m - 13}" cy="${m - 3}" r="4.5" fill="${dark}"/><circle cx="${m + 4}" cy="${m + 6}" r="3.5" fill="${dark}"/>
+      <circle cx="${m + 15}" cy="${m - 5}" r="4" fill="${dark}"/></g></g>`;
+  }
+  return `<g class="body"><circle cx="${m}" cy="${m}" r="36" fill="${light}" stroke="${dark}" stroke-width="4"/>
+    <circle cx="${m}" cy="${m}" r="25" fill="none" stroke="${dark}" stroke-width="2" stroke-dasharray="9 7" opacity=".6"/>
+    <circle cx="${m}" cy="${m}" r="10" fill="${dark}"/><circle cx="${m}" cy="${m}" r="5" fill="#2a0f2e"/></g>
+    <text class="zz" x="${SZ - 26}" y="26" font-size="22" font-weight="800" fill="#4b2a6b">z</text>`;
+}
+
+// Thân sinh vật, ô độc và vòng mục tiêu (lớp dưới cùng). Có `cells` thì tô vòng đã đạt.
+function baseSvg(lv, cells = null) {
+  let out = '';
+  lv.slot.forEach((s, i) => {
+    if (!s) return;
+    const [x, y] = pos(i, lv);
+    out += `<rect x="${x - 16}" y="${y - 16}" width="${SZ + 32}" height="${SZ + 32}" rx="34" fill="#f28bb0"/>`;
+  });
+  lv.slot.forEach((s, i) => {
+    if (!s) return;
+    const [x, y] = pos(i, lv);
+    if (!lv.toxic[i]) { out += `<rect x="${x}" y="${y}" width="${SZ}" height="${SZ}" rx="18" fill="#ffc6db"/>`; return; }
+    out += `<rect x="${x}" y="${y}" width="${SZ}" height="${SZ}" rx="18" fill="#c6df7c"/>
+      <circle cx="${x + 20}" cy="${y + 22}" r="8" fill="#a6c64e"/><circle cx="${x + 70}" cy="${y + 66}" r="10" fill="#a6c64e"/>
+      <circle cx="${x + 68}" cy="${y + 20}" r="5" fill="#a6c64e"/>
+      <text x="${x + SZ / 2}" y="${y + SZ / 2 + 13}" text-anchor="middle" font-size="36" fill="#5f7d1c" opacity=".75">☠</text>`;
+  });
+  lv.target.forEach((t, i) => {
+    if (!t) return;
+    const [x, y] = pos(i, lv), m = SZ / 2;
+    const ok = cells && cells[i] && cells[i].color === t;
+    out += `<circle class="ring${ok ? ' ok' : ''}" data-i="${i}" cx="${x + m}" cy="${y + m}" r="42" fill="${COLORS[t][0]}" stroke="${COLORS[t][1]}"
+      transform="rotate(${100 + (i * 47) % 180} ${x + m} ${y + m})"/>`;
+  });
+  return out;
+}
+
+// Màng một chiều: thanh trên cạnh giữa hai ô, mũi tên chỉ chiều được đi qua. Vẽ đè lên tế bào.
+function wallsSvg(lv) {
+  return lv.oneway.map(([i, j, dir]) => {
+    const [x1, y1] = pos(i, lv), [x2, y2] = pos(j, lv);
+    const cx = (x1 + x2) / 2 + SZ / 2, cy = (y1 + y2) / 2 + SZ / 2;
+    const bar = dir === 'left' || dir === 'right'
+      ? `<rect x="${cx - 5}" y="${cy - 36}" width="10" height="72" rx="5"/>`
+      : `<rect x="${cx - 36}" y="${cy - 5}" width="72" height="10" rx="5"/>`;
+    return `<g fill="#2fb5a5">${bar}<circle cx="${cx}" cy="${cy}" r="13"/></g>
+      <path transform="rotate(${ANGLE[dir]} ${cx} ${cy})" d="M${cx - 4} ${cy - 7} L${cx + 4} ${cy} L${cx - 4} ${cy + 7}"
+        fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }).join('');
+}
+
+function arrowSvg(lv, from, dir) {
+  const [x, y] = pos(from, lv).map(v => v + SZ / 2);
+  const color = step(lv, from, dir) < 0 ? '#ff5a7a' : '#ffffff';
+  const [dr, dc] = DIRS[dir];
+  const x2 = x + dc * SZ * 0.75, y2 = y + dr * SZ * 0.75;
+  return `<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+    <circle cx="${x2}" cy="${y2}" r="11" fill="${color}" opacity=".9"/>`;
+}
+
+// Ảnh tĩnh của một bàn (dùng trong thẻ hướng dẫn).
+function boardSvg(lv, view, from = -1, dir = null) {
+  let out = baseSvg(lv, view);
+  view.forEach((c, i) => {
+    if (!c) return;
+    const [x, y] = pos(i, lv);
+    out += `<g class="cell${c.sleep ? ' asleep' : ''}" transform="translate(${x} ${y})">${cellBody(c)}</g>`;
+  });
+  out += wallsSvg(lv) + (dir ? arrowSvg(lv, from, dir) : '');
+  return `<svg viewBox="-20 -20 ${lv.w * SZ + 40} ${lv.h * SZ + 40}">${out}</svg>`;
+}
+
+// ---------------------------------------------------------------------------
+// Bàn chơi
+// ---------------------------------------------------------------------------
+function load(i) {
+  index = Math.max(0, Math.min(LEVELS.length - 1, i));
+  level = parseLevel(LEVELS[index]);
+  cells = level.init.slice();
+  nextId = level.nextId;
+  history = [];
+  mode = null;
+  save.level = index;
+  persist();
+  $('sub').textContent = `Level ${index + 1}/${LEVELS.length}`;
+  $('goal').textContent = level.kill ? 'Diệt sạch vi khuẩn'
+    : level.hasTarget ? 'Đưa tế bào đúng màu vào mọi vòng tròn'
+    : 'Lấp kín cơ thể' + (level.toxic.some(Boolean) ? ' (trừ ô độc)' : '') + (hasVirus(level) ? ', diệt hết virus' : '');
+  $('goalNote').textContent = level.kill ? 'Các màu khác phải còn sống' : 'Màu nào mất hết tế bào là thua';
+  $('solvedText').textContent = level.kill ? 'Đã diệt sạch vi khuẩn ✓' : level.hasTarget ? 'Đã vào đúng vị trí ✓' : 'Sinh vật đã đầy ✓';
+  $('prev').disabled = index === 0;
+  $('next').disabled = index === LEVELS.length - 1;
+  buildBoard();
+  sync(cells);
+  toast('', 0);
+  renderHearts();
+  update();
+  const fresh = MECHANICS.filter(m => m.has(level, index) && !save.seen.includes(m.key));
+  if (fresh.length) showLearn(fresh, true);
+}
+
+function buildBoard() {
+  board.setAttribute('viewBox', `-20 -20 ${level.w * SZ + 40} ${level.h * SZ + 40}`);
+  board.innerHTML = `${baseSvg(level)}<g id="layer"></g><g>${wallsSvg(level)}</g><g id="overlay"></g>`;
+  layer = $('layer');
+  overlay = $('overlay');
+  nodes = new Map();
+}
+
+function makeCell(c) {
+  const g = document.createElementNS(NS, 'g');
+  g.setAttribute('class', 'cell');
+  g.innerHTML = cellBody(c);
+  return g;
+}
+
+// Đồng bộ DOM với mảng tế bào: tế bào cũ trượt tới chỗ mới, tế bào mới mọc ra từ ô mẹ (`born`: id -> ô).
+// `keep`: tế bào đã rời bàn nhưng còn đang mờ dần.
+function sync(view, born = null, keep = []) {
+  shown = view;
+  const alive = new Set(keep.map(c => c.id));
+  view.forEach((c, i) => {
+    if (!c) return;
+    alive.add(c.id);
+    let g = nodes.get(c.id);
+    const [x, y] = pos(i);
+    if (!g) {
+      g = makeCell(c);
+      nodes.set(c.id, g);
+      layer.appendChild(g);
+      const from = born && born.get(c.id);
+      if (from !== undefined && from !== null) {
+        const [fx, fy] = pos(from);
+        g.style.transform = `translate(${fx}px, ${fy}px)`;
+        g.classList.add('born');
+        g.getBoundingClientRect();           // ép trình duyệt ghi nhận vị trí đầu trước khi trượt
+      }
+    }
+    g.classList.toggle('asleep', !!c.sleep);
+    g.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  for (const [id, g] of nodes) if (!alive.has(id)) { g.remove(); nodes.delete(id); }
+}
+
+const pop = list => { for (const c of list) nodes.get(c.id)?.classList.add('pop'); };
+
+// Đếm tế bào từng loài theo những gì đang hiện trên bàn; vi khuẩn và virus đếm riêng.
+function renderSpecies() {
+  const count = col => shown.filter(c => c && c.color === col).length;
+  let out = level.colors.map(col => {
+    const n = count(col);
+    const [light, dark] = COLORS[col];
+    return `<span class="${n === 0 ? 'gone' : n === 1 ? 'low' : ''}" title="Tế bào ${NAMES[col]}">` +
+      `<i style="background:${light};border-color:${dark}"></i>${n}</span>`;
+  }).join('');
+  if (level.kill) out += `<span class="enemy" title="Vi khuẩn cần diệt">🧫 ${count(level.kill)}</span>`;
+  if (hasVirus(level)) out += `<span class="enemy" title="Virus">🦠 ${count('V')}</span>`;
+  $('species').innerHTML = out;
+}
+
+function renderBoosters() {
+  const idle = !busy && !solved && !lost && !outOfHearts();
+  for (const kind in BOOSTER_NAMES) {
+    $('b-' + kind).querySelector('b').textContent = save.boosters[kind];
+    $('b-' + kind).classList.toggle('on', !!mode && mode.kind === kind);
+  }
+  $('b-mutate').disabled = !idle || !save.boosters.mutate || (level.colors.length < 2 && !level.kill);
+  $('b-clone').disabled = !idle || !save.boosters.clone;
+  $('b-revive').disabled = !lost || busy || !save.boosters.revive;
+  $('lostRevive').textContent = `✨ Hồi sinh (${save.boosters.revive})`;
+  $('lostRevive').disabled = !save.boosters.revive;
+}
+
+function update() {
+  solved = !busy && isWon(level, cells);
+  lost = !busy && isLost(level, cells);
+  $('undo').disabled = history.length === 0 || busy || lost;
+  $('hint').disabled = busy || solved || lost;
+  $('solved').classList.toggle('show', solved);
+  $('lost').classList.toggle('show', lost);
+  if (lost) $('lostText').textContent = `Tế bào ${extinct(level, cells).map(c => NAMES[c]).join(', ')} đã tuyệt chủng: ` +
+    (save.hearts ? 'mất 1 tim' : 'mất 1 tim, đã hết tim');
+  for (const el of board.querySelectorAll('.ring')) {
+    const i = +el.dataset.i;
+    el.classList.toggle('ok', !!shown[i] && shown[i].color === level.target[i]);
+  }
+  renderSpecies();
+  renderBoosters();
+  renderClock();
+}
+
+// Áp một nước (vuốt hoặc booster) theo từng chặng: bản sao mọc ra và dãy trượt, ô độc và bộ 3 làm tế bào mờ đi,
+// virus lan và ăn tế bào, virus chết trên ô độc, tế bào ngủ thức dậy. Thua thì trừ 1 tim.
+async function commit(res, spent = null) {
+  nextId = res.nextId;
+  history.push({ cells, spent });
+  cells = res.cells;
+  overlay.innerHTML = '';
+  busy = true;
+  sync(res.moved, new Map([res.born]));
+  update();
+  if (res.removed.length) { await wait(220); pop(res.removed); await wait(330); }
+  sync(res.cleared);
+  if (res.spread.length) {
+    await wait(res.removed.length ? 80 : 240);
+    pop(res.eaten);
+    sync(res.infected, new Map(res.spread), res.eaten);
+    await wait(340);
+  }
+  if (res.poisoned.length) { pop(res.poisoned); await wait(330); }
+  busy = false;
+  sync(cells);
+  if (isLost(level, cells)) {
+    setHearts(save.hearts - 1);
+    renderHearts(save.hearts);
+  }
+  update();
+}
+
+function play(from, dir) {
+  if (busy || solved || lost || mode || outOfHearts()) return;
+  const res = swipe(level, cells, from, dir, nextId);
+  if (!res) { toast('Không có gì thay đổi'); return; }
+  commit(res);
+}
+
+function restore(state) {
+  cells = state;
+  if (mode) { mode = null; toast('', 0); }
+  overlay.innerHTML = '';
+  sync(cells);
+  update();
+}
+
+// ---------------------------------------------------------------------------
+// Booster: Đột biến và Cấy ghép chọn trên bàn; Hồi sinh chỉ dùng được khi vừa thua
+// ---------------------------------------------------------------------------
+function modeHint() {
+  if (mode.kind === 'mutate') return mode.cell == null ? 'Đột biến: chạm tế bào muốn đổi màu' : 'Chọn màu mới cho tế bào';
+  return mode.from == null ? 'Cấy ghép: chọn tế bào mẹ' : 'Chạm một ô trống bất kỳ để cấy bản sao vào';
+}
+
+function setMode(m) {
+  mode = m;
+  drawMode();
+  update();
+}
+
+function drawMode() {
+  overlay.innerHTML = '';
+  if (!mode) { toast('', 0); return; }
+  const mark = (i, cls = 'mark') => { const [x, y] = pos(i); return `<circle class="${cls}" cx="${x + SZ / 2}" cy="${y + SZ / 2}" r="40"/>`; };
+  let out = '';
+  if (mode.kind === 'mutate' && mode.cell != null) {
+    // Bảng chọn màu đè lên chính tế bào đã chọn
+    const [x, y] = pos(mode.cell);
+    const others = level.colors.filter(col => col !== cells[mode.cell].color);
+    out += `<rect x="${x + 4}" y="${y + 4}" width="${SZ - 8}" height="${SZ - 8}" rx="16" fill="#2a0f2e" opacity=".75"/>`;
+    others.forEach((col, k) => {
+      const cx = x + SZ / 2 + (k - (others.length - 1) / 2) * 40;
+      out += `<circle class="pick" data-pick="${col}" cx="${cx}" cy="${y + SZ / 2}" r="16" fill="${COLORS[col][0]}" stroke="${COLORS[col][1]}" stroke-width="3"/>`;
+    });
+  } else if (mode.kind === 'clone' && mode.from != null) {
+    out += mark(mode.from, 'mark sel');
+    level.slot.forEach((s, i) => { if (s && !level.toxic[i] && !cells[i]) out += mark(i); });
+  } else {
+    cells.forEach((c, i) => { if (c && c.color !== 'V') out += mark(i); });
+  }
+  overlay.innerHTML = out;
+  toast(modeHint(), 0);
+}
+
+function useBooster(kind, res) {
+  save.boosters[kind]--;
+  persist();
+  mode = null;
+  toast('', 0);
+  commit(res, kind);
+}
+
+function onModeTap(ev) {
+  const pick = ev.target.closest('[data-pick]');
+  const i = slotAt(toBoard(ev));
+  if (i >= 0 && cells[i] && cells[i].color === 'V') { toast('Booster không dùng được lên virus'); return; }
+  if (mode.kind === 'mutate') {
+    if (pick) {
+      const res = mutate(level, cells, mode.cell, pick.dataset.pick, nextId);
+      if (res) useBooster('mutate', res);
+      return;
+    }
+    if (i < 0 || !cells[i]) return;
+    const col = cells[i].color;
+    if (level.colors.includes(col) && cells.filter(c => c && c.color === col).length === 1) { toast(`Không thể đổi tế bào ${NAMES[col]} cuối cùng`); return; }
+    const others = level.colors.filter(o => o !== col);
+    if (!others.length) { toast('Không có màu khác để đổi'); return; }
+    if (others.length === 1) { useBooster('mutate', mutate(level, cells, i, others[0], nextId)); return; }
+    mode.cell = i;
+    drawMode();
+    return;
+  }
+  if (i >= 0 && cells[i]) { mode.from = i; drawMode(); return; }
+  if (mode.from == null || i < 0 || !level.slot[i]) return;
+  if (level.toxic[i]) { toast('Không cấy vào ô độc được'); return; }
+  useBooster('clone', transplant(level, cells, mode.from, i, nextId));
+}
+
+function revive() {
+  if (!lost || busy || !save.boosters.revive) return;
+  const h = history.pop();
+  save.boosters.revive--;
+  if (h.spent) save.boosters[h.spent]++;
+  setHearts(save.hearts + 1);
+  renderHearts();
+  restore(h.cells);
+  toast('Hồi sinh: đã quay lại trước nước thua và trả lại tim');
+}
+
+// ---------------------------------------------------------------------------
+// Thẻ hướng dẫn và chọn level
+// ---------------------------------------------------------------------------
+let learnQueue = [], learnPos = 0, learnFresh = false;
+
+function showLearn(list, fresh) {
+  learnQueue = list;
+  learnPos = 0;
+  learnFresh = fresh;
+  renderLearn();
+  $('learn').classList.add('show');
+}
+
+function renderLearn() {
+  const m = learnQueue[learnPos];
+  $('learnTag').textContent = !learnFresh ? 'Luật chơi' : m.fresh ? 'Cơ chế mới' : 'Cách chơi';
+  $('learnTag').classList.toggle('plain', !learnFresh || !m.fresh);
+  $('learnStep').textContent = learnQueue.length > 1 ? `${learnPos + 1}/${learnQueue.length}` : '';
+  $('learnTitle').textContent = `${m.icon} ${m.title}`;
+  $('learnDemo').innerHTML = m.demos.map(d => {
+    const lv = parseLevel(d.def);
+    const res = swipe(lv, lv.init, d.from, d.dir);
+    return `<div class="demo">${boardSvg(lv, lv.init, d.from, d.dir)}<b>→</b>${boardSvg(lv, res.cells)}</div>` +
+      (d.cap ? `<p class="demo-cap">${d.cap}</p>` : '');
+  }).join('');
+  $('learnPoints').innerHTML = m.points.map(p => `<li>${p}</li>`).join('');
+  $('learnOk').textContent = learnPos < learnQueue.length - 1 ? 'Tiếp' : learnFresh ? 'Đã hiểu, chơi thôi' : 'Đóng';
+}
+
+$('learnOk').onclick = () => {
+  const m = learnQueue[learnPos];
+  if (!save.seen.includes(m.key)) { save.seen.push(m.key); persist(); }
+  if (++learnPos < learnQueue.length) renderLearn();
+  else $('learn').classList.remove('show');
+};
+$('rules').onclick = () => showLearn(MECHANICS.filter(m => m.has(level, index)), false);
+
+$('title').onclick = () => {
+  $('levelGrid').innerHTML = LEVELS.map((def, i) => {
+    const lv = parseLevel(def);
+    const icons = MECHANICS.filter(m => m.fresh && m.has(lv)).map(m => m.icon).join('') || (lv.hasTarget ? '🎯' : '');
+    return `<button data-level="${i}" class="${i === index ? 'cur' : ''}">${i + 1}<small>${icons}</small></button>`;
+  }).join('');
+  $('levels').classList.add('show');
+};
+$('levelGrid').onclick = ev => {
+  const b = ev.target.closest('[data-level]');
+  if (!b) return;
+  $('levels').classList.remove('show');
+  load(+b.dataset.level);
+};
+$('levelsClose').onclick = () => $('levels').classList.remove('show');
+
+// ---------------------------------------------------------------------------
+// Thao tác: nhấn vào tế bào rồi vuốt; mũi tên xem trước hướng sẽ chia
+// ---------------------------------------------------------------------------
+function toBoard(ev) {
+  const p = board.createSVGPoint();
+  p.x = ev.clientX; p.y = ev.clientY;
+  return p.matrixTransform(board.getScreenCTM().inverse());
+}
+
+function slotAt(pt) {
+  const c = Math.floor(pt.x / SZ), r = Math.floor(pt.y / SZ);
+  return r < 0 || c < 0 || r >= level.h || c >= level.w ? -1 : r * level.w + c;
+}
+
+function dirOf(dx, dy) {
+  if (Math.hypot(dx, dy) < SZ * 0.3) return null;
+  return Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up');
+}
+
+function drawArrow(from, dir) {
+  overlay.innerHTML = dir ? arrowSvg(level, from, dir) : '';
+}
+
+board.addEventListener('pointerdown', ev => {
+  if (busy || solved || lost || outOfHearts()) return;
+  if (mode) { onModeTap(ev); return; }
+  const pt = toBoard(ev);
+  const i = slotAt(pt);
+  if (i < 0 || !cells[i]) return;
+  if (cells[i].color === 'V') { toast('Virus không vuốt được'); return; }
+  if (cells[i].sleep) { toast('Tế bào đang ngủ: cần một tế bào cùng màu đứng cạnh để đánh thức'); return; }
+  gesture = { from: i, x: pt.x, y: pt.y, dir: null };
+  try { board.setPointerCapture(ev.pointerId); } catch (e) { /* con trỏ đã nhả trước khi bắt */ }
+});
+
+board.addEventListener('pointermove', ev => {
+  if (!gesture) return;
+  const pt = toBoard(ev);
+  const dir = dirOf(pt.x - gesture.x, pt.y - gesture.y);
+  if (dir !== gesture.dir) { gesture.dir = dir; drawArrow(gesture.from, dir); }
+});
+
+board.addEventListener('pointerup', () => {
+  if (!gesture) return;
+  const { from, dir } = gesture;
+  gesture = null;
+  overlay.innerHTML = '';
+  if (dir) play(from, dir);
+});
+board.addEventListener('pointercancel', () => { gesture = null; overlay.innerHTML = ''; });
+
+let toastTimer;
+// ms = 0 giữ thông báo tới khi bị thay; hết giờ thì quay về hướng dẫn của booster đang chọn (nếu có).
+function toast(msg, ms = 2400) {
+  $('toast').textContent = msg;
+  clearTimeout(toastTimer);
+  if (ms) toastTimer = setTimeout(() => { $('toast').textContent = mode ? modeHint() : ''; }, ms);
+}
+
+$('undo').onclick = () => {
+  if (busy || lost || !history.length) return;
+  const h = history.pop();
+  restore(h.cells);
+  if (h.spent) {
+    save.boosters[h.spent]++;
+    persist();
+    update();
+    toast(`Đã trả lại booster ${BOOSTER_NAMES[h.spent]}`);
+  }
+};
+$('reset').onclick = $('lostReset').onclick = () => {
+  if (busy) return;
+  if (lost) { load(index); return; }          // sau khi thua thì chơi lại từ đầu, không hoàn tác về ván thua
+  if (keyOf(cells) === keyOf(level.init)) return;
+  history.push({ cells, spent: null });
+  restore(level.init.slice());
+};
+$('hint').onclick = () => {
+  if (busy || solved || lost) return;
+  if (mode) setMode(null);
+  const path = solve(level, cells);
+  if (!path) { toast('Từ đây không thắng được nữa, hãy hoàn tác.'); return; }
+  drawArrow(path[0][0], path[0][1]);
+  toast(`Thử vuốt theo mũi tên · còn ít nhất ${path.length} lần vuốt`);
+  setTimeout(() => { if (!gesture && !mode) overlay.innerHTML = ''; }, 2500);
+};
+for (const kind of ['mutate', 'clone']) $('b-' + kind).onclick = () => {
+  if (mode && mode.kind === kind) setMode(null);
+  else if (!busy && !solved && !lost && save.boosters[kind]) setMode({ kind });
+};
+$('b-revive').onclick = $('lostRevive').onclick = revive;
+$('refill').onclick = () => { setHearts(MAX_HEARTS); renderHearts(); update(); };
+$('refillAll').onclick = () => {
+  save.boosters = { ...START_BOOSTERS };
+  setHearts(MAX_HEARTS);
+  renderHearts();
+  update();
+  toast('Đã nạp lại 3 tim và booster');
+};
+$('prev').onclick = () => load(index - 1);
+$('next').onclick = () => load(index + 1);
+$('continue').onclick = () => { if (index < LEVELS.length - 1) load(index + 1); else toast('Hết level mẫu!'); };
+
+regen();
+setInterval(() => { if (regen()) { renderHearts(); update(); } else renderClock(); }, 1000);
+load(save.level || 0);
+</script>
+</body>
+</html>

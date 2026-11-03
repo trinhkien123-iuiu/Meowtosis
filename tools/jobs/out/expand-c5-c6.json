@@ -1,0 +1,532 @@
+[
+ {
+  "job": "c5-a xếp 3 vi khuẩn",
+  "def": {
+   "rows": [
+    ".BGG",
+    "#B#A",
+    "CG.A"
+   ],
+   "kill": "G"
+  },
+  "par": 7,
+  "ms": 4,
+  "cats": 5,
+  "slots": 10,
+  "first": 11,
+  "firstOk": 8,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 9.02,
+  "surprise": 6.64,
+  "feats": "push3 replace2 clear1 cleared3 germDie4 germClear1"
+ },
+ {
+  "job": "c5-a xếp 3 vi khuẩn",
+  "def": {
+   "rows": [
+    "AB.G",
+    "C##B",
+    "AG.G"
+   ],
+   "kill": "G"
+  },
+  "par": 7,
+  "ms": 18,
+  "cats": 5,
+  "slots": 10,
+  "first": 13,
+  "firstOk": 8,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 8.58,
+  "surprise": 6.54,
+  "feats": "push2 longPush1 replace2 clear1 cleared3 germDie4 germClear1"
+ },
+ {
+  "job": "c5-a xếp 3 vi khuẩn",
+  "def": {
+   "rows": [
+    "G#BA",
+    "GAGC",
+    ".#B."
+   ],
+   "kill": "G"
+  },
+  "par": 7,
+  "ms": 70,
+  "cats": 5,
+  "slots": 10,
+  "first": 15,
+  "firstOk": 13,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 9.07,
+  "surprise": 6.27,
+  "feats": "push3 longPush1 replace2 clear1 cleared3 germDie4 germClear1"
+ },
+ {
+  "job": "c5-a xếp 3 vi khuẩn",
+  "def": {
+   "rows": [
+    ".GG.",
+    "AAB#",
+    "GCB#"
+   ],
+   "kill": "G"
+  },
+  "par": 7,
+  "ms": 23,
+  "cats": 5,
+  "slots": 10,
+  "first": 16,
+  "firstOk": 11,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 8.45,
+  "surprise": 6.19,
+  "feats": "push3 replace2 clear1 cleared3 germDie4 germClear1"
+ },
+ {
+  "job": "c5-a xếp 3 vi khuẩn",
+  "def": {
+   "rows": [
+    "..#B",
+    "G#AA",
+    "GBGC"
+   ],
+   "kill": "G"
+  },
+  "par": 7,
+  "ms": 13,
+  "cats": 5,
+  "slots": 10,
+  "first": 12,
+  "firstOk": 10,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 8.87,
+  "surprise": 6.17,
+  "feats": "push2 longPush1 replace2 clear1 cleared3 germDie4 germClear1"
+ },
+ {
+  "job": "c5-b khuẩn bàn lớn",
+  "def": {
+   "rows": [
+    "AC.B",
+    ".AB#",
+    "AGA#",
+    "..G.",
+    ".C.B"
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 11,
+  "cats": 9,
+  "slots": 18,
+  "first": 27,
+  "firstOk": 25,
+  "firstOpt": 7,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 9.88,
+  "surprise": 2.7,
+  "feats": "push3 longPush2 replace2 germDie2"
+ },
+ {
+  "job": "c5-b khuẩn bàn lớn",
+  "def": {
+   "rows": [
+    ".AAB",
+    "G#A.",
+    "..C.",
+    "ABBG",
+    ".#C."
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 3,
+  "cats": 9,
+  "slots": 18,
+  "first": 24,
+  "firstOk": 23,
+  "firstOpt": 8,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 9.73,
+  "surprise": 2.46,
+  "feats": "push3 longPush1 replace2 germDie2"
+ },
+ {
+  "job": "c5-b khuẩn bàn lớn",
+  "def": {
+   "rows": [
+    "#BCB",
+    ".AGA",
+    "..A#",
+    "AC..",
+    ".B.G"
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 293,
+  "cats": 9,
+  "slots": 18,
+  "first": 29,
+  "firstOk": 25,
+  "firstOpt": 14,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 9.43,
+  "surprise": 2.45,
+  "feats": "push2 replace2 germDie2"
+ },
+ {
+  "job": "c5-b khuẩn bàn lớn",
+  "def": {
+   "rows": [
+    "..AG",
+    ".CC.",
+    ".A.A",
+    "BG.B",
+    ".B#A"
+   ],
+   "kill": "G"
+  },
+  "par": 10,
+  "ms": 3,
+  "cats": 9,
+  "slots": 19,
+  "first": 28,
+  "firstOk": 25,
+  "firstOpt": 14,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 10,
+  "surprise": 2.32,
+  "feats": "push4 longPush4 replace2 germDie2"
+ },
+ {
+  "job": "c5-b khuẩn bàn lớn",
+  "def": {
+   "rows": [
+    "#G#C",
+    "ABBA",
+    "A..C",
+    ".A#.",
+    ".BG."
+   ],
+   "kill": "G"
+  },
+  "par": 8,
+  "ms": 7,
+  "cats": 9,
+  "slots": 17,
+  "first": 22,
+  "firstOk": 21,
+  "firstOpt": 11,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.8,
+  "surprise": 2.14,
+  "feats": "push4 longPush1 replace2 germDie2"
+ },
+ {
+  "job": "c5-c khuẩn + virus",
+  "def": {
+   "rows": [
+    "#A#.",
+    ".B.A",
+    "GG.A",
+    "BC<."
+   ],
+   "kill": "G"
+  },
+  "par": 10,
+  "ms": 37,
+  "cats": 6,
+  "slots": 14,
+  "first": 18,
+  "firstOk": 3,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.89,
+  "surprise": 8.39,
+  "feats": "push2 longPush2 replace5 spread2 eaten2 virusDie3 germDie2"
+ },
+ {
+  "job": "c5-c khuẩn + virus",
+  "def": {
+   "rows": [
+    "GC#.",
+    ".AGv",
+    ".B.B",
+    "#AA#"
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 47,
+  "cats": 6,
+  "slots": 13,
+  "first": 17,
+  "firstOk": 12,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.05,
+  "surprise": 6.53,
+  "feats": "push1 replace5 spread1 eaten1 virusDie2 germDie2"
+ },
+ {
+  "job": "c5-c khuẩn + virus",
+  "def": {
+   "rows": [
+    "ABCG",
+    ".B.G",
+    "#A^.",
+    ".A.#"
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 45,
+  "cats": 6,
+  "slots": 14,
+  "first": 15,
+  "firstOk": 12,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.27,
+  "surprise": 5.97,
+  "feats": "push3 longPush1 replace4 spread2 eaten2 virusDie3 germDie2"
+ },
+ {
+  "job": "c5-c khuẩn + virus",
+  "def": {
+   "rows": [
+    "BGC.",
+    "##G.",
+    ".AAv",
+    "#B.A"
+   ],
+   "kill": "G"
+  },
+  "par": 8,
+  "ms": 20,
+  "cats": 6,
+  "slots": 13,
+  "first": 17,
+  "firstOk": 15,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.68,
+  "surprise": 5.74,
+  "feats": "push3 longPush3 replace4 spread1 eaten1 virusDie2 germDie2"
+ },
+ {
+  "job": "c5-c khuẩn + virus",
+  "def": {
+   "rows": [
+    ".#GG",
+    ".B.C",
+    "B.<#",
+    "A.AA"
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 16,
+  "cats": 6,
+  "slots": 14,
+  "first": 11,
+  "firstOk": 9,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.04,
+  "surprise": 5.68,
+  "feats": "push2 longPush2 replace5 spread2 eaten1 virusDie3 germDie2"
+ },
+ {
+  "job": "c6-a đại gia đình, dễ",
+  "def": {
+   "rows": [
+    "..C.A",
+    ".#ACB",
+    "..CAC",
+    "CAB.B",
+    "BC#BA"
+   ]
+  },
+  "par": 7,
+  "ms": 17,
+  "cats": 16,
+  "slots": 23,
+  "first": 38,
+  "firstOk": 35,
+  "firstOpt": 8,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.78,
+  "surprise": 1.82,
+  "feats": "push3 longPush1"
+ },
+ {
+  "job": "c6-a đại gia đình, dễ",
+  "def": {
+   "rows": [
+    "CCAAB",
+    "..A.C",
+    "CAB..",
+    "CB#..",
+    "BABC#"
+   ]
+  },
+  "par": 7,
+  "ms": 3,
+  "cats": 16,
+  "slots": 23,
+  "first": 32,
+  "firstOk": 32,
+  "firstOpt": 9,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.64,
+  "surprise": 1.44,
+  "feats": "push4 longPush3"
+ },
+ {
+  "job": "c6-a đại gia đình, dễ",
+  "def": {
+   "rows": [
+    ".A#C.",
+    "BC.BB",
+    "C.#AC",
+    "A.AAC",
+    "B.BC#"
+   ]
+  },
+  "par": 6,
+  "ms": 6,
+  "cats": 16,
+  "slots": 22,
+  "first": 35,
+  "firstOk": 35,
+  "firstOpt": 12,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 7.91,
+  "surprise": 1.31,
+  "feats": "push3 longPush1"
+ },
+ {
+  "job": "c6-a đại gia đình, dễ",
+  "def": {
+   "rows": [
+    "C..C.",
+    "BA.BA",
+    "ABCCB",
+    "AC#B.",
+    ".CA#."
+   ]
+  },
+  "par": 7,
+  "ms": 3,
+  "cats": 16,
+  "slots": 23,
+  "first": 36,
+  "firstOk": 34,
+  "firstOpt": 16,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.31,
+  "surprise": 1.28,
+  "feats": "push3 longPush1"
+ },
+ {
+  "job": "c6-a đại gia đình, dễ",
+  "def": {
+   "rows": [
+    ".CCB.",
+    "##B.C",
+    "AABA.",
+    "CB.CB",
+    "C..AA"
+   ]
+  },
+  "par": 7,
+  "ms": 3,
+  "cats": 16,
+  "slots": 23,
+  "first": 35,
+  "firstOk": 33,
+  "firstOpt": 17,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.23,
+  "surprise": 1.2,
+  "feats": "push6 longPush4"
+ },
+ {
+  "job": "c6-d virus + khuẩn",
+  "def": {
+   "rows": [
+    "..#.#",
+    "CBCBB",
+    "A#.AA",
+    "G.AB.",
+    ">.CG#"
+   ],
+   "kill": "G"
+  },
+  "par": 11,
+  "ms": 475,
+  "cats": 11,
+  "slots": 21,
+  "first": 33,
+  "firstOk": 5,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 11.48,
+  "surprise": 7.92,
+  "feats": "push5 longPush2 replace5 spread3 eaten2 virusDie4 germDie2"
+ },
+ {
+  "job": "c6-d virus + khuẩn",
+  "def": {
+   "rows": [
+    ".B#C#",
+    "#ACG.",
+    "B..C#",
+    ".<ABG",
+    "A#B.A"
+   ],
+   "kill": "G"
+  },
+  "par": 9,
+  "ms": 129,
+  "cats": 11,
+  "slots": 20,
+  "first": 30,
+  "firstOk": 27,
+  "firstOpt": 9,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 9.8,
+  "surprise": 3.7,
+  "feats": "push3 longPush2 replace4 spread1 virusDie2 germDie2"
+ }
+]

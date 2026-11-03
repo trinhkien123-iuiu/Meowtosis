@@ -1,0 +1,9 @@
+== c1-c khử 3, 2 màu (4x4) (3 ứng viên) · bị loại: {"thiếu clear":13152,"quá dài":24,"quá giới hạn giải":10}
+  {"rows":[".AA#","BBA.","B#.A","..B."]} par=9 ms=69 mèo=8 ô=14 đầu=11/11/2 cụt=? thừa=3 khó=10.04 bấtngờ=4.14 [push4 longPush2 clear1 cleared3]
+  {"rows":["BB#A","BBA.","#AA.","...."]} par=9 ms=9 mèo=8 ô=14 đầu=7/7/3 cụt=? thừa=3 khó=9.54 bấtngờ=3.64 [push4 longPush3 clear1 cleared3]
+  {"rows":["BAA.","B.AA","..#.","B.B."]} par=10 ms=5 mèo=8 ô=15 đầu=9/9/4 cụt=? thừa=3 khó=10.11 bấtngờ=3.61 [push2 longPush2 clear1 cleared3]
+== c1-c khử 3, 2 màu (4x5) (0 ứng viên) · bị loại: {"quá giới hạn giải":177,"thiếu clear":1136,"giải chậm":5}
+== c1-d trùm, 2 màu (5x5) (0 ứng viên) · bị loại: {"thiếu clear":357,"quá giới hạn giải":189,"quá ngắn":69,"giải chậm":4}
+== c1-d trùm, 2 màu (5x5) b (2 ứng viên) · bị loại: {"thiếu clear":334,"quá ngắn":69,"quá giới hạn giải":181,"giải chậm":4,"nước đầu dễ đoán":1}
+  {"rows":["BAB#A","#BA..","A#.#A",".ABB#","..#B."]} par=11 ms=373 mèo=12 ô=19 đầu=15/6/3 cụt=? thừa=4 khó=11.2 bấtngờ=6.9 [push4 longPush3 replace1 clear1 cleared3]
+  {"rows":[".B.BB","#.A##","B.A##","AA..#","AAB.B"]} par=10 ms=358 mèo=12 ô=19 đầu=14/11/5 cụt=? thừa=3 khó=10.29 bấtngờ=4.43 [push5 longPush3 clear1 cleared3]

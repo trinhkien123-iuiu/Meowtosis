@@ -1,0 +1,10 @@
+Tiếng mèo trong thư mục này tải từ Mixkit (https://mixkit.co/free-sound-effects/cat/) ngày 2026-11-02.
+Giấy phép: Mixkit Sound Effects Free License (https://mixkit.co/license/#sfxFree)
+- Dùng miễn phí trong dự án thương mại và phi thương mại, kể cả trò chơi điện tử; không bắt buộc ghi nguồn.
+- Không được phân phối lại file âm thanh đứng riêng lẻ (làm kho âm thanh, công cụ, template) hay nhận là của mình.
+
+meow-sweet.mp3      Sweet kitty meow            (sfx 93)
+meow-attention.mp3  Little cat attention meow   (sfx 86)
+meow-hungry.mp3     Domestic cat hungry meow    (sfx 45)
+meow-cartoon.mp3    Cartoon little cat meow     (sfx 91)
+meow-angry.mp3      Angry cartoon kitty meow    (sfx 94)

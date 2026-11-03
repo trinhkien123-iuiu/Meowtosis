@@ -1,0 +1,18 @@
+[
+ {"name": "c1-c khử 3 (4x4)", "shape": {"w": 4, "h": 4, "holes": [0, 2]}, "cells": "AAABBBCC", "need": ["clear"], "min": 6, "max": 10, "twist": true, "ms": 150000, "seed": 201, "top": 5},
+ {"name": "c1-c khử 3 (4x4) b", "shape": {"w": 4, "h": 4, "holes": [0, 2]}, "cells": "AAABBBCC", "need": ["clear"], "min": 6, "max": 10, "twist": true, "ms": 150000, "seed": 202, "top": 5},
+ {"name": "c1-c khử 3 (4x5)", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "AAABBBCCC", "need": ["clear"], "min": 7, "max": 11, "twist": true, "ms": 150000, "seed": 203, "top": 5},
+ {"name": "c1-d trùm", "shape": {"w": 5, "h": 5, "holes": [4, 7]}, "cells": "AAAABBBBCCC", "need": ["clear"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 204, "top": 5},
+ {"name": "c1-d trùm b", "shape": {"w": 5, "h": 5, "holes": [4, 7]}, "cells": "AAAABBBBCCC", "need": ["clear"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 205, "top": 5},
+ {"name": "c2-b hộp 4x5", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "AAAABBBCCCC", "mode": "target", "targets": 3, "min": 6, "max": 10, "twist": true, "ms": 150000, "seed": 206, "top": 5},
+ {"name": "c2-b hộp 4x5 b", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "AAAABBBCCCC", "mode": "target", "targets": 3, "min": 6, "max": 10, "twist": true, "ms": 150000, "seed": 207, "top": 5},
+ {"name": "c2-c trùm", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "AAAABBBBCCCCC", "mode": "target", "targets": 4, "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 208, "top": 5},
+ {"name": "c2-c trùm b", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "AAAABBBBCCCCC", "mode": "target", "targets": 4, "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 209, "top": 5},
+ {"name": "c3-d trùm", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "toxic": 2, "membranes": 3, "cells": "AAAABBBBCCCC", "need": ["oneway", "toxic"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 210, "top": 5},
+ {"name": "c3-d trùm b", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "toxic": 2, "membranes": 3, "cells": "AAAABBBBCCCC", "need": ["oneway", "toxic"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 211, "top": 5},
+ {"name": "c6-c ngủ + màng", "shape": {"w": 5, "h": 5, "holes": [2, 5]}, "membranes": 3, "cells": "AAAABBBBCCCab", "need": ["wake", "oneway"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 212, "top": 5},
+ {"name": "c6-c ngủ + màng b", "shape": {"w": 5, "h": 5, "holes": [2, 5]}, "membranes": 3, "cells": "AAAABBBBCCCab", "need": ["wake", "oneway"], "min": 8, "max": 12, "twist": true, "maxMs": 500, "ms": 150000, "seed": 213, "top": 5},
+ {"name": "c6-e trùm cuối", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAABBBBCCCab", "mode": "kill", "need": ["wake", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 600, "ms": 150000, "seed": 214, "top": 5},
+ {"name": "c6-e trùm cuối b", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAABBBBCCCab", "mode": "kill", "need": ["wake", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 600, "ms": 150000, "seed": 215, "top": 5},
+ {"name": "c6-e trùm cuối 5x6", "shape": {"w": 5, "h": 6, "holes": [5, 8]}, "toxic": 1, "membranes": 1, "virus": 1, "cells": "GAAAAABBBBBCCCab", "mode": "kill", "need": ["wake", "virus"], "min": 9, "max": 13, "twist": true, "maxMs": 600, "ms": 150000, "seed": 216, "top": 5}
+]

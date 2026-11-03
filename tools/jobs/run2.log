@@ -1,0 +1,6 @@
+== c2-b hộp 4x5 (0 ứng viên) · bị loại: {"giải chậm":5,"quá giới hạn giải":9,"không có mẹo":7,"quá ngắn":5}
+== c1-c khử 3 bàn lớn (0 ứng viên) · bị loại: {"thiếu clear":270,"quá giới hạn giải":31,"giải chậm":2}
+== c1-d trùm chương 1 (0 ứng viên) · bị loại: {"thiếu clear":89,"quá giới hạn giải":32,"quá ngắn":5}
+== c2-c trùm chương 2 (1 ứng viên) · bị loại: {"giải chậm":6,"quá giới hạn giải":7,"không có mẹo":5,"quá ngắn":2,"không tìm được trạng thái kín":1}
+  {"rows":["#A#CC","BACC.","C.B..","A.B..","#A##B"],"goal":[".....","..A.C","...A.","...B.","....."]} par=8 ms=62 mèo=13 ô=20 đầu=20/19/9 cụt=? thừa=1 khó=8.9 bấtngờ=2.75 [push2 longPush1 replace1]
+XONG 4 job

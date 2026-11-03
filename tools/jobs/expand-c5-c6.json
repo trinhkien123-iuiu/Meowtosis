@@ -1,0 +1,10 @@
+[
+ {"name": "c5-a xếp 3 vi khuẩn", "shape": {"w": 4, "h": 3, "holes": [0, 2]}, "cells": "GGGAABBC", "mode": "kill", "need": ["germClear"], "min": 5, "max": 8, "ms": 60000, "seed": 51, "top": 5},
+ {"name": "c5-b khuẩn bàn lớn", "shape": {"w": 4, "h": 5, "holes": [1, 3]}, "cells": "GGAAAABBBCC", "mode": "kill", "min": 8, "max": 11, "twist": true, "ms": 90000, "seed": 52, "top": 5},
+ {"name": "c5-c khuẩn + virus", "shape": {"w": 4, "h": 4, "holes": [1, 3]}, "cells": "GGAAABBC", "virus": 1, "mode": "kill", "need": ["virus"], "min": 7, "max": 10, "twist": true, "ms": 60000, "seed": 53, "top": 5},
+ {"name": "c6-a đại gia đình, dễ", "shape": {"w": 5, "h": 5, "holes": [2, 4]}, "cells": "AAAAABBBBBCCCCCC", "need": ["longPush"], "min": 5, "max": 7, "maxMs": 500, "ms": 90000, "seed": 61, "top": 5},
+ {"name": "c6-b hộp + độc", "shape": {"w": 5, "h": 5, "holes": [2, 5]}, "toxic": 2, "cells": "AAAABBBBCCCCC", "mode": "target", "targets": 3, "need": ["toxic"], "min": 7, "max": 10, "twist": true, "maxMs": 500, "ms": 120000, "seed": 62, "top": 5},
+ {"name": "c6-c ngủ + màng", "shape": {"w": 5, "h": 6, "holes": [4, 7]}, "membranes": 2, "cells": "AAAAABBBBBCCCCab", "need": ["wake", "oneway"], "min": 9, "max": 12, "twist": true, "maxMs": 500, "ms": 120000, "seed": 63, "top": 5},
+ {"name": "c6-d virus + khuẩn", "shape": {"w": 5, "h": 5, "holes": [3, 6]}, "cells": "GGAAAABBBBCCC", "virus": 1, "mode": "kill", "need": ["virus"], "min": 9, "max": 12, "twist": true, "maxMs": 500, "ms": 120000, "seed": 64, "top": 5},
+ {"name": "c6-e trùm cuối", "shape": {"w": 5, "h": 6, "holes": [4, 7]}, "toxic": 1, "membranes": 1, "cells": "GAAAAABBBBBCCCab", "virus": 1, "mode": "kill", "need": ["wake", "virus", "toxic"], "min": 10, "max": 13, "twist": true, "maxMs": 600, "ms": 150000, "seed": 65, "top": 5}
+]

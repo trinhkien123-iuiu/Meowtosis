@@ -1,0 +1,33 @@
+[
+ {
+  "job": "c2-c trùm chương 2",
+  "def": {
+   "rows": [
+    "#A#CC",
+    "BACC.",
+    "C.B..",
+    "A.B..",
+    "#A##B"
+   ],
+   "goal": [
+    ".....",
+    "..A.C",
+    "...A.",
+    "...B.",
+    "....."
+   ]
+  },
+  "par": 8,
+  "ms": 62,
+  "cats": 13,
+  "slots": 20,
+  "first": 20,
+  "firstOk": 19,
+  "firstOpt": 9,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.9,
+  "surprise": 2.75,
+  "feats": "push2 longPush1 replace1"
+ }
+]
