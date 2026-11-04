@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd99f192371ecb4ab8c5232f2b82330, type: 3}
+  m_Name: GermClear
+  m_EditorClassIdentifier: 
+  mechanic: 12
+  title: "VI KHU\u1EA8N T\u1EF0 KH\u1EEC"
+  description: "Vi khu\u1EA9n c\u0169ng vu\u1ED1t \u0111\u01B0\u1EE3c. Cho ch\xFAng
+    nh\xE2n l\xEAn \u0111\u1EE7 3 con th\u1EB3ng h\xE0ng l\xE0 c\u1EA3 b\u1ED9 b\u1ECB
+    kh\u1EED!"
+  demoRows:
+  - GG.A
+  demoGoal: []
+  demoMembranes: []
+  demoHasGerms: 1
+  demoMove: 0 1 right

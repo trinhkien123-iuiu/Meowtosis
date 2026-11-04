@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44390b64c85ad3f428537b7586cebc1c, type: 3}
+  m_Name: BoardArt
+  m_EditorClassIdentifier: 
+  germ: {fileID: 21300000, guid: 8c0506fb574624f4dbfc47ddd5cbd619, type: 3}
+  germColor: {r: 0.5176471, g: 0.85882354, b: 0.29803923, a: 1}
+  virusUp: {fileID: 21300000, guid: 88ccfc8cfe457b14f88984279e45f939, type: 3}
+  virusDown: {fileID: 21300000, guid: b080a9403bc278849b2a7b34b1e23b6a, type: 3}
+  virusLeft: {fileID: 21300000, guid: cadf60f437a95ad448e5435ebea5d773, type: 3}
+  virusRight: {fileID: 21300000, guid: bc577dc1f0e18664aba2dfc097755cc8, type: 3}
+  virusColor: {r: 0.70980394, g: 0.42352942, b: 1, a: 1}
+  cats:
+  - species: 0
+    cat: {fileID: 21300000, guid: 6bc7538620bec33499422e056bafe403, type: 3}
+    happyCat: {fileID: 21300000, guid: f3f5c52024d235a44921eb3cc78de5e2, type: 3}
+    box: {fileID: 21300000, guid: a40df4b012ab6594ba384d69e1942402, type: 3}
+    blinkFace: {fileID: 21300000, guid: 973164272f4879a42aec421b1354a89f, type: 3}
+    sadFace: {fileID: 21300000, guid: 0fee5deb64d2e5742a05399c678d83d9, type: 3}
+    yawnFace: {fileID: 21300000, guid: e7f449f7a06dbaf42b567d7479971d7f, type: 3}
+    color: {r: 1, g: 0.365, b: 0.451, a: 1}
+  - species: 1
+    cat: {fileID: 21300000, guid: 7a51fd8727c110346972977822514c6f, type: 3}
+    happyCat: {fileID: 21300000, guid: a7749c106d671ae4c9173a3d9eb1bfc0, type: 3}
+    box: {fileID: 21300000, guid: 7a2c209877261394085abc180617b451, type: 3}
+    blinkFace: {fileID: 21300000, guid: 90a2d023d8a3b1b438f220685f135677, type: 3}
+    sadFace: {fileID: 21300000, guid: c1bd86d2ab8c7be47a0b3ed0228094e5, type: 3}
+    yawnFace: {fileID: 21300000, guid: 1f8776a4cf665c7408d942da74546280, type: 3}
+    color: {r: 0.31, g: 0.553, b: 1, a: 1}
+  - species: 2
+    cat: {fileID: 21300000, guid: 4d650194de7f68843ab953195aefc1aa, type: 3}
+    happyCat: {fileID: 21300000, guid: d8f633a894869e94e9fbed7acda3f8d9, type: 3}
+    box: {fileID: 21300000, guid: 8855b80d87254704fa06a6d6db5096fc, type: 3}
+    blinkFace: {fileID: 21300000, guid: e3657beb5a13a5c459e1b4accc034925, type: 3}
+    sadFace: {fileID: 21300000, guid: 7f87b9594270d5e4ab53ea28606b31fb, type: 3}
+    yawnFace: {fileID: 21300000, guid: 70486a201272c6c4e9f1e48a8318ad56, type: 3}
+    color: {r: 1, g: 0.824, b: 0.247, a: 1}
+  - species: 3
+    cat: {fileID: 21300000, guid: 137cdaab8a036604187182f693ec6df2, type: 3}
+    happyCat: {fileID: 21300000, guid: 88ce31ed393b45b4a9de8582b0f5b79d, type: 3}
+    box: {fileID: 21300000, guid: ed489c9736a4dc34b80257142bc157c0, type: 3}
+    blinkFace: {fileID: 21300000, guid: e071b02769757aa4291abf17544d1566, type: 3}
+    sadFace: {fileID: 21300000, guid: 4748aed09e8d7df499a84fcd08f0777f, type: 3}
+    yawnFace: {fileID: 21300000, guid: edcdd72eefa84b246957a31754f12723, type: 3}
+    color: {r: 1, g: 0.478, b: 0.851, a: 1}
+  - species: 4
+    cat: {fileID: 21300000, guid: c1d94b6b829f85e45857cb8b1550a5aa, type: 3}
+    happyCat: {fileID: 21300000, guid: 5d5168f830abdd04988eeb8927e7de59, type: 3}
+    box: {fileID: 21300000, guid: 800cf30253c48dd4981e15adfab9df83, type: 3}
+    blinkFace: {fileID: 21300000, guid: ed3fb54d94b2cbe4bb8c84ea345ebbf1, type: 3}
+    sadFace: {fileID: 21300000, guid: 98ea3db4a2bf3084584dd27856d4aeee, type: 3}
+    yawnFace: {fileID: 21300000, guid: 7fa99754cebeb794a9d4647708f30bc9, type: 3}
+    color: {r: 0.561, g: 0.455, b: 1, a: 1}

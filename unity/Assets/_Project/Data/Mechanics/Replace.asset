@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd99f192371ecb4ab8c5232f2b82330, type: 3}
+  m_Name: Replace
+  m_EditorClassIdentifier: 
+  mechanic: 2
+  title: "THAY TH\u1EBE"
+  description: "H\u1EBFt ch\u1ED7 \u0111\u1EA9y th\xEC b\u1EA3n sao thay th\u1EBF
+    con m\xE8o b\xEAn c\u1EA1nh. M\xE0u n\xE0o m\u1EA5t h\u1EBFt m\xE8o l\xE0 thua
+    v\xE0 m\u1EA5t 1 tim!"
+  demoRows:
+  - ABB
+  demoGoal: []
+  demoMembranes: []
+  demoHasGerms: 0
+  demoMove: 0 0 right

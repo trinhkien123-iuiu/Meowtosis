@@ -259,8 +259,9 @@ Làm đủ các bước để luật, game, công cụ và tài liệu không l�
 3. **Trong game:** thẻ hướng dẫn (`MECHANICS`), hình vẽ, VFX, SFX; level dạy có `tut` hoặc `tip`.
 4. **Công cụ:** sự kiện mới trong `tools/lib.js` (`events`) để bộ sinh dùng được `need`.
 5. **Ví dụ có test:** thêm vào `tools/test-doc-examples.js`, đặt mã mới.
-6. **Tài liệu này:** thêm một mục ở §5 theo mẫu dưới, thêm cột hoặc dòng ở bảng §6, câu hỏi ở §8; cập nhật [unity-handoff.md §4](unity-handoff.md#4-luật-chơi-chép-sang-c) và ghi nhật ký ở [level-design.md](level-design.md).
-7. `npm run export` rồi `npm test`.
+6. **Bản Unity:** làm theo [architecture.md §8](architecture.md#8-thêm-cơ-chế-mới-phía-unity) (lớp `ITurnStep` / `ILevelGoal`, ví dụ trong `MechanicsExampleTests`).
+7. **Tài liệu này:** thêm một mục ở §5 theo mẫu dưới, thêm cột hoặc dòng ở bảng §6, câu hỏi ở §8; cập nhật [unity-handoff.md §4](unity-handoff.md#4-luật-chơi-chép-sang-c) và ghi nhật ký ở [level-design.md](level-design.md).
+8. `npm run export`, `npm test` rồi `npm run test:unity`.
 
 Mẫu một mục cơ chế:
 

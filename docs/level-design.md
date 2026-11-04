@@ -30,6 +30,9 @@ Tài liệu liên quan: [mechanics.md](mechanics.md) (luật chuẩn của từn
 | 8 | Bàn lớn thì **nhiều mèo đặt sẵn** | Mỗi nước chỉ sinh đúng một mèo, nên số nước ≥ số ô trống; bàn lớn mà ít mèo thì dài lê thê và bộ giải không kham nổi |
 | 9 | Bộ giải (Gợi ý, tính sao) phải chạy **dưới ~300 ms** trên PC | Điện thoại chậm hơn vài lần; Gợi ý phải gần như tức thì |
 | 10 | Khử 3 và ô độc phải được **dạy riêng** | Trên khung nhỏ, lời giải ngắn nhất không bao giờ cần chúng (chúng làm mất mèo), nên level ngẫu nhiên không tự dạy được |
+| 11 | Luật thua phải được **tự tay trải nghiệm sớm**, không chỉ đọc | Góp ý: người chơi tưởng chỉ cần lấp kín vì luật khử chỉ là chữ ở thẻ cơ chế. Nay level 2 có `trap` (nước cố ý thua, không mất tim), level 3 cho tự chọn |
+
+> **Số level trong các bảng phía dưới là số cũ.** Ngày 2026-11-04 đã chèn 2 level vào vị trí 2 và 3: mọi level từ số cũ 2 trở đi nay cộng thêm 2 (level 15 cũ là level 17 mới). Tổng cộng 71 level.
 
 ---
 

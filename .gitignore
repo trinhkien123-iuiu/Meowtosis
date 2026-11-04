@@ -1,4 +1,6 @@
 node_modules/
+tools/dotnet-tests/*/bin/
+tools/dotnet-tests/*/obj/
 .DS_Store
 Thumbs.db
 

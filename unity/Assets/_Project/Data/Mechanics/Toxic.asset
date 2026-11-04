@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd99f192371ecb4ab8c5232f2b82330, type: 3}
+  m_Name: Toxic
+  m_EditorClassIdentifier: 
+  mechanic: 6
+  title: "\xD4 \u0110\u1ED8C"
+  description: "M\xE8o v\xE0o \xF4 \u0111\u1ED9c s\u1EBD ch\u1EBFt ngay, k\u1EC3
+    c\u1EA3 khi b\u1ECB \u0111\u1EA9y v\xE0o. \xD4 \u0111\u1ED9c kh\xF4ng c\u1EA7n
+    l\u1EA5p k\xEDn, d\xF9ng n\xF3 \u0111\u1EC3 lo\u1EA1i b\u1EDBt m\xE8o."
+  demoRows:
+  - ABB~
+  demoGoal: []
+  demoMembranes: []
+  demoHasGerms: 0
+  demoMove: 0 0 right

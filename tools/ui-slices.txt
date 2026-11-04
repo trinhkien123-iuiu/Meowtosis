@@ -1,0 +1,10 @@
+Panel 54 54 54 54
+PanelHeader 42 42 42 42
+LevelBadge 34 34 34 34
+TextBox 36 36 36 36
+ButtonGreen 48 48 48 48
+ButtonBlue 48 48 48 48
+BarBack 26 24 26 24
+BarFill 26 24 26 24
+Bubble 42 42 42 42
+Pill 36 36 36 36

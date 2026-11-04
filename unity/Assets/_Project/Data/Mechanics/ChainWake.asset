@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd99f192371ecb4ab8c5232f2b82330, type: 3}
+  m_Name: ChainWake
+  m_EditorClassIdentifier: 
+  mechanic: 11
+  title: "TH\u1EE8C D\xC2Y CHUY\u1EC0N"
+  description: "M\u1ED9t b\xE9 th\u1EE9c d\u1EADy s\u1EBD \u0111\xE1nh th\u1EE9c
+    lu\xF4n b\xE9 ng\u1EE7 c\xF9ng m\xE0u n\u1EB1m s\xE1t b\xEAn, c\u1EE9 th\u1EBF
+    lan kh\u1EAFp c\u1EA3 nh\xF3m."
+  demoRows:
+  - A.#
+  - '#aa'
+  demoGoal: []
+  demoMembranes: []
+  demoHasGerms: 0
+  demoMove: 0 0 right

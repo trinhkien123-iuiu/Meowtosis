@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3bb074d797d7b74587bd86676535956, type: 3}
+  m_Name: GameSounds
+  m_EditorClassIdentifier: 
+  sounds:
+  - id: 0
+    clip: {fileID: 8300000, guid: 8f11c9b8d7cb73b428bc41b4dca26e3a, type: 3}
+    volume: 0.5
+  - id: 1
+    clip: {fileID: 8300000, guid: 2a31a5eb0c2f34e4fb79f26f1045c788, type: 3}
+    volume: 0.6
+  - id: 2
+    clip: {fileID: 8300000, guid: 954e973762336f3448a801425954ed7c, type: 3}
+    volume: 0.6
+  - id: 3
+    clip: {fileID: 8300000, guid: 6d9f87414400f6546957a8dd2492ceb3, type: 3}
+    volume: 0.8
+  - id: 4
+    clip: {fileID: 8300000, guid: 3e7e255b10c0c674c84762fbe2e5de91, type: 3}
+    volume: 0.7
+  - id: 5
+    clip: {fileID: 8300000, guid: f2d9d0b08fd0f994fac5dcbbe1001449, type: 3}
+    volume: 0.25
+  - id: 6
+    clip: {fileID: 8300000, guid: ebcf73ce152b02443a38ca4aad8d60ef, type: 3}
+    volume: 0.8
+  - id: 7
+    clip: {fileID: 8300000, guid: fcaa577a4a7015f42b042a5e7ab51f6c, type: 3}
+    volume: 0.8
+  - id: 8
+    clip: {fileID: 8300000, guid: c9617b91a0c06ab4a8fa181fd4835cfe, type: 3}
+    volume: 0.45
+  - id: 9
+    clip: {fileID: 8300000, guid: 62536ea7cfbbf2b40929294f7ed35b39, type: 3}
+    volume: 0.5
+  - id: 10
+    clip: {fileID: 8300000, guid: a3a9c59bbaa19254bb6d2a3bdd33596b, type: 3}
+    volume: 0.45
+  - id: 11
+    clip: {fileID: 8300000, guid: 4c96a5640a3122742bc266c2cdb753e5, type: 3}
+    volume: 0.5
+  - id: 12
+    clip: {fileID: 8300000, guid: 1495ae8fff7c7a145a30b9a99d1abee9, type: 3}
+    volume: 0.4
+  - id: 13
+    clip: {fileID: 8300000, guid: 313b2e27de85b4244a9698836feba6d0, type: 3}
+    volume: 0.45
+  - id: 14
+    clip: {fileID: 8300000, guid: c8151ffe8d5191d4b9a2b8114e157412, type: 3}
+    volume: 0.45
+  - id: 15
+    clip: {fileID: 8300000, guid: 11997a0ecd8398248a9e8ad9f71dfd99, type: 3}
+    volume: 0.5
+  - id: 16
+    clip: {fileID: 8300000, guid: e75b79f4f7e46ee46a94c04aa61179ae, type: 3}
+    volume: 0.35
+  - id: 17
+    clip: {fileID: 8300000, guid: 1238077bf7fb5244aa399bcd286d2882, type: 3}
+    volume: 0.5
+  - id: 18
+    clip: {fileID: 8300000, guid: 3b379f76d5e479847b0c5df4687c116e, type: 3}
+    volume: 0.6
+  - id: 19
+    clip: {fileID: 8300000, guid: a1a0ac5a07fcc224283fa854b6dbf3f1, type: 3}
+    volume: 0.8
+  - id: 20
+    clip: {fileID: 8300000, guid: d3bf3558846501c4b8325e9685de6732, type: 3}
+    volume: 0.8
+  meows:
+  - {fileID: 8300000, guid: 20ebb84022fde494095027979e740c64, type: 3}
+  - {fileID: 8300000, guid: d80a65e9e426661408a64116fa504131, type: 3}
+  - {fileID: 8300000, guid: bcf0f54cbb5837841966bb53264255c8, type: 3}
+  - {fileID: 8300000, guid: e1948bb184278844e809b8f1cf449e6d, type: 3}
+  meowVolume: 0.75
+  voicePitches:
+  - 1
+  - 0.86
+  - 1.16
+  - 1.26
+  - 0.78
+  - 1.08
+  music: {fileID: 8300000, guid: 7999e3ef8b7c45c44b3cca80fc22f1d5, type: 3}
+  musicVolume: 0.3

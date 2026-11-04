@@ -5,7 +5,7 @@
 // - không hai level nào trùng khung (kể cả xoay/lật)
 // - các bước hướng dẫn đi được, không dẫn tới thua; đi trọn thì phải thắng đúng số nước tối ưu
 // - tip là một câu chữ; các khối level phủ kín danh sách, không chồng nhau
-// - data/levels.json (dữ liệu cho Unity) khớp với level trong game
+// - data/levels.json và unity/Assets/_Project/Levels/LevelCatalog.txt (dữ liệu cho Unity) khớp với level trong game
 const fs = require('fs');
 const { LEVELS_JSON, loadLogic, loadChapters, exportLevels, asDef, canon } = require('./lib');
 
@@ -30,6 +30,12 @@ LEVELS.forEach((raw, n) => {
   if (!path) { fail(`${name}: không giải được trong giới hạn`); return; }
   if (ms > SLOW_MS) notes.push(`${name}: bộ giải mất ${ms}ms (Gợi ý sẽ chậm trên điện thoại)`);
   if (def.tip !== undefined && (typeof def.tip !== 'string' || !def.tip)) fail(`${name}: tip phải là một câu`);
+  if (def.trap) {
+    const [r, col, dir, text] = def.trap;
+    if (typeof text !== 'string' || !text) fail(`${name} bẫy: thiếu lời thoại`);
+    const res = ctx.swipe(lv, lv.init, r * lv.w + col, dir);
+    if (!res || !ctx.isLost(lv, res.cells)) fail(`${name} bẫy: nước [${r},${col},${dir}] phải dẫn tới thua`);
+  }
   if (def.tut) {
     let c = lv.init;
     for (const [k2, [r, col, dir, text]] of def.tut.entries()) {
@@ -59,6 +65,14 @@ try { saved = fs.readFileSync(LEVELS_JSON, 'utf8'); } catch (e) { /* chưa có f
 if (saved === null) fail('chưa có data/levels.json: chạy npm run export');
 else if (JSON.stringify(JSON.parse(saved)) !== JSON.stringify(exportLevels(ctx)))
   fail('data/levels.json cũ hơn level trong game: chạy npm run export');
+
+// Danh sách level của Unity cũng phải khớp (id cố định ở data/level-ids.json)
+const unity = require('./export-unity');
+let catalog = null;
+try { catalog = fs.readFileSync(unity.CATALOG, 'utf8'); } catch (e) { /* chưa có file */ }
+try {
+  if (catalog !== unity.catalogText(exportLevels(ctx), unity.readIds())) fail('LevelCatalog.txt của Unity cũ hơn level trong game: chạy npm run export');
+} catch (e) { fail(e.message); }
 
 for (const n of notes) console.log('lưu ý:', n);
 if (errors.length) { for (const e of errors) console.log('LỖI:', e); process.exit(1); }

@@ -28,6 +28,60 @@
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
+   "AA.",
+   "##B"
+  ],
+  "trap": [
+   0,
+   1,
+   "right",
+   "Thử vuốt mèo đỏ sang phải xem chuyện gì xảy ra!"
+  ],
+  "tut": [
+   [
+    1,
+    2,
+    "up",
+    "Giữ mèo đỏ lại: vuốt mèo xanh lên lấp ô trống!"
+   ]
+  ],
+  "par": 1,
+  "solution": [
+   [
+    1,
+    2,
+    "up"
+   ]
+  ]
+ },
+ {
+  "index": 3,
+  "chapter": 1,
+  "chapterName": "Phòng nuôi cấy",
+  "rows": [
+   "##B#",
+   "AA.."
+  ],
+  "tip": "Nhớ nhé: đừng để 3 mèo cùng màu thẳng hàng!",
+  "par": 2,
+  "solution": [
+   [
+    0,
+    2,
+    "down"
+   ],
+   [
+    1,
+    2,
+    "right"
+   ]
+  ]
+ },
+ {
+  "index": 4,
+  "chapter": 1,
+  "chapterName": "Phòng nuôi cấy",
+  "rows": [
    "AB."
   ],
   "tut": [
@@ -48,7 +102,7 @@
   ]
  },
  {
-  "index": 3,
+  "index": 5,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -70,7 +124,7 @@
   ]
  },
  {
-  "index": 4,
+  "index": 6,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -117,7 +171,7 @@
   ]
  },
  {
-  "index": 5,
+  "index": 7,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -150,7 +204,7 @@
   ]
  },
  {
-  "index": 6,
+  "index": 8,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -187,7 +241,7 @@
   ]
  },
  {
-  "index": 7,
+  "index": 9,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -219,7 +273,7 @@
   ]
  },
  {
-  "index": 8,
+  "index": 10,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -272,7 +326,7 @@
   ]
  },
  {
-  "index": 9,
+  "index": 11,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -335,7 +389,7 @@
   ]
  },
  {
-  "index": 10,
+  "index": 12,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -370,7 +424,7 @@
   ]
  },
  {
-  "index": 11,
+  "index": 13,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -434,7 +488,7 @@
   ]
  },
  {
-  "index": 12,
+  "index": 14,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -442,6 +496,7 @@
    "..#",
    "A.."
   ],
+  "card": "ClearForRoom",
   "tut": [
    [
     0,
@@ -513,7 +568,7 @@
   ]
  },
  {
-  "index": 13,
+  "index": 15,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -572,7 +627,7 @@
   ]
  },
  {
-  "index": 14,
+  "index": 16,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -635,7 +690,7 @@
   ]
  },
  {
-  "index": 15,
+  "index": 17,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -694,7 +749,7 @@
   ]
  },
  {
-  "index": 16,
+  "index": 18,
   "chapter": 1,
   "chapterName": "Phòng nuôi cấy",
   "rows": [
@@ -764,7 +819,7 @@
   ]
  },
  {
-  "index": 17,
+  "index": 19,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -802,7 +857,7 @@
   ]
  },
  {
-  "index": 18,
+  "index": 20,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -844,7 +899,7 @@
   ]
  },
  {
-  "index": 19,
+  "index": 21,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -880,7 +935,7 @@
   ]
  },
  {
-  "index": 20,
+  "index": 22,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -920,7 +975,7 @@
   ]
  },
  {
-  "index": 21,
+  "index": 23,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -971,7 +1026,7 @@
   ]
  },
  {
-  "index": 22,
+  "index": 24,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1028,7 +1083,7 @@
   ]
  },
  {
-  "index": 23,
+  "index": 25,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1091,7 +1146,7 @@
   ]
  },
  {
-  "index": 24,
+  "index": 26,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1154,7 +1209,7 @@
   ]
  },
  {
-  "index": 25,
+  "index": 27,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1220,7 +1275,7 @@
   ]
  },
  {
-  "index": 26,
+  "index": 28,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1295,7 +1350,7 @@
   ]
  },
  {
-  "index": 27,
+  "index": 29,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1362,7 +1417,7 @@
   ]
  },
  {
-  "index": 28,
+  "index": 30,
   "chapter": 2,
   "chapterName": "Vào vị trí",
   "rows": [
@@ -1425,7 +1480,7 @@
   ]
  },
  {
-  "index": 29,
+  "index": 31,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1468,7 +1523,7 @@
   ]
  },
  {
-  "index": 30,
+  "index": 32,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1508,7 +1563,7 @@
   ]
  },
  {
-  "index": 31,
+  "index": 33,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1579,7 +1634,7 @@
   ]
  },
  {
-  "index": 32,
+  "index": 34,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1640,7 +1695,7 @@
   ]
  },
  {
-  "index": 33,
+  "index": 35,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1688,7 +1743,7 @@
   ]
  },
  {
-  "index": 34,
+  "index": 36,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1743,7 +1798,7 @@
   ]
  },
  {
-  "index": 35,
+  "index": 37,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1820,7 +1875,7 @@
   ]
  },
  {
-  "index": 36,
+  "index": 38,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1887,7 +1942,7 @@
   ]
  },
  {
-  "index": 37,
+  "index": 39,
   "chapter": 3,
   "chapterName": "Màng và độc",
   "rows": [
@@ -1954,7 +2009,7 @@
   ]
  },
  {
-  "index": 38,
+  "index": 40,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -1991,7 +2046,7 @@
   ]
  },
  {
-  "index": 39,
+  "index": 41,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2024,7 +2079,7 @@
   ]
  },
  {
-  "index": 40,
+  "index": 42,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2084,7 +2139,7 @@
   ]
  },
  {
-  "index": 41,
+  "index": 43,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2092,6 +2147,7 @@
    ".bb.b",
    "#.A.#"
   ],
+  "card": "ChainWake",
   "tip": "Ba bé ngủ đều là mèo xanh. Một bé thức dậy sẽ đánh thức luôn bé nằm sát bên!",
   "par": 7,
   "solution": [
@@ -2133,7 +2189,7 @@
   ]
  },
  {
-  "index": 42,
+  "index": 44,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2182,7 +2238,7 @@
   ]
  },
  {
-  "index": 43,
+  "index": 45,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2203,7 +2259,7 @@
   ]
  },
  {
-  "index": 44,
+  "index": 46,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2253,7 +2309,7 @@
   ]
  },
  {
-  "index": 45,
+  "index": 47,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2301,7 +2357,7 @@
   ]
  },
  {
-  "index": 46,
+  "index": 48,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2358,7 +2414,7 @@
   ]
  },
  {
-  "index": 47,
+  "index": 49,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2423,7 +2479,7 @@
   ]
  },
  {
-  "index": 48,
+  "index": 50,
   "chapter": 4,
   "chapterName": "Ngủ và virus",
   "rows": [
@@ -2493,7 +2549,7 @@
   ]
  },
  {
-  "index": 49,
+  "index": 51,
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
   "rows": [
@@ -2530,7 +2586,7 @@
   ]
  },
  {
-  "index": 50,
+  "index": 52,
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
   "rows": [
@@ -2564,7 +2620,7 @@
   ]
  },
  {
-  "index": 51,
+  "index": 53,
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
   "rows": [
@@ -2573,6 +2629,7 @@
    "GCB#"
   ],
   "kill": "G",
+  "card": "GermClear",
   "tip": "Mẹo: vi khuẩn cũng vuốt được. Cho chúng nhân lên đủ 3 con thẳng hàng là bị khử!",
   "par": 7,
   "solution": [
@@ -2614,7 +2671,7 @@
   ]
  },
  {
-  "index": 52,
+  "index": 54,
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
   "rows": [
@@ -2668,7 +2725,7 @@
   ]
  },
  {
-  "index": 53,
+  "index": 55,
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
   "rows": [
@@ -2723,7 +2780,7 @@
   ]
  },
  {
-  "index": 54,
+  "index": 56,
   "chapter": 5,
   "chapterName": "Diệt khuẩn",
   "rows": [
@@ -2784,7 +2841,7 @@
   ]
  },
  {
-  "index": 55,
+  "index": 57,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -2841,7 +2898,7 @@
   ]
  },
  {
-  "index": 56,
+  "index": 58,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -2918,7 +2975,7 @@
   ]
  },
  {
-  "index": 57,
+  "index": 59,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -2969,7 +3026,7 @@
   ]
  },
  {
-  "index": 58,
+  "index": 60,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -3037,7 +3094,7 @@
   ]
  },
  {
-  "index": 59,
+  "index": 61,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -3098,7 +3155,7 @@
   ]
  },
  {
-  "index": 60,
+  "index": 62,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -3163,7 +3220,7 @@
   ]
  },
  {
-  "index": 61,
+  "index": 63,
   "chapter": 6,
   "chapterName": "Đại gia đình",
   "rows": [
@@ -3247,7 +3304,7 @@
   ]
  },
  {
-  "index": 62,
+  "index": 64,
   "chapter": 7,
   "chapterName": "Đủ sắc màu",
   "rows": [
@@ -3281,7 +3338,7 @@
   ]
  },
  {
-  "index": 63,
+  "index": 65,
   "chapter": 7,
   "chapterName": "Đủ sắc màu",
   "rows": [
@@ -3338,7 +3395,7 @@
   ]
  },
  {
-  "index": 64,
+  "index": 66,
   "chapter": 7,
   "chapterName": "Đủ sắc màu",
   "rows": [
@@ -3382,7 +3439,7 @@
   ]
  },
  {
-  "index": 65,
+  "index": 67,
   "chapter": 7,
   "chapterName": "Đủ sắc màu",
   "rows": [
@@ -3447,7 +3504,7 @@
   ]
  },
  {
-  "index": 66,
+  "index": 68,
   "chapter": 7,
   "chapterName": "Đủ sắc màu",
   "rows": [
@@ -3487,7 +3544,7 @@
   ]
  },
  {
-  "index": 67,
+  "index": 69,
   "chapter": 7,
   "chapterName": "Đủ sắc màu",
   "rows": [
@@ -3549,7 +3606,7 @@
   ]
  },
  {
-  "index": 68,
+  "index": 70,
   "chapter": 7,
   "chapterName": "Đủ sắc màu",
   "rows": [
@@ -3615,7 +3672,7 @@
   ]
  },
  {
-  "index": 69,
+  "index": 71,
   "chapter": 7,
   "chapterName": "Đủ sắc màu",
   "rows": [

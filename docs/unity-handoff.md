@@ -241,12 +241,14 @@ Luật nằm trọn trong khối `// ==LOGIC==`, viết bằng hàm thuần (kh�
 5. **Bộ giải + công cụ level:** chép bộ giải A* sang C# (Gợi ý, kiểm tra level trong test); bộ sinh level có thể giữ bằng Node (`tools/`) hoặc viết lại thành Editor tool.
 6. **Application:** phiên chơi, hoàn tác, booster, tim, xu, tiến độ theo `id` (mục 8b).
 7. **Presentation:** bàn chơi, HUD, bản đồ chương, thẻ hướng dẫn, hướng dẫn tương tác, mẹo đầu màn, bảng thắng/thua (View câm + Presenter).
-8. **Art, âm thanh, VFX của team** thay hình tạm (mục 6–7); không chép asset Shikacat vào project Unity.
+8. **Art, âm thanh, VFX:** dùng lại asset Shikacat và tiếng mèo của prototype trong project Unity (dự án cá nhân, phi thương mại, quyết định ngày 2026-11-04); VFX dựng lại theo mục 7.
 9. **Cân bằng lại** khi có playtest: độ khó từng chương, mốc sao, giá booster bằng xu.
 
 ---
 
 ## 8b. Kiến trúc Unity đề xuất
+
+> **Đã làm (2026-11-04):** kiến trúc thật, quy tắc code và định dạng level nằm ở [architecture.md](architecture.md). Tầng Domain, danh sách level `LevelCatalog.txt` và 263 test đã xong; phần dưới là đề xuất ban đầu, giữ lại để tham khảo.
 
 Lấy theo khuôn đã dùng cho game Glimmith (`D:\GitHub\Puzzle_Prototype\ARCHITECTURE.md`), rút gọn cho Meowtosis:
 

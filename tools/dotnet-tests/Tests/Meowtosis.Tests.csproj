@@ -1,0 +1,22 @@
+<!-- Chạy test EditMode của Unity bằng .NET, không cần mở Unity:  npm run test:unity -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <IsPackable>false</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../../unity/Assets/_Project/Tests/EditMode/**/*.cs" />
+    <Compile Include="UnityApplication.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Domain/Meowtosis.Domain.csproj" />
+    <ProjectReference Include="../Gameplay/Meowtosis.Gameplay.csproj" />
+  </ItemGroup>
+</Project>
