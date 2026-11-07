@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Meowtosis.Domain;
 using Meowtosis.Gameplay;
 
@@ -11,37 +10,24 @@ namespace Meowtosis.Presentation
     {
         public const string HeartsFull = "Đầy";
 
-        public static string LevelBadge(int levelNumber) => $"Level {levelNumber}";
+        public static string LevelBadge(int levelNumber) => $"Lv{levelNumber}";
 
         // Dạng ngắn cho ô level trên HUD màn chơi, để ô nhỏ gọn không lấn phần chơi.
-        public static string LevelShort(int levelNumber) => $"Lv{levelNumber}";
+        public static string LevelShort(int levelNumber) => $"Màn {levelNumber}";
 
-        public static string Moves(int movesMade, int par) => $"{movesMade} nước · tối ưu {par}";
-
-        public static string Goal(GoalProgress progress)
-        {
-            var parts = new List<string> { $"Lấp kín {progress.FilledCells}/{progress.CellsToFill}" };
-            if (progress.BoxCount > 0) parts.Add($"Hộp {progress.BoxesDone}/{progress.BoxCount}");
-            if (progress.KillRemaining > 0) parts.Add($"Vi khuẩn còn {progress.KillRemaining}");
-            return string.Join("  ·  ", parts);
-        }
+        // Số trên viên mục tiêu: "đã xong/tổng".
+        public static string Count(int done, int total) => $"{done}/{total}";
 
         public static string CoinReward(int coins) => $"+{coins}";
 
         public static string Cleared(int count) => $"Khử {count}!";
 
-        // Nói rõ vì sao thua, để lần sau người chơi biết tránh.
+        // Tiêu đề thua ngắn gọn, đập ngay vào mắt người chơi
         public static string Lost(LossReport report)
         {
-            var color = ColorName(report.Color);
-            return report.Cause switch
-            {
-                LossCause.Cleared => $"{report.Count} mèo {color} thẳng hàng nên bị khử!",
-                LossCause.Replaced => $"Mèo {color} cuối cùng đã bị thay thế!",
-                LossCause.Poisoned => $"Mèo {color} cuối cùng đã rơi vào ô độc!",
-                LossCause.Eaten => $"Virus đã ăn mất mèo {color} cuối cùng!",
-                _ => $"Hết sạch mèo {color}!",
-            } + "\nMàu nào cũng phải còn ít nhất 1 con.";
+            if (report == null) return "<b>HẾT SẠCH MÈO!</b>";
+            var color = ColorName(report.Color).ToUpper();
+            return $"<b>HẾT SẠCH MÈO {color}!</b>";
         }
 
         // "m:ss" tới tim kế tiếp, rỗng khi tim đầy.
@@ -84,6 +70,19 @@ namespace Meowtosis.Presentation
         public const string TutorialDone = "Giỏi lắm! Giờ tự làm tiếp nhé";
         public const string TrapSeen = "Thấy chưa? Hết sạch một màu là thua!";
         public const string NothingChanges = "Không có gì thay đổi";
+        public const string Understood = "Đã hiểu!";
+        public const string StartPlaying = "Bắt đầu chơi";
+        public const string OnboardingDone = "Xuất sắc! Bạn đã nắm được luật!";
+
+        public static string CheatChosenLevel(int level, int levelCount) => $"Lv{level} / {levelCount}";
+
+        public const string CheatNoMove = "Không tìm được nước đi đúng";
+
+        public static string CheatCoins(int total) => $"Đã cộng xu: {total}";
+
+        public const string CheatUnlocked = "Đã mở khoá mọi level";
+
+        public static string BackgroundButton(string lookName) => $"Nền: {lookName}";
 
         public static string LastOfColor(Species color) => $"Không thể đổi con mèo {ColorName(color)} cuối cùng";
 
@@ -100,7 +99,6 @@ namespace Meowtosis.Presentation
             Species.Yellow => "vàng",
             Species.Pink => "hồng",
             Species.Purple => "tím",
-            Species.Germ => "vi khuẩn",
             _ => "virus",
         };
     }

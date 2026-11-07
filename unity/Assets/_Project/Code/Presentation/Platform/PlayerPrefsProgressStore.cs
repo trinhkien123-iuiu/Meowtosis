@@ -48,6 +48,7 @@ namespace Meowtosis.Presentation
             public bool soundOn = true;
             public bool musicOn = true;
             public int lastLevelIndex;
+            public bool finishedOnboarding;   // save cũ chưa có trường này thì chạy hướng dẫn đầu game một lần
 
             public static SavedProgress From(PlayerProgress progress) => new SavedProgress
             {
@@ -64,6 +65,7 @@ namespace Meowtosis.Presentation
                 soundOn = progress.SoundOn,
                 musicOn = progress.MusicOn,
                 lastLevelIndex = progress.LastLevelIndex,
+                finishedOnboarding = progress.HasFinishedOnboarding,
             };
 
             public PlayerProgress ToProgress()
@@ -82,6 +84,7 @@ namespace Meowtosis.Presentation
                 progress.SoundOn = soundOn;
                 progress.MusicOn = musicOn;
                 progress.LastLevelIndex = lastLevelIndex;
+                progress.HasFinishedOnboarding = finishedOnboarding;
                 return progress;
             }
         }

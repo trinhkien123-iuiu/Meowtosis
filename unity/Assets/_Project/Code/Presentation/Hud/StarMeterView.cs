@@ -1,5 +1,4 @@
 using Meowtosis.Gameplay;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,18 +14,16 @@ namespace Meowtosis.Presentation
         [SerializeField] private Image[] stars;
         [SerializeField] private Sprite litStar;
         [SerializeField] private Sprite emptyStar;
-        [SerializeField] private TMP_Text movesText;
         [SerializeField] private float drainSpeed = 1.2f;
 
         private float shownFill = 1f;
         private float targetFill = 1f;
 
-        public void Show(StarMeter meter, string moves, bool instantly)
+        public void Show(StarMeter meter, bool instantly)
         {
             targetFill = meter.Fill;
             if (instantly) shownFill = targetFill;
             for (var index = 0; index < stars.Length; index++) stars[index].sprite = index < meter.Stars ? litStar : emptyStar;
-            movesText.text = moves;
             ApplyFill();
         }
 

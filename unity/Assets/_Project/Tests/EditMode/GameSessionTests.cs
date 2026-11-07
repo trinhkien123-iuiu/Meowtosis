@@ -75,19 +75,17 @@ namespace Meowtosis.Tests
             Assert.That(StarRating.For(movesMade, par), Is.EqualTo(stars));
 
         [Test]
-        public void GoalProgressCountsFilledCellsBoxesAndGerms()
+        public void GoalProgressCountsFilledCellsAndBoxes()
         {
             var definition = new LevelDefinition { Id = "test" };
-            definition.Rows.AddRange(new[] { "AB~", "G>." });
+            definition.Rows.AddRange(new[] { "AB~", "B>." });
             definition.Goal.AddRange(new[] { "B..", ".A." });
-            definition.KillSpecies = Species.Germ;
             var progress = GoalProgress.Of(new Level(definition).CreateStartBoard());
 
             Assert.That(progress.FilledCells, Is.EqualTo(3));
             Assert.That(progress.CellsToFill, Is.EqualTo(5));
             Assert.That(progress.BoxesDone, Is.EqualTo(0));
             Assert.That(progress.BoxCount, Is.EqualTo(2));
-            Assert.That(progress.KillRemaining, Is.EqualTo(1));
         }
     }
 }

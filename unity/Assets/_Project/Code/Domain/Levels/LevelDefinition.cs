@@ -22,9 +22,6 @@ namespace Meowtosis.Domain
 
         public List<Membrane> Membranes { get; } = new List<Membrane>();
 
-        // Loài phải diệt sạch mới thắng (level diệt khuẩn).
-        public Species? KillSpecies { get; set; }
-
         public List<TutorialStep> Tutorial { get; } = new List<TutorialStep>();
 
         // Tên thẻ cơ chế riêng của level (thử thách mới không tự nhận ra được từ bàn chơi); rỗng nếu không có.

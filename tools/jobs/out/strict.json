@@ -1,0 +1,690 @@
+[
+ {
+  "job": "L23",
+  "def": {
+   "rows": [
+    ".#.A",
+    "...B",
+    "..##"
+   ],
+   "goal": [
+    "B...",
+    "..A.",
+    "...."
+   ]
+  },
+  "par": 9,
+  "ms": 15,
+  "cats": 2,
+  "slots": 9,
+  "first": 4,
+  "firstOk": 2,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 9.9,
+  "surprise": 5,
+  "feats": "push3 longPush1 replace2"
+ },
+ {
+  "job": "L23",
+  "def": {
+   "rows": [
+    "AB#.",
+    "....",
+    "...."
+   ],
+   "goal": [
+    "....",
+    "B...",
+    "A..."
+   ]
+  },
+  "par": 11,
+  "ms": 204,
+  "cats": 2,
+  "slots": 11,
+  "first": 4,
+  "firstOk": 2,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.6,
+  "surprise": 4.5,
+  "feats": "push5 longPush1 replace2"
+ },
+ {
+  "job": "L23",
+  "def": {
+   "rows": [
+    ".#.B",
+    "...A",
+    "...#"
+   ],
+   "goal": [
+    "....",
+    "..B.",
+    "..A."
+   ]
+  },
+  "par": 9,
+  "ms": 27,
+  "cats": 2,
+  "slots": 10,
+  "first": 4,
+  "firstOk": 2,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.4,
+  "surprise": 4,
+  "feats": "push3 replace1"
+ },
+ {
+  "job": "L26",
+  "def": {
+   "rows": [
+    ".#..",
+    ".#BA",
+    ".C.#",
+    "...."
+   ],
+   "goal": [
+    "..A.",
+    "C...",
+    "B...",
+    "...."
+   ]
+  },
+  "par": 11,
+  "ms": 292,
+  "cats": 3,
+  "slots": 13,
+  "first": 8,
+  "firstOk": 6,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 11.1,
+  "surprise": 3.75,
+  "feats": "push3 longPush1 replace1"
+ },
+ {
+  "job": "L26",
+  "def": {
+   "rows": [
+    "#AC.",
+    "..B#",
+    "..#.",
+    "...."
+   ],
+   "goal": [
+    "...C",
+    "....",
+    "A..A",
+    "...."
+   ]
+  },
+  "par": 11,
+  "ms": 21,
+  "cats": 3,
+  "slots": 13,
+  "first": 7,
+  "firstOk": 4,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.46,
+  "surprise": 3.64,
+  "feats": "push4 longPush2 replace1"
+ },
+ {
+  "job": "L26",
+  "def": {
+   "rows": [
+    "C...",
+    "....",
+    "....",
+    "#AB#"
+   ],
+   "goal": [
+    ".CB.",
+    "....",
+    "..A.",
+    "...."
+   ]
+  },
+  "par": 11,
+  "ms": 254,
+  "cats": 3,
+  "slots": 14,
+  "first": 6,
+  "firstOk": 2,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 10.93,
+  "surprise": 3.33,
+  "feats": "push4"
+ },
+ {
+  "job": "L32",
+  "def": {
+   "rows": [
+    "CB#.",
+    "C.#A",
+    ".BAA",
+    "B##."
+   ],
+   "oneway": [
+    [
+     2,
+     2,
+     "right"
+    ],
+    [
+     0,
+     1,
+     "down"
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 7,
+  "cats": 8,
+  "slots": 12,
+  "first": 9,
+  "firstOk": 8,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 8.53,
+  "surprise": 4.17,
+  "feats": "replace3"
+ },
+ {
+  "job": "L32",
+  "def": {
+   "rows": [
+    ".AAB",
+    "CC#.",
+    ".#A.",
+    ".#BB"
+   ],
+   "oneway": [
+    [
+     0,
+     1,
+     "down"
+    ],
+    [
+     1,
+     0,
+     "up"
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 33,
+  "cats": 8,
+  "slots": 13,
+  "first": 11,
+  "firstOk": 11,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 8.29,
+  "surprise": 3.09,
+  "feats": "push2 longPush1 replace2"
+ },
+ {
+  "job": "L41",
+  "def": {
+   "rows": [
+    "..b##",
+    ".bAA.",
+    "B.b#."
+   ]
+  },
+  "par": 10,
+  "ms": 6,
+  "cats": 6,
+  "slots": 12,
+  "first": 3,
+  "firstOk": 1,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 4,
+  "difficulty": 10.33,
+  "surprise": 6.83,
+  "feats": "push4 longPush1 replace1 clear1 cleared3 wake3 wakeUse2"
+ },
+ {
+  "job": "L41",
+  "def": {
+   "rows": [
+    "#.b#.",
+    "bb.A.",
+    ".AB#."
+   ]
+  },
+  "par": 10,
+  "ms": 49,
+  "cats": 6,
+  "slots": 12,
+  "first": 6,
+  "firstOk": 3,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 4,
+  "difficulty": 10.67,
+  "surprise": 6.67,
+  "feats": "push3 longPush1 replace4 wake3 chainWake1 wakeUse3"
+ },
+ {
+  "job": "L41",
+  "def": {
+   "rows": [
+    "..#B.",
+    ".b..A",
+    ".Abb#"
+   ]
+  },
+  "par": 10,
+  "ms": 14,
+  "cats": 6,
+  "slots": 13,
+  "first": 5,
+  "firstOk": 4,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 3,
+  "difficulty": 10.2,
+  "surprise": 5.3,
+  "feats": "push3 clear1 cleared3 wake2 chainWake1 wakeUse1"
+ },
+ {
+  "job": "L47",
+  "def": {
+   "rows": [
+    "###.a",
+    "..#.^",
+    "ABA.b",
+    "BA.CC",
+    "##BCA"
+   ]
+  },
+  "par": 9,
+  "ms": 272,
+  "cats": 12,
+  "slots": 19,
+  "first": 21,
+  "firstOk": 18,
+  "firstOpt": 11,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 9.35,
+  "surprise": 5.38,
+  "feats": "push5 longPush2 replace3 spread1 eaten1 virusDie2"
+ },
+ {
+  "job": "L47",
+  "def": {
+   "rows": [
+    "b.#.C",
+    ".AA^.",
+    "ACA..",
+    "C####",
+    "BBaB."
+   ]
+  },
+  "par": 8,
+  "ms": 3,
+  "cats": 12,
+  "slots": 20,
+  "first": 16,
+  "firstOk": 13,
+  "firstOpt": 6,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 9.05,
+  "surprise": 3.81,
+  "feats": "push3 longPush2 replace2 spread1 virusDie2"
+ },
+ {
+  "job": "L51",
+  "def": {
+   "rows": [
+    "BA#=",
+    "#.=="
+   ]
+  },
+  "par": 6,
+  "ms": 1,
+  "cats": 2,
+  "slots": 6,
+  "first": 3,
+  "firstOk": 1,
+  "firstOpt": 1,
+  "deadFrac": 0,
+  "extra": 2,
+  "difficulty": 7.81,
+  "surprise": 5.33,
+  "feats": "replace2 slide1"
+ },
+ {
+  "job": "L51",
+  "def": {
+   "rows": [
+    ".==A",
+    "#=#B"
+   ]
+  },
+  "par": 5,
+  "ms": 0,
+  "cats": 2,
+  "slots": 6,
+  "first": 3,
+  "firstOk": 1,
+  "firstOpt": 1,
+  "deadFrac": 0,
+  "extra": 1,
+  "difficulty": 7.21,
+  "surprise": 4.83,
+  "feats": "push1 replace1 slide2"
+ },
+ {
+  "job": "L51",
+  "def": {
+   "rows": [
+    "A##B",
+    "===."
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 2,
+  "slots": 6,
+  "first": 2,
+  "firstOk": 2,
+  "firstOpt": 2,
+  "deadFrac": 0,
+  "extra": 0,
+  "difficulty": 4.38,
+  "surprise": 0,
+  "feats": "push1 slide1"
+ },
+ {
+  "job": "L52",
+  "def": {
+   "rows": [
+    "ABA",
+    "=#B",
+    "==#"
+   ]
+  },
+  "par": 4,
+  "ms": 0,
+  "cats": 4,
+  "slots": 7,
+  "first": 5,
+  "firstOk": 3,
+  "firstOpt": 1,
+  "deadFrac": 0.42066420664206644,
+  "extra": 1,
+  "difficulty": 8.22,
+  "surprise": 4.3,
+  "feats": "replace1 slide1"
+ },
+ {
+  "job": "L52",
+  "def": {
+   "rows": [
+    "BAB",
+    "=#=",
+    "A#="
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 4,
+  "slots": 7,
+  "first": 6,
+  "firstOk": 3,
+  "firstOpt": 3,
+  "deadFrac": 0.8985507246376812,
+  "extra": 1,
+  "difficulty": 9.06,
+  "surprise": 4,
+  "feats": "replace1 slide1"
+ },
+ {
+  "job": "L52",
+  "def": {
+   "rows": [
+    "==.",
+    "A#=",
+    "BAB"
+   ]
+  },
+  "par": 5,
+  "ms": 3,
+  "cats": 4,
+  "slots": 8,
+  "first": 6,
+  "firstOk": 3,
+  "firstOpt": 3,
+  "deadFrac": 0.6482504604051565,
+  "extra": 1,
+  "difficulty": 8.94,
+  "surprise": 4,
+  "feats": "replace1 slide1"
+ },
+ {
+  "job": "L53",
+  "def": {
+   "rows": [
+    "B#A",
+    "A#=",
+    "B=="
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 4,
+  "slots": 7,
+  "first": 5,
+  "firstOk": 2,
+  "firstOpt": 1,
+  "deadFrac": 0.8816793893129771,
+  "extra": 1,
+  "difficulty": 9.63,
+  "surprise": 4.9,
+  "feats": "replace1 slide1"
+ },
+ {
+  "job": "L53",
+  "def": {
+   "rows": [
+    "AB#",
+    "B#=",
+    "A=="
+   ]
+  },
+  "par": 4,
+  "ms": 1,
+  "cats": 4,
+  "slots": 7,
+  "first": 5,
+  "firstOk": 3,
+  "firstOpt": 1,
+  "deadFrac": 0.42066420664206644,
+  "extra": 1,
+  "difficulty": 8.26,
+  "surprise": 4.3,
+  "feats": "replace1 slide1"
+ },
+ {
+  "job": "L53",
+  "def": {
+   "rows": [
+    "ABA",
+    "=#.",
+    "==B"
+   ]
+  },
+  "par": 5,
+  "ms": 2,
+  "cats": 4,
+  "slots": 8,
+  "first": 7,
+  "firstOk": 4,
+  "firstOpt": 3,
+  "deadFrac": 0.6467615985300873,
+  "extra": 1,
+  "difficulty": 9.02,
+  "surprise": 3.93,
+  "feats": "replace1 slide1"
+ },
+ {
+  "job": "L56",
+  "def": {
+   "rows": [
+    "BB#=",
+    "C##=",
+    "A=AC",
+    "A==#"
+   ]
+  },
+  "par": 7,
+  "ms": 19,
+  "cats": 7,
+  "slots": 12,
+  "first": 9,
+  "firstOk": 9,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 8.53,
+  "surprise": 3.33,
+  "feats": "push1 replace2 slide1"
+ },
+ {
+  "job": "L56",
+  "def": {
+   "rows": [
+    "#BB=",
+    "=##=",
+    "C=CA",
+    "AA=#"
+   ]
+  },
+  "par": 6,
+  "ms": 8,
+  "cats": 7,
+  "slots": 12,
+  "first": 11,
+  "firstOk": 9,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.69,
+  "surprise": 3.14,
+  "feats": "replace1 slide1"
+ },
+ {
+  "job": "L56",
+  "def": {
+   "rows": [
+    "#A=#",
+    "BAB=",
+    "A##C",
+    "===C"
+   ]
+  },
+  "par": 5,
+  "ms": 7,
+  "cats": 7,
+  "slots": 12,
+  "first": 11,
+  "firstOk": 9,
+  "firstOpt": 7,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 6.73,
+  "surprise": 1.27,
+  "feats": "push1 slide1"
+ },
+ {
+  "job": "L72",
+  "def": {
+   "rows": [
+    "dB.B",
+    "CACA",
+    "..A#",
+    ".>B.",
+    "..D#"
+   ]
+  },
+  "par": 9,
+  "ms": 25,
+  "cats": 10,
+  "slots": 18,
+  "first": 20,
+  "firstOk": 16,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10,
+  "surprise": 5.7,
+  "feats": "push1 replace3 spread2 eaten1 virusDie3"
+ },
+ {
+  "job": "L72",
+  "def": {
+   "rows": [
+    "....",
+    ".dBC",
+    "A.>B",
+    "BC.A",
+    "D#A."
+   ]
+  },
+  "par": 10,
+  "ms": 60,
+  "cats": 10,
+  "slots": 19,
+  "first": 20,
+  "firstOk": 19,
+  "firstOpt": 14,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.6,
+  "surprise": 4.25,
+  "feats": "push2 longPush1 replace2 spread1 eaten1 virusDie2"
+ },
+ {
+  "job": "L72",
+  "def": {
+   "rows": [
+    "dC..",
+    "A..B",
+    "CBA#",
+    "...D",
+    "B>.A"
+   ]
+  },
+  "par": 10,
+  "ms": 12,
+  "cats": 10,
+  "slots": 19,
+  "first": 22,
+  "firstOk": 22,
+  "firstOpt": 14,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 9.73,
+  "surprise": 4.23,
+  "feats": "push2 replace3 spread2 eaten1 virusDie3"
+ }
+]

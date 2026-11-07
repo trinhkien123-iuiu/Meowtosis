@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Meowtosis.Presentation
 {
-    // Vài chú mèo ngóc đầu lên từ sau mép trên của bàn, nháy mắt rồi bật một trái tim hoặc ngôi sao, xong thụt xuống.
+    // Vài chú mèo ngóc đầu lên từ sau khối gỗ ở hàng trên cùng của bàn, nháy mắt rồi bật một trái tim hoặc ngôi sao, xong thụt xuống.
+    // Đầu mèo vẽ sau khối gỗ (thứ tự vẽ thấp hơn), nên phần thân luôn bị chính khối đó che.
     public sealed class CatPeekEvent : AmbientEvent
     {
         private static readonly Species[] CatColors = { Species.Red, Species.Blue, Species.Yellow, Species.Pink, Species.Purple };
@@ -14,7 +15,7 @@ namespace Meowtosis.Presentation
         [SerializeField] private BoardView boardView;
         [SerializeField] private BoardArt art;
         [SerializeField] private SoundPlayer sounds;
-        [Tooltip("Đầu mèo, thứ tự vẽ phải thấp hơn khung gỗ để phần thân bị bàn che.")]
+        [Tooltip("Đầu mèo, thứ tự vẽ phải thấp hơn khối gỗ (-20) và cao hơn bóng đổ của khối (-40) để phần thân bị khối che.")]
         [SerializeField] private SpriteRenderer headPrefab;
         [Tooltip("Hình bật lên khi nháy mắt, thứ tự vẽ cao hơn bàn.")]
         [SerializeField] private SpriteRenderer iconPrefab;
@@ -27,8 +28,8 @@ namespace Meowtosis.Presentation
         [SerializeField] private float catStagger = 0.35f;
 
         [Header("Vị trí")]
-        [Tooltip("Viền gỗ của bàn dày bao nhiêu ô.")]
-        [SerializeField] private float frameRim = 0.35f;
+        [Tooltip("Đầu mèo ẩn thấp hơn mép trên khối gỗ bao nhiêu ô, để phần mép bo tròn của khối không lộ đầu lúc đang trốn.")]
+        [SerializeField] private float rimInset = 0.04f;
         [SerializeField] private float headHeight = 0.95f;
         [Tooltip("Đầu mèo nhô lên khỏi mép bàn bao nhiêu phần chiều cao.")]
         [SerializeField, Range(0.2f, 1f)] private float headShown = 0.62f;
@@ -89,7 +90,8 @@ namespace Meowtosis.Presentation
             }
         }
 
-        // Các ô ở rìa trên của bàn mà phía trên còn đủ chỗ cho đầu mèo (HUD không che).
+        // Các ô trống ở mép ngoài cùng phía trên của bàn mà phía trên còn đủ chỗ cho đầu mèo (HUD không che).
+        // Bỏ ô có quân (mèo ló sẽ chồng lên quân) và ô dưới một lỗ giữa bàn (mèo ló trong lỗ trông như một quân thật).
         private List<int> FindOpenCells(Board board)
         {
             var cells = new List<int>();
@@ -97,11 +99,21 @@ namespace Meowtosis.Presentation
             var hudBottom = targetCamera.ViewportToWorldPoint(new Vector3(0f, 1f - topHudHeight, 0f)).y;
             for (var cell = 0; cell < level.CellCount; cell++)
             {
-                if (!level.IsSlot(cell) || level.Step(cell, Direction.Up) != Level.NoCell) continue;
-                var rim = boardView.CellPosition(cell).y + 0.5f + frameRim;
+                if (!level.IsSlot(cell) || board[cell].HasValue || !IsOuterTop(level, cell)) continue;
+                var rim = boardView.TileTop(cell) - rimInset;
                 if (rim + headHeight * headShown <= hudBottom) cells.Add(cell);
             }
             return cells;
+        }
+
+        // Phía trên ô này trong cùng cột không còn ô nào của bàn.
+        private static bool IsOuterTop(Level level, int cell)
+        {
+            for (var above = cell - level.Width; above >= 0; above -= level.Width)
+            {
+                if (level.IsSlot(above)) return false;
+            }
+            return true;
         }
 
         private IEnumerator RunCat(int index, int cell, float delay)
@@ -115,7 +127,7 @@ namespace Meowtosis.Presentation
             head.transform.localScale = Vector3.one * (headHeight / normalFace.bounds.size.y);
 
             var center = boardView.CellPosition(cell);
-            var rim = center.y + 0.5f + frameRim;
+            var rim = boardView.TileTop(cell) - rimInset;
             var hidden = new Vector3(center.x, rim - headHeight * 0.5f, 0f);
             var shown = hidden + Vector3.up * (headHeight * headShown);
             head.gameObject.SetActive(true);

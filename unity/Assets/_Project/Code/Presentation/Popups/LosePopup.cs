@@ -11,7 +11,9 @@ namespace Meowtosis.Presentation
 
         event Action RestartClicked;
 
-        void Show(string message, int revivesLeft, bool canRevive);
+        void Show(string message, int revivesLeft, bool canRevive, bool showButtons = true);
+
+        void SetButtonsVisible(bool visible);
 
         void Hide();
     }
@@ -28,12 +30,19 @@ namespace Meowtosis.Presentation
 
         public event Action RestartClicked;
 
-        public void Show(string message, int revivesLeft, bool canRevive)
+        public void Show(string message, int revivesLeft, bool canRevive, bool showButtons = true)
         {
             messageText.text = message;
-            reviveCountText.text = revivesLeft.ToString();
-            reviveButton.interactable = canRevive;
+            if (reviveCountText != null) reviveCountText.text = revivesLeft.ToString();
+            if (reviveButton != null) reviveButton.interactable = canRevive;
+            SetButtonsVisible(showButtons);
             Open();
+        }
+
+        public void SetButtonsVisible(bool visible)
+        {
+            if (reviveButton != null) reviveButton.gameObject.SetActive(visible);
+            if (restartButton != null) restartButton.gameObject.SetActive(visible);
         }
 
         private void Awake()

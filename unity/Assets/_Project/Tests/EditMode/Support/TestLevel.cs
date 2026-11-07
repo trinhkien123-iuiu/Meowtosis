@@ -26,12 +26,6 @@ namespace Meowtosis.Tests
             return this;
         }
 
-        public TestLevel WithKill(Species species)
-        {
-            definition.KillSpecies = species;
-            return this;
-        }
-
         public Level Build() => new Level(definition);
 
         public Board Start() => Build().CreateStartBoard();

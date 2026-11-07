@@ -1,14 +1,15 @@
 namespace Meowtosis.Domain
 {
     // Ký hiệu ô dùng trong file level và khoá của bàn:
-    //   # lỗ (không thuộc bàn)   . ô trống   ~ ô độc
-    //   A B C D E  mèo đỏ, xanh, vàng, hồng, tím   G vi khuẩn   chữ thường = đang ngủ
+    //   # lỗ (không thuộc bàn)   . ô trống   ~ ô độc   = ô băng trơn
+    //   A B C D E  mèo đỏ, xanh, vàng, hồng, tím   chữ thường = đang ngủ
     //   ^ v < >    virus quay lên, xuống, trái, phải
     public static class LevelSymbols
     {
         public const char Hole = '#';
         public const char Empty = '.';
         public const char Toxic = '~';
+        public const char Ice = '=';
 
         public static bool TryReadSpecies(char letter, out Species species)
         {
@@ -19,7 +20,6 @@ namespace Meowtosis.Domain
                 case 'C': species = Species.Yellow; return true;
                 case 'D': species = Species.Pink; return true;
                 case 'E': species = Species.Purple; return true;
-                case 'G': species = Species.Germ; return true;
                 default: species = default; return false;
             }
         }
@@ -31,7 +31,6 @@ namespace Meowtosis.Domain
             Species.Yellow => 'C',
             Species.Pink => 'D',
             Species.Purple => 'E',
-            Species.Germ => 'G',
             _ => 'V',
         };
 

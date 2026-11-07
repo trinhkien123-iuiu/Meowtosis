@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Meowtosis.Domain
 {
     // Mọi dãy ngang hoặc dọc từ 3 quân cùng loài trở lên biến mất.
-    // Mèo ngủ và vi khuẩn cũng tính; virus không bao giờ tạo dãy.
+    // Mèo ngủ cũng tính; virus không bao giờ tạo dãy.
     public sealed class ClearRunsStep : ITurnStep
     {
         private const int MinimumRunLength = 3;

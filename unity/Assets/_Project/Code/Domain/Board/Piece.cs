@@ -1,6 +1,6 @@
 namespace Meowtosis.Domain
 {
-    // Một con mèo, vi khuẩn hoặc virus đứng trong một ô. Id đi theo quân khi nó di chuyển, để giao diện bám theo được.
+    // Một con mèo hoặc virus đứng trong một ô. Id đi theo quân khi nó di chuyển, để giao diện bám theo được.
     public readonly struct Piece
     {
         public Piece(int id, Species species, bool isAsleep = false, Direction facing = Direction.Up)
@@ -22,7 +22,7 @@ namespace Meowtosis.Domain
 
         public bool IsVirus => Species == Species.Virus;
 
-        public bool IsCat => Species != Species.Germ && Species != Species.Virus;
+        public bool IsCat => Species != Species.Virus;
 
         public bool CanSwipe => !IsAsleep && !IsVirus;
 

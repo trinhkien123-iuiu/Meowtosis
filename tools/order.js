@@ -60,9 +60,9 @@ const PHASES = [
     { name: 'virus', match: x => !has(x, 'ngủ') },
     { name: 'ngủ + virus', match: () => true },
   ],
-  [
-    { name: 'khuẩn', match: x => !has(x, 'virus') && !has(x, 'độc') },
-    { name: 'khuẩn + cơ chế khác', match: () => true },
+  [   // Băng trơn (thay khối Diệt khuẩn cũ, vi khuẩn đã bỏ 2026-11-07), rồi ôn các cơ chế đã học
+    { name: 'băng', match: x => x.def.rows.join('').includes('=') },
+    { name: 'ôn tập', match: () => true },
   ],
   [{ name: 'trộn mọi cơ chế', match: () => true }],
   [

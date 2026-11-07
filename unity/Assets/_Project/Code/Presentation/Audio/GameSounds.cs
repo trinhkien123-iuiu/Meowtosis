@@ -10,8 +10,8 @@ namespace Meowtosis.Presentation
         [SerializeField] private SoundEntry[] sounds = Array.Empty<SoundEntry>();
         [SerializeField] private AudioClip[] meows = Array.Empty<AudioClip>();
         [SerializeField, Range(0f, 1f)] private float meowVolume = 0.75f;
-        [Tooltip("Cao độ tiếng mèo theo loài: đỏ, xanh, vàng, hồng, tím, vi khuẩn.")]
-        [SerializeField] private float[] voicePitches = { 1f, 0.86f, 1.16f, 1.26f, 0.78f, 1.08f };
+        [Tooltip("Cao độ tiếng mèo theo loài: đỏ, xanh, vàng, hồng, tím.")]
+        [SerializeField] private float[] voicePitches = { 1f, 0.86f, 1.16f, 1.26f, 0.78f };
         [SerializeField] private AudioClip music;
         [SerializeField, Range(0f, 1f)] private float musicVolume = 0.3f;
 

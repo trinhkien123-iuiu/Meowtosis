@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Meowtosis.Domain
 {
     // Mỗi virus trên bàn lan thêm một ô theo hướng nó quay: vào ô trống, hoặc ăn
-    // mèo hay vi khuẩn đang đứng đó. Không lan ra ngoài bàn, qua màng chặn hay vào virus khác.
+    // mèo đang đứng đó. Không lan ra ngoài bàn, qua màng chặn hay vào virus khác.
     // Virus vừa mọc trong lượt này phải đợi lượt sau mới lan.
     public sealed class VirusSpreadStep : ITurnStep
     {

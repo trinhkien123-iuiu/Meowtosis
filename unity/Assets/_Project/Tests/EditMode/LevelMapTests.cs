@@ -70,9 +70,13 @@ namespace Meowtosis.Tests
         public void OnlyTheFirstLevelWithAMechanicIsMarkedNew()
         {
             var levels = Levels(6);
+            levels[2].Goal.Add("A.");
+            levels[4].Goal.Add("A.");
             levels[5].Goal.Add("A.");
+            levels[5].Membranes.Add(new Membrane(0, 0, Direction.Right));
             var entries = LevelMap.Build(levels, PlayerProgress.CreateNew());
-            Assert.That(entries.Select(entry => entry.IntroducesMechanic), Is.EqualTo(new[] { true, true, false, true, false, true }));
+            // Level đầu không đánh dấu: cơ chế cơ bản đã dạy ở màn hướng dẫn. Hộp mới ở level 3, màng mới ở level 6.
+            Assert.That(entries.Select(entry => entry.IntroducesMechanic), Is.EqualTo(new[] { false, false, true, false, false, true }));
         }
     }
 }

@@ -1,0 +1,24 @@
+Hình tách từ game Catdom: Color Hole 1.2.2 (com.drop.cat.color.hole.puzzle, bản APKPure) bằng AssetRipper ngày 2026-11-07.
+Asset có bản quyền của nhà phát hành Catdom, chỉ dùng tạm trong dự án cá nhân, phi thương mại, repo riêng tư. Phải thay trước khi phát hành.
+
+StarMeterLit.png    <- star.png          sao trên thanh sao khi chơi (còn sao)
+StarMeterEmpty.png  <- StarMeterLit.png  sao trống trên thanh sao: cùng dáng, đổi sang nâu xám (tools/make-empty-stars.py)
+WinStarLit.png      <- star_0.png        sao đạt được ở bảng thắng
+WinStarEmpty.png    <- WinStarLit.png    ô sao trống ở bảng thắng: cùng dáng, đổi sang nâu xám (tools/make-empty-stars.py)
+FxTwinkle.png       <- Flare01.png       tia lửa pháo hoa (sao 4 cánh)
+FxFlare.png         <- flare03.png       chớp sáng lúc pháo nổ
+FxGlow.png          <- Glow.png          quầng sáng lúc pháo nổ
+FxSoftDot.png       <- circle_soft02.png đuôi tia lửa, đầu pháo bay lên
+Bản tách đầy đủ: D:\toolGame\catdom\export\Assets\Texture2D
+
+Màn chơi theo bố cục Catdom (2026-11-07):
+BackgroundWood.png  <- bg_12.png        nền sàn gỗ
+TopBar.png          <- top bar.png      thanh trên bằng gỗ, ô tròn bên trái cho avatar
+TopBarAvatar.png    <- ava.png          mặt mèo trong ô tròn
+LevelTab.png        <- Normal.png       tab "Màn N"
+HeartPill.png       <- bg_time_4.png    ô tim (Catdom dùng cho đồng hồ)
+RoundButton.png     <- Btn_0.png        nút tròn nâu
+IconRetry.png       <- retry.png        icon chơi lại
+IconPause.png       <- pause.png        icon tạm dừng (mở Cài đặt)
+
+BoosterBarWood.png  <- bot_bter.png     nền gỗ thanh booster ở đáy màn chơi

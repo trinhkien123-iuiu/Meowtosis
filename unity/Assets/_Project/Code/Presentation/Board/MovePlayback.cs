@@ -22,6 +22,8 @@ namespace Meowtosis.Presentation
         private const float DizzyDelay = 0.23f;
         private const float ChainDelay = 0.1f;
         private const float ChainStep = 0.05f;
+        private const float GateGlowDelay = 0.08f;
+        private const float FrostStep = 0.07f;
 
         private readonly BoardView board;
         private readonly BoardEffects effects;
@@ -59,7 +61,7 @@ namespace Meowtosis.Presentation
                         board.Highlight(Enumerable.Empty<int>());
                     }
                     RemovePoisoned(poisoned);
-                    RemoveCleared(cleared);
+                    RemoveCleared(cleared, stage.Board);
                     removedAlready = true;
                     yield return new WaitForSeconds(RemovingSeconds);
                     board.ShowPieces(stage.Board, null);
@@ -90,6 +92,11 @@ namespace Meowtosis.Presentation
                 sounds.Play(SoundId.Replace);
             }
             board.ShowPieces(move.Placed, move);
+            if (move.PlacedCell != move.SourceCell)
+            {
+                effects.Sparkle(board.CellPosition(move.PlacedCell));
+            }
+            if (move.SwipeDirection.HasValue) PlayMechanics(move, move.SwipeDirection.Value);
 
             if (move.SwipeDirection.HasValue) PlaySwipe(move, parent.Value, move.SwipeDirection.Value);
             else PlayBooster(move, parent);
@@ -119,6 +126,65 @@ namespace Meowtosis.Presentation
                 if (level.TargetAt(shift.From) == pushed.Species && level.TargetAt(shift.To) != pushed.Species)
                     board.StartCoroutine(MakeDizzy(pushed.Id));
             }
+        }
+
+        // Hiệu ứng riêng của cơ chế trên đường đi của cú vuốt: màng một chiều phát hào quang khi có quân đi qua,
+        // bản sao trượt trên băng để lại tuyết ở từng ô băng đi qua.
+        private void PlayMechanics(MoveResult move, Direction direction)
+        {
+            var level = move.Before.Level;
+            var crossings = new List<KeyValuePair<int, int>>();
+            var target = level.Step(move.SourceCell, direction);
+            if (target != Level.NoCell) crossings.Add(new KeyValuePair<int, int>(move.SourceCell, target));
+            foreach (var shift in move.Pushes) crossings.Add(new KeyValuePair<int, int>(shift.From, shift.To));
+
+            // Bản sao trượt từ ô đầu tiên tới ô dừng; mỗi ô băng đi qua có một làn tuyết.
+            var frostCells = new List<int>();
+            if (target != Level.NoCell)
+            {
+                var at = target;
+                for (var guard = 0; guard < level.CellCount; guard++)
+                {
+                    if (level.IsIce(at)) frostCells.Add(at);
+                    if (at == move.PlacedCell) break;
+                    var next = level.Step(at, direction);
+                    if (next == Level.NoCell) break;
+                    crossings.Add(new KeyValuePair<int, int>(at, next));
+                    at = next;
+                }
+            }
+
+            board.StartCoroutine(PlayMechanicsLater(level, direction, crossings, frostCells));
+        }
+
+        private IEnumerator PlayMechanicsLater(Level level, Direction direction, List<KeyValuePair<int, int>> crossings, List<int> frostCells)
+        {
+            yield return new WaitForSeconds(GateGlowDelay);
+            var passed = false;
+            foreach (var crossing in crossings)
+            {
+                if (!HasMembrane(level, crossing.Key, direction)) continue;
+                var middle = (board.CellPosition(crossing.Key) + board.CellPosition(crossing.Value)) * 0.5f;
+                effects.GateGlow(middle, direction);
+                passed = true;
+            }
+            if (passed) sounds.Play(SoundId.Sparkle);
+
+            foreach (var cell in frostCells)
+            {
+                effects.Frost(board.CellPosition(cell));
+                yield return new WaitForSeconds(FrostStep);
+            }
+        }
+
+        // Có màng một chiều trên cạnh từ `cell` theo `direction` (quân đi đúng chiều của mũi tên).
+        private static bool HasMembrane(Level level, int cell, Direction direction)
+        {
+            foreach (var membrane in level.Membranes)
+            {
+                if (level.IndexOf(membrane.Row, membrane.Column) == cell && membrane.Direction == direction) return true;
+            }
+            return false;
         }
 
         // Mèo đang đứng đúng hộp mà bị đẩy ra khỏi hộp: choáng.
@@ -160,21 +226,51 @@ namespace Meowtosis.Presentation
             if (poisoned.Count > 0) sounds.Play(SoundId.Toxic);
         }
 
-        private void RemoveCleared(List<TurnEvent> cleared)
+        private void RemoveCleared(List<TurnEvent> cleared, Board boardAfterStage)
         {
-            foreach (var turnEvent in cleared)
-            {
-                board.TakePieceView(turnEvent.Piece.Id)?.PlayThenDestroy(motions.Pop);
-                var position = board.CellPosition(turnEvent.Cell);
-                var color = art.ColorOf(turnEvent.Piece.Species);
-                effects.Burst(position, color);
-                effects.Ring(position, color);
-            }
             if (cleared.Count == 0) return;
-            sounds.Play(SoundId.Clear);
-            sounds.Play(SoundId.Sparkle);
-            board.Shake();
-            effects.FloatText(board.CellPosition(cleared[cleared.Count / 2].Cell), GameTexts.Cleared(cleared.Count));
+            var species = cleared[0].Piece.Species;
+
+            // Kiểm tra xem sau đợt khử này loài mèo đó có bị tuyệt chủng trên bàn không:
+            // - isFatal = true: Khử 3 làm hết loài -> THUA (Visual/VFX/SFX nổ tung, khóc, báo động)
+            // - isFatal = false: Khử 3 chiến thuật dọn chỗ -> KHÔNG THUA (Visual/VFX/SFX pháo hoa, vui vẻ)
+            var isFatal = !boardAfterStage.Contains(species);
+
+            if (isFatal)
+            {
+                // Toàn bộ mèo còn lại trên bàn khóc / hoảng hốt
+                board.Mourn();
+
+                foreach (var turnEvent in cleared)
+                {
+                    board.TakePieceView(turnEvent.Piece.Id)?.PlayThenDestroy(motions.Pop);
+                    var position = board.CellPosition(turnEvent.Cell);
+                    effects.Smoke(position);
+                    effects.Soul(position);
+                    effects.Burst(position, new Color(1f, 0.25f, 0.25f));
+                }
+
+                sounds.Play(SoundId.AngryMeow);
+                sounds.Play(SoundId.Lose);
+                board.Shake();
+                effects.FloatText(board.CellPosition(cleared[cleared.Count / 2].Cell), $"HẾT MÈO {GameTexts.ColorName(species).ToUpper()}!");
+            }
+            else
+            {
+                foreach (var turnEvent in cleared)
+                {
+                    board.TakePieceView(turnEvent.Piece.Id)?.PlayThenDestroy(motions.Pop);
+                    var position = board.CellPosition(turnEvent.Cell);
+                    var color = art.ColorOf(turnEvent.Piece.Species);
+                    effects.Burst(position, color);
+                    effects.Ring(position, color);
+                }
+
+                sounds.Play(SoundId.Clear);
+                sounds.Play(SoundId.Sparkle);
+                board.Shake();
+                effects.FloatText(board.CellPosition(cleared[cleared.Count / 2].Cell), $"+{cleared.Count} Ô TRỐNG!");
+            }
         }
 
         // Virus chồm tới, hàm răng đớp, con mồi tím tái rồi bị nuốt; xong mới hiện virus mới ở ô đó.
@@ -209,6 +305,7 @@ namespace Meowtosis.Presentation
             {
                 board.PieceViewOf(turnEvent.Piece.Id)?.PlayMotion(motions.Waking);
                 effects.Sparkle(board.CellPosition(turnEvent.Cell));
+                effects.Ring(board.CellPosition(turnEvent.Cell), new Color(1f, 0.95f, 0.7f));
             }
             sounds.PlayMeow(woken[0].Piece.Species, 0.73f, 1.15f);
         }
@@ -226,6 +323,7 @@ namespace Meowtosis.Presentation
                 if (wasDone || !isDone) continue;
                 sounds.Play(SoundId.BoxDone);
                 effects.Sparkle(board.CellPosition(cell));
+                effects.Ring(board.CellPosition(cell), art.ColorOf(target.Value));
             }
         }
     }

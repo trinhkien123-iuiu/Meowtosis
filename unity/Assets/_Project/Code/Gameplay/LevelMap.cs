@@ -41,7 +41,7 @@ namespace Meowtosis.Gameplay
             var entries = new List<LevelMapEntry>(levels.Count);
             for (var index = 0; index < levels.Count; index++)
             {
-                var mechanics = MechanicDetector.In(levels[index], index);
+                var mechanics = MechanicDetector.In(levels[index]);
                 var isNew = mechanics.Count(seenMechanics.Add) > 0;
                 entries.Add(new LevelMapEntry(index, progress.BestStarsFor(levels[index].Id), index <= current, index == current, isNew));
             }

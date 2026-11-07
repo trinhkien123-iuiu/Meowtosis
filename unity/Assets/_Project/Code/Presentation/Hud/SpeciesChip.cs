@@ -23,7 +23,16 @@ namespace Meowtosis.Presentation
         {
             species = shownSpecies;
             icon.sprite = sprite;
+            icon.color = Color.white;
             label.text = text;
+        }
+
+        public void ShowCount(Species shownSpecies, Sprite sprite, int count)
+        {
+            species = shownSpecies;
+            icon.sprite = sprite;
+            icon.color = Color.white;
+            label.text = count.ToString();
         }
 
         private void Awake()

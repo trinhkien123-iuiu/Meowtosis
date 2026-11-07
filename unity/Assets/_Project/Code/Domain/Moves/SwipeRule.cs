@@ -7,6 +7,8 @@ namespace Meowtosis.Domain
     // Ô đó có quân thì cả dãy bị đẩy tới ô trống gần nhất. Hết chỗ đẩy
     // (mép bàn, lỗ, màng chặn, hoặc mèo ngủ đứng như bức tường) thì bản sao thay thế quân kề.
     // Không vuốt được mèo ngủ và virus; bản sao không bao giờ thay thế mèo ngủ hoặc quân cùng loài.
+    // Băng trơn: bản sao vào ô băng đang trống thì trượt tiếp theo hướng vuốt, qua các ô băng trống, tới khi gặp vật cản
+    // (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng (dừng ở ô thường đầu tiên). Dãy bị đẩy không trượt.
     public sealed class SwipeRule
     {
         private readonly TurnResolver turnResolver;
@@ -18,6 +20,19 @@ namespace Meowtosis.Domain
 
         public bool TrySwipe(Board board, Move move, out MoveResult result) =>
             TrySwipe(board, board.Level.IndexOf(move.Row, move.Column), move.Direction, out result);
+
+        // Ô bản sao dừng lại khi vào ô trống `start`: đứng yên nếu không phải băng, trên băng thì trượt tiếp.
+        private static int SlideFrom(Level level, Piece?[] pieces, int start, Direction direction)
+        {
+            var at = start;
+            while (level.IsIce(at))
+            {
+                var next = level.Step(at, direction);
+                if (next == Level.NoCell || pieces[next].HasValue) break;
+                at = next;
+            }
+            return at;
+        }
 
         public bool TrySwipe(Board board, int cell, Direction direction, out MoveResult result)
         {
@@ -58,13 +73,14 @@ namespace Meowtosis.Domain
                 replaced = neighbour;
             }
 
-            pieces[target] = new Piece(board.NextPieceId, parent.Species);
+            var landing = line.Count == 0 && hasRoom ? SlideFrom(level, pieces, target, direction) : target;
+            pieces[landing] = new Piece(board.NextPieceId, parent.Species);
             var placed = board.With(pieces, board.NextPieceId + 1);
-            result = new MoveResult(board, placed, cell, target, pushes, replaced, turnResolver.Resolve(placed), direction);
+            result = new MoveResult(board, placed, cell, landing, pushes, replaced, turnResolver.Resolve(placed), direction);
             return true;
         }
 
-        // Mọi cú vuốt người chơi có thể thử: mỗi mèo thức hoặc vi khuẩn, mỗi hướng (có thể bị từ chối).
+        // Mọi cú vuốt người chơi có thể thử: mỗi mèo thức, mỗi hướng (có thể bị từ chối).
         public static IEnumerable<(int Cell, Direction Direction)> Candidates(Board board)
         {
             for (var cell = 0; cell < board.CellCount; cell++)

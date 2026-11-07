@@ -125,10 +125,6 @@ ex('V6', 'virus lan vào ô độc thì chết, nhưng con gốc vẫn còn', ()
 });
 ex('V7', 'virus bị màng chặn thì không lan', () => assert.strictEqual(viruses(play({ rows: ['A..', '>..'], oneway: [[1, 1, 'left']] }, [[0, 0, 'r']]).cells), 1));
 ex('V8', 'virus ăn con mèo cuối cùng của một màu là thua', () => assert(play({ rows: ['B.', '>A'] }, [[0, 0, 'r']]).lost));
-ex('V9', 'virus ăn được vi khuẩn (nhưng virus vẫn còn đó)', () => {
-  const g = play({ rows: ['A.', '>G'], kill: 'G' }, [[0, 0, 'r']]);
-  assert.deepStrictEqual(g.rows, ['AA', '>>']);
-});
 ex('V10', 'không vuốt được virus; virus bị đẩy theo dãy như mọi con khác', () => {
   assert.strictEqual(play({ rows: ['>.', 'A.'] }, [[0, 0, 'r']]).last, null);
   assert.deepStrictEqual(play({ rows: ['A>.', '...'] }, [[0, 0, 'r']]).rows, ['AA>', '...']);
@@ -139,14 +135,17 @@ ex('V11', 'virus không tạo dãy 3 và không tính là ô đã lấp', () => 
   assert(!ctx.isFull(lv, lv.init));
 });
 
-// --- Vi khuẩn ---
-ex('G1', 'vi khuẩn vuốt được: nó tự nhân lên', () => assert.deepStrictEqual(play({ rows: ['G.', 'A.'], kill: 'G' }, [[0, 0, 'r']]).rows, ['GG', 'A.']));
-ex('G2', '3 vi khuẩn thẳng hàng bị khử', () => assert.deepStrictEqual(play({ rows: ['GG.', 'A..'], kill: 'G' }, [[0, 1, 'r']]).rows, ['...', 'A..']));
-ex('G3', 'bản sao thay thế được vi khuẩn', () => assert.deepStrictEqual(play({ rows: ['AG', 'A.'], kill: 'G' }, [[0, 0, 'r']]).rows, ['AA', 'A.']));
-ex('G4', 'vi khuẩn chết hết không phải là thua; còn vi khuẩn thì chưa thắng', () => {
-  const lv = ctx.parseLevel({ rows: ['AG'], kill: 'G' });
-  assert(!ctx.isLost(lv, lv.init) && !ctx.isComplete(lv, lv.init));
+// --- Băng trơn ---
+ex('I1', 'bản sao vào ô băng trống thì trượt tới khi ra khỏi băng', () => assert.deepStrictEqual(play({ rows: ['A===.'] }, [[0, 0, 'r']]).rows, ['A...A']));
+ex('I2', 'trượt gặp mèo khác thì dừng ngay trước nó', () => assert.deepStrictEqual(play({ rows: ['A==A'] }, [[0, 0, 'r']]).rows, ['A.AA']));
+ex('I3', 'ra khỏi băng thì dừng ở ô thường đầu tiên', () => assert.deepStrictEqual(play({ rows: ['A=.='] }, [[0, 0, 'r']]).rows, ['A.A.']));
+ex('I4', 'trượt vào ô độc thì chết', () => {
+  const g = play({ rows: ['A==~'] }, [[0, 0, 'r']]);
+  assert.deepStrictEqual(g.rows, ['A...']);
+  assert(!g.lost);
 });
+ex('I5', 'dãy bị đẩy không trượt, chỉ đi 1 ô', () => assert.deepStrictEqual(play({ rows: ['AB=='] }, [[0, 0, 'r']]).rows, ['AAB.']));
+ex('I6', 'virus lan lên băng cũng chỉ 1 ô', () => assert.deepStrictEqual(play({ rows: ['>==', 'A..'] }, [[1, 0, 'r']]).rows, ['>>.', 'AA.']));
 
 // --- Booster ---
 ex('B1', 'Đột biến: không đổi được virus, không đổi con cuối cùng của một màu', () => {
@@ -155,9 +154,7 @@ ex('B1', 'Đột biến: không đổi được virus, không đổi con cuối 
   assert.strictEqual(ctx.mutate(lv, lv.init, 0, 'B'), null);
   assert(ctx.mutate(lv, lv.init, 2, 'A'));
 });
-ex('B2', 'Đột biến biến vi khuẩn thành mèo; biến mèo ngủ thành mèo thức', () => {
-  const lv = ctx.parseLevel({ rows: ['AG', 'Bb'], kill: 'G' });
-  assert.strictEqual(ctx.mutate(lv, lv.init, 1, 'A').cells[1].color, 'A');
+ex('B2', 'Đột biến biến mèo ngủ thành mèo thức', () => {
   const lv2 = ctx.parseLevel({ rows: ['A.', 'Bc', 'C.'] });
   const r = ctx.mutate(lv2, lv2.init, 3, 'A');
   assert(r && !r.cells[3].sleep);

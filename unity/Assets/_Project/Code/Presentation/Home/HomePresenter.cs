@@ -36,6 +36,7 @@ namespace Meowtosis.Presentation
             map.LevelClicked += OnLevelClicked;
             map.BackClicked += OnMapBack;
             map.ResetClicked += OnMapReset;
+            map.UnlockAllClicked += OnMapUnlockAll;
         }
 
         public void Dispose()
@@ -47,6 +48,7 @@ namespace Meowtosis.Presentation
             map.LevelClicked -= OnLevelClicked;
             map.BackClicked -= OnMapBack;
             map.ResetClicked -= OnMapReset;
+            map.UnlockAllClicked -= OnMapUnlockAll;
         }
 
         public void Start()
@@ -103,6 +105,21 @@ namespace Meowtosis.Presentation
             fresh.MusicOn = progress.MusicOn;
             store.Save(fresh);
             navigator.OpenMap();
+        }
+
+        // Bản thử: mở khoá toàn bộ các level trên bản đồ.
+        private void OnMapUnlockAll()
+        {
+            foreach (var level in levels)
+            {
+                if (progress.BestStarsFor(level.Id) == 0)
+                {
+                    progress.RecordWin(level.Id, 1);
+                }
+            }
+            store.Save(progress);
+            sound.Play(SoundId.Win);
+            map.Show(LevelMap.Build(levels, progress));
         }
 
         private void OnLevelClicked(int index)

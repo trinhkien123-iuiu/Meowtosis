@@ -23,10 +23,13 @@ namespace Meowtosis.Presentation
         private LevelRun run;
         private int levelIndex;
         private bool isPlayingMove;
+        private bool isSpotlighting;
         private bool isHintShowing;
         private Action pendingAction;
         private float pendingDelay;
         private float secondsSinceClockUpdate;
+        private string trapExplanation;
+        private int cheatLevelIndex;
 
         public GamePresenter(IReadOnlyList<LevelDefinition> levels, GameRules rules, PlayerProgress progress,
             IProgressStore store, IClock clock, GameViews views, ISceneNavigator navigator)
@@ -43,7 +46,7 @@ namespace Meowtosis.Presentation
         }
 
         private bool CanPlay => run.Session.Status == SessionStatus.Playing && progress.Hearts > 0
-            && !isPlayingMove && pendingAction == null && !views.Mechanic.IsOpen;
+            && !isPlayingMove && !isSpotlighting && pendingAction == null && !views.Mechanic.IsOpen && !views.Cheat.IsOpen;
 
         // Người chơi đang rảnh, không có bước hướng dẫn hay bảng nào mở: lúc này mới có sự kiện vui.
         private bool IsIdle => CanPlay && !targeting.IsActive && run.GuidedStep == null
@@ -82,46 +85,45 @@ namespace Meowtosis.Presentation
             progress.LastLevelIndex = levelIndex;
             store.Save(progress);
             run = new LevelRun(levels[levelIndex], progress, store, clock);
+            if (levels[levelIndex].Trap != null && progress.BestStarsFor(levels[levelIndex].Id) == 0)
+                run.EnableTrap();
+            trapExplanation = null;
+            isSpotlighting = false;
             pendingAction = null;
             isPlayingMove = false;
             isHintShowing = false;
             views.Win.Hide();
             views.Lose.Hide();
+            views.Board.ClearSpotlight();
             views.Board.Build(run.Session.Level);
             targeting.Cancel();
             views.Board.Show(run.Session.Board);
             QueueNewMechanics();
-            ShowNextMechanic();
+            views.Mechanic.Hide();
             RefreshHud(true);
-            if (progress.Hearts == 0 && !views.Mechanic.IsOpen) ShowNoHearts();
+            if (progress.Hearts == 0) ShowNoHearts();
         }
 
-        // Thẻ "Cơ chế mới": mỗi cơ chế chỉ hiện một lần, lúc mở level đầu tiên có nó, trước khi người chơi đi nước nào.
+        // Đánh dấu cơ chế đã gặp trong progress để lưu dữ liệu, không hiện popup làm gián đoạn người chơi.
         private void QueueNewMechanics()
         {
-            foreach (var mechanic in MechanicDetector.In(run.Session.Definition, levelIndex))
+            foreach (var mechanic in MechanicDetector.In(run.Session.Definition))
             {
-                if (progress.MarkMechanicSeen(mechanic.ToString())) mechanicCards.Enqueue(mechanic);
+                progress.MarkMechanicSeen(mechanic.ToString());
             }
             store.Save(progress);
         }
 
         private void ShowNextMechanic()
         {
-            if (mechanicCards.Count > 0)
-            {
-                views.Mechanic.Show(mechanicCards.Dequeue());
-                views.Sound.Play(SoundId.PopupOpen);
-                return;
-            }
             views.Mechanic.Hide();
         }
 
         private void OnMechanicContinue()
         {
-            ShowNextMechanic();
+            views.Mechanic.Hide();
             RefreshHud(false);
-            if (progress.Hearts == 0 && !views.Mechanic.IsOpen) ShowNoHearts();
+            if (progress.Hearts == 0) ShowNoHearts();
         }
 
         private void Play(IGameCommand command)
@@ -140,8 +142,7 @@ namespace Meowtosis.Presentation
             isPlayingMove = false;
             if (outcome.Stars > 0)
             {
-                views.Board.Celebrate();
-                Later(() =>
+                views.Board.Celebrate(() =>
                 {
                     views.Sound.Play(SoundId.PopupOpen);
                     views.Win.Show(outcome.Stars, outcome.CoinsEarned, progress.Coins);
@@ -150,7 +151,13 @@ namespace Meowtosis.Presentation
             else if (outcome.SprungTrap)
             {
                 views.Board.Mourn();
-                Later(RestartAfterTrap);
+                views.Sound.Play(SoundId.Lose);
+                Later(() =>
+                {
+                    views.Sound.Play(SoundId.PopupOpen);
+                    views.Lose.Show(GameTexts.Lost(LossReport.Of(outcome.Move)), 0, false, showButtons: false);
+                    Later(RestartAfterTrap, 1.8f);
+                });
             }
             else if (outcome.LostHeart)
             {
@@ -158,32 +165,86 @@ namespace Meowtosis.Presentation
                 Later(() => ShowLose(outcome.Move));
             }
             else if (run.Session.Definition.Tutorial.Count > 0 && run.Session.MovesMade == run.Session.Definition.Tutorial.Count)
-                views.Hud.ShowToast(GameTexts.TutorialDone);
+            {
+                if (run.Session.Definition.Trap != null)
+                {
+                    int survivorCell = -1;
+                    for (int i = 0; i < run.Session.Board.CellCount; i++)
+                    {
+                        if (run.Session.Board[i] is Piece piece && piece.IsCat && piece.Species == Species.Red)
+                        {
+                            survivorCell = i;
+                            break;
+                        }
+                    }
+
+                    isSpotlighting = true;
+                    views.Board.Spotlight(survivorCell >= 0 ? survivorCell : run.Session.Level.IndexOf(1, 1));
+                    trapExplanation = "Đảm bảo mỗi màu >= 1 mèo";
+                    RefreshHud(true);
+                    Later(() =>
+                    {
+                        views.Board.ClearSpotlight();
+                        trapExplanation = "Hãy thử lấp đầy bảng mà không làm mất mèo nhé";
+                        isSpotlighting = false;
+                        RefreshHud(true);
+                        Later(() =>
+                        {
+                            trapExplanation = null;
+                            RefreshHud(true);
+                        }, 2.5f);
+                    }, 2.5f);
+                }
+                else
+                {
+                    views.Hud.ShowToast(GameTexts.TutorialDone);
+                }
+            }
             RefreshHud(false);
         }
 
-        // Người chơi vừa tự thấy luật qua nước bẫy: nhắc lại một câu, đưa bàn về đầu để chơi thật.
+        // Người chơi vừa tự thấy luật qua nước bẫy: đóng bảng thua, đưa bàn về đầu và hướng dẫn chơi thật.
         private void RestartAfterTrap()
         {
+            views.Lose.Hide();
             run.FinishTrap();
             views.Board.Show(run.Session.Board);
-            views.Hud.ShowToast(GameTexts.TrapSeen);
+            trapExplanation = "Nhưng nếu bạn làm như này thì sao?";
             RefreshHud(true);
         }
 
         private void OnCellSwiped(int cell, Direction direction)
         {
+            if (isSpotlighting) return;
             if (!CanPlay || targeting.IsActive || !run.Session.Board[cell].HasValue) return;
-            var step = run.GuidedStep;
-            if (step != null && (run.Session.Level.IndexOf(step.Move.Row, step.Move.Column) != cell || step.Move.Direction != direction))
+
+            // Khóa các nước đi khác trong giai đoạn hướng dẫn/onboarding, chỉ cho đi đúng nước được chỉ dẫn
+            if (run.GuidedStep != null)
             {
-                views.Board.Refuse(cell);
-                views.Hud.ShowToast(GameTexts.SwipeLikeTheHand);
-                return;
+                var step = run.GuidedStep;
+                var expectedCell = run.Session.Level.IndexOf(step.Move.Row, step.Move.Column);
+                if (cell != expectedCell || direction != step.Move.Direction)
+                {
+                    views.Board.Refuse(cell);
+                    return;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(trapExplanation) && trapExplanation != "Nhưng nếu bạn làm như này thì sao?")
+            {
+                trapExplanation = null;
+                RefreshHud(true);
             }
 
             var command = new SwipeCommand(rules.Swipes, cell, direction);
-            if (command.TryApply(run.Session.Board, out _)) Play(command);
+            if (command.TryApply(run.Session.Board, out _))
+            {
+                if (trapExplanation == "Nhưng nếu bạn làm như này thì sao?")
+                {
+                    trapExplanation = null;
+                }
+                Play(command);
+            }
             else
             {
                 views.Board.Refuse(cell);
@@ -193,7 +254,7 @@ namespace Meowtosis.Presentation
 
         private void OnCellTapped(int cell)
         {
-            if (!CanPlay) return;
+            if (!CanPlay || run.GuidedStep != null) return;
             if (!targeting.IsActive)
             {
                 views.Board.Pet(cell);
@@ -212,12 +273,7 @@ namespace Meowtosis.Presentation
 
         private void OnBoosterClicked(BoosterKind kind)
         {
-            if (!CanPlay) return;
-            if (run.GuidedStep != null)
-            {
-                views.Hud.ShowToast(GameTexts.FollowTheHand);
-                return;
-            }
+            if (!CanPlay || run.GuidedStep != null) return;
             ClearHint();
             if (targeting.Kind == kind) targeting.Cancel();
             else if (progress.BoosterCount(kind) > 0) targeting.Begin(kind, run.Session.Board);
@@ -248,12 +304,7 @@ namespace Meowtosis.Presentation
 
         private void OnHintClicked()
         {
-            if (!CanPlay) return;
-            if (run.GuidedStep != null)
-            {
-                views.Hud.ShowToast(GameTexts.FollowTheHand);
-                return;
-            }
+            if (!CanPlay || run.GuidedStep != null) return;
             targeting.Cancel();
             // Mũi tên còn đang hiện thì đã trả lượt cho gợi ý này rồi, bấm lại không trừ thêm.
             if (isHintShowing) return;
@@ -292,11 +343,16 @@ namespace Meowtosis.Presentation
 
         private void OnRestartClicked()
         {
+            trapExplanation = null;
+            isSpotlighting = false;
+            views.Board.ClearSpotlight();
             views.Lose.Hide();
             views.Settings.Hide();
             targeting.Cancel();
             ClearHint();
             run.Restart();
+            if (levels[levelIndex].Trap != null && progress.BestStarsFor(levels[levelIndex].Id) == 0)
+                run.EnableTrap();
             views.Board.Show(run.Session.Board);
             RefreshHud(true);
             if (progress.Hearts == 0) ShowNoHearts();
@@ -335,19 +391,7 @@ namespace Meowtosis.Presentation
             ShowSettings();
         }
 
-        private void OnPreviousLevelClicked()
-        {
-            OpenLevel(levelIndex - 1);
-            ShowSettings();
-        }
-
-        private void OnNextLevelClicked()
-        {
-            OpenLevel(levelIndex + 1);
-            ShowSettings();
-        }
-
-        // Bản thử: nạp đầy tim và booster.
+        // Bản thử (bảng cheat): nạp đầy tim và booster.
         private void OnRefillClicked()
         {
             progress.RefillHearts();
@@ -358,7 +402,96 @@ namespace Meowtosis.Presentation
             RefreshHud(false);
         }
 
-        private void ShowSettings() => views.Settings.Show(progress.SoundOn, progress.MusicOn, levelIndex + 1);
+        // ---- Bảng cheat của bản thử (chạm nhanh 3 lần vào ô Lv) ----
+
+        private const int CheatCoinAmount = 500;
+
+        private void OnCheatOpened()
+        {
+            cheatLevelIndex = levelIndex;
+            views.Sound.Play(SoundId.PopupOpen);
+            ShowCheat();
+        }
+
+        private void ShowCheat() => views.Cheat.Show(cheatLevelIndex + 1, levels.Count);
+
+        // Thắng ngay với 3 sao: ghi tiến độ như thắng thật, diễn hoạt cảnh thắng rồi hiện bảng thắng.
+        private void OnCheatWin()
+        {
+            views.Cheat.Hide();
+            if (run.Session.Status != SessionStatus.Playing || isPlayingMove) return;
+            targeting.Cancel();
+            ClearHint();
+            views.Board.HideTutorial();
+            views.Board.ClearFocus();
+            var coins = progress.RecordWin(run.Session.Definition.Id, 3);
+            store.Save(progress);
+            isPlayingMove = true;
+            views.Board.Celebrate(() =>
+            {
+                isPlayingMove = false;
+                views.Sound.Play(SoundId.PopupOpen);
+                views.Win.Show(3, coins, progress.Coins);
+            });
+        }
+
+        // Đi giúp một nước đúng (lấy từ Gợi ý, không trừ lượt). Đang ở bước hướng dẫn thì đi đúng nước hướng dẫn.
+        private void OnCheatSolveStep()
+        {
+            views.Cheat.Hide();
+            if (!CanPlay) return;
+            var step = run.GuidedStep;
+            Move move;
+            if (step != null) move = step.Move;
+            else
+            {
+                var hint = rules.Hints.Suggest(run.Session, HintAdvisor.DefaultTimeLimit);
+                if (hint.Kind != HintKind.Move)
+                {
+                    views.Hud.ShowToast(GameTexts.CheatNoMove);
+                    return;
+                }
+                move = hint.Move;
+            }
+            Play(new SwipeCommand(rules.Swipes, run.Session.Level.IndexOf(move.Row, move.Column), move.Direction));
+        }
+
+        private void OnCheatLevelStepped(int delta)
+        {
+            cheatLevelIndex = Math.Max(0, Math.Min(levels.Count - 1, cheatLevelIndex + delta));
+            ShowCheat();
+        }
+
+        private void OnCheatOpenLevel()
+        {
+            views.Cheat.Hide();
+            OpenLevel(cheatLevelIndex);
+        }
+
+        private void OnCheatCoins()
+        {
+            progress.AddCoins(CheatCoinAmount);
+            store.Save(progress);
+            views.Sound.Play(SoundId.Coin);
+            views.Hud.ShowToast(GameTexts.CheatCoins(progress.Coins));
+        }
+
+        private void OnCheatUnlockAll()
+        {
+            foreach (var level in levels) progress.MarkPassed(level.Id);
+            store.Save(progress);
+            views.Hud.ShowToast(GameTexts.CheatUnlocked);
+        }
+
+        // Chơi lại màn hướng dẫn đầu game: xoá dấu đã xong rồi mở lại màn chơi (GameBootstrap chạy hướng dẫn trước).
+        private void OnCheatOnboarding()
+        {
+            progress.HasFinishedOnboarding = false;
+            store.Save(progress);
+            navigator.OpenGame();
+        }
+
+        private void ShowSettings() => views.Settings.Show(progress.SoundOn, progress.MusicOn);
 
         private void ShowLose(MoveResult lastMove) => views.Lose.Show(GameTexts.Lost(LossReport.Of(lastMove)),
             progress.BoosterCount(BoosterKind.Revive), run.CanRevive);
@@ -382,8 +515,8 @@ namespace Meowtosis.Presentation
             var session = run.Session;
             hud.ShowLevel(levelIndex + 1);
             ShowHearts();
-            hud.ShowStars(run.Stars, GameTexts.Moves(session.MovesMade, session.Definition.Par), instantly);
-            hud.ShowGoal(GameTexts.Goal(GoalProgress.Of(session.Board)));
+            hud.ShowStars(run.Stars, instantly);
+            hud.ShowGoal(GoalProgress.Of(session.Board), instantly);
             hud.ShowTip(CurrentTip());
             hud.ShowSpecies(SpeciesCensus.Of(session.Board));
             hud.ShowBooster(BoosterKind.Mutate, progress.BoosterCount(BoosterKind.Mutate), targeting.Kind == BoosterKind.Mutate);
@@ -397,31 +530,42 @@ namespace Meowtosis.Presentation
         // Bàn tay và lớp tối của bước hướng dẫn; tắt khi đang diễn nước đi hoặc đang mở thẻ cơ chế.
         private void RefreshTutorial()
         {
-            var step = run.GuidedStep;
-            if (step == null || !CanPlay)
+            if (isSpotlighting)
             {
                 views.Board.HideTutorial();
                 return;
             }
+            var step = run.GuidedStep;
+            if (step == null || !CanPlay)
+            {
+                views.Board.HideTutorial();
+                // Giữ vùng sáng trong lúc nước hướng dẫn đang diễn, để thấy rõ kết quả của cơ chế
+                if (!isPlayingMove) views.Board.ClearFocus();
+                return;
+            }
+            // Làm tối phần không liên quan, chừa sáng các ô nước hướng dẫn chạm tới để thấy rõ cơ chế làm gì
+            if (rules.Swipes.TrySwipe(run.Session.Board, step.Move, out var preview))
+                views.Board.Focus(MoveFocus.CellsOf(preview, run.Session.Level));
             views.Board.ShowTutorial(run.Session.Level.IndexOf(step.Move.Row, step.Move.Column), step.Move.Direction);
         }
 
-        // Đang chọn booster thì nhắc bước chọn; rồi lời hướng dẫn của bước hiện tại; rồi mẹo đầu màn (tắt sau nước đầu).
+        // Bỏ bong bóng chữ giải thích cơ chế dài dòng; chỉ nhắc bước khi đang chọn mục tiêu cho booster.
         private string CurrentTip()
         {
+            if (!string.IsNullOrEmpty(trapExplanation)) return trapExplanation;
             if (targeting.IsActive) return targeting.Prompt;
-            var session = run.Session;
-            if (session.Status != SessionStatus.Playing) return "";
             var step = run.GuidedStep;
-            if (step != null) return step.Text;
-            return session.MovesMade == 0 ? session.Definition.Tip : "";
+            if (step != null && !string.IsNullOrEmpty(step.Text)) return step.Text;
+            return "";
         }
 
-        private void Later(Action action)
+        private void Later(Action action, float delay)
         {
             pendingAction = action;
-            pendingDelay = ResultPopupDelay;
+            pendingDelay = delay;
         }
+
+        private void Later(Action action) => Later(action, ResultPopupDelay);
 
         private void Subscribe(bool subscribe)
         {
@@ -432,6 +576,16 @@ namespace Meowtosis.Presentation
                 board.CellSwiped += OnCellSwiped;
                 board.CellTapped += OnCellTapped;
                 hud.SettingsClicked += OnSettingsClicked;
+                hud.RestartClicked += OnRestartClicked;
+                hud.LevelBadgeTripleTapped += OnCheatOpened;
+                views.Cheat.WinClicked += OnCheatWin;
+                views.Cheat.SolveStepClicked += OnCheatSolveStep;
+                views.Cheat.LevelStepped += OnCheatLevelStepped;
+                views.Cheat.OpenLevelClicked += OnCheatOpenLevel;
+                views.Cheat.RefillClicked += OnRefillClicked;
+                views.Cheat.CoinsClicked += OnCheatCoins;
+                views.Cheat.UnlockAllClicked += OnCheatUnlockAll;
+                views.Cheat.OnboardingClicked += OnCheatOnboarding;
                 hud.HintClicked += OnHintClicked;
                 hud.BoosterClicked += OnBoosterClicked;
                 hud.ColorChosen += OnColorChosen;
@@ -443,9 +597,6 @@ namespace Meowtosis.Presentation
                 views.Settings.SoundToggled += OnSoundToggled;
                 views.Settings.MusicToggled += OnMusicToggled;
                 views.Settings.RestartClicked += OnRestartClicked;
-                views.Settings.PreviousLevelClicked += OnPreviousLevelClicked;
-                views.Settings.NextLevelClicked += OnNextLevelClicked;
-                views.Settings.RefillClicked += OnRefillClicked;
                 views.NoHearts.RefillClicked += OnRefillClicked;
                 views.Mechanic.ContinueClicked += OnMechanicContinue;
             }
@@ -454,6 +605,16 @@ namespace Meowtosis.Presentation
                 board.CellSwiped -= OnCellSwiped;
                 board.CellTapped -= OnCellTapped;
                 hud.SettingsClicked -= OnSettingsClicked;
+                hud.RestartClicked -= OnRestartClicked;
+                hud.LevelBadgeTripleTapped -= OnCheatOpened;
+                views.Cheat.WinClicked -= OnCheatWin;
+                views.Cheat.SolveStepClicked -= OnCheatSolveStep;
+                views.Cheat.LevelStepped -= OnCheatLevelStepped;
+                views.Cheat.OpenLevelClicked -= OnCheatOpenLevel;
+                views.Cheat.RefillClicked -= OnRefillClicked;
+                views.Cheat.CoinsClicked -= OnCheatCoins;
+                views.Cheat.UnlockAllClicked -= OnCheatUnlockAll;
+                views.Cheat.OnboardingClicked -= OnCheatOnboarding;
                 hud.HintClicked -= OnHintClicked;
                 hud.BoosterClicked -= OnBoosterClicked;
                 hud.ColorChosen -= OnColorChosen;
@@ -465,9 +626,6 @@ namespace Meowtosis.Presentation
                 views.Settings.SoundToggled -= OnSoundToggled;
                 views.Settings.MusicToggled -= OnMusicToggled;
                 views.Settings.RestartClicked -= OnRestartClicked;
-                views.Settings.PreviousLevelClicked -= OnPreviousLevelClicked;
-                views.Settings.NextLevelClicked -= OnNextLevelClicked;
-                views.Settings.RefillClicked -= OnRefillClicked;
                 views.NoHearts.RefillClicked -= OnRefillClicked;
                 views.Mechanic.ContinueClicked -= OnMechanicContinue;
             }

@@ -15,6 +15,8 @@ namespace Meowtosis.Presentation
 
         event Action ResetClicked;
 
+        event Action UnlockAllClicked;
+
         void Show(IReadOnlyList<LevelMapEntry> entries);
 
         void Hide();
@@ -34,6 +36,8 @@ namespace Meowtosis.Presentation
         [SerializeField] private Button backButton;
         [Tooltip("Bản thử: xoá tiến độ để chơi lại từ đầu. Gỡ trước khi phát hành.")]
         [SerializeField] private Button resetButton;
+        [Tooltip("Bản thử: mở khoá toàn bộ các level.")]
+        [SerializeField] private Button unlockLevelButton;
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private RectTransform content;
 
@@ -76,6 +80,8 @@ namespace Meowtosis.Presentation
 
         public event Action ResetClicked;
 
+        public event Action UnlockAllClicked;
+
         public void Show(IReadOnlyList<LevelMapEntry> entries)
         {
             gameObject.SetActive(true);
@@ -114,9 +120,21 @@ namespace Meowtosis.Presentation
 
         private void Awake()
         {
-            backButton.onClick.AddListener(() => BackClicked?.Invoke());
-            resetButton.onClick.AddListener(() => ResetClicked?.Invoke());
+            if (backButton != null) backButton.onClick.AddListener(() => BackClicked?.Invoke());
+            if (resetButton != null) resetButton.onClick.AddListener(() => ResetClicked?.Invoke());
+            if (unlockLevelButton == null)
+            {
+                var found = transform.Find("MapSafeArea/UnlockLevelButton");
+                if (found != null) unlockLevelButton = found.GetComponent<Button>();
+            }
+            if (unlockLevelButton != null)
+            {
+                unlockLevelButton.onClick.AddListener(UnlockAll);
+            }
         }
+
+        // Gọi từ button Unlock trong Inspector (UnityEvent OnClick) hoặc code
+        public void UnlockAll() => UnlockAllClicked?.Invoke();
 
         private void Build(int count)
         {

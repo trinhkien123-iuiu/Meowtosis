@@ -1,0 +1,1302 @@
+[
+ {
+  "name": "độc 3x3 AB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 200,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 3x3 AB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 201,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 3x3 AAB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 202,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 3x3 AAB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 203,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 3x3 ABC 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 204,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 3x3 ABC 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 205,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 3x3 AABB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 206,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 3x3 AABB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 207,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x3 AB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 208,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x3 AB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 209,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x3 AAB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 210,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x3 AAB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 211,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x3 ABC 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 212,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x3 ABC 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 213,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x3 AABB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 214,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x3 AABB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 215,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x2 AB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 216,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 2,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x2 AB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 217,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 2,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x2 AAB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 218,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 2,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x2 AAB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 219,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 2,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x2 ABC 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 220,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 2,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x2 ABC 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 221,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 2,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x2 AABB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 222,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 2,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x2 AABB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 223,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 2,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x4 AB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 224,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x4 AB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 225,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x4 AAB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 226,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x4 AAB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 227,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x4 ABC 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 228,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x4 ABC 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 229,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x4 AABB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 230,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 4x4 AABB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 231,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x3 AB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 232,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x3 AB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 233,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x3 AAB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 234,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x3 AAB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 235,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x3 ABC 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 236,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x3 ABC 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 237,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x3 AABB 1",
+  "strict": true,
+  "ms": 90000,
+  "seed": 238,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 1,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc 5x3 AABB 2",
+  "strict": true,
+  "ms": 90000,
+  "seed": 239,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AABB",
+  "toxic": 2,
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 3x3 Aab",
+  "strict": true,
+  "ms": 90000,
+  "seed": 240,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "Aab",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 3x3 AaB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 241,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AaB",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 3x3 AABb",
+  "strict": true,
+  "ms": 90000,
+  "seed": 242,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AABb",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 3x3 ABcC",
+  "strict": true,
+  "ms": 90000,
+  "seed": 243,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "ABcC",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 3x3 AAbB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 244,
+  "top": 5,
+  "shape": {
+   "w": 3,
+   "h": 3,
+   "holes": [
+    0,
+    2
+   ]
+  },
+  "cells": "AAbB",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x3 Aab",
+  "strict": true,
+  "ms": 90000,
+  "seed": 245,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "Aab",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x3 AaB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 246,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AaB",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x3 AABb",
+  "strict": true,
+  "ms": 90000,
+  "seed": 247,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AABb",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x3 ABcC",
+  "strict": true,
+  "ms": 90000,
+  "seed": 248,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "ABcC",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x3 AAbB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 249,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AAbB",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x4 Aab",
+  "strict": true,
+  "ms": 90000,
+  "seed": 250,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "Aab",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x4 AaB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 251,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AaB",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x4 AABb",
+  "strict": true,
+  "ms": 90000,
+  "seed": 252,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AABb",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x4 ABcC",
+  "strict": true,
+  "ms": 90000,
+  "seed": 253,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "ABcC",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 4x4 AAbB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 254,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AAbB",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 5x3 Aab",
+  "strict": true,
+  "ms": 90000,
+  "seed": 255,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "Aab",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 5x3 AaB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 256,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AaB",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 5x3 AABb",
+  "strict": true,
+  "ms": 90000,
+  "seed": 257,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AABb",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 5x3 ABcC",
+  "strict": true,
+  "ms": 90000,
+  "seed": 258,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "ABcC",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "ngủ 5x3 AAbB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 259,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AAbB",
+  "min": 3,
+  "max": 9
+ },
+ {
+  "name": "độc+màng 4x3 AB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 260,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AB",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ },
+ {
+  "name": "độc+màng 4x3 AAB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 261,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ },
+ {
+  "name": "độc+màng 4x3 ABC",
+  "strict": true,
+  "ms": 90000,
+  "seed": 262,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 3,
+   "holes": [
+    1,
+    3
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ },
+ {
+  "name": "độc+màng 4x4 AB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 263,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AB",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ },
+ {
+  "name": "độc+màng 4x4 AAB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 264,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ },
+ {
+  "name": "độc+màng 4x4 ABC",
+  "strict": true,
+  "ms": 90000,
+  "seed": 265,
+  "top": 5,
+  "shape": {
+   "w": 4,
+   "h": 4,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ },
+ {
+  "name": "độc+màng 5x3 AB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 266,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AB",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ },
+ {
+  "name": "độc+màng 5x3 AAB",
+  "strict": true,
+  "ms": 90000,
+  "seed": 267,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "AAB",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ },
+ {
+  "name": "độc+màng 5x3 ABC",
+  "strict": true,
+  "ms": 90000,
+  "seed": 268,
+  "top": 5,
+  "shape": {
+   "w": 5,
+   "h": 3,
+   "holes": [
+    2,
+    4
+   ]
+  },
+  "cells": "ABC",
+  "toxic": 1,
+  "membranes": 1,
+  "min": 4,
+  "max": 10
+ }
+]

@@ -25,7 +25,7 @@ namespace Meowtosis.Presentation
         [SerializeField] private float catWidth = 0.778f;
         [Tooltip("Ảnh mèo cao hơn tâm ô một chút (prototype: 1/90 ô).")]
         [SerializeField] private float catLift = 0.011f;
-        [Tooltip("Bề rộng hình vi khuẩn, virus (vẽ trên khung 1,5 ô).")]
+        [Tooltip("Bề rộng hình virus (vẽ trên khung 1,5 ô).")]
         [SerializeField] private float placeholderWidth = 1.5f;
         [SerializeField] private float slideSpeed = 10f;
         [SerializeField] private float breathSeconds = 2.8f;
@@ -79,8 +79,7 @@ namespace Meowtosis.Presentation
             }
             breathPhase = piece.Id * 0.73f % breathSeconds;
             if (piece.IsVirus) SetBody(art.VirusSprite(piece.Facing), placeholderWidth, 0f);
-            else if (piece.IsCat) SetBody(art.CatSprite(piece.Species, isHappy), catWidth, catLift);
-            else SetBody(art.Germ, placeholderWidth, 0f);
+            else SetBody(art.CatSprite(piece.Species, isHappy), catWidth, catLift);
             sleepMarks.SetActive(piece.IsAsleep);
         }
 
@@ -135,6 +134,24 @@ namespace Meowtosis.Presentation
 
         // Quay đầu sang hướng ngược lại một lúc.
         public void FlipFor(float seconds) => flipTimeLeft = seconds;
+
+        private bool isHighlightedOrder;
+
+        public void SetHighlightOrder(bool highlight)
+        {
+            if (isHighlightedOrder == highlight) return;
+            isHighlightedOrder = highlight;
+            int offset = highlight ? 10 : -10;
+            foreach (var r in GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                r.sortingOrder += offset;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            isHighlightedOrder = false;
+        }
 
         private void SetBody(Sprite sprite, float width, float lift)
         {
@@ -191,7 +208,14 @@ namespace Meowtosis.Presentation
             scaleX *= (1f + breathWide * breath) * (flipTimeLeft > 0f ? -1f : 1f);
             scaleY *= 1f - breathFlat * breath;
             lean = Vector2.Lerp(lean, leanTarget, 1f - Mathf.Exp(-leanSpeed * Time.deltaTime));
+            scaleX *= 1f + Mathf.Abs(lean.x) * 0.22f - Mathf.Abs(lean.y) * 0.12f;
+            scaleY *= 1f + Mathf.Abs(lean.y) * 0.22f - Mathf.Abs(lean.x) * 0.12f;
             position += lean * leanDistance;
+            if (hasMood)
+            {
+                // Run sợ hãi khi gặp nguy hiểm cận kề
+                position.x += Mathf.Sin(Time.time * 42f) * 0.045f;
+            }
             rotation -= lean.x * leanDegrees;
             visual.localPosition = position;
             visual.localRotation = Quaternion.Euler(0f, 0f, rotation);

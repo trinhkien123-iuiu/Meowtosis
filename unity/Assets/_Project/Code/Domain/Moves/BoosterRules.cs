@@ -13,7 +13,7 @@ namespace Meowtosis.Domain
             this.turnResolver = turnResolver;
         }
 
-        // Hoán đổi: biến một mèo hoặc vi khuẩn thành mèo màu khác có trong level. Mèo ngủ thì thức dậy.
+        // Hoán đổi: biến một mèo thành mèo màu khác có trong level. Mèo ngủ thì thức dậy.
         // Không dùng được cho virus và cho con mèo cuối cùng của một màu.
         public bool TryMutate(Board board, int cell, Species color, out MoveResult result)
         {

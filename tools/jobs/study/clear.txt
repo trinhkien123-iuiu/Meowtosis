@@ -1,0 +1,68 @@
+Tỷ lệ thắng của người chơi casual (quên luật / cẩn thận), số level giải được, nước thừa trung bình
+
+Khối 1 · Phòng nuôi cấy (level 1–16)
+  hiện tại     giải được 16/16  thắng  10% /  37%  thua  66%  khử/ván 3.21  thừa 1.56
+  khử an toàn  giải được 16/16  thắng  41% /  41%  thua   0%  khử/ván 4.63  thừa 1.00
+  khử từ 4     giải được 16/16  thắng  85% /  92%  thua  11%  khử/ván 0.44  thừa 0.00
+  không khử    giải được 16/16  thắng 100% / 100%  thua   0%  khử/ván 0.00  thừa 0.00
+Khối 2 · Vào vị trí (level 17–28)
+  hiện tại     giải được 12/12  thắng   4% /  12%  thua  61%  khử/ván 3.57  thừa 1.75
+  khử an toàn  giải được 12/12  thắng  12% /  14%  thua  12%  khử/ván 4.88  thừa 1.08
+  khử từ 4     giải được 12/12  thắng  25% /  32%  thua  34%  khử/ván 1.47  thừa 0.83
+  không khử    giải được 12/12  thắng  31% /  40%  thua  41%  khử/ván 0.00  thừa 0.75
+Khối 3 · Màng và độc (level 29–37)
+  hiện tại     giải được  9/9  thắng  16% /  34%  thua  59%  khử/ván 3.10  thừa 2.22
+  khử an toàn  giải được  9/9  thắng  29% /  35%  thua   7%  khử/ván 3.72  thừa 1.11
+  khử từ 4     giải được  9/9  thắng  66% /  73%  thua  10%  khử/ván 0.52  thừa 0.00
+  không khử    giải được  9/9  thắng  86% /  92%  thua   6%  khử/ván 0.00  thừa 0.00
+Khối 4 · Ngủ và virus (level 38–48)
+  hiện tại     giải được 11/11  thắng  17% /  31%  thua  67%  khử/ván 3.27  thừa 1.00
+  khử an toàn  giải được 11/11  thắng  35% /  36%  thua   3%  khử/ván 4.84  thừa 0.82
+  khử từ 4     giải được 11/11  thắng  83% /  87%  thua   8%  khử/ván 0.77  thừa 0.27
+  không khử    giải được 11/11  thắng  99% /  99%  thua   0%  khử/ván 0.00  thừa 0.27
+Khối 5 · Diệt khuẩn (level 49–54)
+  hiện tại     giải được  6/6  thắng   6% /  23%  thua  75%  khử/ván 2.50  thừa 0.83
+  khử an toàn  giải được  6/6  thắng  10% /  26%  thua  32%  khử/ván 3.70  thừa 0.67
+  khử từ 4     giải được  6/6  thắng  15% /  36%  thua  45%  khử/ván 0.84  thừa 0.00
+  không khử    giải được  6/6  thắng  16% /  36%  thua  54%  khử/ván 0.00  thừa 0.00
+Khối 6 · Đại gia đình (level 55–61)
+  hiện tại     giải được  7/7  thắng   0% /   0%  thua  32%  khử/ván 6.52  thừa 1.29
+  khử an toàn  giải được  7/7  thắng   1% /   1%  thua   2%  khử/ván 7.30  thừa 0.71
+  khử từ 4     giải được  7/7  thắng  26% /  27%  thua   3%  khử/ván 1.76  thừa 0.14
+  không khử    giải được  7/7  thắng  48% /  49%  thua   2%  khử/ván 0.00  thừa 0.00
+Khối 7 · Đủ sắc màu (level 62–69)
+  hiện tại     giải được  8/8  thắng   2% /  13%  thua  82%  khử/ván 3.20  thừa 1.38
+  khử an toàn  giải được  8/8  thắng  20% /  20%  thua  14%  khử/ván 4.55  thừa 0.88
+  khử từ 4     giải được  8/8  thắng  32% /  33%  thua  32%  khử/ván 1.42  thừa 0.88
+  không khử    giải được  8/8  thắng  51% /  52%  thua  24%  khử/ván 0.00  thừa 0.75
+
+Từng level khối 1–2 (thắng quên luật / cẩn thận · par · thừa):
+level  hiện tại              khử an toàn           khử từ 4              không khử             
+    1   34%/100% p1 t0       100%/100% p1 t0       100%/100% p1 t0       100%/100% p1 t0       
+    2    9%/100% p2 t0       100%/100% p2 t0        36%/100% p2 t0       100%/100% p2 t0       
+    3  100%/100% p2 t0       100%/100% p2 t0       100%/100% p2 t0       100%/100% p2 t0       
+    4    0%/100% p3 t1       100%/100% p2 t0       100%/100% p2 t0       100%/100% p2 t0       
+    5    0%/  0% p4 t1         0%/  0% p4 t1       100%/100% p3 t0       100%/100% p3 t0       
+    6   18%/ 92% p5 t1        91%/ 91% p4 t0       100%/100% p4 t0       100%/100% p4 t0       
+    7    0%/100% p4 t1        92%/ 92% p4 t1       100%/100% p3 t0       100%/100% p3 t0       
+    8    0%/  0% p8 t3         0%/  0% p8 t3       100%/100% p5 t0       100%/100% p5 t0       
+    9    0%/  0% p10 t3        2%/  2% p9 t2       100%/100% p7 t0       100%/100% p7 t0       
+   10    3%/  3% p4 t1         1%/  1% p3 t0       100%/100% p3 t0       100%/100% p3 t0       
+   11    0%/  0% p10 t0        4%/  4% p10 t0        5%/ 22% p10 t0      100%/100% p10 t0      
+   12    0%/  1% p8 t3        52%/ 52% p5 t0       100%/100% p5 t0       100%/100% p5 t0       
+   13    0%/  2% p9 t2         0%/  0% p9 t2        98%/ 99% p7 t0       100%/100% p7 t0       
+   14    0%/  0% p10 t2       18%/ 18% p8 t0        64%/100% p8 t0       100%/100% p8 t0       
+   15    0%/  0% p9 t3         0%/  0% p9 t3        57%/ 57% p6 t0       100%/100% p6 t0       
+   16    0%/  0% p11 t4        0%/  0% p11 t4       97%/ 97% p7 t0       100%/100% p7 t0       
+   17   32%/100% p2 t0        82%/100% p2 t0        82%/100% p2 t0        82%/100% p2 t0       
+   18    6%/ 20% p5 t1        10%/ 11% p5 t1        29%/ 47% p5 t1        30%/ 42% p5 t1       
+   19    2%/ 21% p4 t1        35%/ 33% p3 t0        63%/ 63% p3 t0        63%/ 63% p3 t0       
+   20    3%/  4% p4 t0         3%/  4% p4 t0         3%/  3% p4 t0         9%/  7% p4 t0       
+   21    1%/  1% p7 t3        20%/ 20% p4 t0        40%/ 60% p4 t0        40%/ 60% p4 t0       
+   22    0%/  0% p7 t1         0%/  0% p7 t1         2%/  3% p7 t1        15%/ 19% p7 t1       
+   23    0%/  0% p9 t1         0%/  0% p9 t1        54%/ 62% p8 t0        54%/ 71% p8 t0       
+   24    0%/  0% p9 t4         1%/  1% p7 t2         4%/  4% p7 t2         6%/ 14% p7 t2       
+   25    0%/  0% p10 t4        2%/  2% p8 t2         1%/  1% p8 t2        16%/ 30% p7 t1       
+   26    0%/  0% p11 t0        0%/  0% p11 t0       23%/ 38% p11 t0       61%/ 71% p11 t0      
+   27    0%/  0% p9 t1         0%/  0% p9 t1         1%/  2% p8 t0         3%/  6% p8 t0       
+   28    0%/  0% p9 t5         0%/  0% p9 t5         0%/  1% p8 t4         0%/  1% p8 t4       

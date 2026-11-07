@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Meowtosis.Domain
 {
     // Tìm chuỗi vuốt thắng ngắn nhất bằng A*. Dùng cho Gợi ý và để kiểm tra level.
-    // Ước lượng là số ô còn phải lấp. Mỗi nước chỉ thêm tối đa một mèo hoặc vi khuẩn,
+    // Ước lượng là số ô còn phải lấp. Mỗi nước chỉ thêm tối đa một mèo,
     // nên ước lượng không bao giờ vượt số nước còn lại và lời giải tìm thấy đầu tiên là ngắn nhất.
     // Các thế cờ cùng tổng ước lượng được lấy cái mới nhất trước, y như prototype,
     // nên hai bên ra cùng lời giải trong cùng giới hạn.
@@ -74,8 +74,7 @@ namespace Meowtosis.Domain
 
         private static int Estimate(Board board)
         {
-            var kill = board.Level.KillSpecies;
-            return board.Level.CellsToFill - board.Count(piece => !piece.IsVirus && piece.Species != kill);
+            return board.Level.CellsToFill - board.Count(piece => !piece.IsVirus);
         }
 
         private static void AddToBucket(List<Stack<string>> buckets, int total, string key)

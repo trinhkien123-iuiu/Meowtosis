@@ -84,6 +84,7 @@ namespace Meowtosis.Presentation
         private IEnumerator PlaySequence(int earnedStars, int coinsEarned, int totalCoins)
         {
             effects.Confetti();
+            effects.Fireworks();
             yield return new WaitForSecondsRealtime(firstStarDelay);
             for (var index = 0; index < stars.Length; index++)
             {

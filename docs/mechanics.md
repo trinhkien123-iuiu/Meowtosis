@@ -30,12 +30,12 @@ Bàn là lưới ô vuông; ô nào thuộc "cơ thể" thì chơi được. To�
 | `#` | Ngoài cơ thể (lỗ hoặc phần ngoài bàn) |
 | `.` | Ô trống |
 | `~` | Ô độc |
+| `=` | Ô băng trơn (trống) |
 | `A` `B` `C` `D` `E` | Mèo đỏ, xanh, vàng, hồng, tím |
 | `a` `b` `c` `d` `e` | Mèo ngủ cùng màu |
-| `G` | Vi khuẩn (chỉ ở level diệt khuẩn) |
 | `^` `v` `<` `>` | Virus; mũi tên là hướng nó lan |
 
-Các trường thêm của một level: `goal` (hộp mục tiêu), `oneway` (màng một chiều), `kill` (diệt khuẩn), `tut` (hướng dẫn tương tác), `tip` (mẹo đầu màn). Chi tiết định dạng: [unity-handoff.md §3](unity-handoff.md#3-dữ-liệu-level).
+Các trường thêm của một level: `goal` (hộp mục tiêu), `oneway` (màng một chiều), `tut` (hướng dẫn tương tác), `tip` (mẹo đầu màn). Chi tiết định dạng: [unity-handoff.md §3](unity-handoff.md#3-dữ-liệu-level).
 
 Trong các ví dụ dưới đây, bàn được viết theo từng hàng, ví dụ `AB. / B..` là hàng trên `AB.`, hàng dưới `B..`. Nước đi viết là "vuốt (hàng, cột) sang phải".
 
@@ -44,12 +44,11 @@ Trong các ví dụ dưới đây, bàn được viết theo từng hàng, ví d
 ## 2. Thắng và thua
 
 **Thắng** khi đồng thời:
-1. **Kín ổ:** mọi ô (trừ ô độc) có một tế bào không phải virus. Mèo ngủ và vi khuẩn cũng tính là đã lấp.
+1. **Kín ổ:** mọi ô (trừ ô độc) có một tế bào không phải virus. Mèo ngủ cũng tính là đã lấp.
 2. **Đúng hộp:** mọi hộp có mèo đúng màu (mèo ngủ cũng được tính).
-3. **Sạch khuẩn:** ở level diệt khuẩn, không còn vi khuẩn nào.
-4. **Và không thua.**
+3. **Và không thua.**
 
-**Thua** khi một màu mèo có mặt lúc đầu màn không còn con nào, kể cả con đang ngủ. Vi khuẩn và virus không phải màu mèo: vi khuẩn chết hết là chuyện tốt, không phải thua.
+**Thua** khi một màu mèo có mặt lúc đầu màn không còn con nào, kể cả con đang ngủ. Virus không phải màu mèo.
 
 Kiểm tra sau mỗi lượt. Thua thì mất 1 tim (dùng Hồi sinh để quay lại, mục 7).
 
@@ -63,14 +62,15 @@ Kiểm tra sau mỗi lượt. Thua thì mất 1 tim (dùng Hồi sinh để quay
 
 ## 3. Một lần vuốt
 
-**Vuốt được:** mèo đang thức, vi khuẩn. **Không vuốt được:** mèo ngủ, virus.
+**Vuốt được:** mèo đang thức. **Không vuốt được:** mèo ngủ, virus.
 
 Con được vuốt **nhân đôi**: bản sao đi vào ô kề theo hướng vuốt.
 
 | Ô kề | Kết quả | Mã |
 |---|---|---|
 | Trống | Bản sao vào ô đó | S1: `A.` → `AA` |
-| Có tế bào, phía sau dãy còn ô trống | **Đẩy** cả dãy liền nhau đi 1 ô tới ô trống đầu tiên, bản sao vào ô kề. Dãy gồm mèo, virus, vi khuẩn; **mèo ngủ không bị đẩy** | S2: `AB.` → `AAB` |
+| Có tế bào, phía sau dãy còn ô trống | **Đẩy** cả dãy liền nhau đi 1 ô tới ô trống đầu tiên, bản sao vào ô kề. Dãy gồm mèo, virus; **mèo ngủ không bị đẩy** | S2: `AB.` → `AAB` |
+| Trống, là ô **băng** | Bản sao **trượt** tiếp theo hướng vuốt qua các ô băng trống, dừng khi gặp vật cản (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng | I1: `A===.` → `A...A` |
 | Có tế bào, phía sau không còn ô trống (gặp mép, lỗ, màng chặn hoặc **mèo ngủ**) | **Thay thế:** bản sao chiếm ô kề, con cũ ở đó chết | S3: `AB / B.` → `AA / B.` |
 
 **Nước không hợp lệ** (game từ chối, không tính nước):
@@ -80,7 +80,7 @@ Con được vuốt **nhân đôi**: bản sao đi vào ô kề theo hướng vu
 - Đè lên hoặc đẩy một con mèo ngủ (N4).
 - Vuốt mèo ngủ (N1) hoặc virus (V10).
 
-Mỗi nước sinh **đúng một** tế bào mới. Vì vậy một level cần **ít nhất** bằng ngần ấy nước: số ô trống, cộng số ô đang có virus hoặc vi khuẩn phải dọn rồi lấp lại. Bộ giải A* dựa vào điều này.
+Mỗi nước sinh **đúng một** tế bào mới. Vì vậy một level cần **ít nhất** bằng ngần ấy nước: số ô trống, cộng số ô đang có virus phải dọn rồi lấp lại. Bộ giải A* dựa vào điều này.
 
 ---
 
@@ -114,9 +114,9 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
 
 ### 5.1 Khử 3
 
-- **Xuất hiện:** level 12 (hướng dẫn tương tác).
+- **Xuất hiện:** bản Unity dạy ở màn hướng dẫn đầu game (cùng nhân đôi, đẩy, thay thế; `Levels/Onboarding.txt`), level 1 để tự áp dụng; level 12 dạy dùng khử 3 để dọn chỗ (hướng dẫn tương tác).
 - **Luật:** 3 tế bào cùng màu trở lên nằm liền nhau theo hàng ngang hoặc dọc thì biến mất ở bước 3. Đường chéo không tính.
-- **Tương tác:** mèo ngủ cũng tính vào dãy (K2, N5). Vi khuẩn cũng bị khử khi đủ 3 (G2). Virus không bao giờ bị khử 3 (V11). Màng một chiều không ngăn khử (M5).
+- **Tương tác:** mèo ngủ cũng tính vào dãy (K2, N5). Virus không bao giờ bị khử 3 (V11). Màng một chiều không ngăn khử (M5).
 - **Dùng để:** dọn chỗ khi bàn kẹt. Có hại: khử hết một màu là thua (K3).
 - **Ví dụ:** K1 `AA. / A..`, vuốt (0,1) sang phải → hàng trên `AAA` bị khử → `... / A..`.
 - **Ghi chú thiết kế:** với 3 màu trở lên, lời giải ngắn nhất gần như không bao giờ cần khử 3; level bắt buộc khử 3 dùng 2 màu, như level 10, 12, 15, 16 (xem [level-design.md](level-design.md)).
@@ -139,9 +139,9 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
 
 - **Ký hiệu:** `~`.
 - **Xuất hiện:** level 33 (hướng dẫn tương tác).
-- **Luật:** mọi tế bào đứng trên ô độc chết ở bước 2 và bước 5: mèo, mèo ngủ, vi khuẩn, virus. Ô độc không cần lấp (T3) và không bao giờ mất.
+- **Luật:** mọi tế bào đứng trên ô độc chết ở bước 2 và bước 5: mèo, mèo ngủ, virus. Ô độc không cần lấp (T3) và không bao giờ mất.
 - **Các cách vào ô độc:** bản sao vuốt thẳng vào (T1: chết ngay, coi như mất một nước), bị đẩy vào (T2), virus lan vào (V6).
-- **Dùng để:** loại bớt tế bào thừa, diệt virus và vi khuẩn. Coi chừng làm một màu tuyệt chủng.
+- **Dùng để:** loại bớt tế bào thừa, diệt virus. Coi chừng làm một màu tuyệt chủng.
 
 ### 5.5 Mèo ngủ
 
@@ -162,7 +162,7 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
 - **Xuất hiện:** level 42 (hướng dẫn tương tác); hai virus ở level 44 (có mẹo).
 - **Luật lan (bước 4):**
   - **Mọi** virus, con gốc lẫn con mới sinh, đều là virus đầy đủ: cùng hướng, cùng cách lan.
-  - Mỗi lượt, mỗi virus có từ trước lượt đó lan **1 ô** theo hướng của nó: ô trống thì thành virus, ô có mèo, mèo ngủ hoặc vi khuẩn thì **ăn** con đó và thành virus.
+  - Mỗi lượt, mỗi virus có từ trước lượt đó lan **1 ô** theo hướng của nó: ô trống thì thành virus, ô có mèo hoặc mèo ngủ thì **ăn** con đó và thành virus.
   - Virus **không lan** khi ô phía trước là ngoài cơ thể, là màng chặn chiều đó (V7), hoặc đã là virus (V2).
   - Virus vừa sinh trong lượt này chỉ bắt đầu lan từ lượt sau.
 - **Hệ quả: tốc độ lây.** Một dãy virus nối đuôi thẳng hàng thì chỉ **con đầu dãy** lan, nên mỗi lượt dãy dài thêm 1 (V1). Có 2 nguồn virus thì mỗi lượt thêm 2 (V2). Virus chạm mép thì đứng yên, hết lây (V3).
@@ -172,7 +172,6 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
   - Đột biến không dùng được trên virus (B1). Virus không bị khử 3 (V11).
 - **Diệt từ đuôi lên đầu.** Diệt con đầu dãy thì con ngay sau ăn lại ô đó trong cùng lượt (V4). Diệt con cuối dãy trước, rồi lần lên, thì sạch (V5).
 - **Nguy hiểm:** virus ăn con mèo cuối cùng của một màu là thua (V8). Virus nằm trên ô không tính là đã lấp (V11): còn virus thì chưa thắng.
-- **Virus và vi khuẩn:** virus ăn được vi khuẩn, nhưng để lại virus ở đó (V9).
 - **Virus bị đẩy** theo dãy như mọi tế bào khác (V10).
 
 | Mã | Bàn đầu | Nước | Kết quả |
@@ -183,37 +182,54 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
 | V5 | `AB / >>` | (0,0) xuống, rồi (0,1) xuống | Diệt con đuôi, rồi con đầu → `AB / AB`: thắng |
 | V6 | `A.. / >~.` | (0,0) phải | Virus lan vào ô độc và chết; con gốc (1,0) còn nguyên |
 
-### 5.7 Vi khuẩn
+### 5.7 Băng trơn
 
-- **Ký hiệu:** `G`, level có `kill: 'G'`.
-- **Xuất hiện:** level 49 (hướng dẫn tương tác); khử 3 vi khuẩn ở level 51 (có mẹo).
-- **Luật:** vi khuẩn là một tế bào bình thường **không thuộc màu mèo nào**: tính là đã lấp ô, nhưng còn vi khuẩn thì chưa thắng; vi khuẩn chết hết không phải là thua (G4).
-- **Vuốt được:** vuốt vi khuẩn thì nó **tự nhân lên** (G1). Có lợi khi cần đủ 3 con để khử, có hại nếu nhân bừa.
-- **Cách diệt:** thay thế bằng bản sao mèo (G3); khử 3 vi khuẩn thẳng hàng (G2); ô độc; virus ăn (V9, nhưng để lại virus); Đột biến biến vi khuẩn thành mèo (B2).
+- **Ký hiệu:** `=` (ô băng đang trống).
+- **Xuất hiện:** level 49 (hướng dẫn tương tác), khối 5.
+- **Luật:** ô băng là ô thường phải lấp. Bản sao **vuốt vào ô băng đang trống** thì trượt tiếp theo hướng vuốt, qua các ô băng trống, cho tới khi:
+  - ô phía trước là mép, lỗ, màng chặn hoặc có quân (I1, I2): dừng lại trên băng;
+  - ô phía trước không phải băng: trượt sang ô đó rồi dừng (I3); ô đó là ô độc thì bản sao chết (I4).
+  Trượt xảy ra ở bước 1 (đặt bản sao), trước mọi bước khác của lượt.
+- **Không trượt:** dãy bị đẩy (I5), bản sao thay thế (ô đích đã có quân), virus lan (I6), booster Cấy ghép.
+- **Cách lấp một dải băng:** lấp từ đầu xa trước, bản sao sau trượt tới và dừng sát bản sao trước; hoặc vuốt vào băng từ bên cạnh dải (vuông góc), khi đó bản sao dừng ngay vì ô kế là mép hoặc quân.
+- **Ý nghĩa đo được** (`tools/study-mechanics.js`, 8 level): băng làm đổi lời giải (bộ sinh loại level mà lời giải không băng vẫn thắng), thường **rút ngắn** đường đưa mèo đi xa (par giảm trung bình 0,75 nước, tới 3 nước ở level 54–55), số quyết định gần như không đổi. Băng là cơ chế giúp sức, hợp người chơi casual.
+
+| Mã | Bàn đầu | Nước | Kết quả |
+|---|---|---|---|
+| I1 | `A===.` | (0,0) phải | `A...A`: trượt hết dải băng, dừng ở ô thường cuối |
+| I2 | `A==A` | (0,0) phải | `A.AA`: dừng ngay trước mèo |
+| I3 | `A=.=` | (0,0) phải | `A.A.`: ra khỏi băng là dừng |
+| I4 | `A==~` | (0,0) phải | `A...`: trượt vào ô độc và chết |
+| I5 | `AB==` | (0,0) phải | `AAB.`: dãy bị đẩy chỉ đi 1 ô |
+| I6 | `>== / A..` | (1,0) phải | `>>. / AA.`: virus lan lên băng 1 ô |
+
+### Vi khuẩn (đã bỏ)
+
+Bỏ ngày 2026-11-07. Đo bằng `tools/study-mechanics.js` cho thấy đổi vi khuẩn thành ô trống thì số nước tối ưu y hệt: vi khuẩn chỉ là "ô trống phải lấp bằng thay thế", không thêm quyết định mới. Các level từng có vi khuẩn nay có ô trống ở chỗ đó (giữ id cũ); khối 5 đổi thành "Ôn tập". Mã ví dụ G1–G4, V9 không còn dùng. Bộ luật của prototype web vẫn đọc được `G` và `kill` nhưng không level nào dùng.
 
 ### 5.8 Màu mèo
 
 - 5 màu: `A` đỏ, `B` xanh, `C` vàng (từ đầu game), `D` hồng (lần đầu ở level 18), `E` tím (lần đầu ở level 31); hai level đó có mẹo đầu màn.
 - Từ khối 2 tới khối 6, một số level dùng hồng hoặc tím **thay cho trọn một màu cũ** (ví dụ mọi mèo đỏ thành hồng): luật chỉ quan tâm các màu khác nhau, nên lời giải và độ khó không đổi. Mỗi level ở các chương này vẫn chỉ có tối đa 3 màu. Màu tím không dùng ở level có virus (virus cũng tím).
-- Khối 7 là nơi **lần đầu có 4 màu (level 62) rồi 5 màu (level 66) cùng lúc**. Hai level mở đầu chỉ có đúng 1 bé màu thứ 4 / thứ 5: bé bị thay thế là tuyệt chủng.
+- Khối 7 là nơi **lần đầu có 4 màu (level 69) rồi 5 màu (level 73) cùng lúc**. Hai level mở đầu chỉ có đúng 1 bé màu thứ 4 / thứ 5: bé bị thay thế là tuyệt chủng.
 - Màu nào có mặt lúc đầu màn đều phải sống tới cuối (mục 2). Nhiều màu hơn thì mỗi màu ít con hơn: dễ tuyệt chủng hơn, khó khử 3 hơn.
-- Ảnh mèo lấy từ Shikacat (12 màu có sẵn); đã bỏ các màu dễ lẫn: WarmPink giống đỏ, Orange giống vàng, Green và Lime giống vi khuẩn và ô độc, các màu xanh nhạt giống `B`.
+- Ảnh mèo lấy từ Shikacat (12 màu có sẵn); đã bỏ các màu dễ lẫn: WarmPink giống đỏ, Orange giống vàng, Green và Lime giống ô độc, các màu xanh nhạt giống `B`.
 
 ---
 
 ## 6. Bảng: cái gì diệt được cái gì
 
-| | Mèo thức | Mèo ngủ | Virus | Vi khuẩn |
-|---|---|---|---|---|
-| Vuốt được | Có | Không | Không | Có (tự nhân lên) |
-| Bị đẩy | Có | **Không** (chặn dãy như tường) | Có | Có |
-| Bị bản sao thay thế | Có (trừ cùng màu với con vuốt) | **Không** | Có | Có |
-| Bị khử 3 | Có | Có | **Không** | Có (3 vi khuẩn) |
-| Chết trên ô độc | Có | Có | Có | Có |
-| Bị virus ăn | Có | Có | Không (virus không lan vào virus) | Có |
-| Đột biến | Có (trừ con cuối của một màu) | Có, và thức luôn | **Không** | Có, thành mèo |
-| Tính là đã lấp ô | Có | Có | **Không** | Có |
-| Là màu mèo (hết là thua) | Có | Có | Không | Không (phải diệt hết) |
+| | Mèo thức | Mèo ngủ | Virus |
+|---|---|---|---|
+| Vuốt được | Có | Không | Không |
+| Bị đẩy | Có | **Không** (chặn dãy như tường) | Có |
+| Bị bản sao thay thế | Có (trừ cùng màu với con vuốt) | **Không** | Có |
+| Bị khử 3 | Có | Có | **Không** |
+| Chết trên ô độc | Có | Có | Có |
+| Bị virus ăn | Có | Có | Không (virus không lan vào virus) |
+| Đột biến | Có (trừ con cuối của một màu) | Có, và thức luôn | **Không** |
+| Tính là đã lấp ô | Có | Có | **Không** |
+| Là màu mèo (hết là thua) | Có | Có | Không |
 
 ---
 
@@ -223,7 +239,7 @@ Mỗi booster dùng là **một nước** (tính vào số nước, ảnh hưở
 
 | Booster | Làm gì | Không dùng được khi | Mã |
 |---|---|---|---|
-| **Đột biến** | Đổi một tế bào sang màu khác có trong màn. Mèo ngủ bị đổi thì thức luôn; vi khuẩn bị đổi thì thành mèo | Chọn virus; chọn con cuối cùng của một màu (đổi đi là tuyệt chủng) | B1, B2 |
+| **Đột biến** | Đổi một tế bào sang màu khác có trong màn. Mèo ngủ bị đổi thì thức luôn | Chọn virus; chọn con cuối cùng của một màu (đổi đi là tuyệt chủng) | B1, B2 |
 | **Cấy ghép** | Chọn một tế bào, bản sao của nó mọc ở **bất kỳ** ô trống nào, không đẩy gì | Ô đích là ô độc hoặc đã có tế bào; tế bào nguồn là virus | B3 |
 | **Hồi sinh** | Chỉ dùng ngay sau khi thua: quay lại trước nước thua, trả lại 1 tim và booster đã dùng ở nước đó | Chưa thua | — |
 
@@ -235,6 +251,8 @@ Số lượt booster lúc đầu: mỗi loại 3.
 
 | Câu hỏi | Trả lời | Mã |
 |---|---|---|
+| Sao bản sao chạy tuốt ra xa? | Nó vào ô băng trống nên trượt tới khi gặp vật cản hoặc ra khỏi băng | I1, I2, I3 |
+| Sao dãy bị đẩy lên băng mà không trượt? | Chỉ bản sao vừa vào ô băng trống mới trượt | I5 |
 | Virus mỗi lượt sinh mấy con? | Mỗi virus không bị chặn sinh 1. Dãy nối đuôi thì chỉ con đầu sinh, nên mỗi nguồn thêm 1 con/lượt | V1, V2 |
 | Sao màn này virus sinh 2, màn kia sinh 1? | Số nguồn virus đang lan được khác nhau | V2 |
 | Diệt con virus gốc có hết lây không? | Không. Con nào cũng lây; phải diệt hết, từ đuôi lên đầu | V4, V5 |
@@ -243,7 +261,6 @@ Số lượt booster lúc đầu: mỗi loại 3.
 | Sao mèo ngủ chưa dậy đã biến mất? | 3 con cùng màu thẳng hàng bị khử trước bước đánh thức | N5 |
 | Mèo ngủ có được tính cho hộp không? | Có | H1 |
 | Kín ổ rồi sao vẫn thua? | Có màu đã tuyệt chủng | W1 |
-| Vi khuẩn vuốt được à? | Được, nó tự nhân lên | G1 |
 | Màng có chặn đánh thức, chặn khử 3 không? | Không | M4, M5 |
 | Sao không đẩy được, không đè lên được mèo ngủ? | Mèo ngủ say như hòn đá: dãy chạm nó thì dừng (bản sao thay con kề); vuốt thẳng vào nó là nước không hợp lệ. Muốn dùng ô đó thì đánh thức nó, hoặc dùng khử 3, ô độc | N4, N6 |
 | Level này có chắc giải được không? | Có. Mọi level có lời giải do máy tìm, lưu ở `data/levels.json`; `npm test` kiểm tra lại | — |
@@ -271,7 +288,7 @@ Mẫu một mục cơ chế:
 - **Ký hiệu:** …
 - **Xuất hiện:** level … (hướng dẫn / mẹo)
 - **Luật:** … (chạy ở bước nào trong mục 4)
-- **Tương tác:** với khử 3, ô độc, màng, mèo ngủ, virus, vi khuẩn, hộp, booster
+- **Tương tác:** với khử 3, ô độc, màng, mèo ngủ, virus, hộp, booster
 - **Cách xử lý / diệt:** …
 - **Hay bị hỏi:** …
 - **Ví dụ:** mã X1, X2 (trong tools/test-doc-examples.js)

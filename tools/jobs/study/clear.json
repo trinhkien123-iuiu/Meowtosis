@@ -1,0 +1,4426 @@
+{
+ "hiện tại": [
+  {
+   "level": 1,
+   "solvable": true,
+   "par": 1,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.335,
+    "lose": 0.665,
+    "clears": 0.665
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 2,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.085,
+    "lose": 0.915,
+    "clears": 0.915
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 3,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 4,
+   "solvable": true,
+   "par": 3,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 1,
+    "clears": 1
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 5,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 4
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 4
+   }
+  },
+  {
+   "level": 6,
+   "solvable": true,
+   "par": 5,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.18,
+    "lose": 0.805,
+    "clears": 1.12
+   },
+   "careful": {
+    "win": 0.915,
+    "lose": 0,
+    "clears": 1.615
+   }
+  },
+  {
+   "level": 7,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 1,
+    "clears": 1
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 8,
+   "solvable": true,
+   "par": 8,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8
+   }
+  },
+  {
+   "level": 9,
+   "solvable": true,
+   "par": 10,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.98,
+    "clears": 2.09
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.985
+   }
+  },
+  {
+   "level": 10,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.025,
+    "lose": 0.485,
+    "clears": 4.05
+   },
+   "careful": {
+    "win": 0.025,
+    "lose": 0,
+    "clears": 4.725
+   }
+  },
+  {
+   "level": 11,
+   "solvable": true,
+   "par": 10,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.98,
+    "clears": 2.68
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.57
+   }
+  },
+  {
+   "level": 12,
+   "solvable": true,
+   "par": 8,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.9,
+    "clears": 2.455
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 6.805
+   }
+  },
+  {
+   "level": 13,
+   "solvable": true,
+   "par": 9,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.85,
+    "clears": 4.14
+   },
+   "careful": {
+    "win": 0.015,
+    "lose": 0,
+    "clears": 8.76
+   }
+  },
+  {
+   "level": 14,
+   "solvable": true,
+   "par": 10,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.99,
+    "clears": 1.47
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.85
+   }
+  },
+  {
+   "level": 15,
+   "solvable": true,
+   "par": 9,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.875,
+    "clears": 6.445
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.76
+   }
+  },
+  {
+   "level": 16,
+   "solvable": true,
+   "par": 11,
+   "extra": 4,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.1,
+    "clears": 11.3
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 11.755
+   }
+  },
+  {
+   "level": 17,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.315,
+    "lose": 0.685,
+    "clears": 0.685
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 18,
+   "solvable": true,
+   "par": 5,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.06,
+    "lose": 0.765,
+    "clears": 1.89
+   },
+   "careful": {
+    "win": 0.2,
+    "lose": 0,
+    "clears": 3.02
+   }
+  },
+  {
+   "level": 19,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.015,
+    "lose": 0.725,
+    "clears": 1.41
+   },
+   "careful": {
+    "win": 0.205,
+    "lose": 0,
+    "clears": 1.215
+   }
+  },
+  {
+   "level": 20,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.03,
+    "lose": 0.1,
+    "clears": 3.415
+   },
+   "careful": {
+    "win": 0.035,
+    "lose": 0,
+    "clears": 3.41
+   }
+  },
+  {
+   "level": 21,
+   "solvable": true,
+   "par": 7,
+   "extra": 3,
+   "forgetful": {
+    "win": 0.01,
+    "lose": 0.435,
+    "clears": 3.505
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 5.395
+   }
+  },
+  {
+   "level": 22,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.39,
+    "clears": 7.305
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.745
+   }
+  },
+  {
+   "level": 23,
+   "solvable": true,
+   "par": 9,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.885,
+    "clears": 3.395
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.885
+   }
+  },
+  {
+   "level": 24,
+   "solvable": true,
+   "par": 9,
+   "extra": 4,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.535,
+    "clears": 4.69
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.83
+   }
+  },
+  {
+   "level": 25,
+   "solvable": true,
+   "par": 10,
+   "extra": 4,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.6,
+    "clears": 4.19
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.995
+   }
+  },
+  {
+   "level": 26,
+   "solvable": true,
+   "par": 11,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.995,
+    "clears": 1.84
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.775
+   }
+  },
+  {
+   "level": 27,
+   "solvable": true,
+   "par": 9,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.295,
+    "clears": 8.85
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.755
+   }
+  },
+  {
+   "level": 28,
+   "solvable": true,
+   "par": 9,
+   "extra": 5,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.95,
+    "clears": 1.7
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 3.615
+   }
+  },
+  {
+   "level": 29,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 30,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.26,
+    "lose": 0.72,
+    "clears": 1.105
+   },
+   "careful": {
+    "win": 0.975,
+    "lose": 0,
+    "clears": 0.645
+   }
+  },
+  {
+   "level": 31,
+   "solvable": true,
+   "par": 9,
+   "extra": 4,
+   "forgetful": {
+    "win": 0.015,
+    "lose": 0.91,
+    "clears": 3.18
+   },
+   "careful": {
+    "win": 0.085,
+    "lose": 0,
+    "clears": 7.47
+   }
+  },
+  {
+   "level": 32,
+   "solvable": true,
+   "par": 7,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.33,
+    "clears": 6.52
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.215
+   }
+  },
+  {
+   "level": 33,
+   "solvable": true,
+   "par": 3,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.135,
+    "lose": 0.865,
+    "clears": 0.325
+   },
+   "careful": {
+    "win": 0.97,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 34,
+   "solvable": true,
+   "par": 8,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.17,
+    "clears": 3.875
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 4.215
+   }
+  },
+  {
+   "level": 35,
+   "solvable": true,
+   "par": 9,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.675,
+    "clears": 5.85
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.23
+   }
+  },
+  {
+   "level": 36,
+   "solvable": true,
+   "par": 8,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.71,
+    "clears": 5.61
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 5.63
+   }
+  },
+  {
+   "level": 37,
+   "solvable": true,
+   "par": 11,
+   "extra": 5,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.95,
+    "clears": 1.415
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 3.845
+   }
+  },
+  {
+   "level": 38,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 39,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.03,
+    "lose": 0.945,
+    "clears": 1.46
+   },
+   "careful": {
+    "win": 0.225,
+    "lose": 0,
+    "clears": 3.1
+   }
+  },
+  {
+   "level": 40,
+   "solvable": true,
+   "par": 9,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.705,
+    "clears": 6.725
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 10
+   }
+  },
+  {
+   "level": 41,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.905,
+    "clears": 3.915
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.06
+   }
+  },
+  {
+   "level": 42,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.49,
+    "lose": 0.51,
+    "clears": 0.555
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0.145
+   }
+  },
+  {
+   "level": 43,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.315,
+    "lose": 0.685,
+    "clears": 0.685
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 44,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.905,
+    "clears": 1.835
+   },
+   "careful": {
+    "win": 0.02,
+    "lose": 0,
+    "clears": 5.62
+   }
+  },
+  {
+   "level": 45,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.075,
+    "lose": 0.68,
+    "clears": 3.445
+   },
+   "careful": {
+    "win": 0.105,
+    "lose": 0,
+    "clears": 5.49
+   }
+  },
+  {
+   "level": 46,
+   "solvable": true,
+   "par": 9,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.765,
+    "clears": 2.865
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8
+   }
+  },
+  {
+   "level": 47,
+   "solvable": true,
+   "par": 10,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.665,
+    "clears": 7.28
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.025
+   }
+  },
+  {
+   "level": 48,
+   "solvable": true,
+   "par": 11,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.57,
+    "clears": 7.17
+   },
+   "careful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 8.69
+   }
+  },
+  {
+   "level": 49,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.355,
+    "lose": 0.645,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.965,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 50,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 1,
+    "clears": 0.645
+   },
+   "careful": {
+    "win": 0.385,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 51,
+   "solvable": true,
+   "par": 7,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.99,
+    "clears": 2.3
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 6.2
+   }
+  },
+  {
+   "level": 52,
+   "solvable": true,
+   "par": 8,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.595,
+    "clears": 1.76
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 1.695
+   }
+  },
+  {
+   "level": 53,
+   "solvable": true,
+   "par": 8,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.005,
+    "lose": 0.755,
+    "clears": 3.015
+   },
+   "careful": {
+    "win": 0.015,
+    "lose": 0,
+    "clears": 6.895
+   }
+  },
+  {
+   "level": 54,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.51,
+    "clears": 7.29
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9
+   }
+  },
+  {
+   "level": 55,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.005,
+    "lose": 0.23,
+    "clears": 4.19
+   },
+   "careful": {
+    "win": 0.02,
+    "lose": 0,
+    "clears": 4.585
+   }
+  },
+  {
+   "level": 56,
+   "solvable": true,
+   "par": 9,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.005,
+    "clears": 8.71
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.68
+   }
+  },
+  {
+   "level": 57,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.005,
+    "lose": 0.13,
+    "clears": 8.02
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 7.95
+   }
+  },
+  {
+   "level": 58,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.375,
+    "clears": 8.215
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.22
+   }
+  },
+  {
+   "level": 59,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.335,
+    "clears": 6.225
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.955
+   }
+  },
+  {
+   "level": 60,
+   "solvable": true,
+   "par": 9,
+   "extra": 4,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.69,
+    "clears": 2.095
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 4.325
+   }
+  },
+  {
+   "level": 61,
+   "solvable": true,
+   "par": 12,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.495,
+    "clears": 8.165
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 10.18
+   }
+  },
+  {
+   "level": 62,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.1,
+    "lose": 0.895,
+    "clears": 1.06
+   },
+   "careful": {
+    "win": 0.625,
+    "lose": 0,
+    "clears": 1.47
+   }
+  },
+  {
+   "level": 63,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.875,
+    "clears": 4.57
+   },
+   "careful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 7.41
+   }
+  },
+  {
+   "level": 64,
+   "solvable": true,
+   "par": 6,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.015,
+    "lose": 0.855,
+    "clears": 2.82
+   },
+   "careful": {
+    "win": 0.065,
+    "lose": 0,
+    "clears": 5.865
+   }
+  },
+  {
+   "level": 65,
+   "solvable": true,
+   "par": 10,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.995,
+    "clears": 0.745
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 1.595
+   }
+  },
+  {
+   "level": 66,
+   "solvable": true,
+   "par": 5,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.055,
+    "lose": 0.895,
+    "clears": 1.41
+   },
+   "careful": {
+    "win": 0.37,
+    "lose": 0,
+    "clears": 3.08
+   }
+  },
+  {
+   "level": 67,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.01,
+    "lose": 0.57,
+    "clears": 2.7
+   },
+   "careful": {
+    "win": 0.015,
+    "lose": 0,
+    "clears": 3.88
+   }
+  },
+  {
+   "level": 68,
+   "solvable": true,
+   "par": 10,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.895,
+    "clears": 3.535
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.52
+   }
+  },
+  {
+   "level": 69,
+   "solvable": true,
+   "par": 12,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.575,
+    "clears": 8.795
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 10.34
+   }
+  }
+ ],
+ "khử an toàn": [
+  {
+   "level": 1,
+   "solvable": true,
+   "par": 1,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 2,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 3,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 4,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 5,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 4
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 4
+   }
+  },
+  {
+   "level": 6,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.91,
+    "lose": 0,
+    "clears": 1
+   },
+   "careful": {
+    "win": 0.91,
+    "lose": 0,
+    "clears": 1
+   }
+  },
+  {
+   "level": 7,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.915,
+    "lose": 0,
+    "clears": 1.385
+   },
+   "careful": {
+    "win": 0.915,
+    "lose": 0,
+    "clears": 1.385
+   }
+  },
+  {
+   "level": 8,
+   "solvable": true,
+   "par": 8,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8
+   }
+  },
+  {
+   "level": 9,
+   "solvable": true,
+   "par": 9,
+   "extra": 2,
+   "forgetful": {
+    "win": 0.02,
+    "lose": 0,
+    "clears": 8.075
+   },
+   "careful": {
+    "win": 0.02,
+    "lose": 0,
+    "clears": 8.075
+   }
+  },
+  {
+   "level": 10,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 4.9
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 4.9
+   }
+  },
+  {
+   "level": 11,
+   "solvable": true,
+   "par": 10,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.04,
+    "lose": 0,
+    "clears": 8.04
+   },
+   "careful": {
+    "win": 0.04,
+    "lose": 0,
+    "clears": 8.04
+   }
+  },
+  {
+   "level": 12,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.52,
+    "lose": 0,
+    "clears": 2.645
+   },
+   "careful": {
+    "win": 0.52,
+    "lose": 0,
+    "clears": 2.645
+   }
+  },
+  {
+   "level": 13,
+   "solvable": true,
+   "par": 9,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.735
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.735
+   }
+  },
+  {
+   "level": 14,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.175,
+    "lose": 0,
+    "clears": 5.84
+   },
+   "careful": {
+    "win": 0.175,
+    "lose": 0,
+    "clears": 5.84
+   }
+  },
+  {
+   "level": 15,
+   "solvable": true,
+   "par": 9,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.665
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.665
+   }
+  },
+  {
+   "level": 16,
+   "solvable": true,
+   "par": 11,
+   "extra": 4,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 11.76
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 11.76
+   }
+  },
+  {
+   "level": 17,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.815,
+    "lose": 0.185,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 18,
+   "solvable": true,
+   "par": 5,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.095,
+    "lose": 0.01,
+    "clears": 3.16
+   },
+   "careful": {
+    "win": 0.11,
+    "lose": 0,
+    "clears": 3.115
+   }
+  },
+  {
+   "level": 19,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.345,
+    "lose": 0.335,
+    "clears": 1.16
+   },
+   "careful": {
+    "win": 0.33,
+    "lose": 0,
+    "clears": 1.03
+   }
+  },
+  {
+   "level": 20,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.025,
+    "lose": 0.01,
+    "clears": 3.505
+   },
+   "careful": {
+    "win": 0.035,
+    "lose": 0,
+    "clears": 3.45
+   }
+  },
+  {
+   "level": 21,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.195,
+    "lose": 0,
+    "clears": 2.25
+   },
+   "careful": {
+    "win": 0.195,
+    "lose": 0,
+    "clears": 2.25
+   }
+  },
+  {
+   "level": 22,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.675
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.675
+   }
+  },
+  {
+   "level": 23,
+   "solvable": true,
+   "par": 9,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.77
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.77
+   }
+  },
+  {
+   "level": 24,
+   "solvable": true,
+   "par": 7,
+   "extra": 2,
+   "forgetful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 5.915
+   },
+   "careful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 5.915
+   }
+  },
+  {
+   "level": 25,
+   "solvable": true,
+   "par": 8,
+   "extra": 2,
+   "forgetful": {
+    "win": 0.015,
+    "lose": 0,
+    "clears": 6.16
+   },
+   "careful": {
+    "win": 0.015,
+    "lose": 0,
+    "clears": 6.16
+   }
+  },
+  {
+   "level": 26,
+   "solvable": true,
+   "par": 11,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.395
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.395
+   }
+  },
+  {
+   "level": 27,
+   "solvable": true,
+   "par": 9,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.71
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.71
+   }
+  },
+  {
+   "level": 28,
+   "solvable": true,
+   "par": 9,
+   "extra": 5,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.895,
+    "clears": 1.81
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 3.76
+   }
+  },
+  {
+   "level": 29,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 30,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.97,
+    "lose": 0,
+    "clears": 1.22
+   },
+   "careful": {
+    "win": 0.97,
+    "lose": 0,
+    "clears": 1.22
+   }
+  },
+  {
+   "level": 31,
+   "solvable": true,
+   "par": 6,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.13,
+    "lose": 0,
+    "clears": 4.925
+   },
+   "careful": {
+    "win": 0.13,
+    "lose": 0,
+    "clears": 4.925
+   }
+  },
+  {
+   "level": 32,
+   "solvable": true,
+   "par": 7,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.215
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.215
+   }
+  },
+  {
+   "level": 33,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.46,
+    "lose": 0.54,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.995,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 34,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.015,
+    "lose": 0.035,
+    "clears": 3.66
+   },
+   "careful": {
+    "win": 0.02,
+    "lose": 0,
+    "clears": 3.725
+   }
+  },
+  {
+   "level": 35,
+   "solvable": true,
+   "par": 9,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.015,
+    "clears": 7.95
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.83
+   }
+  },
+  {
+   "level": 36,
+   "solvable": true,
+   "par": 8,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 6.42
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 6.415
+   }
+  },
+  {
+   "level": 37,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.015,
+    "lose": 0.08,
+    "clears": 2.135
+   },
+   "careful": {
+    "win": 0.025,
+    "lose": 0,
+    "clears": 2.15
+   }
+  },
+  {
+   "level": 38,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 39,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.82,
+    "lose": 0,
+    "clears": 1.15
+   },
+   "careful": {
+    "win": 0.82,
+    "lose": 0,
+    "clears": 1.15
+   }
+  },
+  {
+   "level": 40,
+   "solvable": true,
+   "par": 9,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.94
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.94
+   }
+  },
+  {
+   "level": 41,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 6.985
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 6.985
+   }
+  },
+  {
+   "level": 42,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.99,
+    "lose": 0,
+    "clears": 0.605
+   },
+   "careful": {
+    "win": 0.99,
+    "lose": 0,
+    "clears": 0.605
+   }
+  },
+  {
+   "level": 43,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 44,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.04,
+    "lose": 0.315,
+    "clears": 4.285
+   },
+   "careful": {
+    "win": 0.095,
+    "lose": 0,
+    "clears": 5.345
+   }
+  },
+  {
+   "level": 45,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.04,
+    "lose": 0,
+    "clears": 5.83
+   },
+   "careful": {
+    "win": 0.04,
+    "lose": 0,
+    "clears": 5.83
+   }
+  },
+  {
+   "level": 46,
+   "solvable": true,
+   "par": 8,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 6.845
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 6.845
+   }
+  },
+  {
+   "level": 47,
+   "solvable": true,
+   "par": 10,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.03,
+    "clears": 8.955
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.95
+   }
+  },
+  {
+   "level": 48,
+   "solvable": true,
+   "par": 11,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 8.665
+   },
+   "careful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 8.665
+   }
+  },
+  {
+   "level": 49,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.355,
+    "lose": 0.645,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.965,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 50,
+   "solvable": true,
+   "par": 4,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.155,
+    "lose": 0.83,
+    "clears": 0.46
+   },
+   "careful": {
+    "win": 0.53,
+    "lose": 0,
+    "clears": 0.545
+   }
+  },
+  {
+   "level": 51,
+   "solvable": true,
+   "par": 6,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.06,
+    "lose": 0.14,
+    "clears": 5.1
+   },
+   "careful": {
+    "win": 0.055,
+    "lose": 0,
+    "clears": 5.295
+   }
+  },
+  {
+   "level": 52,
+   "solvable": true,
+   "par": 8,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.095,
+    "clears": 2.05
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 1.99
+   }
+  },
+  {
+   "level": 53,
+   "solvable": true,
+   "par": 8,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.01,
+    "lose": 0.205,
+    "clears": 5.72
+   },
+   "careful": {
+    "win": 0.02,
+    "lose": 0,
+    "clears": 6.655
+   }
+  },
+  {
+   "level": 54,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.87
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.87
+   }
+  },
+  {
+   "level": 55,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.025,
+    "lose": 0.01,
+    "clears": 4.59
+   },
+   "careful": {
+    "win": 0.02,
+    "lose": 0,
+    "clears": 4.585
+   }
+  },
+  {
+   "level": 56,
+   "solvable": true,
+   "par": 9,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.68
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 8.68
+   }
+  },
+  {
+   "level": 57,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 7.945
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 7.945
+   }
+  },
+  {
+   "level": 58,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.01,
+    "clears": 9.245
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 9.29
+   }
+  },
+  {
+   "level": 59,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.95
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.95
+   }
+  },
+  {
+   "level": 60,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.025,
+    "lose": 0.005,
+    "clears": 2.815
+   },
+   "careful": {
+    "win": 0.03,
+    "lose": 0,
+    "clears": 2.79
+   }
+  },
+  {
+   "level": 61,
+   "solvable": true,
+   "par": 12,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.125,
+    "clears": 9.875
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 10.575
+   }
+  },
+  {
+   "level": 62,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.98,
+    "lose": 0,
+    "clears": 0.32
+   },
+   "careful": {
+    "win": 0.98,
+    "lose": 0,
+    "clears": 0.32
+   }
+  },
+  {
+   "level": 63,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 7.435
+   },
+   "careful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 7.435
+   }
+  },
+  {
+   "level": 64,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.03,
+    "lose": 0,
+    "clears": 4.93
+   },
+   "careful": {
+    "win": 0.03,
+    "lose": 0,
+    "clears": 4.93
+   }
+  },
+  {
+   "level": 65,
+   "solvable": true,
+   "par": 10,
+   "extra": 2,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.975,
+    "clears": 0.77
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 1.74
+   }
+  },
+  {
+   "level": 66,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.59,
+    "lose": 0,
+    "clears": 1.745
+   },
+   "careful": {
+    "win": 0.59,
+    "lose": 0,
+    "clears": 1.745
+   }
+  },
+  {
+   "level": 67,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.025,
+    "lose": 0.08,
+    "clears": 3.185
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 3.16
+   }
+  },
+  {
+   "level": 68,
+   "solvable": true,
+   "par": 10,
+   "extra": 1,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.015,
+    "clears": 7.7
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 7.815
+   }
+  },
+  {
+   "level": 69,
+   "solvable": true,
+   "par": 12,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.025,
+    "clears": 10.285
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 10.245
+   }
+  }
+ ],
+ "khử từ 4": [
+  {
+   "level": 1,
+   "solvable": true,
+   "par": 1,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 2,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.36,
+    "lose": 0.64,
+    "clears": 0.64
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 3,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 4,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 5,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 6,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 7,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 8,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 9,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 10,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 11,
+   "solvable": true,
+   "par": 10,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.05,
+    "lose": 0.81,
+    "clears": 2.44
+   },
+   "careful": {
+    "win": 0.215,
+    "lose": 0,
+    "clears": 4.135
+   }
+  },
+  {
+   "level": 12,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 13,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.975,
+    "lose": 0.01,
+    "clears": 0.72
+   },
+   "careful": {
+    "win": 0.985,
+    "lose": 0,
+    "clears": 0.735
+   }
+  },
+  {
+   "level": 14,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.635,
+    "lose": 0.365,
+    "clears": 0.635
+   },
+   "careful": {
+    "win": 0.995,
+    "lose": 0,
+    "clears": 0.4
+   }
+  },
+  {
+   "level": 15,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.57,
+    "lose": 0,
+    "clears": 2.115
+   },
+   "careful": {
+    "win": 0.57,
+    "lose": 0,
+    "clears": 2.115
+   }
+  },
+  {
+   "level": 16,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.97,
+    "lose": 0,
+    "clears": 0.555
+   },
+   "careful": {
+    "win": 0.97,
+    "lose": 0,
+    "clears": 0.555
+   }
+  },
+  {
+   "level": 17,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.815,
+    "lose": 0.185,
+    "clears": 0.185
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 18,
+   "solvable": true,
+   "par": 5,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.29,
+    "lose": 0.61,
+    "clears": 0.795
+   },
+   "careful": {
+    "win": 0.47,
+    "lose": 0,
+    "clears": 0.555
+   }
+  },
+  {
+   "level": 19,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.63,
+    "lose": 0.32,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.625,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 20,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.03,
+    "lose": 0.035,
+    "clears": 1.36
+   },
+   "careful": {
+    "win": 0.025,
+    "lose": 0,
+    "clears": 1.45
+   }
+  },
+  {
+   "level": 21,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.4,
+    "lose": 0.475,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.595,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 22,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.015,
+    "lose": 0.08,
+    "clears": 2.95
+   },
+   "careful": {
+    "win": 0.025,
+    "lose": 0,
+    "clears": 2.985
+   }
+  },
+  {
+   "level": 23,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.54,
+    "lose": 0.22,
+    "clears": 1.82
+   },
+   "careful": {
+    "win": 0.62,
+    "lose": 0,
+    "clears": 2.1
+   }
+  },
+  {
+   "level": 24,
+   "solvable": true,
+   "par": 7,
+   "extra": 2,
+   "forgetful": {
+    "win": 0.035,
+    "lose": 0.47,
+    "clears": 1.525
+   },
+   "careful": {
+    "win": 0.035,
+    "lose": 0,
+    "clears": 1.25
+   }
+  },
+  {
+   "level": 25,
+   "solvable": true,
+   "par": 8,
+   "extra": 2,
+   "forgetful": {
+    "win": 0.01,
+    "lose": 0.095,
+    "clears": 2.655
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 2.85
+   }
+  },
+  {
+   "level": 26,
+   "solvable": true,
+   "par": 11,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.23,
+    "lose": 0.565,
+    "clears": 2.82
+   },
+   "careful": {
+    "win": 0.375,
+    "lose": 0,
+    "clears": 4.45
+   }
+  },
+  {
+   "level": 27,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.005,
+    "lose": 0.055,
+    "clears": 3.485
+   },
+   "careful": {
+    "win": 0.02,
+    "lose": 0,
+    "clears": 3.22
+   }
+  },
+  {
+   "level": 28,
+   "solvable": true,
+   "par": 8,
+   "extra": 4,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.99,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 29,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 30,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 31,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 32,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 33,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.46,
+    "lose": 0.54,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.995,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 34,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.37,
+    "lose": 0.01,
+    "clears": 0.885
+   },
+   "careful": {
+    "win": 0.385,
+    "lose": 0,
+    "clears": 0.86
+   }
+  },
+  {
+   "level": 35,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.595,
+    "lose": 0,
+    "clears": 0.5
+   },
+   "careful": {
+    "win": 0.595,
+    "lose": 0,
+    "clears": 0.5
+   }
+  },
+  {
+   "level": 36,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.005,
+    "lose": 0.005,
+    "clears": 2.705
+   },
+   "careful": {
+    "win": 0.01,
+    "lose": 0,
+    "clears": 2.725
+   }
+  },
+  {
+   "level": 37,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.485,
+    "lose": 0.315,
+    "clears": 0.56
+   },
+   "careful": {
+    "win": 0.57,
+    "lose": 0,
+    "clears": 0.515
+   }
+  },
+  {
+   "level": 38,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 39,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 40,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.995,
+    "lose": 0,
+    "clears": 0.295
+   },
+   "careful": {
+    "win": 0.995,
+    "lose": 0,
+    "clears": 0.295
+   }
+  },
+  {
+   "level": 41,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.65,
+    "lose": 0.11,
+    "clears": 2.24
+   },
+   "careful": {
+    "win": 0.62,
+    "lose": 0,
+    "clears": 2.455
+   }
+  },
+  {
+   "level": 42,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 43,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 44,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.44,
+    "lose": 0.405,
+    "clears": 1.475
+   },
+   "careful": {
+    "win": 0.73,
+    "lose": 0,
+    "clears": 1.555
+   }
+  },
+  {
+   "level": 45,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 46,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.655,
+    "lose": 0.31,
+    "clears": 0.81
+   },
+   "careful": {
+    "win": 0.885,
+    "lose": 0,
+    "clears": 0.82
+   }
+  },
+  {
+   "level": 47,
+   "solvable": true,
+   "par": 9,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.75,
+    "lose": 0.015,
+    "clears": 1.155
+   },
+   "careful": {
+    "win": 0.76,
+    "lose": 0,
+    "clears": 1.115
+   }
+  },
+  {
+   "level": 48,
+   "solvable": true,
+   "par": 11,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.62,
+    "lose": 0.04,
+    "clears": 2.475
+   },
+   "careful": {
+    "win": 0.625,
+    "lose": 0,
+    "clears": 2.465
+   }
+  },
+  {
+   "level": 49,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.355,
+    "lose": 0.645,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.965,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 50,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.16,
+    "lose": 0.835,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.7,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 51,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.175,
+    "lose": 0.535,
+    "clears": 0.985
+   },
+   "careful": {
+    "win": 0.255,
+    "lose": 0,
+    "clears": 1.045
+   }
+  },
+  {
+   "level": 52,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 53,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.055,
+    "lose": 0.555,
+    "clears": 1.375
+   },
+   "careful": {
+    "win": 0.1,
+    "lose": 0,
+    "clears": 1.44
+   }
+  },
+  {
+   "level": 54,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.14,
+    "lose": 0.12,
+    "clears": 2.7
+   },
+   "careful": {
+    "win": 0.145,
+    "lose": 0,
+    "clears": 2.875
+   }
+  },
+  {
+   "level": 55,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.165,
+    "lose": 0,
+    "clears": 0.69
+   },
+   "careful": {
+    "win": 0.165,
+    "lose": 0,
+    "clears": 0.69
+   }
+  },
+  {
+   "level": 56,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.655,
+    "lose": 0,
+    "clears": 2.635
+   },
+   "careful": {
+    "win": 0.655,
+    "lose": 0,
+    "clears": 2.635
+   }
+  },
+  {
+   "level": 57,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.765,
+    "lose": 0,
+    "clears": 1.885
+   },
+   "careful": {
+    "win": 0.765,
+    "lose": 0,
+    "clears": 1.885
+   }
+  },
+  {
+   "level": 58,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.055,
+    "lose": 0.01,
+    "clears": 2.675
+   },
+   "careful": {
+    "win": 0.075,
+    "lose": 0,
+    "clears": 2.655
+   }
+  },
+  {
+   "level": 59,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.05,
+    "lose": 0.16,
+    "clears": 2.115
+   },
+   "careful": {
+    "win": 0.06,
+    "lose": 0,
+    "clears": 2.29
+   }
+  },
+  {
+   "level": 60,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.145,
+    "lose": 0,
+    "clears": 0.37
+   },
+   "careful": {
+    "win": 0.145,
+    "lose": 0,
+    "clears": 0.37
+   }
+  },
+  {
+   "level": 61,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.075,
+    "clears": 1.94
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 1.91
+   }
+  },
+  {
+   "level": 62,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 63,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.015,
+    "lose": 0.43,
+    "clears": 1.47
+   },
+   "careful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 1.68
+   }
+  },
+  {
+   "level": 64,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.225,
+    "lose": 0.6,
+    "clears": 2.205
+   },
+   "careful": {
+    "win": 0.275,
+    "lose": 0,
+    "clears": 2.79
+   }
+  },
+  {
+   "level": 65,
+   "solvable": true,
+   "par": 10,
+   "extra": 2,
+   "forgetful": {
+    "win": 0.035,
+    "lose": 0.96,
+    "clears": 0.09
+   },
+   "careful": {
+    "win": 0.025,
+    "lose": 0,
+    "clears": 0.115
+   }
+  },
+  {
+   "level": 66,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 67,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.255,
+    "lose": 0.03,
+    "clears": 1.27
+   },
+   "careful": {
+    "win": 0.275,
+    "lose": 0,
+    "clears": 1.22
+   }
+  },
+  {
+   "level": 68,
+   "solvable": true,
+   "par": 10,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.02,
+    "lose": 0.505,
+    "clears": 2.41
+   },
+   "careful": {
+    "win": 0.045,
+    "lose": 0,
+    "clears": 2.725
+   }
+  },
+  {
+   "level": 69,
+   "solvable": true,
+   "par": 12,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.01,
+    "clears": 3.91
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 3.92
+   }
+  }
+ ],
+ "không khử": [
+  {
+   "level": 1,
+   "solvable": true,
+   "par": 1,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 2,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 3,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 4,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 5,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 6,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 7,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 8,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 9,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 10,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 11,
+   "solvable": true,
+   "par": 10,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 12,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 13,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 14,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 15,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 16,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 17,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.815,
+    "lose": 0.185,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 18,
+   "solvable": true,
+   "par": 5,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.295,
+    "lose": 0.625,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.42,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 19,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.63,
+    "lose": 0.32,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.625,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 20,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.085,
+    "lose": 0.11,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.07,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 21,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.4,
+    "lose": 0.475,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.595,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 22,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.15,
+    "lose": 0.155,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.185,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 23,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.54,
+    "lose": 0.365,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.71,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 24,
+   "solvable": true,
+   "par": 7,
+   "extra": 2,
+   "forgetful": {
+    "win": 0.06,
+    "lose": 0.66,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.135,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 25,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.16,
+    "lose": 0.565,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.3,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 26,
+   "solvable": true,
+   "par": 11,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.605,
+    "lose": 0.35,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.71,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 27,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.03,
+    "lose": 0.07,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.055,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 28,
+   "solvable": true,
+   "par": 8,
+   "extra": 4,
+   "forgetful": {
+    "win": 0,
+    "lose": 0.99,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.005,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 29,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 30,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 31,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 32,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 33,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.46,
+    "lose": 0.54,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.995,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 34,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.71,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.71,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 35,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.735,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.735,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 36,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.99,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.99,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 37,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.85,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.85,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 38,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 39,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 40,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 41,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 42,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 43,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 44,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 45,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 46,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 47,
+   "solvable": true,
+   "par": 9,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.95,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.95,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 48,
+   "solvable": true,
+   "par": 11,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.985,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.985,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 49,
+   "solvable": true,
+   "par": 2,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.355,
+    "lose": 0.645,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.965,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 50,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.16,
+    "lose": 0.835,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.7,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 51,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.04,
+    "lose": 0.885,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.08,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 52,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 53,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.18,
+    "lose": 0.56,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.23,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 54,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.225,
+    "lose": 0.285,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.205,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 55,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.37,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.37,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 56,
+   "solvable": true,
+   "par": 8,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 57,
+   "solvable": true,
+   "par": 7,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 58,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.255,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.255,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 59,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.185,
+    "lose": 0.135,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.215,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 60,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.575,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.575,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 61,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 62,
+   "solvable": true,
+   "par": 3,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 63,
+   "solvable": true,
+   "par": 7,
+   "extra": 1,
+   "forgetful": {
+    "win": 0.02,
+    "lose": 0.325,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.03,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 64,
+   "solvable": true,
+   "par": 5,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 65,
+   "solvable": true,
+   "par": 10,
+   "extra": 2,
+   "forgetful": {
+    "win": 0.06,
+    "lose": 0.94,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.055,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 66,
+   "solvable": true,
+   "par": 4,
+   "extra": 0,
+   "forgetful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 1,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 67,
+   "solvable": true,
+   "par": 6,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.965,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.965,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 68,
+   "solvable": true,
+   "par": 9,
+   "extra": 0,
+   "forgetful": {
+    "win": 0.05,
+    "lose": 0.63,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0.12,
+    "lose": 0,
+    "clears": 0
+   }
+  },
+  {
+   "level": 69,
+   "solvable": true,
+   "par": 12,
+   "extra": 3,
+   "forgetful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 0
+   },
+   "careful": {
+    "win": 0,
+    "lose": 0,
+    "clears": 0
+   }
+  }
+ ]
+}

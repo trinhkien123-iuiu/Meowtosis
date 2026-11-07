@@ -68,8 +68,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 1238077bf7fb5244aa399bcd286d2882, type: 3}
     volume: 0.5
   - id: 18
-    clip: {fileID: 8300000, guid: 3b379f76d5e479847b0c5df4687c116e, type: 3}
-    volume: 0.6
+    clip: {fileID: 8300000, guid: e32ebaba35b2ac14e95715e403785f49, type: 3}
+    volume: 0.45
   - id: 19
     clip: {fileID: 8300000, guid: a1a0ac5a07fcc224283fa854b6dbf3f1, type: 3}
     volume: 0.8
@@ -77,11 +77,14 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: d3bf3558846501c4b8325e9685de6732, type: 3}
     volume: 0.8
   meows:
-  - {fileID: 8300000, guid: 20ebb84022fde494095027979e740c64, type: 3}
-  - {fileID: 8300000, guid: d80a65e9e426661408a64116fa504131, type: 3}
-  - {fileID: 8300000, guid: bcf0f54cbb5837841966bb53264255c8, type: 3}
-  - {fileID: 8300000, guid: e1948bb184278844e809b8f1cf449e6d, type: 3}
-  meowVolume: 0.75
+  - {fileID: 8300000, guid: a7af78920ea06b54ebec0bd3da4831e1, type: 3}
+  - {fileID: 8300000, guid: 9b3aacf55651f544a86acd270d1f4de5, type: 3}
+  - {fileID: 8300000, guid: 829a886048760364188c52ca017a1c05, type: 3}
+  - {fileID: 8300000, guid: b62e43d4b9bab324d8c4c786d3b57f24, type: 3}
+  - {fileID: 8300000, guid: 4574654880e7c9341a8330383e6bc5dc, type: 3}
+  - {fileID: 8300000, guid: b4f63a931c4b74646b6c180704165d4f, type: 3}
+  - {fileID: 8300000, guid: 3bbc781578170664fa6a5267596c5ac4, type: 3}
+  meowVolume: 0.35
   voicePitches:
   - 1
   - 0.86

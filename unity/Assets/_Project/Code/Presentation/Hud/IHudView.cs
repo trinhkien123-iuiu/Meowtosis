@@ -10,20 +10,27 @@ namespace Meowtosis.Presentation
     {
         event Action SettingsClicked;
 
+        // Nút chơi lại màn trên thanh trên.
+        event Action RestartClicked;
+
         event Action HintClicked;
 
         event Action<BoosterKind> BoosterClicked;
 
         event Action<Species> ColorChosen;
 
+        // Chạm nhanh 3 lần vào ô "Lv": mở bảng cheat của bản thử.
+        event Action LevelBadgeTripleTapped;
+
         void ShowLevel(int levelNumber);
 
         // `timer` là thời gian tới tim kế tiếp, rỗng khi tim đầy.
         void ShowHearts(int hearts, string timer);
 
-        void ShowStars(StarMeter meter, string movesText, bool instantly);
+        void ShowStars(StarMeter meter, bool instantly);
 
-        void ShowGoal(string text);
+        // Viên gỗ mục tiêu dưới thanh sao (số ô đã lấp, số hộp đúng màu).
+        void ShowGoal(GoalProgress progress, bool instantly);
 
         // Bong bóng lời thoại: mẹo, hướng dẫn, gợi ý; chuỗi rỗng thì ẩn.
         void ShowTip(string text);

@@ -36,8 +36,8 @@ function exportLevels(ctx) {
     const def = asDef(d), lv = ctx.parseLevel(def), path = ctx.solve(lv, lv.init);
     const k = chapters.findIndex(c => i >= c.from && i <= c.to);
     return { index: i + 1, chapter: k + 1, chapterName: chapters[k].name, ...JSON.parse(JSON.stringify(def)),
-      par: path ? path.length : null,
-      solution: path ? path.map(([from, dir]) => [Math.floor(from / lv.w), from % lv.w, dir]) : null };
+      par: def.par !== undefined ? def.par : (path ? path.length : null),
+      solution: def.solution ? def.solution : (path ? path.map(([from, dir]) => [Math.floor(from / lv.w), from % lv.w, dir]) : null) };
   });
 }
 
@@ -64,7 +64,7 @@ function rng(seed) {
 // Chạy một lời giải, đếm các sự kiện. Dùng để biết cơ chế nào thật sự cần và để chấm "bất ngờ".
 function events(ctx, lv, path) {
   const ev = { push: 0, longPush: 0, replace: 0, clear: 0, cleared: 0, toxic: 0, wake: 0, chainWake: 0, wakeUse: 0,
-    spread: 0, eaten: 0, virusDie: 0, germDie: 0, germClear: 0 };
+    spread: 0, eaten: 0, virusDie: 0, germDie: 0, germClear: 0, slide: 0 };
   const sleepers = new Set(lv.init.filter(x => x && x.sleep).map(x => x.id));
   let c = lv.init, id = lv.nextId;   // cấp id mới như game, để mèo sinh ra và virus lan ra không trùng id cũ
   for (const [f, d] of path) {
@@ -77,6 +77,7 @@ function events(ctx, lv, path) {
       if (n >= 2) ev.longPush++;
     }
     if (r.replaced) ev.replace++;
+    if (r.slid) ev.slide++;
     const killed = [r.replaced, ...r.removed, ...r.poisoned, ...r.eaten].filter(Boolean);
     ev.virusDie += killed.filter(x => x.color === 'V').length;
     ev.germDie += killed.filter(x => x.color === lv.kill).length;
@@ -173,7 +174,7 @@ function census(def) {
     fill: [...flat].filter(ch => ch !== '#' && ch !== '~' && !/[A-Fa-f]/.test(ch)).length,
     colors: new Set([...flat].filter(ch => /[A-Fa-f]/.test(ch)).map(ch => ch.toUpperCase())).size,
     mech: [d.goal && 'hộp', d.oneway && d.oneway.length && 'màng', flat.includes('~') && 'độc', /[a-f]/.test(flat) && 'ngủ',
-      /[<>^v]/.test(flat) && 'virus', d.kill && 'khuẩn'].filter(Boolean),
+      /[<>^v]/.test(flat) && 'virus', d.kill && 'khuẩn', flat.includes('=') && 'băng'].filter(Boolean),
   };
 }
 

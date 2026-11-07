@@ -45,7 +45,7 @@ Mỗi level là một phần tử trong mảng `LEVELS` (khối `// ==LOGIC==` c
 | `#` | Ngoài cơ thể (không phải ô) |
 | `.` | Ô trống |
 | `~` | Ô độc (không cần lấp) |
-| `A` `B` `C` `D` `E` | Mèo đỏ, xanh, vàng, hồng, tím (hồng từ level 18, tím từ level 31; 4–5 màu cùng lúc từ level 62) |
+| `A` `B` `C` `D` `E` | Mèo đỏ, xanh, vàng, hồng, tím (hồng từ level 18, tím từ level 31; 4–5 màu cùng lúc từ level 69) |
 | `a` `b` `c` `d` `e` | Mèo ngủ (màu tương ứng) |
 | `G` | Vi khuẩn |
 | `^` `v` `<` `>` | Virus, mũi tên là hướng lan |
@@ -76,9 +76,9 @@ Level chia thành các **khối theo cơ chế**, khai báo trong mảng `CHAPTE
 | 2 · Vào vị trí | 17–28 | Hộp mục tiêu |
 | 3 · Màng và độc | 29–37 | Màng một chiều, ô độc |
 | 4 · Ngủ và virus | 38–48 | Mèo ngủ (cả thức dây chuyền), virus (cả hai virus) |
-| 5 · Diệt khuẩn | 49–54 | Diệt khuẩn (cả khử 3 vi khuẩn) |
-| 6 · Đại gia đình | 55–61 | Bàn 5×5–5×6, đông mèo, trộn mọi cơ chế |
-| 7 · Đủ sắc màu | 62–69 | Lần đầu 4 màu (level 62) rồi 5 màu (level 66) cùng lúc |
+| 5 · Băng trơn | 49–61 | Băng trơn (8 level), rồi 5 level ôn (vi khuẩn đã bỏ 2026-11-07) |
+| 6 · Đại gia đình | 62–68 | Bàn 5×5–5×6, đông mèo, trộn mọi cơ chế |
+| 7 · Đủ sắc màu | 69–76 | Lần đầu 4 màu (level 69) rồi 5 màu (level 73) cùng lúc |
 
 ### 3.2 Xuất ra JSON
 
@@ -167,8 +167,8 @@ Luật nằm trọn trong khối `// ==LOGIC==`, viết bằng hàm thuần (kh�
 
 **Onboarding (3 lớp):**
 1. **Thẻ hướng dẫn** hiện lần đầu gặp mỗi cơ chế (`MECHANICS`): ảnh trước/sau một lần vuốt, ảnh "sau" do chính luật tính ra.
-2. **Hướng dẫn tương tác** ở 10 level (1, 2, 4, 12, 17, 29, 33, 38, 42, 49): làm tối bàn trừ ô cần chú ý, bàn tay chỉ hướng vuốt, bong bóng lời thoại; chỉ nhận đúng nước được chỉ; hoàn tác thì lùi bước.
-3. **Mẹo đầu màn** (`tip`) ở 9 level có yếu tố mới nhỏ (10 bàn đông mèo, 18 mèo hồng, 31 mèo tím, 41 thức dây chuyền, 44 hai virus, 51 khử 3 vi khuẩn, 57 bàn đông mèo nhất, 62 bốn màu, 66 năm màu): chỉ là bong bóng lời thoại, không khoá nước.
+2. **Hướng dẫn tương tác** ở 7 level (12, 17, 29, 33, 38, 42, 49 băng trơn; bản Unity dạy nhân đôi, đẩy, thay thế, khử 3 ở màn hướng dẫn đầu game, xem `architecture.md`): làm tối bàn trừ ô cần chú ý, bàn tay chỉ hướng vuốt, bong bóng lời thoại; chỉ nhận đúng nước được chỉ; hoàn tác thì lùi bước.
+3. **Mẹo đầu màn** (`tip`) ở 8 level có yếu tố mới nhỏ (10 bàn đông mèo, 18 mèo hồng, 31 mèo tím, 41 thức dây chuyền, 44 hai virus, 64 bàn đông mèo nhất, 69 bốn màu, 73 năm màu): chỉ là bong bóng lời thoại, không khoá nước.
 
 ---
 

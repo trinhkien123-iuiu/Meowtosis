@@ -17,19 +17,12 @@ namespace Meowtosis.Presentation
 
         event Action RestartClicked;
 
-        event Action PreviousLevelClicked;
-
-        event Action NextLevelClicked;
-
-        event Action RefillClicked;
-
-        void Show(bool soundOn, bool musicOn, int levelNumber);
+        void Show(bool soundOn, bool musicOn);
 
         void Hide();
     }
 
-    // Popup cài đặt: bật/tắt âm thanh và nhạc, chơi lại màn. Phần "Bản thử" (chuyển level, nạp đầy tim và booster)
-    // chỉ để test cho tới khi có bản đồ level.
+    // Popup cài đặt: bật/tắt âm thanh và nhạc, chơi lại màn, về Home. Các nút để test nằm ở bảng cheat (CheatPopup).
     public sealed class SettingsPopup : PopupView, ISettingsPopup
     {
         [SerializeField] private Button soundButton;
@@ -40,10 +33,6 @@ namespace Meowtosis.Presentation
         [SerializeField] private Image musicIcon;
         [SerializeField] private Color offColor = new Color(1f, 1f, 1f, 0.35f);
         [SerializeField] private Button restartButton;
-        [SerializeField] private Button previousButton;
-        [SerializeField] private Button nextButton;
-        [SerializeField] private TMP_Text levelText;
-        [SerializeField] private Button refillButton;
         [SerializeField] private Button closeButton;
         [SerializeField] private Button homeButton;
 
@@ -55,17 +44,10 @@ namespace Meowtosis.Presentation
 
         public event Action RestartClicked;
 
-        public event Action PreviousLevelClicked;
-
-        public event Action NextLevelClicked;
-
-        public event Action RefillClicked;
-
-        public void Show(bool soundOn, bool musicOn, int levelNumber)
+        public void Show(bool soundOn, bool musicOn)
         {
             soundIcon.sprite = soundOn ? soundOnSprite : soundOffSprite;
             musicIcon.color = musicOn ? Color.white : offColor;
-            levelText.text = GameTexts.LevelBadge(levelNumber);
             if (!IsOpen) Open();
         }
 
@@ -74,9 +56,6 @@ namespace Meowtosis.Presentation
             soundButton.onClick.AddListener(() => SoundToggled?.Invoke());
             musicButton.onClick.AddListener(() => MusicToggled?.Invoke());
             restartButton.onClick.AddListener(() => RestartClicked?.Invoke());
-            previousButton.onClick.AddListener(() => PreviousLevelClicked?.Invoke());
-            nextButton.onClick.AddListener(() => NextLevelClicked?.Invoke());
-            refillButton.onClick.AddListener(() => RefillClicked?.Invoke());
             closeButton.onClick.AddListener(Hide);
             homeButton.onClick.AddListener(() => HomeClicked?.Invoke());
         }

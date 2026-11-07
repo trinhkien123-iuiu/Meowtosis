@@ -32,8 +32,8 @@ namespace Meowtosis.Presentation
         // Chạm vào quân: vuốt ve.
         void Pet(int cell);
 
-        // Thắng: mèo nhảy vui, confetti.
-        void Celebrate();
+        // Thắng: mèo nhảy vui, rồi các khối rơi xuống hố kéo theo mèo; rơi hết thì gọi `finished`.
+        void Celebrate(Action finished);
 
         // Thua: mèo mặt bất lực đổ mồ hôi, bàn rung.
         void Mourn();
@@ -49,9 +49,19 @@ namespace Meowtosis.Presentation
 
         void HideHint();
 
-        // Bước hướng dẫn: làm tối bàn trừ ô mèo và ô đích, bàn tay lướt theo nước cần vuốt.
+        // Bước hướng dẫn: bàn tay lướt theo nước cần vuốt, bóng mờ bản sao trượt sang ô đích.
         void ShowTutorial(int cell, Direction direction);
 
         void HideTutorial();
+
+        // Làm tối cả màn hình, chỉ chừa sáng các ô `cells` (bàn tay và bóng mờ hướng dẫn vẫn nổi trên lớp tối).
+        void Focus(IEnumerable<int> cells);
+
+        void ClearFocus();
+
+        // Tiêu điểm sáng vào một ô: làm tối phần còn lại, quân ở ô đó nhảy lên.
+        void Spotlight(int cell);
+
+        void ClearSpotlight();
     }
 }

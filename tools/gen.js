@@ -4,14 +4,17 @@
 //   frame: ['..#', '...']          khung cố định, hoặc
 //   shape: { w, h, holes: [a, b] } khung ngẫu nhiên w×h khoét a..b ô (vẫn liền một khối, không trùng khung đã có)
 //   cells: 'AAABBc'                mèo đặt ngẫu nhiên (chữ thường = đang ngủ, G = vi khuẩn)
-//   toxic: n, virus: n | '<>', membranes: n
+//   toxic: n, ice: n (ô băng trơn), virus: n | '<>', membranes: n
 //   mode: 'fill' | 'target' | 'kill', targets: n (số hộp)
 //   need: ['clear', 'replace', ...]  sự kiện bắt buộc có trong lời giải ngắn nhất (tên như trong lib.events,
+//                                    thêm 'ice' = băng làm đổi lời giải,
 //                                    thêm 'oneway' = màng làm đổi lời giải)
 //   min, max: khoảng số nước tối ưu · maxMs: bỏ level mà bộ giải chạy lâu hơn (mặc định 300)
 //   twist: true -> đòi có ít nhất một mẹo trong lời giải và đa số nước đầu không tối ưu
+//   strict: true -> mọi cơ chế có trên bàn phải bắt buộc dùng mới thắng được (tools/mechanic-use.js)
 //   ms: thời gian chạy job · seed · top: số ứng viên in ra
 const fs = require('fs');
+const mechanicUse = require('./mechanic-use');
 const { loadLogic, asDef, canon, rng, events, featString, explore, firstMoves, randomPlay, census, scores } = require('./lib');
 
 const ctx = loadLogic();
@@ -48,8 +51,8 @@ function randomFrame(rnd, w, h, holes) {
 }
 
 for (const job of jobs) {
-  const { name, frame, shape, cells: put = 'AB', toxic = 0, virus = 0, membranes = 0, mode = 'fill', targets = 2,
-    need = [], min = 3, max = 99, maxMs = 300, twist = false, ms = 20000, seed = 1, nodes = 80000, top = 4 } = job;
+  const { name, frame, shape, cells: put = 'AB', toxic = 0, ice = 0, virus = 0, membranes = 0, mode = 'fill', targets = 2,
+    need = [], strict = false, min = 3, max = 99, maxMs = 300, twist = false, ms = 20000, seed = 1, nodes = 80000, top = 4 } = job;
   const rnd = rng(seed);
   const why = {};
   const no = reason => { why[reason] = (why[reason] || 0) + 1; return null; };
@@ -63,6 +66,7 @@ for (const job of jobs) {
     const g = rows0.join('').split('');
     const free = () => g.map((ch, j) => ch === '.' ? j : -1).filter(j => j >= 0);
     for (let n = 0; n < toxic; n++) g[rnd.pick(free())] = '~';
+    for (let n = 0; n < ice; n++) { const f = free(); if (!f.length) return null; g[rnd.pick(f)] = '='; }
     for (const ch of put) { const f = free(); if (!f.length) return null; g[rnd.pick(f)] = ch; }
     const arrows = typeof virus === 'string' ? [...virus] : Array.from({ length: virus }, () => rnd.pick(ARROWS));
     for (const a of arrows) g[rnd.pick(free())] = a;
@@ -136,8 +140,23 @@ for (const job of jobs) {
           for (const [f, d] of alt) { const r = ctx.swipe(lv, c, f, d); if (!r) { ok = false; break; } c = r.cells; }
           if (ok && ctx.isWon(lv, c)) return no('màng không đổi gì');
         }
+      } else if (n === 'ice') {
+        // Băng phải đổi cách giải: lời giải của bản không băng đem chơi trên bàn có băng thì không thắng.
+        const plain = ctx.parseLevel({ ...def, rows: def.rows.map(row => row.replace(/=/g, '.')) });
+        const alt = ctx.solve(plain, plain.init, nodes, maxMs);
+        if (alt) {
+          let c = lv.init, ok = true;
+          for (const [f, d] of alt) { const r = ctx.swipe(lv, c, f, d); if (!r) { ok = false; break; } c = r.cells; }
+          if (ok && ctx.isWon(lv, c)) return no('băng không đổi gì');
+        }
+        if (!ev.slide) return no('không trượt');
       } else if (n === 'virus') { if (!ev.spread || !ev.virusDie) return no('thiếu ' + n); }
       else if (!ev[n]) return no('thiếu ' + n);
+    }
+    if (strict) {
+      const use = mechanicUse.check(ctx, def);
+      const weak = Object.keys(use).find(k => use[k] !== 'bắt buộc');
+      if (weak) return no(`${weak} ${use[weak]}`);
     }
     // Lọc rẻ trước (nước đầu bằng A*), duyệt toàn bộ không gian sau cùng vì tốn nhất
     const fm = firstMoves(ctx, lv, path.length, nodes, maxMs);

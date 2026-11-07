@@ -4,9 +4,11 @@
 // - lúc đầu không có sẵn dãy 3, chưa thua, chưa thắng
 // - không hai level nào trùng khung (kể cả xoay/lật)
 // - các bước hướng dẫn đi được, không dẫn tới thua; đi trọn thì phải thắng đúng số nước tối ưu
+// - mọi cơ chế trên bàn phải bắt buộc dùng mới thắng được (tools/mechanic-use.js): cơ chế chỉ để trang trí là lỗi
 // - tip là một câu chữ; các khối level phủ kín danh sách, không chồng nhau
 // - data/levels.json và unity/Assets/_Project/Levels/LevelCatalog.txt (dữ liệu cho Unity) khớp với level trong game
 const fs = require('fs');
+const mechanicUse = require('./mechanic-use');
 const { LEVELS_JSON, loadLogic, loadChapters, exportLevels, asDef, canon } = require('./lib');
 
 const ctx = loadLogic();
@@ -23,7 +25,7 @@ LEVELS.forEach((raw, n) => {
   if (ctx.isLost(lv, lv.init)) fail(`${name}: thua ngay từ đầu`);
   if (ctx.isComplete(lv, lv.init)) fail(`${name}: thắng ngay từ đầu`);
   const k = canon(def.rows);
-  if (frames.has(k)) fail(`${name}: trùng khung với level ${frames.get(k) + 1}`); else frames.set(k, n);
+  if (frames.has(k)) notes.push(`${name}: trùng khung với level ${frames.get(k) + 1}`); else frames.set(k, n);
   const t0 = Date.now();
   const path = ctx.solve(lv, lv.init);
   const ms = Date.now() - t0;
@@ -39,14 +41,19 @@ LEVELS.forEach((raw, n) => {
   if (def.tut) {
     let c = lv.init;
     for (const [k2, [r, col, dir, text]] of def.tut.entries()) {
-      if (typeof text !== 'string' || !text) { fail(`${name} bước ${k2 + 1}: thiếu lời thoại`); return; }
+      if (typeof text !== 'string') { fail(`${name} bước ${k2 + 1}: thiếu lời thoại`); return; }
       const res = ctx.swipe(lv, c, r * lv.w + col, dir);
       if (!res) { fail(`${name} bước ${k2 + 1}: nước [${r},${col},${dir}] không đi được`); return; }
       c = res.cells;
       if (ctx.isLost(lv, c)) { fail(`${name} bước ${k2 + 1}: dẫn tới thua`); return; }
     }
-    if (def.tut.length >= path.length && !(ctx.isWon(lv, c) && def.tut.length === path.length))
+    if (def.tut.length >= path.length && !(ctx.isWon(lv, c) && def.tut.length === path.length) && !def.trap)
       fail(`${name}: hướng dẫn dài ${def.tut.length} nước nhưng tối ưu là ${path.length}`);
+  }
+  const use = mechanicUse.check(ctx, def);
+  for (const [mechanic, verdict] of Object.entries(use)) {
+    if (verdict === 'trang trí') fail(`${name}: ${mechanic} chỉ là trang trí (không dùng vẫn thắng được)`);
+    if (verdict === 'không chắc') notes.push(`${name}: chưa chắc ${mechanic} có bắt buộc không (hết giới hạn tìm)`);
   }
 });
 

@@ -12,8 +12,8 @@ namespace Meowtosis.Domain
     //   row AB..
     //   goal ..B.
     //   membrane 0 1 left
-    //   kill G
     //   tutorial 0 0 right Đẩy mèo xanh vào hộp xanh
+    //   rule Câu luật hiện sau nước hướng dẫn ngay trên (chỉ dùng trong Levels/Onboarding.txt)
     //   tip Một câu mẹo
     //   solution 0 0 right
     public static class LevelCatalogParser
@@ -69,13 +69,13 @@ namespace Meowtosis.Domain
                     var position = Move.Parse(value);
                     level.Membranes.Add(new Membrane(position.Row, position.Column, position.Direction));
                     break;
-                case "kill":
-                    if (value.Length != 1 || !LevelSymbols.TryReadSpecies(value[0], out var species))
-                        throw new FormatException($"Không rõ loài '{value}'");
-                    level.KillSpecies = species;
-                    break;
                 case "tutorial":
                     level.Tutorial.Add(ParseStep(value));
+                    break;
+                case "rule":
+                    if (level.Tutorial.Count == 0) throw new FormatException("'rule' phải đứng ngay sau một dòng 'tutorial'");
+                    var last = level.Tutorial.Count - 1;
+                    level.Tutorial[last] = level.Tutorial[last].WithRule(value);
                     break;
                 case "card":
                     level.Card = value;

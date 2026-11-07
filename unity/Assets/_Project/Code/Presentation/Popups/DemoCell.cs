@@ -14,7 +14,7 @@ namespace Meowtosis.Presentation
         [SerializeField] private GameObject sleepMarks;
         [Tooltip("Bề rộng ảnh mèo so với ô.")]
         [SerializeField] private float catWidth = 0.778f;
-        [Tooltip("Bề rộng hình vi khuẩn, virus so với ô (vẽ trên khung 1,5 ô).")]
+        [Tooltip("Bề rộng hình virus so với ô (vẽ trên khung 1,5 ô).")]
         [SerializeField] private float placeholderWidth = 1.5f;
 
         public void ShowCell(Level level, int cell, BoardArt art)
@@ -35,8 +35,7 @@ namespace Meowtosis.Presentation
 
             var value = shown.Value;
             if (value.IsVirus) piece.sprite = art.VirusSprite(value.Facing);
-            else if (value.IsCat) piece.sprite = art.CatSprite(value.Species, isHappy);
-            else piece.sprite = art.Germ;
+            else piece.sprite = art.CatSprite(value.Species, isHappy);
             var width = cellSize * (value.IsCat ? catWidth : placeholderWidth);
             piece.rectTransform.sizeDelta = new Vector2(width, width * piece.sprite.rect.height / piece.sprite.rect.width);
         }

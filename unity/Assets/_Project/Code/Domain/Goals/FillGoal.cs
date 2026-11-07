@@ -1,6 +1,6 @@
 namespace Meowtosis.Domain
 {
-    // Mọi ô của bàn (trừ ô độc) có mèo hoặc vi khuẩn. Virus không tính là đã lấp.
+    // Mọi ô của bàn (trừ ô độc) có mèo. Virus không tính là đã lấp.
     public sealed class FillGoal : ILevelGoal
     {
         public bool IsMet(Board board)

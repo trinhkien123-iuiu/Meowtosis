@@ -1,6 +1,6 @@
 namespace Meowtosis.Domain
 {
-    // Mọi loại quân có thể đứng trong một ô. Năm màu mèo đứng đầu.
+    // Mọi loại quân có thể đứng trong một ô: năm màu mèo, rồi virus.
     public enum Species
     {
         Red,
@@ -8,7 +8,6 @@ namespace Meowtosis.Domain
         Yellow,
         Pink,
         Purple,
-        Germ,
         Virus,
     }
 }

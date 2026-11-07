@@ -28,6 +28,12 @@ namespace Meowtosis.Presentation
             Apply();
         }
 
+        // Căn lại nền và hoạ tiết (ví dụ sau khi đổi ảnh nền); chưa có bàn thì để lần Frame đầu tiên căn.
+        public void Refit()
+        {
+            if (hasBoard) Apply();
+        }
+
         private void Awake() => targetCamera = GetComponent<Camera>();
 
         private void LateUpdate()

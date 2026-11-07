@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Meowtosis.Domain;
+using Meowtosis.Gameplay;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Meowtosis.Presentation
 {
@@ -17,12 +19,13 @@ namespace Meowtosis.Presentation
         [SerializeField] private CameraFraming cameraFraming;
         [SerializeField] private BoardEffects effects;
         [SerializeField] private SoundPlayer sounds;
+        [SerializeField] private BoardCollapse collapse;
 
         [Header("Prefab")]
-        [Tooltip("Khung gỗ liền một khối, tự vẽ theo hình dạng từng level.")]
-        [SerializeField] private BoardFrame framePrefab;
+        [Tooltip("Một khối gỗ 3D cho mỗi ô. SortingGroup trên prefab được cộng thêm số hàng, để khối hàng dưới che mặt trước khối hàng trên.")]
         [SerializeField] private Transform tilePrefab;
         [SerializeField] private Transform toxicTilePrefab;
+        [SerializeField] private Transform iceTilePrefab;
         [SerializeField] private SpriteRenderer boxPrefab;
         [Tooltip("Màng cho đi qua sang phải; hướng khác xoay theo.")]
         [SerializeField] private Transform membranePrefab;
@@ -32,6 +35,12 @@ namespace Meowtosis.Presentation
         [SerializeField] private Transform hintArrowPrefab;
         [SerializeField] private TutorialHand tutorialHandPrefab;
 
+        [Header("Làm tối khi hướng dẫn")]
+        [Tooltip("Lớp tối phủ cả màn hình (SpriteRenderer, Mask Interaction = Visible Outside Mask).")]
+        [SerializeField] private Transform focusShadePrefab;
+        [Tooltip("Lỗ sáng trên một ô: SpriteMask theo hình ô, khoét lớp tối.")]
+        [SerializeField] private Transform focusWindowPrefab;
+
         [Header("Rung bàn")]
         [SerializeField] private float shakeSeconds = 0.4f;
         [SerializeField] private AnimationCurve shakeX = PieceMotion.Keys(0f, 0f, 0.2f, -0.078f, 0.4f, 0.067f, 0.6f, -0.044f, 0.8f, 0.033f, 1f, 0f);
@@ -40,11 +49,16 @@ namespace Meowtosis.Presentation
         private readonly Dictionary<int, PieceView> pieceViews = new Dictionary<int, PieceView>();
         private readonly List<Transform> highlights = new List<Transform>();
         private readonly List<GameObject> tutorialParts = new List<GameObject>();
+        private readonly List<GameObject> focusParts = new List<GameObject>();
+        private readonly Dictionary<int, Transform> tiles = new Dictionary<int, Transform>();
+        // Vật gắn với một ô nhưng không phải quân: hộp mục tiêu và màng ngăn. Rơi cùng khối gỗ của ô khi thắng.
+        private readonly Dictionary<int, List<Transform>> cellExtras = new Dictionary<int, List<Transform>>();
         private MovePlayback playback;
         private Transform boardRoot;
         private Transform pieceRoot;
         private Transform hintArrow;
         private PieceView leaningView;
+        private PieceView highlightedPiece;
         private BoardLayout layout;
         private Level level;
         private Board currentBoard;
@@ -65,10 +79,13 @@ namespace Meowtosis.Presentation
             pieceViews.Clear();
             highlights.Clear();
             tutorialParts.Clear();
+            focusParts.Clear();
+            tiles.Clear();
+            cellExtras.Clear();
+            highlightedPiece = null;
             level = newLevel;
             layout = new BoardLayout(level);
             boardRoot = CreateGroup(transform, "Board");
-            Instantiate(framePrefab, boardRoot).Build(level);
             var cellRoot = CreateGroup(boardRoot, "Cells");
             pieceRoot = CreateGroup(boardRoot, "Pieces");
 
@@ -80,11 +97,15 @@ namespace Meowtosis.Presentation
 
             hintArrow = Instantiate(hintArrowPrefab, boardRoot);
             hintArrow.gameObject.SetActive(false);
+            ClearSpotlight();
+            HideTutorial();
             cameraFraming.Frame(layout.Bounds);
         }
 
         public void Show(Board board)
         {
+            ClearSpotlight();
+            HideTutorial();
             foreach (var view in pieceViews.Values) view.ClearMood();
             ShowPieces(board, null);
         }
@@ -100,9 +121,7 @@ namespace Meowtosis.Presentation
                 return;
             }
             PieceViewOf(piece.Id)?.PlayMotion(motions.Nope);
-            if (piece.IsVirus) sounds.Play(SoundId.Grumble);
-            else if (!piece.IsCat) sounds.Play(SoundId.Squish);
-            else sounds.Play(SoundId.AngryMeow);
+            sounds.Play(piece.IsVirus ? SoundId.Grumble : SoundId.AngryMeow);
         }
 
         public void Pet(int cell)
@@ -116,20 +135,42 @@ namespace Meowtosis.Presentation
             {
                 view.PlayMotion(motions.Pet);
                 view.ShowFaceFor(FaceKind.Blink, 0.5f);
-                if (piece.IsCat) sounds.PlayMeow(piece.Species, 0.47f, 1.12f);
-                else sounds.Play(SoundId.Squish);
+                sounds.PlayMeow(piece.Species, 0.47f, 1.12f);
             }
         }
 
-        public void Celebrate()
+        public void Celebrate(Action finished)
         {
             foreach (var view in pieceViews.Values.Where(view => view.Piece.IsCat))
             {
                 view.Show(view.Piece, art, true);
                 view.PlayMotion(motions.Hop);
             }
-            effects.Confetti();
             sounds.Play(SoundId.Win);
+            HideHint();
+            ClearSpotlight();
+            HideTutorial();
+            StartCoroutine(collapse.Run(CollapseOrder(), finished));
+        }
+
+        // Khối hàng dưới (gần người chơi) rơi trước, trong hàng từ trái sang phải; quân đứng trên khối rơi theo.
+        private List<BoardCollapse.Column> CollapseOrder()
+        {
+            var columns = new List<BoardCollapse.Column>();
+            for (var row = level.Height - 1; row >= 0; row--)
+            {
+                for (var column = 0; column < level.Width; column++)
+                {
+                    var cell = level.IndexOf(row, column);
+                    if (!tiles.TryGetValue(cell, out var tile)) continue;
+                    var pieces = new List<Transform>();
+                    var view = PieceAtCell(cell);
+                    if (view != null) pieces.Add(view.transform);
+                    cellExtras.TryGetValue(cell, out var extras);
+                    columns.Add(new BoardCollapse.Column(tile, pieces, extras ?? new List<Transform>()));
+                }
+            }
+            return columns;
         }
 
         public void Mourn()
@@ -173,23 +214,99 @@ namespace Meowtosis.Presentation
         {
             HideTutorial();
             var target = level.Step(cell, direction);
-            // Vòng sáng nhấp nhẹ quanh ô cần vuốt và ô đích, không che tối các ô khác.
-            foreach (var marked in new[] { cell, target })
+            if (target == Level.NoCell) return;
+
+            if (tutorialHandPrefab != null)
             {
-                if (marked == Level.NoCell) continue;
-                var ring = Instantiate(highlightPrefab, boardRoot);
-                ring.localPosition = layout.CellCenter(marked);
-                tutorialParts.Add(ring.gameObject);
+                var hand = Instantiate(tutorialHandPrefab, boardRoot);
+                hand.Swipe(layout.CellCenter(cell), layout.CellCenter(target));
+                tutorialParts.Add(hand.gameObject);
             }
-            var hand = Instantiate(tutorialHandPrefab, boardRoot);
-            hand.Swipe(layout.CellCenter(cell), target == Level.NoCell ? layout.CellCenter(cell) : layout.CellCenter(target));
-            tutorialParts.Add(hand.gameObject);
+
+            // Onboarding trực quan bằng hình ảnh: bóng mờ lướt từ ô gốc sang ô đích mô phỏng động tác vuốt
+            if (currentBoard != null && currentBoard[cell] is Piece piece)
+            {
+                var ghostObj = new GameObject("GhostPreview");
+                ghostObj.transform.SetParent(boardRoot, false);
+
+                var sprite = piece.IsCat ? art.CatSprite(piece.Species, false) : art.VirusSprite(piece.Facing);
+                var width = piece.IsCat ? 0.778f : 1.5f;
+                var lift = piece.IsCat ? 0.011f : 0f;
+
+                var landing = LandingOf(target, direction);
+                var ghost = ghostObj.AddComponent<GhostPiecePreview>();
+                ghost.Init(layout.CellCenter(cell), layout.CellCenter(landing), sprite, width, lift, 15);
+                tutorialParts.Add(ghostObj);
+
+                effects.Sparkle(boardRoot.TransformPoint(layout.CellCenter(landing)));
+            }
+        }
+
+        // Ô bản sao sẽ dừng khi vào ô `target`: trống và là băng thì trượt tiếp như SwipeRule, để bóng mờ chỉ đúng chỗ.
+        private int LandingOf(int target, Direction direction)
+        {
+            if (currentBoard[target].HasValue) return target;
+            var at = target;
+            while (level.IsIce(at))
+            {
+                var next = level.Step(at, direction);
+                if (next == Level.NoCell || currentBoard[next].HasValue) break;
+                at = next;
+            }
+            return at;
         }
 
         public void HideTutorial()
         {
-            foreach (var part in tutorialParts) Destroy(part);
+            foreach (var part in tutorialParts)
+            {
+                if (part != null) Destroy(part);
+            }
             tutorialParts.Clear();
+        }
+
+        public void Focus(IEnumerable<int> cells)
+        {
+            ClearFocus();
+            focusParts.Add(Instantiate(focusShadePrefab, boardRoot).gameObject);
+            foreach (var cell in cells)
+            {
+                var window = Instantiate(focusWindowPrefab, boardRoot);
+                window.localPosition = layout.CellCenter(cell);
+                focusParts.Add(window.gameObject);
+            }
+        }
+
+        public void ClearFocus()
+        {
+            foreach (var part in focusParts)
+            {
+                if (part != null) Destroy(part);
+            }
+            focusParts.Clear();
+        }
+
+        public void Spotlight(int cell)
+        {
+            ClearSpotlight();
+            Focus(new[] { cell });
+            highlightedPiece = PieceAtCell(cell);
+            if (highlightedPiece != null)
+            {
+                highlightedPiece.SetHighlightOrder(true);
+                highlightedPiece.PlayMotion(motions.Hop);
+            }
+            effects.Sparkle(boardRoot.TransformPoint(layout.CellCenter(cell)));
+        }
+
+        public void ClearSpotlight()
+        {
+            if (highlightedPiece != null)
+            {
+                highlightedPiece.SetHighlightOrder(false);
+                highlightedPiece = null;
+            }
+            ClearFocus();
         }
 
         // Prefab vẽ cho hướng phải; Unity quay ngược chiều kim đồng hồ.
@@ -202,6 +319,21 @@ namespace Meowtosis.Presentation
         };
 
         internal Vector3 CellPosition(int cell) => boardRoot.TransformPoint(layout.CellCenter(cell));
+
+        // Mép trên của khối gỗ ở ô này trong không gian thế giới (không tính bóng đổ); ô không có khối thì lấy mép trên của ô.
+        internal float TileTop(int cell)
+        {
+            var top = CellPosition(cell).y + 0.5f;
+            if (!tiles.TryGetValue(cell, out var tile)) return top;
+            var found = false;
+            foreach (var renderer in tile.GetComponentsInChildren<SpriteRenderer>())
+            {
+                if (renderer.name == "Shadow") continue;
+                top = found ? Mathf.Max(top, renderer.bounds.max.y) : renderer.bounds.max.y;
+                found = true;
+            }
+            return top;
+        }
 
         // Vùng các ô của bàn trong không gian thế giới, chưa tính viền gỗ.
         internal Bounds PlayArea => new Bounds(boardRoot.TransformPoint(layout.Bounds.center), layout.Bounds.size);
@@ -282,6 +414,9 @@ namespace Meowtosis.Presentation
             if (TryGetCell(worldPoint, out var cell)) CellSwiped?.Invoke(cell, direction);
         }
 
+        private readonly GameRules rules = GameRules.CreateStandard();
+        private readonly HashSet<int> endangeredPieceIds = new HashSet<int>();
+
         // Đang kéo: quân dưới ngón tay nghiêng theo hướng kéo (theo trục kéo nhiều hơn), chưa tính nước đi.
         private void OnDragged(Vector2 worldPoint, Vector2 drag)
         {
@@ -292,12 +427,71 @@ namespace Meowtosis.Presentation
             if (view == null) return;
             var axis = Mathf.Abs(drag.x) > Mathf.Abs(drag.y) ? new Vector2(Mathf.Sign(drag.x), 0f) : new Vector2(0f, Mathf.Sign(drag.y));
             view.Lean(axis * Mathf.Clamp01(drag.magnitude / LeanFullDrag));
+
+            // Cảnh báo nguy hiểm trực quan (Telegraphed Danger):
+            // Nếu người chơi kéo đủ một khoảng (>= 0.18 ô), dự đoán xem hướng vuốt này có dẫn đến tuyệt chủng loài nào không.
+            if (drag.magnitude >= 0.18f && currentBoard != null)
+            {
+                var isHorizontal = Mathf.Abs(drag.x) >= Mathf.Abs(drag.y);
+                var dir = isHorizontal
+                    ? (drag.x > 0f ? Direction.Right : Direction.Left)
+                    : (drag.y > 0f ? Direction.Up : Direction.Down);
+
+                if (rules.Swipes.TrySwipe(currentBoard, cell, dir, out var previewMove))
+                {
+                    var loss = LossReport.Of(previewMove);
+                    if (loss != null)
+                    {
+                        SetEndangeredWarning(loss.Color);
+                        return;
+                    }
+                }
+            }
+            ClearEndangeredWarning();
+        }
+
+        private void SetEndangeredWarning(Species color)
+        {
+            if (currentBoard == null) return;
+            var toWarn = new HashSet<int>();
+            for (var i = 0; i < currentBoard.CellCount; i++)
+            {
+                if (currentBoard[i] is Piece p && p.IsCat && p.Species == color)
+                {
+                    toWarn.Add(p.Id);
+                }
+            }
+
+            if (endangeredPieceIds.SetEquals(toWarn)) return;
+
+            ClearEndangeredWarning();
+            foreach (var id in toWarn)
+            {
+                var pv = PieceViewOf(id);
+                if (pv != null)
+                {
+                    pv.ShowSadMood();
+                    endangeredPieceIds.Add(id);
+                }
+            }
+        }
+
+        private void ClearEndangeredWarning()
+        {
+            if (endangeredPieceIds.Count == 0) return;
+            foreach (var id in endangeredPieceIds)
+            {
+                var pv = PieceViewOf(id);
+                pv?.ClearMood();
+            }
+            endangeredPieceIds.Clear();
         }
 
         private void OnDragEnded()
         {
             if (leaningView != null) leaningView.Lean(Vector2.zero);
             leaningView = null;
+            ClearEndangeredWarning();
         }
 
         private void OnTapped(Vector2 worldPoint)
@@ -322,17 +516,28 @@ namespace Meowtosis.Presentation
             boardRoot.localPosition = Vector3.zero;
         }
 
-        // Mỗi ô: ô gạch hoặc ô độc và hộp mục tiêu (khung gỗ là một khối riêng, vẽ bởi BoardFrame).
+        // Mỗi ô: một khối gỗ (hoặc khối độc, khối băng) và hộp mục tiêu. Không có khung bao quanh: các khối đứng sát nhau thành hình bàn.
         private void BuildCell(int cell, Transform cellRoot)
         {
             var center = layout.CellCenter(cell);
-            Instantiate(level.IsToxic(cell) ? toxicTilePrefab : tilePrefab, cellRoot).localPosition = center;
+            var tile = Instantiate(level.IsToxic(cell) ? toxicTilePrefab : level.IsIce(cell) ? iceTilePrefab : tilePrefab, cellRoot);
+            tile.localPosition = center;
+            var row = cell / level.Width;
+            foreach (var group in tile.GetComponentsInChildren<SortingGroup>()) group.sortingOrder += row;
+            tiles[cell] = tile;
 
             var target = level.TargetAt(cell);
             if (!target.HasValue) return;
             var box = Instantiate(boxPrefab, cellRoot);
             box.transform.localPosition = center;
             box.sprite = art.BoxSprite(target.Value);
+            AddExtra(cell, box.transform);
+        }
+
+        private void AddExtra(int cell, Transform extra)
+        {
+            if (!cellExtras.TryGetValue(cell, out var extras)) cellExtras[cell] = extras = new List<Transform>();
+            extras.Add(extra);
         }
 
         // Màng nằm trên cạnh giữa hai ô; mũi tên chỉ chiều được đi qua.
@@ -342,6 +547,7 @@ namespace Meowtosis.Presentation
             var view = Instantiate(membranePrefab, parent);
             view.localPosition = layout.CellCenter(cell) + BoardLayout.Offset(membrane.Direction) * 0.5f;
             view.localRotation = Quaternion.Euler(0f, 0f, AngleOf(membrane.Direction));
+            AddExtra(cell, view);
         }
 
         private static Transform CreateGroup(Transform parent, string name)

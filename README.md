@@ -1,7 +1,7 @@
 # Meowtosis
 Game Ý tưởng mưới
 
-Game giải đố vuốt cho mèo nhân đôi, lấp kín ổ (cảm hứng cơ chế từ *Mitoosis* của Le Slo). Prototype web có 71 level xếp từ dễ đến khó theo 7 khối cơ chế; bản hoàn chỉnh đang làm bằng Unity 2022.3 trong `unity/` (kiến trúc: [docs/architecture.md](docs/architecture.md)).
+Game giải đố vuốt cho mèo nhân đôi, lấp kín ổ (cảm hứng cơ chế từ *Mitoosis* của Le Slo). Prototype web có 76 level xếp từ dễ đến khó theo 7 khối cơ chế; bản hoàn chỉnh đang làm bằng Unity 2022.3 trong `unity/` (kiến trúc: [docs/architecture.md](docs/architecture.md)).
 
 ## Chạy (cần Node.js, không cần cài gói)
 

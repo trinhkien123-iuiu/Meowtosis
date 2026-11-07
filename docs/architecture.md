@@ -41,30 +41,32 @@ unity/Assets/_Project/
 │   ├── Domain/                 Meowtosis.Domain.asmdef
 │   │   ├── Board/              Direction, Species, Piece, Board
 │   │   ├── Levels/             LevelDefinition, LevelCatalogParser, Level, LevelSymbols, Move, Membrane, TutorialStep
-│   │   ├── Goals/              ILevelGoal, FillGoal, TargetBoxGoal, KillGoal, GameOutcome
+│   │   ├── Goals/              ILevelGoal, FillGoal, TargetBoxGoal, GameOutcome
 │   │   ├── Turn/               ITurnStep, TurnResolver, PoisonStep, ClearRunsStep, VirusSpreadStep, WakeStep, TurnStage, TurnEvent
 │   │   ├── Moves/              SwipeRule, BoosterRules, MoveResult
 │   │   └── Solving/            Solver, SolveResult
 │   ├── Gameplay/               Meowtosis.Gameplay.asmdef: GameSession, LevelRun, PlayerProgress, IGameCommand (Swipe/Mutate/Transplant),
 │   │                           StarRating + StarMeter, HintAdvisor, GoalProgress, SpeciesCensus, Mechanic + MechanicDetector, LevelMap,
-│   │                           GameRules, IClock, IProgressStore
+│   │                           GameRules, IClock, IProgressStore, Onboarding (màn hướng dẫn đầu game), MoveFocus
 │   ├── Presentation/           Meowtosis.Presentation.asmdef: GamePresenter, GameViews, BoosterTargeting, GameTexts
-│   │   ├── Board/              IBoardView, BoardView, BoardFrame, DistanceTransform, MovePlayback, BoardIdle, PieceView, PieceMotions, BoardLayout, BoardArt, SpriteSizing
+│   │   ├── Board/              IBoardView, BoardView, BoardCollapse, MovePlayback, BoardIdle, PieceView, PieceMotions, BoardLayout, BoardArt, SpriteSizing
 │   │   ├── Home/               IHomeView + HomeTab, HomeView, HomePager, HomeBottomBar, HomeToggleRow, HomePresenter,
 │   │   │                       LevelMapView, LevelMapNode, LevelMapEffects
 │   │   ├── Hud/                IHudView, HudView, SafeAreaFitter, BoosterButton, StarMeterView, SpeciesChip, CoinCounterView
-│   │   ├── Popups/             PopupView, WinPopup, LosePopup, SettingsPopup, NoHeartsPopup, MechanicPopup, MechanicCard,
+│   │   ├── Popups/             PopupView, WinPopup, LosePopup, SettingsPopup, NoHeartsPopup, MechanicPopup, MechanicCard, CheatPopup,
 │   │   │                       MechanicDemoView, DemoCell (popup nào cũng kèm interface của nó trong cùng file)
 │   │   ├── Effects/            BoardEffects, WinEffects, UiSparkle, SoulEffect, JawsEffect, DizzyEffect, FloatingText, Spin, TutorialHand
 │   │   ├── Audio/              ISoundPlayer + SoundId, SoundPlayer, GameSounds
+│   │   ├── Onboarding/         IOnboardingView, OnboardingView, OnboardingPresenter
 │   │   ├── Platform/           PlayerPrefsProgressStore, SystemClock, ISceneNavigator, SceneNavigator
 │   │   ├── Input/              SwipeInput
-│   │   └── Camera/             CameraFraming
+│   │   └── Camera/             CameraFraming, BackgroundSwitcher
 │   ├── Bootstrap/              Meowtosis.Bootstrap.asmdef: GameBootstrap, HomeBootstrap
 │   └── Editor/                 (chưa làm) công cụ trong Editor
-├── Levels/LevelCatalog.txt     71 level, sinh từ prototype (mục 5)
-├── Prefabs/Board/              BoardFrame, Tile, ToxicTile, Box, Membrane, Piece, Highlight, HintArrow,
-│                               TutorialHand
+├── Levels/LevelCatalog.txt     76 level, sinh từ prototype (mục 5)
+├── Levels/Onboarding.txt       màn hướng dẫn đầu game, viết tay (mục 5)
+├── Prefabs/Board/              Tile, ToxicTile, IceTile (khối gỗ 3D, Art/Board từ tools/make-board-art.py), Box, Membrane, Piece, Highlight, HintArrow,
+│                               TutorialHand, FocusShade + FocusWindow (làm tối, chừa sáng vài ô)
 ├── Prefabs/Home/               LevelMapNode, MapPathDot, MapBackgroundTile, MapRing
 ├── Prefabs/Audio                 SoundPlayer và nhóm AudioSource, dùng chung cho hai scene
 ├── Prefabs/Hud/                BoosterButton, SpeciesChip, ColorChoice, DemoCell, DemoMembrane, WinSparkle, WinConfetti, WinCoin
@@ -88,7 +90,9 @@ unity/Assets/_Project/
     ├── GameSessionTests        phiên chơi, hoàn tác, chơi lại, sao, tiến độ nhiệm vụ
     ├── LevelMapTests           mở khoá, chơi lại level cũ, level hiện tại, đánh dấu cơ chế mới
     ├── LevelRunTests           tim, xu, booster (tiêu, trả khi hoàn tác, mua), hồi sinh, thanh sao, gợi ý, thẻ cơ chế
-    └── LevelCatalogTests       71 level: bàn đầu hợp lệ, lời giải thắng đúng par, bộ giải ra đúng par, hướng dẫn đi được, bẫy thua vì khử
+    ├── LevelCatalogTests       76 level: bàn đầu hợp lệ, lời giải thắng đúng par, bộ giải ra đúng par, hướng dẫn đi được, bẫy thua vì khử
+    └── OnboardingTests         màn hướng dẫn đầu game: dạy đúng thứ tự nhân đôi → đẩy → thay thế → khử 3, không bước nào thua,
+                                chờ "Đã hiểu!", phần tự chơi từ chối nước làm thua và gợi ý được nước thắng
 
 tools/dotnet-tests/             Chạy cùng bộ test trên bằng .NET, không cần mở Unity
 ```
@@ -126,7 +130,7 @@ tools/dotnet-tests/             Chạy cùng bộ test trên bằng .NET, không
 | `BoosterRules` | Đột biến, Cấy ghép; cũng kết thúc lượt qua `TurnResolver` |
 | `TurnResolver` | Chạy lần lượt các `ITurnStep` của cuối lượt |
 | `PoisonStep`, `ClearRunsStep`, `VirusSpreadStep`, `WakeStep` | Mỗi lớp một luật cuối lượt |
-| `ILevelGoal` + `FillGoal`, `TargetBoxGoal`, `KillGoal` | Mỗi lớp một điều kiện thắng |
+| `ILevelGoal` + `FillGoal`, `TargetBoxGoal` | Mỗi lớp một điều kiện thắng |
 | `GameOutcome` | Thắng / thua / loài tuyệt chủng |
 | `Solver` | A* tìm lời giải ngắn nhất (Gợi ý, kiểm tra level) |
 | `LevelCatalogParser` | Đọc `LevelCatalog.txt` thành `LevelDefinition` |
@@ -187,7 +191,7 @@ SwipeInput ──(điểm, hướng)──► BoardView ──CellSwiped(ô, hư
 | `MechanicDetector` | Đọc nội dung level, trả về các cơ chế có trong đó; `PlayerProgress.MarkMechanicSeen` nhớ cơ chế đã giới thiệu |
 | `GamePresenter` | Nghe các view, gọi `LevelRun`, chọn chữ hiện ra (`GameTexts`), xếp hàng thẻ cơ chế, ép đúng nước khi đang hướng dẫn. Không biết MonoBehaviour |
 | `BoardView` + `PieceView` | Vẽ khung bàn, ô, ô độc, hộp, màng; mỗi quân một `PieceView` theo id: quân cũ trượt sang ô mới, mèo vừa nhân đôi mọc ra từ ô mèo mẹ |
-| `BoardFrame` | Vẽ khung gỗ liền một khối thành một ảnh theo hình dạng từng level, cùng thông số với `baseSvg` của prototype. Màu, độ dày, bán kính chỉnh trên prefab. Độ phân giải tính theo cỡ bàn. Mở level tốn thời gian vì ảnh được tính lại mỗi lần |
+| `BoardCollapse` | Hoạt cảnh thắng: mèo nhảy mừng, rồi khối gỗ rơi xuống hố từng hàng (hàng gần người chơi trước, khối sau bắt đầu khi khối trước chưa rơi xong), mèo nhảy lên rồi rơi theo khối của nó; rơi hết mới hiện panel thắng (pháo giấy, pháo hoa `WinEffects.Fireworks`). Nhịp, độ cao, đường cong chỉnh trên object `Board` |
 | `MovePlayback` | Diễn một `MoveResult` theo thời gian của prototype: đặt mèo, rồi từng `TurnStage`. Giao diện không tự tính lại luật |
 | `BoardIdle` | Hoạt ảnh lúc rảnh: chớp mắt, liếc, quay đầu, ngáp, vươn vai, dụi nhau; tắt khi đang diễn nước đi |
 | `PieceMotions` | ScriptableObject chứa đường cong của mọi hoạt ảnh quân, chỉnh trong Inspector |
@@ -195,20 +199,23 @@ SwipeInput ──(điểm, hướng)──► BoardView ──CellSwiped(ô, hư
 | `BoardEffects` | Sinh hiệu ứng từ `Prefabs/Effects`, chỉ đặt chỗ và tô màu. Confetti, hạt sáng co theo khung nhìn để luôn cùng cỡ trên màn hình |
 | `SoundPlayer` + `GameSounds` | Phát âm theo `SoundId` qua nhóm `AudioSource` trong scene, tự gắn tiếng bấm cho mọi nút. Presenter chỉ biết `ISoundPlayer` |
 | `MechanicPopup` + `MechanicDemoView` | Thẻ "Cơ chế mới": bàn minh hoạ chạy lặp, bàn sau khi vuốt do chính luật chơi tính ra. Nội dung nằm trong `Data/Mechanics/*.asset` |
-| Bẫy dạy luật (`LevelDefinition.Trap`, `LevelRun.GuidedStep`, `FinishTrap`) | Level 2: thẻ Khử 3 hiện trước; rồi bàn tay chỉ nước làm thua, bộ 3 được khoanh rồi mới nổ, không mất tim; bàn về đầu và hướng dẫn nước thắng. Lúc mở level mà đã biết cơ chế Khử thì bỏ qua bẫy |
+| Bẫy dạy luật (`LevelDefinition.Trap`, `LevelRun.GuidedStep`, `FinishTrap`) | Hiện không level nào dùng (luật thua đã dạy ở màn hướng dẫn đầu game); giữ lại để dùng khi cần. Cách chạy: bàn tay chỉ nước làm thua, bộ 3 được khoanh rồi mới nổ, không mất tim; bàn về đầu và hướng dẫn nước thắng. Lúc mở level mà đã biết cơ chế Khử thì bỏ qua bẫy |
 | `LossReport` | Từ nước vừa đi suy ra màu nào hết mèo và vì sao (khử, thay thế, ô độc, virus) để popup thua nói rõ lý do |
 | `BoardLayout` | Đổi ô ↔ toạ độ: mỗi ô rộng 1 đơn vị, tâm bàn ở gốc |
 | `BoardArt` | ScriptableObject chứa mọi hình của bàn. Hình đặt cỡ theo đơn vị ô (`SpriteLayers`), nên thay ảnh khác cỡ vẫn vừa |
 | `SwipeInput` | Chạm/kéo chuột thành cú vuốt (đủ 0,3 ô là tính), bỏ qua khi bấm lên nút |
 | `CameraFraming` | Căn camera cho bàn vừa màn hình, chừa chỗ cho HUD trên/dưới, ảnh nền phủ kín |
-| `HudView` | uGUI: ô level, tim, xu, thanh sao, dòng nhiệm vụ, bong bóng lời thoại, hàng đếm mèo, 4 nút booster |
+| `HudView` | uGUI: ô level, tim, thanh sao, viên mục tiêu (`GoalPillView`), bong bóng lời thoại, hàng đếm mèo, nút booster |
+| `GoalPillView` | Viên gỗ dưới thanh sao, không có chữ: icon khối gỗ + "ô đã lấp/tổng", màn có hộp thêm icon hộp kem (`Art/UI/GoalBox.png`, vẽ bằng `tools/make-goal-icons.py`) + "hộp đúng màu/tổng". Số đổi xanh khi xong, viên gỗ nảy nhẹ mỗi lần tiến độ tăng |
 | `HomePresenter` + `HomeView` | Màn Home: hiện xu, tim, level đang chơi, đổi trang, bật tắt âm thanh, mở màn chơi qua `ISceneNavigator`. Trang Shop mới là chỗ giữ sẵn, chưa bán gì |
 | `HomePager` + `HomeBottomBar` | Chuyển từ `MenuPager`, `BottomBarView` của Bounce_Blast. Ba trang Shop, Home, Setting xếp thành một dải, cả dải và thanh dưới chạy theo một vị trí duy nhất nên luôn khớp nhau: vuốt thì bám ngón tay, bấm tab hoặc thả thì trượt tới, đang trượt vẫn nắm lại được. Thứ tự trang, tab và enum `HomeTab` phải trùng nhau |
-| `AmbientSchedule` + `AmbientEvents` + `AmbientEvent` | Sự kiện vui trong màn chơi, chỉ để ngắm: 1–2 phút một lần chọn ngẫu nhiên một sự kiện có chỗ diễn. Chỉ đếm giờ lúc người chơi rảnh (không có nước đang diễn, popup, hướng dẫn, booster đang chọn); hết rảnh là dừng ngay. Thêm sự kiện mới: kế thừa `AmbientEvent` rồi thêm vào danh sách trên `Ambient` trong scene Game. Hiện có `CatPeekEvent` (một hai chú mèo ngóc đầu từ mép trên của bàn, đổi sang mắt trái tim rồi bật trái tim hoặc ngôi sao). Hình trong `Prefabs/Ambient`. Xem thử trong Play: chuột phải `AmbientEvents` chọn "Xem thử một sự kiện" |
+| `AmbientSchedule` + `AmbientEvents` + `AmbientEvent` | Sự kiện vui trong màn chơi, chỉ để ngắm: 1–2 phút một lần chọn ngẫu nhiên một sự kiện có chỗ diễn. Chỉ đếm giờ lúc người chơi rảnh (không có nước đang diễn, popup, hướng dẫn, booster đang chọn); hết rảnh là dừng ngay. Thêm sự kiện mới: kế thừa `AmbientEvent` rồi thêm vào danh sách trên `Ambient` trong scene Game. Hiện có `CatPeekEvent` (một hai chú mèo ngóc đầu từ sau khối gỗ ở ô trống trên mép ngoài cùng phía trên của bàn, đổi sang mắt trái tim rồi bật trái tim hoặc ngôi sao). Hình trong `Prefabs/Ambient`. Xem thử trong Play: chuột phải `AmbientEvents` chọn "Xem thử một sự kiện" |
 | `LevelMap` | Tính các nút bản đồ từ danh sách level và tiến độ: thắng level nào mở level kế tiếp, mọi level đã mở chơi lại được, giữ số sao cao nhất |
 | `LevelMapView` + `LevelMapNode` + `LevelMapEffects` | Bản đồ phủ kín màn hình, mở khi bấm Play: đường uốn lượn cuộn dọc từ dưới lên, mở ra tại level hiện tại. Nút, chấm đường, nền sinh từ `Prefabs/Home`; chỉnh khoảng cách và độ lượn trên `LevelMap` trong scene Home. Nhấn nút thì lún xuống, thả thì nảy về; chọn level mở thì nảy to kèm vòng sáng, sao toé và tiếng `LevelSelect` rồi mới vào màn chơi; bấm level chưa mở thì rung kèm tiếng `LevelLocked`. Nút Reset ở góc phải là của bản thử: xoá tiến độ, giữ cài đặt âm thanh, gỡ trước khi phát hành (độ nảy trên `Prefabs/Home/LevelMapNode`, hạt trên `Content/EffectLayer`) |
 | `WinPopup` + `WinEffects` + `CoinCounterView` | Panel thắng: pháo giấy, tiêu đề nảy, từng sao đáp xuống toé sáng và kêu cao dần, rồi ô tổng xu bật ra, icon xu với số thưởng nảy lên (không có nền), xu bay nối đuôi về ô tổng xu trong khi số thưởng mờ dần; mỗi đồng về thì số tăng và icon nảy (chuyển từ `CollectCoins` của Bounce_Blast). Nút Tiếp tục sang level kế (level cuối thì về bản đồ), nút Trở về mở bản đồ qua `ISceneNavigator.OpenMap`. Hiệu ứng vẽ bằng Image vì hạt Particle System nằm dưới lớp UI phủ màn hình |
-| `GameBootstrap` | Đọc `LevelCatalog.txt`, tạo bộ luật và presenter, mở level chơi gần nhất (chỉnh được `openLevelNumber` trong Inspector để test) |
+| `Onboarding` | Màn hướng dẫn đầu game, không phụ thuộc Unity: bước làm theo (chỉ nhận đúng nước), hiện câu luật (chờ "Đã hiểu!"), tự chơi (chỉ nhận nước còn đường thắng, nên không thua được), xong. `FocusCells` cho biết nước đang dạy chạm tới những ô nào để làm tối phần còn lại |
+| `OnboardingPresenter` + `OnboardingView` | Kiểu Meowdoku: làm tối mọi thứ trừ ô của nước đang dạy (`BoardView.Focus`), bàn tay chỉ nước, bong bóng lời dẫn; nước khử 3 thì bộ 3 được khoanh rồi mới nổ; đi xong thì sáng cả bàn, câu luật và nút "Đã hiểu!" ngay dưới bàn; phần tự chơi đi sai hoặc đứng yên 6 giây thì bàn tay chỉ nước; kín ổ thì "Bắt đầu chơi" sang level 1. `OnboardingView` ẩn các phần HUD chưa cần trong lúc hướng dẫn (danh sách kéo thả trên Canvas `Hud`) |
+| `GameBootstrap` | Đọc `LevelCatalog.txt`, tạo bộ luật, nạp tiến độ. Chưa qua hướng dẫn đầu game (`PlayerProgress.HasFinishedOnboarding`) thì chạy `OnboardingPresenter` trước, xong mới tạo `GamePresenter` và mở level chơi gần nhất. Để test: `openLevelNumber` mở thẳng một level, `alwaysShowOnboarding` luôn chạy hướng dẫn |
 
 Các quân và ô được tạo bằng code lúc chạy (bàn mỗi level một khác); HUD, camera, đèn nằm sẵn trong `Scenes/Game.unity`.
 Dự án dùng **Input Manager cũ** (`Input.GetMouseButton`, chạy được cả chạm trên điện thoại). URP 2D cần **Global Light 2D** trong scene, thiếu thì sprite bị tối.
@@ -221,7 +228,7 @@ Quy ước: **giao diện, prefab và scene dựng trong Unity Editor** (kéo th
 
 | Muốn sửa | Sửa ở |
 |---|---|
-| Màu, độ dày, bán kính khung gỗ | Component `BoardFrame` trên `Prefabs/Board/BoardFrame` |
+| Hình khối gỗ, ô độc, bóng dưới khối | `Art/Board/*.png` (vẽ lại bằng `tools/make-board-art.py`), prefab `Prefabs/Board/Tile`, `ToxicTile`. Bàn không có khung bao: các khối đứng sát nhau; `SortingGroup` trên `Cube` cộng thêm số hàng để khối hàng dưới che mặt trước khối hàng trên |
 | Cỡ ô, thứ tự vẽ của bàn | Prefab trong `Prefabs/Board` (mỗi lớp là một SpriteRenderer có Order in Layer riêng) |
 | Ảnh mèo từng màu, hộp, vi khuẩn, virus | `Art/BoardArt.asset` |
 | Vị trí, cỡ chữ, màu HUD và popup | Canvas `Hud` trong `Scenes/Game.unity` |
@@ -234,16 +241,20 @@ Quy ước: **giao diện, prefab và scene dựng trong Unity Editor** (kéo th
 | Bố cục, nhịp diễn của panel thắng | `Hud/WinPopup` trong scene (`WinPopup`); số lượng và tốc độ hạt, đường bay của xu ở `WinPopup/EffectLayer` (`WinEffects`); số đồng xu bay ở `WinPopup`; vị trí ô tổng xu ở `WinPopup/CounterArea/CoinCounter`; hình hạt ở `Prefabs/Hud/Win*` |
 | Nhịp, độ nảy của hoạt ảnh quân | `Data/PieceMotions.asset` |
 | Âm thanh của từng sự kiện | `Data/GameSounds.asset` |
+| Bàn, các bước, lời dẫn, câu luật của màn hướng dẫn đầu game | `Levels/Onboarding.txt` (chạy `npm run test:unity` sau khi sửa) |
+| Độ tối, hình lỗ sáng khi hướng dẫn | `Prefabs/Board/FocusShade` (màu), `Prefabs/Board/FocusWindow` (SpriteMask theo hình ô, kèm lớp sáng nhẹ) |
+| Phần HUD ẩn khi hướng dẫn, nút "Đã hiểu!" / "Bắt đầu chơi" | `OnboardingView` trên Canvas `Hud`, nút ở `SafeArea/OnboardingButton` |
 
 Cây scene `Game`:
 
 ```text
 Main Camera (CameraFraming) └ Background      Global Light 2D      Board (BoardView, SwipeInput, BoardEffects, BoardIdle)      Game (GameBootstrap)
 Audio (SoundPlayer) └ Music, Effect1..6
-Hud (Canvas 1080×1920, HudView)
+Hud (Canvas 1080×1920, HudView, OnboardingView)
 ├── SafeArea (SafeAreaFitter)               mọi phần tử HUD nằm trong vùng an toàn, tránh tai thỏ
 │   ├── LevelBadge, Hearts, HeartTimer, SettingsButton    thanh trên (màn chơi không hiện xu)
 │   ├── StarMeter (StarMeterView), Goal                   thanh sao: tụt theo số nước, sao tắt khi qua mốc
+│   ├── OnboardingButton                                  nút dưới bàn của màn hướng dẫn đầu game (tắt sẵn)
 │   └── Layout
 │       ├── TipBubble, Toast                              bong bóng lời thoại, thông báo ngắn (tắt sẵn)
 │       ├── SpeciesRow, ColorPicker                       hàng đếm mèo, bảng chọn màu (chỉ hiện khi dùng Đột biến)
@@ -282,7 +293,8 @@ prototype/meowtosis.html ─► npm run export ─► data/levels.json          
 | `tutorial` | `tutorial 0 0 right Đẩy mèo xanh vào hộp xanh` | Một bước hướng dẫn: nước đi rồi lời thoại |
 | `card` | `card ChainWake` | Thẻ "Cơ chế mới" riêng của level, cho thử thách mới không tự nhận ra được từ bàn chơi. Tên trong enum `Mechanic`, nội dung ở `Data/Mechanics/<Tên>.asset` |
 | `trap` | `trap 0 1 right Thử vuốt mèo đỏ sang phải…` | Nước cố ý dẫn tới thua để dạy luật khử, chơi trước các bước `tutorial`. Thua không mất tim, chỉ diễn khi chưa biết cơ chế Khử |
-| `tip` | `tip Mèo hồng đến chơi!…` | Mẹo đầu màn |
+| `tip` | `tip Mèo hồng đến chơi!…` | Mẹo đầu màn. Trong `Onboarding.txt`: lời dặn khi người chơi tự lấp nốt ổ |
+| `rule` | `rule Ô bên cạnh có mèo thì cả dãy bị đẩy đi.` | Chỉ dùng trong `Onboarding.txt`: câu luật hiện sau khi đi xong bước `tutorial` ngay trên, chờ bấm "Đã hiểu!". `<br>` là xuống dòng |
 | `solution` | `solution 0 0 right` | Một nước của lời giải ngắn nhất (lặp lại `par` lần) |
 
 **Id cố định:** `data/level-ids.json` ghi `id → nội dung chơi`.
@@ -304,8 +316,8 @@ prototype/meowtosis.html ─► npm run export ─► data/levels.json          
 
 Bộ test hiện có 292 ca:
 - 45 ví dụ luật, mã trùng với [mechanics.md](mechanics.md) (S1, V4…), thấy ở `Description` của từng test.
-- 71 level × 3 ca: bàn đầu hợp lệ, lời giải xuất từ prototype thắng đúng `par`, bộ giải C# tìm ra đúng `par`.
-- 10 level có hướng dẫn: các bước hướng dẫn đi được.
+- 76 level × 3 ca: bàn đầu hợp lệ, lời giải xuất từ prototype thắng đúng `par`, bộ giải C# tìm ra đúng `par`.
+- 7 level có hướng dẫn (cả bài băng trơn): các bước hướng dẫn đi được. Màn hướng dẫn đầu game có test riêng (`OnboardingTests`).
 - 1 ca kiểm tra id không trùng.
 - 9 ca phiên chơi: đi nước, nước bị từ chối, hết nhận nước khi thua, hoàn tác, chơi lại, số sao, tiến độ nhiệm vụ.
 - 13 ca tài nguyên: thắng được xu theo sao, thua mất tim và hồi sinh trả tim, booster tiêu/trả/mua, hồi tim theo giờ, thanh sao tụt theo nước, gợi ý đi theo lời giải.
@@ -363,3 +375,26 @@ Làm cùng lúc với checklist ở [mechanics.md §9](mechanics.md#9-thêm-cơ-
 | 2026-11-04 | Thêm thẻ cho 3 thử thách mới: Dọn chỗ (level 14), Thức dây chuyền (43), Vi khuẩn tự khử (53). Thẻ Khử 3 ở level 2 hiện trước nước bẫy | Quy ước: thẻ chỉ dành cho luật, chướng ngại và thử thách mới; mèo màu mới dùng mẹo đầu màn, không có thẻ |
 | 2026-11-04 | Nhận xu theo kiểu Bounce_Blast: ô tổng xu chỉ hiện trong panel thắng (`WinPopup/CounterArea/CoinCounter`), 12 đồng bay nối đuôi về đó, sao lấp lánh quanh ô thưởng | Số trên ô thưởng đứng yên, số trên ô tổng xu mới đếm lên |
 | 2026-11-04 | Chuyển VFX, SFX, hoạt ảnh từ prototype: `MovePlayback`, `BoardIdle`, `Prefabs/Effects`, `Data/PieceMotions`, `Data/GameSounds` | Tiếng mới sinh bằng `tools/make-sfx.py` |
+| 2026-11-07 | Màn hướng dẫn đầu game theo kiểu Meowdoku (`Levels/Onboarding.txt`, `Onboarding`, `OnboardingPresenter`, `OnboardingView`): một bàn 2×3 (`BA. / A..`), bốn bước làm theo dạy nhân đôi → đẩy → thay thế → khử 3, mỗi bước xong hiện câu luật với nút "Đã hiểu!", rồi tự lấp nốt 3 ô, xong thì "Bắt đầu chơi" sang level 1 | Bàn tìm bằng luật của game (cách tìm ở [level-design.md](level-design.md)). `BoardView.Spotlight` nay dùng chung prefab `FocusShade`/`FocusWindow` với `Focus` thay cho lớp tối dựng bằng code. Save cũ chưa có `finishedOnboarding` nên sẽ thấy hướng dẫn một lần |
+| 2026-11-07 | Gọn level đầu: bỏ level `A.` và `AB.`, bỏ bẫy và bàn tay ở `AA. / ##B` và `.B. / #A#` (69 level). `MechanicDetector.In` không còn nhận số thứ tự level, không tính 4 cơ chế cơ bản; xong màn hướng dẫn thì ghi 4 cơ chế đó là đã biết (`Onboarding.TaughtMechanics`) | Tiến độ lưu theo id nên sao không lệch; `lastLevelIndex` của save cũ lệch 2 level |
+| 2026-11-07 | Bàn chơi kiểu khối gỗ 3D: mỗi ô một khối (mặt trên vân gỗ + mặt trước tối), không còn khung bao (`BoardFrame`, `DistanceTransform` đã xoá). Thắng thì khối rơi xuống hố kéo theo mèo (`BoardCollapse`), rồi panel thắng kèm pháo hoa. `IBoardView.Celebrate` nhận callback khi rơi xong | Hình sinh bằng `tools/make-board-art.py` (256 pixel/đơn vị). Lỗ sáng hướng dẫn (`FocusWindow`) đổi theo hình khối |
+| 2026-11-07 | Bỏ vi khuẩn: xoá `Species.Germ`, `KillGoal`, `LevelDefinition.KillSpecies`, từ khoá `kill`, `GoalProgress.KillRemaining`, hình vi khuẩn trong `BoardArt`, thẻ `Data/Mechanics/Kill` và `GermClear` (enum `Mechanic` giữ số cũ: `Virus = 8`, `ClearForRoom = 10`, `ChainWake = 11`). 68 level | Đo cho thấy vi khuẩn không đổi cách giải (xem level-design.md) |
+| 2026-11-07 | Cơ chế Băng trơn (`=`): bản sao vào ô băng trống trượt tới vật cản hoặc ra khỏi băng (`SwipeRule.SlideFrom`, `Level.IsIce`, `Mechanic.Ice = 13`). Khối 5 thành "Băng trơn": 8 level băng (level 49 có hướng dẫn) rồi 5 level ôn; 76 level. Khối băng `Prefabs/Board/IceTile` (hình `Art/Board/IceCube.png`); bóng mờ hướng dẫn chỉ đúng điểm dừng trên băng | Luật ở mechanics.md §5.7, ví dụ I1–I6 có test cả JS lẫn C#. Level sinh bằng `tools/jobs/ice.json` (`gen.js` có `ice: n`, `need: ['ice']`) |
+| 2026-11-07 | Bong bóng lời thoại kiểu bảng gỗ (`Art/UI/TipWood.png`, đuôi `TipWoodTail.png`, sinh bằng `tools/make-tip-bubble.py`), chữ nâu đậm, tự co 34–48. `HudView.ShowTip` không còn ép cỡ chữ trong code: chỉnh trên `Hud/SafeArea/Layout/TipBubble/TipText` | Chủ dự án chọn kiểu 3 trong 5 kiểu vẽ thử (mây trắng, kem viền cam, bảng gỗ, mây xanh ngọc, tím viền vàng). Chữ trắng viền nâu không đủ rõ vì viền TextMeshPro mỏng nên đổi sang chữ nâu |
+| 2026-11-07 | Mọi cơ chế trên bàn phải bắt buộc dùng mới thắng (`tools/mechanic-use.js`, nằm trong `npm test`). Thay 25 level có cơ chế trang trí, gồm 3 bài nhập môn hộp, màng, băng | Chi tiết ở level-design.md |
+| 2026-11-07 | Nền màn chơi đổi được: `BackgroundSwitcher` trên Main Camera giữ danh sách kiểu nền (ảnh, có hiện hoạ tiết chân mèo không), nút `SettingsPopup/SettingsCard/BackgroundButton` chuyển sang kiểu kế tiếp, lựa chọn lưu ở PlayerPrefs `meowtosis-background`. Hai kiểu: "Đêm xanh" (nền cũ) và "Hồ lá súng" (`Art/UI/BackgroundLake.png`, sinh bằng `tools/make-backgrounds.py`). Bảng gỗ lời thoại thu còn 860×200, dạng 9 phần | Thêm kiểu nền: thêm một phần tử vào `Looks` trên Main Camera |
+| 2026-11-07 | Tiếng mèo đổi sang 7 tiếng mèo tách từ Catdom: Color Hole (`Audio/Catdom/CatMeow1..7`), tiếng vuốt sai `CatMeowWarning`. `meowVolume` 0,75 → 0,35, `AngryMeow` 0,6 → 0,45 vì clip mới to hơn khoảng 2,5 lần. Tiếng Mixkit cũ vẫn ở `Audio/Meows` | Asset có bản quyền, chỉ dùng tạm; nguồn ở `Audio/Catdom/NGUON.txt`, bản tách đủ 78 file ở `D:	oolGame\catdom\export` |
+| 2026-11-07 | Sao và pháo hoa theo Catdom (`Art/Catdom`, nguồn ở `NGUON.txt`): thanh sao dùng `StarMeterLit/Empty`, bảng thắng dùng `WinStarLit/Empty`. Pháo hoa `WinEffects` viết lại: đầu pháo kéo vệt sáng, nổ có quầng sáng (`FxGlow`) và chớp sáng (`FxFlare`), tia lửa sao 4 cánh (`FxTwinkle`) có vệt đuôi dài theo tốc độ (`FxSoftDot`), chậm dần vì sức cản, rơi theo trọng lực, lõi trắng ngả sang màu quả pháo, nhấp nháy trước khi tắt. Mọi thông số chỉnh trên `WinPopup/EffectLayer` | Asset có bản quyền, chỉ dùng tạm |
+| 2026-11-07 | Dải ruy băng đỏ hai đuôi gấp sau hàng sao ở bảng thắng (`WinPopup/WinCard/WinRibbon`, hình `Art/UI/WinRibbon.png` vẽ bằng `tools/make-ribbon.py`); dòng thưởng `Reward` dời xuống y = −268 cho khỏi bị che | Tự vẽ, không phải asset Catdom |
+| 2026-11-07 | Sao trống (`WinStarEmpty`, `StarMeterEmpty`) tạo lại từ chính sao đạt được bằng `tools/make-empty-stars.py`: giữ dáng, cỡ và các mặt khối, chỉ đổi sang tông nâu xám, nên ô trống và sao sáng khớp nhau (trước đây `star_hold`/`star_off` khác dáng và cỡ) | Chạy lại script nếu đổi hình sao sáng |
+| 2026-11-07 | Sự kiện mèo ló đầu (`CatPeekEvent`) theo bàn khối gỗ: đầu mèo vẽ sau khối gỗ (thứ tự −30, giữa khối −20 và bóng −40) nên thân bị khối che; mép ló lấy từ mép trên thật của khối (`BoardView.TileTop`) thay cho viền khung cũ (`frameRim`); chỉ ló sau ô trống ở mép ngoài cùng phía trên, không ló trong lỗ giữa bàn hay sau ô có quân | Bàn không có ô trống ở mép trên thì lần đó không có mèo ló |
+| 2026-11-07 | Bỏ hai dòng chữ dưới thanh sao: dòng số nước "N nước · tối ưu P" (trùng với thanh sao, gây áp lực) và dòng "Lấp kín a/b · Hộp c/d". Thay bằng viên gỗ mục tiêu `Hud/SafeArea/GoalPill` (`GoalPillView`, nền `HeartPill` 9-slice). `IHudView.ShowStars(meter, instantly)`, `ShowGoal(GoalProgress, instantly)`; `GameTexts.Moves`/`Goal` thay bằng `GameTexts.Count` | Icon hộp lấy dáng hộp Shikacat, chỉ dùng tạm |
+| 2026-11-08 | Thông báo nổi `Toast` đổi từ dải tím nhạt sang viên gỗ (`HeartPill` 9-slice) ôm vừa chữ, chữ kem 36 | Cho cùng tông với thanh trên và viên mục tiêu |
+| 2026-11-08 | Hoạt cảnh thắng: hộp mục tiêu và màng ngăn trước đây đứng yên giữa không trung khi bàn rơi. Nay `BoardView` ghi chúng theo ô (`cellExtras`) và đưa vào `BoardCollapse.Column.Extras`, rơi cùng khối gỗ của ô, co lại và xoay quanh tâm khối, giữ nguyên góc xoay ban đầu của màng | Vật mới gắn vào ô nhớ thêm vào `AddExtra` để rơi theo |
+| 2026-11-08 | Sửa lỗi màn hướng dẫn không hiện bàn cờ trên máy thật: `OnboardingView.hiddenWhileOnboarding` còn tham chiếu tới dòng "Goal" cũ đã bị xoá khi thay bằng `GoalPill`, nên `Enter()` ném NullReference và dừng cả hướng dẫn. Đã trỏ mục đó sang `GoalPill`; `Enter/Exit` nay bỏ qua mục trống | Xoá hoặc đổi tên phần HUD thì kiểm tra các danh sách kéo thả trong Inspector (`hiddenWhileOnboarding`...) |
+| 2026-11-08 | VFX theo cơ chế (hạt tự vẽ bằng `tools/make-fx-textures.py`, vật liệu `Art/Effects/Particle{Bubble,Gas,Glint,Halo}`): ô độc có bong bóng và khí độc bốc lên liên tục (`ToxicTile/ToxicFx`); ô băng lấp lánh (`IceTile/IceFx`); quân đi qua màng một chiều thì phát hào quang ngọc lam kèm vệt sáng theo hướng đi (`Prefabs/Effects/GateGlow`, `BoardEffects.GateGlow`); bản sao trượt trên băng để lại tuyết ở từng ô băng (`Frost`); hộp mục tiêu đầy và mèo ngủ thức dậy có thêm vòng sóng. Logic nằm ở `MovePlayback.PlayMechanics` | Mới xem tận mắt ô độc; băng, cổng và vòng sóng chưa thử trong Play |
+| 2026-11-07 | Hướng dẫn trong level làm tối phần không liên quan như màn hướng dẫn đầu game: `MoveFocus.CellsOf` (dùng chung với `Onboarding.FocusCells`) trả các ô nước đi chạm tới, gồm cả đường trượt trên băng; `GamePresenter.RefreshTutorial` gọi `BoardView.Focus`, giữ vùng sáng tới khi nước diễn xong. Level 12 bỏ hướng dẫn, bỏ mẹo level 2, 10, 64, viết lại lời dẫn 6 màn cơ chế mới | Chi tiết ở level-design.md |
+| 2026-11-07 | Bảng cheat của bản thử (`Hud/CheatPopup`, `CheatPopup`): chạm nhanh 3 lần vào ô Lv (nút trong suốt trên `SafeArea/LevelBadge`, `HudView.LevelBadgeTripleTapped`, khoảng cách chạm `tripleTapSeconds` = 0,6 giây). Nút: thắng ngay 3 sao, đi giúp 1 nước (nước hướng dẫn hoặc Gợi ý, không trừ lượt), chọn level ±1/±10 rồi mở, nạp đầy tim và booster, +500 xu, mở khoá mọi level (1 sao, không cộng xu: `PlayerProgress.MarkPassed`), chơi lại màn hướng dẫn đầu game | Gỡ `CheatPopup` và nút trên ô Lv trước khi phát hành |
+| 2026-11-07 | Bảng Cài đặt gọn lại: chỉ còn âm thanh, nhạc, "Chơi lại màn" (nút xanh) và "Về Home" (nút cam). Bỏ phần bản thử (chọn level, nạp đầy tim và booster) khỏi `SettingsPopup` (code và scene); nút đổi nền `BackgroundButton` dời sang bảng cheat | Các chức năng thử nằm hết ở bảng cheat |
+| 2026-11-07 | Màn chơi theo bố cục Catdom (`Art/Catdom`, nguồn ở `NGUON.txt`): nền sàn gỗ `BackgroundWood` là kiểu nền đầu tiên "Sàn gỗ" (mặc định; bảng cheat vẫn đổi được sang Đêm xanh, Hồ lá súng). Thanh trên `SafeArea/TopBar` bằng gỗ có avatar mèo; ô level `LevelBadge` thành tab "Màn N" (`GameTexts.LevelShort`, vẫn chạm 3 lần mở cheat); tim nằm trong ô `HeartPill`, đồng hồ hồi tim ngay dưới; hai nút tròn `RestartButton` (mới, `IHudView.RestartClicked` → chơi lại màn) và `SettingsButton` (icon tạm dừng). Thanh sao và dòng nhiệm vụ dời xuống dưới thanh trên. Màn chơi không hiện xu | Asset có bản quyền, chỉ dùng tạm |
+| 2026-11-07 | Dải nền thanh booster đổi sang gỗ: `Layout/BoosterBack/BackFill` dùng `Art/Catdom/BoosterBarWood.png` (9 phần, giữ viền sáng mép trên), tắt `BackLine` | Cùng tông với thanh trên gỗ |

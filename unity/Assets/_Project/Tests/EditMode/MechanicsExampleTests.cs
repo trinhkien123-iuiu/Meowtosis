@@ -203,10 +203,6 @@ namespace Meowtosis.Tests
         public void VirusEatingTheLastCatOfAColourLoses() =>
             Assert.That(TestLevel.FromRows("B.", ">A").Play("0 0 right").IsLost, Is.True);
 
-        [Test, Description("V9")]
-        public void VirusEatsGerms() =>
-            Assert.That(TestLevel.FromRows("A.", ">G").WithKill(Species.Germ).Play("0 0 right").Rows, Is.EqualTo(Rows("AA", ">>")));
-
         [Test, Description("V10")]
         public void VirusCannotBeSwipedButIsPushedLikeAnyPiece()
         {
@@ -222,27 +218,35 @@ namespace Meowtosis.Tests
             Assert.That(new FillGoal().IsMet(board), Is.False);
         }
 
-        // Vi khuẩn
+        // Băng trơn
 
-        [Test, Description("G1")]
-        public void GermsCanBeSwipedAndMultiply() =>
-            Assert.That(TestLevel.FromRows("G.", "A.").WithKill(Species.Germ).Play("0 0 right").Rows, Is.EqualTo(Rows("GG", "A.")));
+        [Test, Description("I1")]
+        public void CopyOnEmptyIceSlidesUntilItLeavesTheIce() =>
+            Assert.That(TestLevel.FromRows("A===.").Play("0 0 right").Rows, Is.EqualTo(Rows("A...A")));
 
-        [Test, Description("G2")]
-        public void ThreeGermsInARowClear() =>
-            Assert.That(TestLevel.FromRows("GG.", "A..").WithKill(Species.Germ).Play("0 1 right").Rows, Is.EqualTo(Rows("...", "A..")));
+        [Test, Description("I2")]
+        public void SlideStopsRightBeforeAnotherPiece() =>
+            Assert.That(TestLevel.FromRows("A==A").Play("0 0 right").Rows, Is.EqualTo(Rows("A.AA")));
 
-        [Test, Description("G3")]
-        public void CopyCanReplaceAGerm() =>
-            Assert.That(TestLevel.FromRows("AG", "A.").WithKill(Species.Germ).Play("0 0 right").Rows, Is.EqualTo(Rows("AA", "A.")));
+        [Test, Description("I3")]
+        public void SlideStopsOnTheFirstPlainCell() =>
+            Assert.That(TestLevel.FromRows("A=.=").Play("0 0 right").Rows, Is.EqualTo(Rows("A.A.")));
 
-        [Test, Description("G4")]
-        public void GermsAreNotAColourButMustBeGoneToWin()
+        [Test, Description("I4")]
+        public void SlidingIntoToxicKillsTheCopy()
         {
-            var board = TestLevel.FromRows("AG").WithKill(Species.Germ).Start();
-            Assert.That(GameOutcome.IsLost(board), Is.False);
-            Assert.That(GameOutcome.IsComplete(board), Is.False);
+            var play = TestLevel.FromRows("A==~").Play("0 0 right");
+            Assert.That(play.Rows, Is.EqualTo(Rows("A...")));
+            Assert.That(play.IsLost, Is.False);
         }
+
+        [Test, Description("I5")]
+        public void PushedRowsDoNotSlide() =>
+            Assert.That(TestLevel.FromRows("AB==").Play("0 0 right").Rows, Is.EqualTo(Rows("AAB.")));
+
+        [Test, Description("I6")]
+        public void VirusSpreadsOneCellOntoIce() =>
+            Assert.That(TestLevel.FromRows(">==", "A..").Play("1 0 right").Rows, Is.EqualTo(Rows(">>.", "AA.")));
 
         // Booster
 
@@ -256,12 +260,8 @@ namespace Meowtosis.Tests
         }
 
         [Test, Description("B2")]
-        public void MutateTurnsGermsIntoCatsAndWakesSleepingCats()
+        public void MutateWakesSleepingCats()
         {
-            var germs = TestLevel.FromRows("AG", "Bb").WithKill(Species.Germ).Start();
-            Assert.That(Rules.Boosters.TryMutate(germs, 1, Species.Red, out var fromGerm), Is.True);
-            Assert.That(fromGerm.After[1].Value.Species, Is.EqualTo(Species.Red));
-
             var sleeping = TestLevel.FromRows("A.", "Bc", "C.").Start();
             Assert.That(Rules.Boosters.TryMutate(sleeping, 3, Species.Red, out var fromSleeping), Is.True);
             Assert.That(fromSleeping.After[3].Value.IsAsleep, Is.False);

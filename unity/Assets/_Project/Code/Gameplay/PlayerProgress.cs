@@ -45,6 +45,9 @@ namespace Meowtosis.Gameplay
         // Level mở gần nhất, để lần sau vào thẳng level đó.
         public int LastLevelIndex { get; set; }
 
+        // Đã đi hết màn hướng dẫn đầu game (Levels/Onboarding.txt) thì không chạy lại.
+        public bool HasFinishedOnboarding { get; set; }
+
         public IReadOnlyDictionary<BoosterKind, int> Boosters => boosters;
 
         public IReadOnlyDictionary<string, int> BestStars => bestStars;
@@ -134,6 +137,15 @@ namespace Meowtosis.Gameplay
             var reward = stars * CoinsPerStar;
             Coins += reward;
             return reward;
+        }
+
+        // Bản thử: cộng xu.
+        public void AddCoins(int coins) => Coins = Math.Max(0, Coins + coins);
+
+        // Bản thử: coi như đã qua level (1 sao) để mở khoá level sau, không cộng xu. Level đã có sao thì giữ nguyên.
+        public void MarkPassed(string levelId)
+        {
+            if (BestStarsFor(levelId) == 0) bestStars[levelId] = 1;
         }
 
         // Đánh dấu đã xem thẻ hướng dẫn của một cơ chế; trả true nếu đây là lần đầu.

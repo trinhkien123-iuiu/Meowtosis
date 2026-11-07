@@ -4,7 +4,7 @@ namespace Meowtosis.Presentation
     public sealed class GameViews
     {
         public GameViews(IBoardView board, IHudView hud, IWinPopup win, ILosePopup lose, ISettingsPopup settings,
-            INoHeartsPopup noHearts, IMechanicPopup mechanic, ISoundPlayer sound, IAmbientEvents ambient)
+            INoHeartsPopup noHearts, IMechanicPopup mechanic, ISoundPlayer sound, IAmbientEvents ambient, ICheatPopup cheat)
         {
             Ambient = ambient;
             Board = board;
@@ -15,6 +15,7 @@ namespace Meowtosis.Presentation
             NoHearts = noHearts;
             Mechanic = mechanic;
             Sound = sound;
+            Cheat = cheat;
         }
 
         public IBoardView Board { get; }
@@ -34,5 +35,7 @@ namespace Meowtosis.Presentation
         public ISoundPlayer Sound { get; }
 
         public IAmbientEvents Ambient { get; }
+
+        public ICheatPopup Cheat { get; }
     }
 }

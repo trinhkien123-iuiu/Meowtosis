@@ -4,21 +4,17 @@ using UnityEngine;
 
 namespace Meowtosis.Presentation
 {
-    // Hình đổi theo loài: mèo từng màu (thường, vui, các vẻ mặt), hộp từng màu, vi khuẩn, virus bốn hướng, màu hạt hiệu ứng.
+    // Hình đổi theo loài: mèo từng màu (thường, vui, các vẻ mặt), hộp từng màu, virus bốn hướng, màu hạt hiệu ứng.
     // Hình cố định của bàn (ô, khung, màng...) nằm trong các prefab ở Prefabs/Board.
     [CreateAssetMenu(fileName = "BoardArt", menuName = "Meowtosis/Board Art")]
     public sealed class BoardArt : ScriptableObject
     {
-        [SerializeField] private Sprite germ;
-        [SerializeField] private Color germColor = new Color32(0x84, 0xdb, 0x4c, 0xff);
         [SerializeField] private Sprite virusUp;
         [SerializeField] private Sprite virusDown;
         [SerializeField] private Sprite virusLeft;
         [SerializeField] private Sprite virusRight;
         [SerializeField] private Color virusColor = new Color32(0xb5, 0x6c, 0xff, 0xff);
         [SerializeField] private CatArt[] cats = Array.Empty<CatArt>();
-
-        public Sprite Germ => germ;
 
         public Sprite VirusSprite(Direction facing) => facing switch
         {
@@ -54,7 +50,6 @@ namespace Meowtosis.Presentation
         // Màu hạt hiệu ứng khi quân này vỡ.
         public Color ColorOf(Species species)
         {
-            if (species == Species.Germ) return germColor;
             if (species == Species.Virus) return virusColor;
             var art = Find(species);
             return art != null ? art.Color : Color.white;

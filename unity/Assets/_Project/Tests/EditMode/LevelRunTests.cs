@@ -130,19 +130,16 @@ namespace Meowtosis.Tests
         [Test]
         public void MechanicsFollowTheLevelContent()
         {
-            var plain = TestLevel.FromRows("A.").Build();
-            Assert.That(MechanicDetector.In(plain, 0), Is.EqualTo(new[] { Mechanic.Divide }));
-            Assert.That(MechanicDetector.In(plain, 1), Is.EqualTo(new[] { Mechanic.Divide, Mechanic.Clear }));
-            Assert.That(MechanicDetector.In(plain, 3), Is.EqualTo(new[] { Mechanic.Divide, Mechanic.Clear, Mechanic.Push }));
-            Assert.That(MechanicDetector.In(plain, 5), Is.EqualTo(new[] { Mechanic.Divide, Mechanic.Clear, Mechanic.Push, Mechanic.Replace }));
+            // Nhân đôi, đẩy, thay thế, khử 3 đã dạy ở màn hướng dẫn đầu game nên level thường không có cơ chế mới nào.
+            var plain = TestLevel.FromRows("AB.", "...").Build();
+            Assert.That(MechanicDetector.In(plain), Is.Empty);
 
-            var full = TestLevel.FromRows("Aa~", "G>.").WithGoal("..B", "...").WithMembrane(1, 2, Direction.Left).WithKill(Species.Germ).Build();
-            var found = MechanicDetector.In(full, 0);
+            var full = TestLevel.FromRows("Aa~", "B>.").WithGoal("..B", "...").WithMembrane(1, 2, Direction.Left).Build();
+            var found = MechanicDetector.In(full);
             Assert.That(found, Has.Member(Mechanic.TargetBox));
             Assert.That(found, Has.Member(Mechanic.Membrane));
             Assert.That(found, Has.Member(Mechanic.Toxic));
             Assert.That(found, Has.Member(Mechanic.Virus));
-            Assert.That(found, Has.Member(Mechanic.Kill));
             Assert.That(found, Has.No.Member(Mechanic.Sleep), "mèo ngủ cạnh mèo cùng màu thức dậy ngay từ đầu");
         }
 

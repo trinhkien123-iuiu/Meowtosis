@@ -30,9 +30,9 @@ Tài liệu liên quan: [mechanics.md](mechanics.md) (luật chuẩn của từn
 | 8 | Bàn lớn thì **nhiều mèo đặt sẵn** | Mỗi nước chỉ sinh đúng một mèo, nên số nước ≥ số ô trống; bàn lớn mà ít mèo thì dài lê thê và bộ giải không kham nổi |
 | 9 | Bộ giải (Gợi ý, tính sao) phải chạy **dưới ~300 ms** trên PC | Điện thoại chậm hơn vài lần; Gợi ý phải gần như tức thì |
 | 10 | Khử 3 và ô độc phải được **dạy riêng** | Trên khung nhỏ, lời giải ngắn nhất không bao giờ cần chúng (chúng làm mất mèo), nên level ngẫu nhiên không tự dạy được |
-| 11 | Luật thua phải được **tự tay trải nghiệm sớm**, không chỉ đọc | Góp ý: người chơi tưởng chỉ cần lấp kín vì luật khử chỉ là chữ ở thẻ cơ chế. Nay level 2 có `trap` (nước cố ý thua, không mất tim), level 3 cho tự chọn |
+| 11 | Luật thua phải được **tự tay trải nghiệm sớm**, không chỉ đọc | Góp ý: người chơi tưởng chỉ cần lấp kín vì luật khử chỉ là chữ ở thẻ cơ chế. Bản Unity dạy luật này ở màn hướng dẫn đầu game (câu luật sau bước thay thế; phần tự chơi chặn nước làm hết màu). Level 1 `AA. / ##B` để người chơi tự áp dụng: vuốt đỏ sang phải là hết màu đỏ |
 
-> **Số level trong các bảng phía dưới là số cũ.** Ngày 2026-11-04 đã chèn 2 level vào vị trí 2 và 3: mọi level từ số cũ 2 trở đi nay cộng thêm 2 (level 15 cũ là level 17 mới). Tổng cộng 71 level.
+> **Số level:** ngày 2026-11-04 đã chèn 2 level vào vị trí 2 và 3 (mọi level sau cộng thêm 2). Ngày 2026-11-07 bỏ level 1 `A.` và level 4 `AB.` vì màn hướng dẫn đầu game đã dạy, nên **từ level 3 trở đi số level trùng lại số trong các bảng phía dưới**. Level 1, 2 nay là `AA. / ##B` và `##B# / AA..`. Tổng cộng 69 level.
 
 ---
 
@@ -106,6 +106,8 @@ Mọi công cụ đọc luật **thẳng từ khối `// ==LOGIC==` của game**
 | `run-jobs.js` | Chạy song song nhiều job (mỗi job một tiến trình), gộp kết quả vào `jobs/out/` |
 | `check.js` | Kiểm tra cả danh sách level: giải được, đủ nhanh, không trùng khung, hướng dẫn đúng, chương phủ kín |
 | `bfs-compare.js` | So bộ giải A* của game với BFS gốc (cùng số nước tối ưu) |
+| `study-clear.js` | So các phương án luật khử 3 (hiện tại, khử an toàn, khử từ 4, không khử) bằng mô hình người chơi casual; kết quả ở `jobs/study/clear.txt` |
+| `study-mechanics.js` | Mỗi cơ chế có đổi cách giải không: so từng level với bản bỏ cơ chế (par, nước thừa, độ khó theo quyết định, tỷ lệ thắng casual); kết quả ở `jobs/study/mechanics-*.txt` |
 | `export-levels.js` | Xuất level + chương + `par` + lời giải ra `data/levels.json` (`npm run export`) |
 | `serve.js` | Máy chủ chơi thử (`npm start`, `npm run lan`, thêm `--port=` để đổi cổng) |
 | `difficulty.js` | Đo độ khó theo quyết định của mọi level, song song, nhớ kết quả trong `jobs/difficulty.json` (`npm run difficulty`; chỉ đo level mới hoặc vừa sửa) |
@@ -335,3 +337,156 @@ Mỗi chương: level nhỏ để dạy và luyện, rồi thả xuống một b
 - Đổi luật thì phải đo lại độ khó của các level dính tới luật đó: `difficulty.json` nhớ theo nội dung level nên không tự biết luật đã đổi. Xoá các mục liên quan rồi chạy lại `npm run difficulty`.
 - Đặt tên lớp CSS cho hiệu ứng thì rà trùng tên trước: lớp `ghost` của hồn mèo từng trùng nút "Bản đồ" trên bảng thắng.
 
+
+### Màn hướng dẫn đầu game kiểu Meowdoku (2026-11-07)
+
+**Vì sao:** chơi thử từ tiến độ trống cho thấy luật được dạy rải rác qua nhiều level. Level 2 dạy hai luật mới cùng lúc (khử 3 và hết màu là thua). Mẹo đầu màn và thẻ cơ chế đã bị tắt trong Unity nên nhiều luật không còn được giải thích. Chủ dự án muốn làm như Meowdoku: trước level 1 có một bàn duy nhất, làm tối mọi thứ không liên quan và bắt người chơi làm theo để hiểu hết luật.
+
+**Cách Meowdoku làm** (xem video `D:\GitHub\asset_meowtosis\onboarding.mp4`, tách khung hình 1 giây một lần bằng OpenCV):
+1. Một bàn 4×4, không có HUD. Mỗi bước chỉ sáng ô liên quan, có bàn tay chỉ và lời dẫn ở trên ("Nhấn hai lần để đặt mèo vào ô").
+2. Làm xong thì cả bàn sáng lại, lời dẫn đổi thành luật vừa thấy ("Tốt lắm! Mỗi màu chỉ một chú mèo.") kèm nút "Đã hiểu!".
+3. Lặp lại cho từng luật. Bước cuối người chơi tự làm ("Tìm chú mèo cuối cùng!"), có nút gợi ý.
+4. "Xuất sắc! Bạn đã nắm được luật!" rồi "Bắt đầu chơi". Level 1 nhắc lại 3 luật bằng icon nhỏ trên HUD.
+
+**Ràng buộc khi chọn bàn:** muốn dạy theo thứ tự nhân đôi → đẩy → thay thế → khử 3 rồi lấp kín, mà không nước nào làm thua.
+- Mỗi nước nhân đôi hay đẩy lấp thêm 1 ô, thay thế không lấp thêm ô nào, khử 3 làm trống 3 ô. Bàn có E ô trống thì cả màn dài E + 4 nước.
+- Sau hai nước đầu bàn phải còn chỗ trống, nếu không là đã thắng. Vậy E ≥ 3, tức ít nhất 7 nước.
+
+**Tìm bàn:** script duyệt mọi bàn 2×3, 2×4, 3×3 có 2 màu (`#` `.` `A` `B`), tìm chuỗi nước đúng thứ tự trên mà không lúc nào thua. Có 9848 bàn đạt mức ngắn nhất là 7 nước. Chọn bàn chữ nhật 2×3 không có lỗ, phần tự chơi chỉ cần vuốt từng mèo xuống:
+
+```text
+B A .      1. (0,1) xuống   nhân đôi         B A . / A A .
+A . .      2. (0,0) phải    đẩy              B B A / A A .
+           3. (0,2) trái    thay thế xanh    B A A / A A .   (xanh còn 1 bé)
+           4. (0,2) xuống   khử 3 đỏ         B A A / . . .
+           5–7. tự lấp 3 ô hàng dưới
+```
+
+Ở nước tự chơi đầu tiên có 5 nước đi được, 4 nước còn đường thắng. Nước còn lại là mèo đỏ (0,1) vuốt trái: bản sao thay mất bé xanh cuối cùng, hết màu xanh. Game từ chối nước đó và hiện bàn tay chỉ nước đúng, nên người mới không thể thua ở màn này.
+
+**Bài học:**
+- Khi duyệt bàn, chống trùng phải theo cả nội dung bàn. `lib.canon` chỉ chuẩn hoá hình khung, nên lần chạy đầu chỉ thử một bàn cho mỗi hình khung và chỉ ra bàn 2×4 dài 8 nước. Sửa xong thì tìm được bàn 7 nước.
+- Duyệt 2×5 (hơn 1 triệu bàn, mỗi bàn tìm sâu 8 nước) không xong trong 10 phút. Hãy giới hạn độ sâu và cỡ bàn trước khi mở rộng.
+
+**Gọn level đầu sau khi có màn hướng dẫn:** màn hướng dẫn đã dạy nhân đôi, đẩy, thay thế, khử 3 và luật thua, nên các level đầu không cần dạy lại:
+
+| Level cũ | Bàn | Làm gì |
+|---|---|---|
+| 1 | `A.` | Bỏ: trùng bước 1 của màn hướng dẫn |
+| 2 | `AA. / ##B` | Bỏ bẫy và bàn tay. Nay là level 1: tự áp dụng luật thua (vuốt đỏ sang phải là khử 3 mèo đỏ, hết màu) |
+| 3 | `##B# / AA..` | Giữ (mẹo chỉ hiện ở bản web) |
+| 4 | `AB.` | Bỏ: 1 nước, vuốt con nào cũng thắng, trùng bước 2 |
+| 6 | `.B. / #A#` | Bỏ bàn tay 3 bước. Nay là level 4: tự tìm nước thay thế (cần đúng 1 nước thay thế) |
+
+Không chạy lại `tools/order.js`: bỏ `tut` thì giai đoạn "chia" của khối 1 không còn bài nhập môn và cả khối sẽ bị xếp lại. Chỉ bỏ 2 level và lùi `from`/`to` của `CHAPTERS` đi 2. Bản đồ Unity không còn đánh dấu "cơ chế mới" vì nhân đôi, đẩy, thay thế, khử 3 (`MechanicDetector` chỉ còn tính cơ chế theo nội dung level).
+
+**Lưu ý:**
+- Bản web không có màn hướng dẫn, nên giờ vào thẳng level `AA. / ##B` mà không có bàn tay.
+- Level 6 `B.. / A..` cùng khung 2×3 với màn hướng dẫn `BA. / A..`, chỉ khác vị trí mèo.
+
+### Đo lại độ khó cho người chơi casual và ý nghĩa từng cơ chế (2026-11-07)
+
+**Góp ý playtest:** người chơi không hardcore thấy khó, hay quên luật khử 3 nên hay thua. Vừa lấp xong một góc lại phải phá để đưa mèo khác tới đúng chỗ, nên mệt và không thấy thành tựu. Cơ chế vi khuẩn bị chê vô nghĩa: không có vi khuẩn thì vẫn phải đưa mèo vào ô đó.
+
+**Cách đo:** dùng mô hình người chơi casual, không nhìn trước:
+- **Quên luật:** chọn ngẫu nhiên một nước làm thêm một ô có mèo.
+- **Cẩn thận:** như trên nhưng bỏ các nước thua ngay.
+
+Mỗi level chơi 200 ván cho mỗi kiểu (`tools/study-clear.js`). Cơ chế đo bằng phản chứng: so từng level với bản bỏ cơ chế (`tools/study-mechanics.js`).
+
+**Luật khử 3 là gốc của cả hai lời phàn nàn.** Tỷ lệ thắng của người chơi casual (quên luật / cẩn thận), số lần khử trong một ván, số nước thừa trung bình trong lời giải ngắn nhất:
+
+| Khối | Hiện tại | Khử an toàn (không khử nếu làm tuyệt chủng) | Khử từ 4 | Không khử |
+|---|---|---|---|---|
+| 1 | 10% / 37%, khử 3,2 lần, thừa 1,56 | 41% / 41%, thừa 1,00 | 85% / 92%, khử 0,4 lần, thừa 0 | 100% / 100% |
+| 2 (hộp) | 4% / 12%, thừa 1,75 | 12% / 14% | 25% / 32%, thừa 0,83 | 31% / 40% |
+| 3 (màng, độc) | 16% / 34%, thừa 2,22 | 29% / 35% | 66% / 73%, thừa 0 | 86% / 92% |
+| 4 (ngủ, virus) | 17% / 31% | 35% / 36% | 83% / 87% | 99% / 99% |
+| 6 (bàn lớn) | 0% / 0% | 1% / 1% | 26% / 27% | 48% / 49% |
+| 7 (nhiều màu) | 2% / 13% | 20% / 20% | 32% / 33% | 51% / 52% |
+
+- Với luật hiện tại, người quên luật thua 66% số ván ở khối 1, vì 3 mèo cùng màu thẳng hàng tự khử trung bình 3,2 lần mỗi ván.
+- "Nước thừa" (par trừ số ô phải lấp) chính là số nước phá đi làm lại. Nó gần như chỉ đến từ việc phải xếp mèo sao cho không có 3 con cùng màu thẳng hàng. Bỏ được điều đó thì nước thừa ở khối 1 và 3 về 0, tức lấp tới đâu chắc tới đó.
+- Khử an toàn hết thua oan nhưng vẫn phải phá đi làm lại, nên tỷ lệ thắng chỉ lên 41%.
+- Không khử thì khối 1 thành chơi bừa cũng thắng: mất hết câu đố.
+- Khử từ 4 giữ được khử như một công cụ (vẫn có lúc khử, vẫn có thể thua) mà hết phá đi làm lại ở phần lớn level.
+
+**Từng cơ chế có đổi cách giải không** (trung bình trên các level có cơ chế, có so với bỏ đi):
+
+| Cơ chế | Số level | Δpar | Δ độ khó quyết định (bitsOpt) | Δ thắng casual | Nhận xét |
+|---|---|---|---|---|---|
+| Hộp | 14 | +1,36 | +6,0 | −31 điểm | Có nghĩa nhất, nhưng cũng là nguồn "phải đưa mèo tới đúng chỗ" |
+| Virus | 13 | +1,15 | +7,3 | −1,5 | Có nghĩa: tạo áp lực thời gian và thứ tự diệt |
+| Vi khuẩn | 11 | **0,00** | +4,6 | −7 | Par y hệt khi đổi vi khuẩn thành ô trống (chỉ 2 level lệch 1 nước). Vuốt cho vi khuẩn tự nhân lên chỉ dùng ở 1/11 level. Đúng như góp ý: vi khuẩn chỉ là "ô trống phải lấp bằng thay thế" |
+| Màng | 12 | +0,75 | +2,8 | −2 | Yếu: 4/12 level bỏ màng vẫn y nguyên |
+| Mèo ngủ | 12 | +0,75 | +1,0 | −1 | Yếu: đa số chỉ đánh thức 1 con, hai level không cần đánh thức |
+| Ô độc | 13 | **0,00** | +0,6 | −1 | Gần như chỉ là một cái lỗ: 5/13 level lời giải không chạm ô độc |
+
+Đề xuất và lựa chọn của chủ dự án ghi tiếp ở mục sau khi đã chốt.
+
+**Chốt (2026-11-07):** giữ luật khử 3. **Bỏ vi khuẩn:**
+- 10 level có vi khuẩn đổi vi khuẩn thành ô trống và giữ id cũ, nên sao không mất.
+- Bỏ level `GA / .#`: bài dạy vi khuẩn, không có vi khuẩn thì chỉ còn 2 nước.
+- Khối 5 thành "Ôn tập" (5 level). Còn 68 level.
+- Code Unity không còn `Species.Germ`, `KillGoal`, từ khoá `kill`, thẻ `Kill`/`GermClear`. Số enum `Mechanic` 9 và 12 để trống, không dùng lại.
+
+### Cơ chế Băng trơn (2026-11-07)
+
+**Luật** (chi tiết và ví dụ I1–I6 ở [mechanics.md §5.7](mechanics.md)): bản sao vào ô băng `=` đang trống thì trượt theo hướng vuốt tới khi gặp vật cản hoặc ra khỏi băng. Dãy bị đẩy, bản sao thay thế, virus và Cấy ghép không trượt.
+
+**Làm level:**
+1. `tools/gen.js` có thêm `ice: n` (số ô băng) và `need: ['ice']`. Điều kiện này loại level mà lời giải của bản không băng đem chơi trên bàn có băng vẫn thắng, tức băng không đổi gì; chừng 85–95% ứng viên bị loại vì lý do đó.
+2. Job ở `tools/jobs/ice.json`. Các job nhập môn 3×2, bất ngờ, băng + độc, băng + virus không ra ứng viên nào. Bài nhập môn `#B= / A==` tìm bằng cách duyệt hết các bàn nhỏ có 2 mèo, chọn bàn 3 nước có trượt mà không cần thay thế hay khử.
+3. Chọn tay 8 level theo nhịp nhập môn → luyện (2×4, 3×3) → 3 màu → mở rộng 4×4. Đặt ở đầu khối 5, trước 5 level ôn. Không chạy lại `order.js`; `PHASES` khối 5 nay là `băng` rồi `ôn tập`.
+
+**Đo** (`node tools/study-mechanics.js băng`): par trung bình −0,75 khi có băng (tới −3 ở level 54–55), độ khó theo quyết định −1,0, tỷ lệ thắng casual gần như không đổi. Băng là cơ chế **giúp sức**: đưa mèo đi xa bằng một nước. Nó làm đổi lời giải mà không làm khó thêm.
+
+**Lưu ý:** bài nhập môn 2×3 khuyết góc trùng khung level 19. `check.js` chỉ ghi chú, vì mọi bàn nhỏ có lời giải 3 nước dùng băng đều có khung này.
+
+### Cơ chế phải bắt buộc dùng mới qua màn (2026-11-07)
+
+**Yêu cầu của chủ dự án:** level có cơ chế nào thì người chơi phải dùng tới cơ chế đó mới thắng được. Đó mới là ý nghĩa của việc tạo ra cơ chế.
+
+**Cách kiểm** (`tools/mechanic-use.js`): với mỗi cơ chế trên bàn, cấm mọi nước dùng tới nó rồi tìm đường thắng (A\*, tối đa 200.000 trạng thái hoặc 4 giây). Còn thắng được thì cơ chế đó chỉ là **trang trí**. "Dùng" nghĩa là:
+
+| Cơ chế | Dùng nghĩa là |
+|---|---|
+| Băng | có nước làm bản sao trượt |
+| Ô độc | có quân chết trên ô độc |
+| Mèo ngủ | có nước đánh thức mèo ngủ |
+| Màng | có nước đưa quân xuyên màng (bản sao hoặc dãy bị đẩy) |
+| Hộp | điều kiện thắng nên không cấm được: bỏ hộp đi thì lời giải ngắn nhất không còn đúng hộp |
+| Virus | luôn bắt buộc (còn virus thì chưa thắng) |
+
+**Kết quả lần đầu:**
+- 22 level có cơ chế chỉ là trang trí: hộp 17, 23, 26; màng 29, 36, 63, 65, 67, 68, 74, 76; ô độc 34, 35, 36, 59, 62, 65, 67, 68, 74, 76; mèo ngủ 40, 41, 65, 72, 76; băng 49, 51, 52, 53.
+- Cả 3 bài nhập môn hộp, màng, băng cũng hỏng: không làm theo cơ chế vẫn thắng.
+- Thêm 6 level chưa chắc (32, 47, 56, 63, 68).
+
+**Sửa:**
+1. `gen.js` có thêm `strict: true`, chỉ nhận level mà mọi cơ chế đều bắt buộc. `tools/jobs/make-strict-jobs.js` tạo job cùng cỡ bàn, số mèo, số cơ chế với từng level hỏng (`tools/jobs/strict.json`).
+2. Đợt đầu ra được 10 level. Ô độc gần như không bao giờ bắt buộc trên bàn ngẫu nhiên, vì muốn bỏ bớt mèo thì luôn có cách thay thế. Đợt hai (`tools/jobs/strict2.json`) dùng bàn nhỏ 4×3, 5×2, 4×4 và thử nhiều hơn, thì ra đủ level ô độc, mèo ngủ, độc + màng.
+3. Bài nhập môn tìm bằng cách duyệt hết bàn nhỏ: bàn liền khối, 2–3 nước, không cần thay thế hay khử.
+   - Hộp `#B.A / A.##`: mèo đỏ vào hộp là sai.
+   - Màng `#BAA / ..##`: hàng dưới chỉ vào được qua màng.
+   - Băng `B==A / A#.#`.
+4. Level trộn lớn ở khối 6–7 (62, 63, 65, 68, 74, 76) bỏ phần trang trí: ô độc thừa thành lỗ, màng thừa bỏ đi, mèo ngủ thừa cho thức sẵn hoặc thành lỗ. Các level này vẫn giữ hộp hoặc virus khi cơ chế đó bắt buộc.
+5. Thay bằng `tools/jobs/apply-strict.js` (25 level, giữ `tip`/`card` của level 41). Level mới nhận id mới.
+
+**Sau khi sửa:** 0 level trang trí, 0 level chưa chắc. `check.js` (trong `npm test`) nay báo **lỗi** nếu có cơ chế trang trí. 4 cặp level trùng hình khung (17–29, 23–36, 49–51, 52–53) chỉ là lưu ý.
+
+### Gọn hướng dẫn trong level (2026-11-07)
+
+- **Level 12** `.B# / ..# / A..`: bỏ bàn tay 4 bước và thẻ "Dọn chỗ", thành màn chơi bình thường.
+- **Bỏ mẹo thừa:**
+  - Level 2 ("đừng để 3 mèo thẳng hàng"): màn hướng dẫn đầu game đã dạy.
+  - Level 10 và 64 ("bàn to, đông mèo"): không dạy gì mới.
+- **Lời dẫn ở 6 màn đầu tiên có cơ chế mới nói rõ cơ chế làm gì:**
+  - Hộp (17): chỉ nhận mèo cùng màu.
+  - Màng (29): chỉ cho đi theo mũi tên.
+  - Ô độc (33): mèo vào là biến mất, không cần lấp.
+  - Mèo ngủ (38): không vuốt được, đặt mèo cùng màu sát bên để đánh thức.
+  - Virus (42): lan 1 ô mỗi nước và ăn mèo; còn virus là chưa thắng.
+  - Băng (49): bản sao trượt tới khi gặp vật cản.
+- **Bản Unity:** mỗi bước hướng dẫn làm tối phần bàn không liên quan, chừa sáng các ô nước đó chạm tới (`MoveFocus`, gồm cả đường trượt trên băng). Vùng sáng giữ nguyên trong lúc nước đi đang diễn để thấy rõ kết quả.
+- **Còn lại** mẹo màu mới (18, 31, 69, 73), thức dây chuyền (41) và hai virus (44). Bản Unity hiện không hiện mẹo đầu màn (`GamePresenter.CurrentTip` chỉ hiện lời hướng dẫn), nên các mẹo này chỉ còn thấy ở bản web.

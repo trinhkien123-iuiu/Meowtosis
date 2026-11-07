@@ -61,6 +61,8 @@ namespace Meowtosis.Gameplay
 
         public bool IsTrapActive => isTrapPending;
 
+        public void EnableTrap() => isTrapPending = Session.Definition.Trap != null;
+
         // Bước người chơi phải làm theo lúc này: bẫy trước, rồi các bước hướng dẫn. Null nếu được đi tự do.
         public TutorialStep GuidedStep
         {
@@ -124,7 +126,12 @@ namespace Meowtosis.Gameplay
             return true;
         }
 
-        public void Restart() => Session.Restart();
+        public void Restart()
+        {
+            Session.Restart();
+            if (Session.Definition.Trap != null && Progress.BestStarsFor(Session.Definition.Id) == 0)
+                isTrapPending = true;
+        }
 
         // Người chơi đã thấy bẫy: ghi nhận đã biết cơ chế và đưa bàn về đầu để chơi thật.
         public void FinishTrap()

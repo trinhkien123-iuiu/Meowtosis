@@ -14,6 +14,7 @@ namespace Meowtosis.Domain
 
         private readonly bool[] isSlot;
         private readonly bool[] isToxic;
+        private readonly bool[] isIce;
         private readonly Species?[] targets;
         private readonly int[] nextCells;        // [cell * 4 + direction]: ô mà quân đi tới, hoặc NoCell
         private readonly int[][] neighbours;     // các ô kề trên bàn, bỏ qua màng
@@ -30,6 +31,7 @@ namespace Meowtosis.Domain
 
             isSlot = new bool[CellCount];
             isToxic = new bool[CellCount];
+            isIce = new bool[CellCount];
             targets = new Species?[CellCount];
             startPieces = new Piece?[CellCount];
             for (var cell = 0; cell < CellCount; cell++)
@@ -37,6 +39,7 @@ namespace Meowtosis.Domain
                 var symbol = definition.Rows[RowOf(cell)][ColumnOf(cell)];
                 isSlot[cell] = symbol != LevelSymbols.Hole;
                 isToxic[cell] = symbol == LevelSymbols.Toxic;
+                isIce[cell] = symbol == LevelSymbols.Ice;
                 if (LevelSymbols.TryReadPiece(symbol, firstFreePieceId, out var piece))
                 {
                     startPieces[cell] = piece;
@@ -49,9 +52,8 @@ namespace Meowtosis.Domain
             Membranes = definition.Membranes.ToList();
             nextCells = CreateNextCells(Membranes);
             neighbours = CreateNeighbours();
-            KillSpecies = definition.KillSpecies;
             StartingColors = startPieces
-                .Where(piece => piece.HasValue && !piece.Value.IsVirus && piece.Value.Species != KillSpecies)
+                .Where(piece => piece.HasValue && !piece.Value.IsVirus)
                 .Select(piece => piece.Value.Species)
                 .Distinct()
                 .ToList();
@@ -69,9 +71,6 @@ namespace Meowtosis.Domain
         public int CellCount => Width * Height;
 
         public IReadOnlyList<Membrane> Membranes { get; }
-
-        // Loài phải diệt sạch mới thắng (level diệt khuẩn), hoặc null.
-        public Species? KillSpecies { get; }
 
         // Các màu mèo có trên bàn lúc đầu. Mất hết mèo của một màu là thua.
         public IReadOnlyList<Species> StartingColors { get; }
@@ -95,6 +94,9 @@ namespace Meowtosis.Domain
         public bool IsSlot(int cell) => isSlot[cell];
 
         public bool IsToxic(int cell) => isToxic[cell];
+
+        // Ô băng trơn: bản sao vào ô này khi nó trống thì trượt tiếp (SwipeRule).
+        public bool IsIce(int cell) => isIce[cell];
 
         // Màu hộp mục tiêu ở ô này, hoặc null.
         public Species? TargetAt(int cell) => targets[cell];
@@ -165,7 +167,6 @@ namespace Meowtosis.Domain
         {
             var goals = new List<ILevelGoal> { new FillGoal() };
             if (HasTargets) goals.Add(new TargetBoxGoal());
-            if (KillSpecies.HasValue) goals.Add(new KillGoal(KillSpecies.Value));
             return goals;
         }
     }

@@ -1,0 +1,196 @@
+== độc 3x3 AB 1 (0 ứng viên) · bị loại: {"không giải được":80334,"độc trang trí":2453}
+== độc 3x3 AB 2 (0 ứng viên) · bị loại: {"không giải được":130233,"độc trang trí":16074}
+== độc 3x3 AAB 1 (0 ứng viên) · bị loại: {"không giải được":40643,"độc trang trí":13757}
+== độc 3x3 AAB 2 (0 ứng viên) · bị loại: {"không giải được":85151,"quá ngắn":35528,"độc trang trí":18248}
+== độc 3x3 ABC 1 (0 ứng viên) · bị loại: {"độc trang trí":36959,"không giải được":31942}
+== độc 3x3 ABC 2 (0 ứng viên) · bị loại: {"quá ngắn":54435,"độc trang trí":35133,"không giải được":74424}
+== độc 3x3 AABB 2 (0 ứng viên) · bị loại: {"quá ngắn":111278,"không giải được":46150,"độc trang trí":7366}
+== độc 3x3 AABB 1 (0 ứng viên) · bị loại: {"không giải được":26278,"độc trang trí":15153,"quá ngắn":18924}
+== độc 4x3 AB 1 (0 ứng viên) · bị loại: {"độc trang trí":1433,"quá dài":520,"quá giới hạn giải":107,"không giải được":831}
+== độc 4x3 AB 2 (1 ứng viên) · bị loại: {"không giải được":1869,"độc trang trí":1171,"quá giới hạn giải":107,"quá dài":241}
+  {"rows":["A~##",".B~.","...."]} par=7 ms=3 mèo=2 ô=8 đầu=4/4/1 cụt=0.08 thừa=1 khó=8.95 bấtngờ=3 [push3 longPush1 toxic1]
+== độc 4x3 AAB 2 (9 ứng viên) · bị loại: {"độc trang trí":2882,"không giải được":3361,"quá dài":165,"quá giới hạn giải":49}
+  {"rows":["#AB~",".~A#","...."]} par=7 ms=1 mèo=3 ô=8 đầu=5/3/1 cụt=0.23 thừa=2 khó=9.5 bấtngờ=5.8 [push3 replace1 toxic1]
+  {"rows":["...A",".#.#","~~BA"]} par=6 ms=1 mèo=3 ô=8 đầu=5/3/1 cụt=0.23 thừa=1 khó=8.9 bấtngờ=4.3 [push2 toxic1]
+  {"rows":["...A","##.#","~~BA"]} par=5 ms=1 mèo=3 ô=7 đầu=5/3/1 cụt=0.32 thừa=1 khó=8.57 bấtngờ=4.3 [push2 toxic1]
+  {"rows":["..#~","~..B","#A#A"]} par=5 ms=0 mèo=3 ô=7 đầu=5/3/1 cụt=0.26 thừa=1 khó=8.35 bấtngờ=4.3 [push2 toxic1]
+  {"rows":["#A~A","#..B","..#~"]} par=5 ms=1 mèo=3 ô=7 đầu=5/3/1 cụt=0.26 thừa=1 khó=8.35 bấtngờ=4.3 [push2 toxic1]
+== độc 4x3 AAB 1 (2 ứng viên) · bị loại: {"không giải được":795,"độc trang trí":2222,"quá dài":386,"quá giới hạn giải":104}
+  {"rows":["..A.",".B##",".~A#"]} par=6 ms=2 mèo=3 ô=8 đầu=5/4/1 cụt=0.13 thừa=1 khó=8.58 bấtngờ=3.7 [push3 longPush1 toxic1]
+  {"rows":["....","A~A.",".##B"]} par=7 ms=4 mèo=3 ô=9 đầu=6/6/2 cụt=? thừa=1 khó=8.53 bấtngờ=2.83 [push3 toxic1]
+== độc 4x3 ABC 2 (13 ứng viên) · bị loại: {"độc trang trí":1791,"không giải được":1203,"quá giới hạn giải":186,"quá dài":32}
+  {"rows":["~#~.","CB..","A##."]} par=6 ms=1 mèo=3 ô=7 đầu=6/3/1 cụt=0.00 thừa=2 khó=8.27 bấtngờ=6.17 [push3 longPush1 replace1 toxic1]
+  {"rows":[".A#~",".~BC","...#"]} par=7 ms=1 mèo=3 ô=8 đầu=5/3/2 cụt=0.00 thừa=2 khó=8.36 bấtngờ=5.4 [push2 replace1 toxic1]
+  {"rows":["..#~","~.CA","..#B"]} par=7 ms=2 mèo=3 ô=8 đầu=6/3/1 cụt=0.00 thừa=2 khó=8.87 bấtngờ=5.17 [push4 longPush1 toxic2]
+  {"rows":["~..C",".B~.","A##."]} par=8 ms=2 mèo=3 ô=8 đầu=6/6/3 cụt=0.00 thừa=3 khó=8.78 bấtngờ=4.5 [push1 replace2 toxic1]
+  {"rows":["...B",".#.#","~~CA"]} par=6 ms=1 mèo=3 ô=8 đầu=5/3/1 cụt=0.00 thừa=1 khó=8.2 bấtngờ=4.3 [push3 toxic1]
+== độc 4x3 AABB 1 (8 ứng viên) · bị loại: {"quá dài":237,"không giải được":789,"độc trang trí":3623,"quá giới hạn giải":72}
+  {"rows":[".#BA","..A#",".#~B"]} par=8 ms=3 mèo=4 ô=8 đầu=5/2/1 cụt=0.51 thừa=4 khó=10.92 bấtngờ=6.9 [push3 replace2 toxic2]
+  {"rows":["#A#.","BB..","A~#."]} par=7 ms=3 mèo=4 ô=8 đầu=6/3/1 cụt=0.19 thừa=3 khó=9.44 bấtngờ=6.67 [push3 longPush1 replace2 toxic1]
+  {"rows":["....","~BA#","B#A#"]} par=6 ms=1 mèo=4 ô=8 đầu=5/3/2 cụt=0.05 thừa=2 khó=7.94 bấtngờ=5.4 [push2 replace1 toxic1]
+  {"rows":["..#.",".~BA","A.B#"]} par=8 ms=4 mèo=4 ô=9 đầu=7/6/4 cụt=0.36 thừa=3 khó=9.74 bấtngờ=4.79 [push2 replace2 toxic1]
+  {"rows":[".~##",".A#.","ABB."]} par=5 ms=1 mèo=4 ô=8 đầu=7/4/1 cụt=0.08 thừa=1 khó=7.95 bấtngờ=4.5 [push3 longPush1 toxic1]
+== độc 4x3 AABB 2 (12 ứng viên) · bị loại: {"không giải được":6253,"độc trang trí":10744,"quá giới hạn giải":16,"quá dài":118}
+  {"rows":["#.#~","B.AA","#.~B"]} par=5 ms=3 mèo=4 ô=7 đầu=5/3/2 cụt=0.23 thừa=2 khó=7.88 bấtngờ=5.4 [push1 replace1 toxic1]
+  {"rows":["...#","#A~.","AB~B"]} par=6 ms=3 mèo=4 ô=8 đầu=6/4/2 cụt=0.42 thừa=2 khó=9.2 bấtngờ=5.33 [push3 replace1 toxic1]
+  {"rows":["B##.","AB~A","~..."]} par=6 ms=5 mèo=4 ô=8 đầu=7/5/2 cụt=0.32 thừa=2 khó=8.98 bấtngờ=5.29 [push1 replace1 toxic1]
+  {"rows":["B.#A",".~BA","~..."]} par=7 ms=4 mèo=4 ô=9 đầu=7/5/4 cụt=0.07 thừa=2 khó=8.26 bấtngờ=4.71 [push2 replace1 toxic1]
+  {"rows":["AB~B","~.#A","#..."]} par=5 ms=1 mèo=4 ô=8 đầu=7/4/3 cụt=0.78 thừa=1 khó=9.48 bấtngờ=3.93 [push1 toxic1]
+== độc 4x3 ABC 1 (7 ứng viên) · bị loại: {"độc trang trí":2433,"quá dài":132,"không giải được":507,"quá giới hạn giải":176}
+  {"rows":["#.#~","..BA","..#C"]} par=6 ms=1 mèo=3 ô=8 đầu=6/3/1 cụt=0.00 thừa=1 khó=8.27 bấtngờ=4.67 [push3 longPush1 toxic1]
+  {"rows":[".B#A",".~C.","...#"]} par=8 ms=2 mèo=3 ô=9 đầu=5/5/3 cụt=0.00 thừa=2 khó=8.58 bấtngờ=3.8 [push2 replace1 toxic1]
+  {"rows":["..#B","...A","C.#~"]} par=7 ms=1 mèo=3 ô=9 đầu=6/4/3 cụt=? thừa=1 khó=8.2 bấtngờ=3.5 [push3 toxic1]
+  {"rows":["A.~.","##B.",".C.."]} par=7 ms=4 mèo=3 ô=9 đầu=6/5/2 cụt=0.08 thừa=1 khó=8.77 bấtngờ=3.33 [push4 longPush1 toxic1]
+  {"rows":[".##B","A~C.","#..."]} par=6 ms=2 mèo=3 ô=8 đầu=5/5/2 cụt=0.00 thừa=1 khó=7.78 bấtngờ=2.7 [push3 toxic1]
+== độc 5x2 AB 2 (4 ứng viên) · bị loại: {"độc trang trí":33641,"không giải được":83689}
+  {"rows":[".~~BA","....#"]} par=7 ms=0 mèo=2 ô=7 đầu=4/2/1 cụt=0.00 thừa=2 khó=8.7 bấtngờ=6 [push2 replace1 toxic1]
+  {"rows":[".#~AB","....~"]} par=7 ms=0 mèo=2 ô=7 đầu=4/2/1 cụt=0.00 thừa=2 khó=8.7 bấtngờ=6 [push2 replace1 toxic1]
+  {"rows":["....~","##~BA"]} par=6 ms=0 mèo=2 ô=6 đầu=4/2/1 cụt=0.00 thừa=2 khó=8.1 bấtngờ=6 [push2 replace1 toxic1]
+  {"rows":["....#","~#~AB"]} par=6 ms=0 mèo=2 ô=6 đầu=4/2/1 cụt=0.00 thừa=2 khó=8.1 bấtngờ=6 [push2 replace1 toxic1]
+== độc 5x2 AB 1 (3 ứng viên) · bị loại: {"độc trang trí":4697,"không giải được":11162,"quá dài":34}
+  {"rows":["BA~..","#...."]} par=8 ms=1 mèo=2 ô=8 đầu=4/2/1 cụt=0.00 thừa=2 khó=9.3 bấtngờ=6 [push2 longPush1 replace1 toxic1]
+  {"rows":["BA~#.","#...."]} par=7 ms=0 mèo=2 ô=7 đầu=4/2/1 cụt=0.00 thừa=2 khó=8.7 bấtngờ=6 [push2 longPush1 replace1 toxic1]
+  {"rows":["#...#","..~BA"]} par=7 ms=1 mèo=2 ô=7 đầu=4/2/1 cụt=0.00 thừa=2 khó=8.7 bấtngờ=6 [push2 replace1 toxic1]
+== độc 5x2 AAB 1 (3 ứng viên) · bị loại: {"độc trang trí":9864,"không giải được":8029,"quá dài":74}
+  {"rows":["BA.~#","A#..."]} par=7 ms=2 mèo=3 ô=7 đầu=4/2/1 cụt=0.52 thừa=3 khó=10.25 bấtngờ=6.5 [push2 longPush1 replace2 toxic1]
+  {"rows":["...##","~AAB."]} par=5 ms=1 mèo=3 ô=7 đầu=6/4/2 cụt=0.11 thừa=1 khó=7.65 bấtngờ=3.83 [push2 longPush2 toxic1]
+  {"rows":[".A..#","..~AB"]} par=6 ms=4 mèo=3 ô=8 đầu=7/6/4 cụt=0.00 thừa=1 khó=7.08 bấtngờ=2.79 [push1 toxic1]
+== độc 5x2 AAB 2 (5 ứng viên) · bị loại: {"độc trang trí":58568,"không giải được":54491}
+  {"rows":["ABA~.","#~..."]} par=6 ms=1 mèo=3 ô=7 đầu=6/2/1 cụt=0.79 thừa=2 khó=10.63 bấtngờ=6.67 [push1 longPush1 replace1 toxic1]
+  {"rows":["....~","A#~AB"]} par=5 ms=1 mèo=3 ô=7 đầu=5/4/2 cụt=0.00 thừa=1 khó=6.56 bấtngờ=3.3 [push1 toxic1]
+  {"rows":["~~AAB","#...#"]} par=4 ms=0 mèo=3 ô=6 đầu=5/4/2 cụt=0.00 thừa=1 khó=6.4 bấtngờ=3.3 [push1 longPush1 toxic1]
+  {"rows":["BA~#~","#..A."]} par=4 ms=0 mèo=3 ô=6 đầu=6/5/3 cụt=0.00 thừa=1 khó=6.3 bấtngờ=3 [push2 longPush1 toxic1]
+  {"rows":["#.~AB","~A..#"]} par=4 ms=1 mèo=3 ô=6 đầu=6/5/3 cụt=0.00 thừa=1 khó=5.62 bấtngờ=3 [push1 toxic1]
+== độc 5x2 ABC 2 (3 ứng viên) · bị loại: {"độc trang trí":59169,"không giải được":33384}
+  {"rows":["A~...","BC.~#"]} par=7 ms=1 mèo=3 ô=7 đầu=6/3/1 cụt=0.00 thừa=3 khó=8.87 bấtngờ=6.67 [push2 longPush1 replace2 toxic1]
+  {"rows":["...~#","#~ABC"]} par=5 ms=0 mèo=3 ô=6 đầu=6/2/1 cụt=0.00 thừa=2 khó=7.67 bấtngờ=6.67 [push2 replace1 toxic1]
+  {"rows":["A#...","B.C~~"]} par=7 ms=1 mèo=3 ô=7 đầu=6/4/2 cụt=0.00 thừa=3 khó=8.53 bấtngờ=5.83 [push1 longPush1 replace2 toxic1]
+== độc 5x2 ABC 1 (2 ứng viên) · bị loại: {"độc trang trí":6435,"không giải được":814,"quá giới hạn giải":219}
+  {"rows":["CA.~#","B#..."]} par=7 ms=1 mèo=3 ô=7 đầu=5/2/1 cụt=0.00 thừa=3 khó=8.8 bấtngờ=6.9 [push2 longPush1 replace2 toxic1]
+  {"rows":["CBA~.",".#..."]} par=7 ms=2 mèo=3 ô=8 đầu=7/3/2 cụt=0.00 thừa=2 khó=8.63 bấtngờ=6.14 [push1 longPush1 replace1 toxic1]
+== độc 5x2 AABB 2 (3 ứng viên) · bị loại: {"độc trang trí":26722,"quá ngắn":32344,"không giải được":18822}
+  {"rows":["A...B","#~AB~"]} par=5 ms=2 mèo=4 ô=7 đầu=6/5/1 cụt=0.07 thừa=2 khó=7.88 bấtngờ=5.17 [push2 longPush1 replace1 toxic1]
+  {"rows":["B#.A.","~BA~#"]} par=3 ms=0 mèo=4 ô=6 đầu=5/4/2 cụt=0.33 thừa=1 khó=6.76 bấtngờ=3.3 [push1 toxic1]
+  {"rows":["#~AB#","A..~B"]} par=3 ms=1 mèo=4 ô=6 đầu=5/4/2 cụt=0.32 thừa=1 khó=6.39 bấtngờ=3.3 [push1 toxic1]
+== độc 5x2 AABB 1 (2 ứng viên) · bị loại: {"độc trang trí":27752,"không giải được":5279,"quá dài":2}
+  {"rows":["A#...",".ABB~"]} par=5 ms=1 mèo=4 ô=8 đầu=6/4/2 cụt=0.12 thừa=1 khó=7.69 bấtngờ=3.83 [push2 longPush2 toxic1]
+  {"rows":["#...#","A~BBA"]} par=4 ms=1 mèo=4 ô=7 đầu=5/4/2 cụt=0.10 thừa=1 khó=6.74 bấtngờ=3.3 [push1 longPush1 toxic1]
+== độc 4x4 AB 1 (0 ứng viên) · bị loại: {"quá dài":781,"quá giới hạn giải":146,"không giải được":233,"độc trang trí":32}
+== độc 4x4 AB 2 (1 ứng viên) · bị loại: {"không giải được":372,"quá dài":436,"quá giới hạn giải":198,"độc trang trí":79}
+  {"rows":["#~..","~A.#","....","B##."]} par=9 ms=4 mèo=2 ô=10 đầu=4/4/2 cụt=? thừa=1 khó=9.34 bấtngờ=2.5 [push3 toxic1]
+== độc 4x4 AAB 2 (0 ứng viên) · bị loại: {"độc trang trí":301,"quá dài":318,"quá giới hạn giải":179,"không giải được":274}
+== độc 4x4 ABC 1 (1 ứng viên) · bị loại: {"quá giới hạn giải":165,"độc trang trí":323,"quá dài":600,"không giải được":72}
+  {"rows":["A.#B","#.C~","....","#.#."]} par=9 ms=3 mèo=3 ô=11 đầu=4/4/2 cụt=? thừa=1 khó=9.4 bấtngờ=2.5 [push2 toxic1]
+== độc 4x4 AAB 1 (1 ứng viên) · bị loại: {"quá dài":653,"quá giới hạn giải":153,"không giải được":158,"độc trang trí":209}
+  {"rows":["A.#A","#.B~","....","#.#."]} par=9 ms=6 mèo=3 ô=11 đầu=4/4/2 cụt=? thừa=1 khó=9.4 bấtngờ=2.5 [push2 toxic1]
+== độc 4x4 ABC 2 (1 ứng viên) · bị loại: {"độc trang trí":434,"không giải được":174,"quá dài":237,"quá giới hạn giải":188}
+  {"rows":["~#.C","B..#","A#..","~..#"]} par=8 ms=1 mèo=3 ô=10 đầu=5/3/2 cụt=? thừa=1 khó=9 bấtngờ=3.9 [push2 longPush1 toxic1]
+== độc 4x4 AABB 1 (1 ứng viên) · bị loại: {"độc trang trí":781,"quá dài":375,"không giải được":72,"quá giới hạn giải":139}
+  {"rows":["..#A","#...","#BB#","..~A"]} par=9 ms=3 mèo=4 ô=11 đầu=5/5/3 cụt=? thừa=2 khó=9.2 bấtngờ=3.8 [push2 replace1 toxic1]
+== độc 4x4 AABB 2 (4 ứng viên) · bị loại: {"độc trang trí":561,"không giải được":181,"quá dài":143,"quá giới hạn giải":179}
+  {"rows":["#...","BA~.",".#B.","A#~#"]} par=8 ms=10 mèo=4 ô=10 đầu=7/5/4 cụt=0.65 thừa=2 khó=10.61 bấtngờ=4.71 [push1 replace1 toxic1]
+  {"rows":[".B.#","~.~A","#.B#","...A"]} par=9 ms=16 mèo=4 ô=11 đầu=7/7/3 cụt=? thừa=2 khó=9.54 bấtngờ=4.14 [push4 replace1 toxic1]
+  {"rows":[".~BA","...#","#.~.",".A#B"]} par=9 ms=8 mèo=4 ô=11 đầu=7/5/4 cụt=? thừa=2 khó=9.26 bấtngờ=3.71 [push2 toxic2]
+  {"rows":[".B..","~.~A","##A.","#B.."]} par=8 ms=12 mèo=4 ô=11 đầu=8/8/5 cụt=? thừa=1 khó=8.55 bấtngờ=2.25 [push3 longPush1 toxic1]
+== độc 5x3 AB 1 (0 ứng viên) · bị loại: {"quá dài":528,"độc trang trí":69,"quá giới hạn giải":144,"không giải được":298}
+== độc 5x3 AAB 1 (0 ứng viên) · bị loại: {"quá giới hạn giải":152,"quá dài":349,"không giải được":199,"độc trang trí":288}
+== độc 5x3 AB 2 (0 ứng viên) · bị loại: {"quá giới hạn giải":183,"không giải được":568,"độc trang trí":129,"quá dài":264}
+== độc 5x3 AAB 2 (1 ứng viên) · bị loại: {"không giải được":440,"độc trang trí":311,"quá dài":205,"quá giới hạn giải":176}
+  {"rows":["#A...","A#B.~","..~.#"]} par=8 ms=6 mèo=3 ô=10 đầu=5/5/2 cụt=0.05 thừa=1 khó=9.12 bấtngờ=2.7 [push2 toxic1]
+== độc 5x3 ABC 2 (1 ứng viên) · bị loại: {"quá giới hạn giải":189,"độc trang trí":431,"quá dài":136,"không giải được":287}
+  {"rows":["#B...","A#C.~","..~.#"]} par=8 ms=4 mèo=3 ô=10 đầu=5/5/2 cụt=0.00 thừa=1 khó=9 bấtngờ=2.7 [push2 toxic1]
+== độc 5x3 ABC 1 (0 ứng viên) · bị loại: {"độc trang trí":234,"quá dài":190,"không giải được":52,"quá giới hạn giải":193}
+== độc 5x3 AABB 1 (1 ứng viên) · bị loại: {"độc trang trí":590,"quá giới hạn giải":136,"quá dài":237,"không giải được":120}
+  {"rows":["A~##.","#A...","B.#.B"]} par=7 ms=4 mèo=4 ô=10 đầu=6/6/3 cụt=? thừa=1 khó=8.2 bấtngờ=2.5 [push3 longPush1 toxic1]
+== độc 5x3 AABB 2 (1 ứng viên) · bị loại: {"không giải được":318,"quá dài":120,"độc trang trí":573,"quá giới hạn giải":165}
+  {"rows":["B.#A.","#AB~~","##..."]} par=7 ms=6 mèo=4 ô=9 đầu=7/6/4 cụt=0.09 thừa=2 khó=8.29 bấtngờ=4.29 [push1 replace1 toxic1]
+== ngủ 3x3 Aab (0 ứng viên) · bị loại: {"không giải được":143907}
+== ngủ 3x3 AaB (0 ứng viên) · bị loại: {"không giải được":17722}
+== ngủ 3x3 AABb (1 ứng viên) · bị loại: {"không giải được":5599,"ngủ trang trí":1650}
+  {"rows":[".A#","b#A","..B"]} par=4 ms=0 mèo=4 ô=7 đầu=4/2/2 cụt=0.42 thừa=1 khó=7.47 bấtngờ=4 [push1 replace1 wake1]
+== ngủ 3x3 ABcC (1 ứng viên) · bị loại: {"không giải được":3638,"ngủ trang trí":1390}
+  {"rows":["AB#","C#c","..."]} par=5 ms=0 mèo=4 ô=7 đầu=5/2/1 cụt=0.65 thừa=2 khó=9.56 bấtngờ=5.4 [push1 replace2 wake1]
+== ngủ 3x3 AAbB (1 ứng viên) · bị loại: {"ngủ trang trí":1473,"không giải được":6135}
+  {"rows":[".A#","b#A",".B."]} par=3 ms=0 mèo=4 ô=7 đầu=4/4/3 cụt=0.42 thừa=0 khó=5.59 bấtngờ=0.5 [wake1]
+== ngủ 4x3 Aab (0 ứng viên) · bị loại: {"không giải được":5265}
+== ngủ 4x3 AaB (39 ứng viên) · bị loại: {"ngủ trang trí":676,"quá dài":1269,"không giải được":1210}
+  {"rows":[".B..",".A#a","##.."]} par=9 ms=5 mèo=3 ô=9 đầu=5/3/2 cụt=? thừa=3 khó=9.6 bấtngờ=4.9 [push2 longPush1 replace3 wake1 wakeUse1]
+  {"rows":[".B##",".a#.","..A."]} par=9 ms=3 mèo=3 ô=9 đầu=3/2/1 cụt=? thừa=3 khó=9.73 bấtngờ=4.83 [replace3 wake1 wakeUse1]
+  {"rows":["#..#","Ba..","A..#"]} par=7 ms=2 mèo=3 ô=9 đầu=3/1/1 cụt=? thừa=1 khó=8.53 bấtngờ=4.83 [push1 replace1 wake1 wakeUse2]
+  {"rows":[".A.#","##a.",".B.."]} par=8 ms=2 mèo=3 ô=9 đầu=4/2/2 cụt=? thừa=2 khó=8.8 bấtngờ=4.5 [push2 longPush1 replace2 wake1 wakeUse1]
+  {"rows":["...#",".#a#","..BA"]} par=8 ms=1 mèo=3 ô=9 đầu=3/2/1 cụt=? thừa=2 khó=9.13 bấtngờ=4.33 [push4 longPush1 replace2 wake1 wakeUse1]
+== ngủ 4x3 AABb (48 ứng viên) · bị loại: {"ngủ trang trí":1391,"quá dài":607,"không giải được":2054}
+  {"rows":[".#B#",".AAb","..#."]} par=9 ms=6 mèo=4 ô=9 đầu=4/2/1 cụt=? thừa=4 khó=9.9 bấtngờ=6.5 [push2 longPush1 replace1 clear1 cleared3 wake1 wakeUse1]
+  {"rows":["...#","#Ab.","BA#."]} par=7 ms=1 mèo=4 ô=9 đầu=3/1/1 cụt=? thừa=2 khó=8.49 bấtngờ=5.33 [push1 replace2 wake1 wakeUse2]
+  {"rows":[".#..","BAA.",".b#."]} par=9 ms=6 mèo=4 ô=10 đầu=6/4/1 cụt=? thừa=3 khó=10.07 bấtngờ=5.17 [push2 longPush1 replace3 wake1]
+  {"rows":["AB.b","##.A","...."]} par=9 ms=8 mèo=4 ô=10 đầu=5/3/2 cụt=? thừa=3 khó=9.6 bấtngờ=4.9 [push4 longPush1 replace3 wake1]
+  {"rows":["..#A","#..A",".b#B"]} par=8 ms=2 mèo=4 ô=9 đầu=3/2/1 cụt=? thừa=3 khó=9.13 bấtngờ=4.83 [push1 replace3 wake1 wakeUse1]
+== ngủ 4x3 ABcC (43 ứng viên) · bị loại: {"ngủ trang trí":2874,"quá dài":78,"không giải được":370,"quá giới hạn giải":2}
+  {"rows":[".c#C","#..B","..#A"]} par=8 ms=9 mèo=4 ô=9 đầu=5/1/1 cụt=? thừa=3 khó=9.4 bấtngờ=6.5 [push1 replace3 wake1 wakeUse1]
+  {"rows":["..A.","c#CB","..##"]} par=8 ms=14 mèo=4 ô=9 đầu=7/3/1 cụt=? thừa=3 khó=9.51 bấtngờ=5.93 [push2 longPush1 replace3 wake1 wakeUse1]
+  {"rows":[".#AC",".#..","Bc.#"]} par=8 ms=8 mèo=4 ô=9 đầu=5/3/2 cụt=? thừa=3 khó=9 bấtngờ=4.9 [push2 replace3 wake1 wakeUse1]
+  {"rows":["#...","Bc##","C.A."]} par=7 ms=9 mèo=4 ô=9 đầu=5/3/1 cụt=? thừa=2 khó=8.8 bấtngờ=4.8 [push2 longPush1 replace2 wake1 wakeUse1]
+  {"rows":["#...","#c#B",".A.C"]} par=8 ms=4 mèo=4 ô=9 đầu=6/5/1 cụt=? thừa=3 khó=9.47 bấtngờ=4.67 [push2 replace3 wake1 wakeUse1]
+== ngủ 4x3 AAbB (47 ứng viên) · bị loại: {"ngủ trang trí":1239,"không giải được":1893,"quá dài":738}
+  {"rows":["AA..",".#B#",".b.#"]} par=9 ms=4 mèo=4 ô=9 đầu=4/3/2 cụt=? thừa=4 khó=9.4 bấtngờ=5.25 [push5 longPush1 replace1 clear1 cleared3 wake1]
+  {"rows":["BA.A",".b#.","##.."]} par=8 ms=4 mèo=4 ô=9 đầu=5/3/2 cụt=? thừa=3 khó=9 bấtngờ=4.9 [push1 replace3 wake1 wakeUse1]
+  {"rows":["B.A.","A#.b","..#."]} par=9 ms=8 mèo=4 ô=10 đầu=7/6/1 cụt=? thừa=3 khó=10.11 bấtngờ=4.64 [push1 replace3 wake1 wakeUse1]
+  {"rows":[".b#B","..AA","..#."]} par=7 ms=2 mèo=4 ô=10 đầu=4/2/1 cụt=? thừa=1 khó=8.68 bấtngờ=4.5 [push3 longPush1 replace1 wake1 wakeUse1]
+  {"rows":["..#.","A.B.","Ab##"]} par=6 ms=2 mèo=4 ô=9 đầu=4/2/1 cụt=? thừa=1 khó=8.08 bấtngờ=4.5 [push2 longPush1 replace1 wake1 wakeUse1]
+== ngủ 4x4 AaB (1 ứng viên) · bị loại: {"quá dài":1381,"không giải được":133,"ngủ trang trí":40,"quá giới hạn giải":55}
+  {"rows":["A.#.",".a.B","#..#","#..."]} par=9 ms=6 mèo=3 ô=12 đầu=4/4/2 cụt=? thừa=0 khó=9.4 bấtngờ=1 [push2 longPush1 wake1 wakeUse1]
+== ngủ 4x4 Aab (0 ứng viên) · bị loại: {"không giải được":527,"quá giới hạn giải":136}
+== ngủ 4x4 AABb (23 ứng viên) · bị loại: {"quá dài":935,"không giải được":71,"quá giới hạn giải":28,"ngủ trang trí":241}
+  {"rows":[".#A#","..AB","..b#",".#.."]} par=9 ms=6 mèo=4 ô=12 đầu=3/2/1 cụt=? thừa=1 khó=9.73 bấtngờ=3.83 [push4 longPush1 replace1 wake1 wakeUse2]
+  {"rows":["..#.","#AbA","..#B",".#.."]} par=9 ms=7 mèo=4 ô=12 đầu=6/4/3 cụt=? thừa=1 khó=9.4 bấtngờ=3.5 [push2 longPush1 replace1 wake1 wakeUse1]
+  {"rows":["...#","##.b",".BA.","..#A"]} par=9 ms=14 mèo=4 ô=12 đầu=6/6/2 cụt=? thừa=1 khó=9.73 bấtngờ=2.83 [push4 longPush1 replace1 wake1]
+  {"rows":["....",".bA#","..AB",".##."]} par=9 ms=1 mèo=4 ô=13 đầu=5/3/3 cụt=? thừa=0 khó=9.2 bấtngờ=2 [push3 wake1 wakeUse1]
+  {"rows":["...#","#.bA","B.##","..A."]} par=9 ms=8 mèo=4 ô=12 đầu=4/4/3 cụt=? thừa=1 khó=8.9 bấtngờ=2 [push3 longPush2 replace1 wake1]
+== ngủ 4x4 ABcC (7 ứng viên) · bị loại: {"quá dài":555,"ngủ trang trí":256,"quá giới hạn giải":41,"không giải được":29,"ngủ không chắc":3}
+  {"rows":["B#.#","C#.#","..A.",".c.."]} par=9 ms=19 mèo=4 ô=12 đầu=7/6/2 cụt=? thừa=1 khó=9.83 bấtngờ=3.36 [push4 longPush2 replace1 wake1 wakeUse1]
+  {"rows":[".A..","B.#.","#c.#","C..#"]} par=9 ms=12 mèo=4 ô=12 đầu=6/6/4 cụt=? thừa=1 khó=9.07 bấtngờ=2.17 [push1 replace1 wake1]
+  {"rows":["..B.","#..#","#.cA",".C.."]} par=9 ms=1 mèo=4 ô=13 đầu=7/7/3 cụt=? thừa=0 khó=9.54 bấtngờ=1.14 [push3 longPush1 wake1]
+  {"rows":[".#.B","Ac#.","....","C#.."]} par=9 ms=3 mèo=4 ô=13 đầu=5/5/3 cụt=? thừa=0 khó=9.2 bấtngờ=0.8 [push2 longPush2 wake1]
+  {"rows":["...#","#..C",".Ac.","..#B"]} par=9 ms=3 mèo=4 ô=13 đầu=6/6/4 cụt=? thừa=0 khó=9.07 bấtngờ=0.67 [push4 longPush1 wake1]
+== ngủ 5x3 Aab (0 ứng viên) · bị loại: {"không giải được":1203}
+== ngủ 5x3 AaB (2 ứng viên) · bị loại: {"quá dài":700,"quá giới hạn giải":101,"không giải được":124,"ngủ trang trí":63}
+  {"rows":["..#..","..a.#","##.AB"]} par=8 ms=2 mèo=3 ô=11 đầu=4/3/2 cụt=? thừa=0 khó=8.8 bấtngờ=1.75 [push3 wake1 wakeUse3]
+  {"rows":[".a...",".B.##","A#..#"]} par=8 ms=4 mèo=3 ô=11 đầu=3/3/1 cụt=? thừa=0 khó=9.13 bấtngờ=1.33 [push3 longPush1 wake1 wakeUse1]
+== ngủ 5x3 AABb (23 ứng viên) · bị loại: {"quá dài":364,"ngủ trang trí":213,"không giải được":59,"quá giới hạn giải":63,"ngủ không chắc":2}
+  {"rows":["...##",".b#B#","..A.A"]} par=8 ms=3 mèo=4 ô=11 đầu=3/2/1 cụt=? thừa=1 khó=9.13 bấtngờ=3.83 [push4 longPush1 replace1 wake1 wakeUse1]
+  {"rows":["A#...","..#B#","#.A.b"]} par=9 ms=7 mèo=4 ô=11 đầu=5/4/2 cụt=? thừa=2 khó=9.6 bấtngờ=3.8 [push2 longPush1 replace2 wake1 wakeUse1]
+  {"rows":["#bAA.",".....","B##.#"]} par=9 ms=3 mèo=4 ô=11 đầu=4/3/2 cụt=? thừa=2 khó=9.4 bấtngờ=3.75 [push2 longPush2 replace2 wake1 wakeUse1]
+  {"rows":["#..#B","..A.A","#.b#."]} par=8 ms=5 mèo=4 ô=11 đầu=6/4/3 cụt=? thừa=1 khó=8.8 bấtngờ=3.5 [push3 longPush1 replace1 wake1 wakeUse1]
+  {"rows":[".b##.","..A..",".#AB."]} par=9 ms=17 mèo=4 ô=12 đầu=6/6/1 cụt=? thừa=1 khó=10.07 bấtngờ=3.17 [push4 longPush1 replace1 wake1 wakeUse1]
+== ngủ 5x3 AAbB (22 ứng viên) · bị loại: {"không giải được":63,"ngủ trang trí":233,"quá dài":397,"quá giới hạn giải":73}
+  {"rows":[".....","##Ab.","AB..#"]} par=9 ms=25 mèo=4 ô=12 đầu=5/4/1 cụt=? thừa=1 khó=10 bấtngờ=3.7 [push5 longPush2 replace1 wake1 wakeUse1]
+  {"rows":[".#.BA","..bA#",".#..#"]} par=8 ms=19 mèo=4 ô=11 đầu=6/5/1 cụt=? thừa=1 khó=9.47 bấtngờ=3.67 [push3 longPush1 replace1 wake1 wakeUse1]
+  {"rows":["#....","Ab#.#",".AB.#"]} par=9 ms=5 mèo=4 ô=11 đầu=4/4/1 cụt=? thừa=2 khó=9.9 bấtngờ=3.5 [push4 longPush2 replace2 wake1]
+  {"rows":["...b#","##.#A","..AB."]} par=9 ms=11 mèo=4 ô=11 đầu=6/6/2 cụt=? thừa=2 khó=9.73 bấtngờ=3.33 [push5 longPush2 replace2 wake1 wakeUse1]
+  {"rows":["..##.","#BA..",".Ab.."]} par=9 ms=69 mèo=4 ô=12 đầu=7/6/3 cụt=? thừa=1 khó=9.54 bấtngờ=3.07 [push5 longPush1 replace1 wake1 wakeUse1]
+== ngủ 4x4 AAbB (28 ứng viên) · bị loại: {"quá dài":847,"quá giới hạn giải":30,"ngủ trang trí":198,"không giải được":87,"ngủ không chắc":1}
+  {"rows":[".#..","..AA","#.b.","#B.#"]} par=9 ms=10 mèo=4 ô=12 đầu=6/5/1 cụt=? thừa=1 khó=10.07 bấtngờ=3.67 [push2 longPush1 replace1 wake1 wakeUse1]
+  {"rows":["#BA#","..b.","..#.",".#.A"]} par=9 ms=3 mèo=4 ô=12 đầu=5/3/3 cụt=? thừa=1 khó=9.18 bấtngờ=3.5 [push1 replace1 wake1 wakeUse1]
+  {"rows":[".##.","AB#b","....",".A.#"]} par=9 ms=41 mèo=4 ô=12 đầu=8/7/2 cụt=? thừa=1 khó=9.9 bấtngờ=3.38 [push5 longPush2 replace1 wake1]
+  {"rows":["A#.#","B#.#","..A.",".b.."]} par=9 ms=16 mèo=4 ô=12 đầu=7/6/2 cụt=? thừa=1 khó=9.83 bấtngờ=3.36 [push4 longPush2 replace1 wake1 wakeUse1]
+  {"rows":["#A..","#...","#bA.","..B#"]} par=9 ms=22 mèo=4 ô=12 đầu=7/6/4 cụt=? thừa=1 khó=9.26 bấtngờ=2.79 [push3 replace1 wake1 wakeUse1]
+== ngủ 5x3 ABcC (12 ứng viên) · bị loại: {"ngủ trang trí":371,"quá giới hạn giải":58,"quá dài":266,"không giải được":25,"ngủ không chắc":3}
+  {"rows":["..###","...BC","...cA"]} par=8 ms=8 mèo=4 ô=12 đầu=5/2/2 cụt=? thừa=0 khó=9 bấtngờ=3 [push5 wake1 wakeUse1]
+  {"rows":["#...B","..c##","#.AC."]} par=7 ms=2 mèo=4 ô=11 đầu=5/3/2 cụt=? thừa=0 khó=8.4 bấtngờ=2.4 [push4 longPush1 wake1 wakeUse1]
+  {"rows":["C....","#.c.#",".A#B."]} par=9 ms=7 mèo=4 ô=12 đầu=5/5/3 cụt=? thừa=1 khó=9.2 bấtngờ=2.3 [push2 replace1 wake1 wakeUse1]
+  {"rows":["..A#B","...c.","#..#C"]} par=9 ms=9 mèo=4 ô=12 đầu=4/4/3 cụt=? thừa=1 khó=8.9 bấtngờ=2 [push3 longPush1 replace1 wake1 wakeUse2]
+  {"rows":[".#..A",".c.#.","#B.C#"]} par=8 ms=4 mèo=4 ô=11 đầu=4/4/3 cụt=? thừa=1 khó=8.26 bấtngờ=2 [push2 replace1 wake1 wakeUse1]
+== độc+màng 4x3 AAB (2 ứng viên) · bị loại: {"độc trang trí":892,"quá dài":104,"không giải được":454,"quá giới hạn giải":60,"màng trang trí":3}
+  {"rows":["...#","AB~A",".#.."],"oneway":[[1,0,"right"]]} par=8 ms=3 mèo=3 ô=9 đầu=6/5/3 cụt=0.08 thừa=2 khó=9.03 bấtngờ=4.5 [push1 replace1 toxic1]
+  {"rows":[".A~.","##A.","#.B."],"oneway":[[2,2,"up"]]} par=7 ms=4 mèo=3 ô=8 đầu=6/5/3 cụt=0.08 thừa=2 khó=8.41 bấtngờ=4.5 [push2 replace1 toxic1]
+== độc+màng 4x3 AB (0 ứng viên) · bị loại: {"không giải được":519,"độc trang trí":633,"quá dài":159,"quá giới hạn giải":77,"màng trang trí":1}
+== độc+màng 4x4 AB (0 ứng viên) · bị loại: {"quá dài":275,"không giải được":87,"quá giới hạn giải":58,"độc trang trí":131}
+== độc+màng 4x4 AAB (0 ứng viên) · bị loại: {"quá giới hạn giải":89,"không giải được":72,"quá dài":164,"độc trang trí":140}
+== độc+màng 4x3 ABC (1 ứng viên) · bị loại: {"độc trang trí":297,"không giải được":87,"quá giới hạn giải":39,"quá dài":7}
+  {"rows":[".~.C",".B##",".A.."],"oneway":[[2,1,"up"]]} par=8 ms=4 mèo=3 ô=9 đầu=6/5/3 cụt=0.08 thừa=2 khó=9.05 bấtngờ=4.5 [push3 longPush1 replace1 toxic1]
+== độc+màng 4x4 ABC (0 ứng viên) · bị loại: {"quá giới hạn giải":72,"độc trang trí":208,"quá dài":101,"không giải được":35}
+== độc+màng 5x3 AB (0 ứng viên) · bị loại: {"không giải được":229,"quá dài":201,"quá giới hạn giải":136,"độc trang trí":83}
+== độc+màng 5x3 AAB (1 ứng viên) · bị loại: {"quá dài":106,"độc trang trí":154,"không giải được":96,"quá giới hạn giải":80}
+  {"rows":["#..#B","#.~A.","..A.."],"oneway":[[0,4,"down"]]} par=9 ms=3 mèo=3 ô=11 đầu=5/5/1 cụt=? thừa=1 khó=10 bấtngờ=3.1 [push5 longPush1 toxic1]
+== độc+màng 5x3 ABC (0 ứng viên) · bị loại: {"độc trang trí":173,"không giải được":47,"quá giới hạn giải":75,"quá dài":70}
+XONG 69 job

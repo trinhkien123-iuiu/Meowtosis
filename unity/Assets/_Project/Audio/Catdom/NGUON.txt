@@ -1,0 +1,7 @@
+Tiếng mèo tách từ game Catdom: Color Hole 1.2.2 (com.drop.cat.color.hole.puzzle, bản APKPure) bằng AssetRipper ngày 2026-11-07.
+Đây là asset có bản quyền của nhà phát hành Catdom, chỉ dùng làm âm thanh tạm trong dự án cá nhân, phi thương mại, repo riêng tư.
+Phải thay bằng âm thanh có giấy phép trước khi phát hành.
+
+CatMeow1..7.ogg     <- Cat meow 1..7.ogg      (tiếng mèo khi chạm, nhân đôi)
+CatMeowWarning.ogg  <- meowarning.ogg         (tiếng khi vuốt sai)
+Bản tách đầy đủ (78 file âm thanh): D:\toolGame\catdom\export\Assets\AudioClip

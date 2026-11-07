@@ -20,7 +20,6 @@ namespace Meowtosis.Presentation
         [SerializeField] private string[] demoGoal = Array.Empty<string>();
         [Tooltip("Mỗi dòng \"hàng cột hướng\", ví dụ \"0 2 left\".")]
         [SerializeField] private string[] demoMembranes = Array.Empty<string>();
-        [SerializeField] private bool demoHasGerms;
         [Tooltip("Nước vuốt \"hàng cột hướng\", ví dụ \"0 0 right\".")]
         [SerializeField] private string demoMove = "0 0 right";
 
@@ -42,7 +41,6 @@ namespace Meowtosis.Presentation
                 var position = Move.Parse(text);
                 definition.Membranes.Add(new Membrane(position.Row, position.Column, position.Direction));
             }
-            if (demoHasGerms) definition.KillSpecies = Species.Germ;
             return definition;
         }
     }
