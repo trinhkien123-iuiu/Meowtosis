@@ -4,6 +4,9 @@ tools/dotnet-tests/*/obj/
 .DS_Store
 Thumbs.db
 
+backup-prototypes/
+prototype/
+
 # Unity (khi tạo project trong thư mục unity/)
 /unity/[Ll]ibrary/
 /unity/[Tt]emp/
