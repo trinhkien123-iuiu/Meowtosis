@@ -1,0 +1,13 @@
+[
+ { "name": "v43 thanh/dải 2 virus đối đầu", "shape": { "w": 4, "h": 2, "holes": [0, 1] }, "cells": "AAB", "toxic": 1, "virus": "<>", "need": ["virus"], "strict": true, "min": 3, "max": 6, "ms": 30000, "seed": 101, "top": 8 },
+ { "name": "v45 3x3 2 virus vuông góc", "shape": { "w": 3, "h": 3, "holes": [0, 2] }, "cells": "AABB", "virus": "<^", "need": ["virus"], "strict": true, "min": 5, "max": 8, "ms": 30000, "seed": 102, "top": 8 },
+ { "name": "v47 5x5 ngủ + 2 virus", "shape": { "w": 5, "h": 5, "holes": [3, 5] }, "cells": "AAABBCCab", "virus": "^<", "need": ["virus"], "strict": true, "min": 8, "max": 12, "ms": 60000, "seed": 103, "top": 8 },
+ { "name": "v48 4x5 bất ngờ 2 virus", "shape": { "w": 4, "h": 5, "holes": [1, 3] }, "cells": "BBCCDD", "virus": "v^", "need": ["virus"], "twist": true, "strict": true, "min": 8, "max": 12, "ms": 60000, "seed": 104, "top": 8 },
+ { "name": "v60 4x4 ôn virus đối đầu", "shape": { "w": 4, "h": 4, "holes": [1, 3] }, "cells": "AABBA", "virus": "<>", "need": ["virus"], "strict": true, "min": 6, "max": 10, "ms": 40000, "seed": 105, "top": 8 },
+ { "name": "v65 5x5 2 virus", "shape": { "w": 5, "h": 5, "holes": [2, 4] }, "cells": "AABBBCC", "virus": "v>", "need": ["virus"], "strict": true, "min": 8, "max": 12, "ms": 60000, "seed": 106, "top": 8 },
+ { "name": "v66 5x5 2 virus", "shape": { "w": 5, "h": 5, "holes": [3, 5] }, "cells": "AABBCCD", "virus": "<^", "need": ["virus"], "strict": true, "min": 8, "max": 12, "ms": 60000, "seed": 107, "top": 8 },
+ { "name": "v68 5x6 trùm chương 2 virus", "shape": { "w": 5, "h": 6, "holes": [3, 5] }, "cells": "AABBBCCC", "virus": "><", "need": ["virus"], "strict": true, "min": 10, "max": 14, "ms": 60000, "seed": 108, "top": 8 },
+ { "name": "v72 4x5 ngủ + 2 virus", "shape": { "w": 4, "h": 5, "holes": [1, 3] }, "cells": "AABCCd", "virus": "v<", "need": ["virus"], "strict": true, "min": 8, "max": 12, "ms": 60000, "seed": 109, "top": 8 },
+ { "name": "v75 5x5 4 màu 2 virus", "shape": { "w": 5, "h": 5, "holes": [3, 5] }, "cells": "AABBCCDD", "virus": "<>", "need": ["virus"], "strict": true, "min": 9, "max": 13, "ms": 60000, "seed": 110, "top": 8 },
+ { "name": "v76 5x6 trùm cuối 3 virus", "shape": { "w": 5, "h": 6, "holes": [4, 6] }, "cells": "AABBCCDDE", "virus": "^v<", "need": ["virus"], "strict": true, "min": 10, "max": 15, "ms": 60000, "seed": 111, "top": 8 }
+]

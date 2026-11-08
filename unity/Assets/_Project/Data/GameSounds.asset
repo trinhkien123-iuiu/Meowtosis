@@ -76,6 +76,12 @@ MonoBehaviour:
   - id: 20
     clip: {fileID: 8300000, guid: d3bf3558846501c4b8325e9685de6732, type: 3}
     volume: 0.8
+  - id: 21
+    clip: {fileID: 8300000, guid: e2d7adec6d9012b468a255a079269951, type: 3}
+    volume: 0.6
+  - id: 22
+    clip: {fileID: 8300000, guid: 8ecef5a96c6ac9749a9e5241ccdc1166, type: 3}
+    volume: 0.6
   meows:
   - {fileID: 8300000, guid: a7af78920ea06b54ebec0bd3da4831e1, type: 3}
   - {fileID: 8300000, guid: 9b3aacf55651f544a86acd270d1f4de5, type: 3}

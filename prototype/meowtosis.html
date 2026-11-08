@@ -209,6 +209,10 @@
   .ring.box image { transition: filter .25s; }
   .ring.box.ok image { filter: drop-shadow(0 0 7px #fff6a0) brightness(1.1); }
   .chev { animation: nudge 1.1s ease-in-out infinite; }
+  .portal .swirl { animation: swirlSpin 2.4s linear infinite; }
+  @keyframes swirlSpin { to { stroke-dashoffset: -30; } }
+  .dualPulse { animation: badgePulse 1.3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes badgePulse { 50% { transform: scale(1.14); } }
   @keyframes nudge { 50% { transform: translateX(5px); opacity: .55; } }
   .mark { fill: none; stroke: #fff; stroke-width: 4; stroke-dasharray: 9 7; animation: pulse .75s ease-in-out infinite alternate; }
   .mark.sel { stroke: var(--gold); stroke-dasharray: none; stroke-width: 6; animation: none; }
@@ -460,6 +464,13 @@
 //   ^ v < > virus, mũi tên là hướng nó lan
 // Trường thêm: goal = vòng mục tiêu (chữ cái = vòng cần tế bào màu đó, . = không có vòng);
 // oneway = [[hàng, cột, hướng]]: màng giữa ô đó và ô kề theo hướng, chỉ cho đi qua theo hướng ấy;
+// portal = [[hàng, cột, hướng, hàng kia, cột kia]]: cặp cổng dịch chuyển. Đi ra khỏi ô thứ nhất theo `hướng` thì vào ô kia
+// (giữ nguyên hướng đi); đi ra khỏi ô kia theo hướng ngược lại thì vào ô thứ nhất. Cạnh có cổng phải nhìn ra ngoài bàn
+// (mép hoặc lỗ). Luật nào cần "ô kề" (bản sao, đẩy dãy, thay thế, trượt băng, virus lan) đều đi qua cổng.
+// dual = [[hàng, cột, màu kia, chu kỳ, lượt còn lại]]: mèo hai màu. Chữ cái trong rows là màu hiện tại; mỗi lượt đếm lùi,
+// về 0 thì đổi sang màu kia rồi đếm lại từ `chu kỳ`. Hai số cuối tuỳ chọn (mặc định chu kỳ 2, còn lại = chu kỳ).
+// Màu kia có thể chưa có con nào trên bàn: bản sao của mèo hai màu lúc nó mang màu đó là mèo thường màu đó, và hộp đòi
+// màu đó thì chỉ mèo hai màu cung cấp được.
 // kill = màu cần diệt sạch (level diệt khuẩn).
 // tut = các bước hướng dẫn [hàng, cột, hướng, lời thoại]: bàn tay chỉ đúng nước đó và game chỉ nhận nước đó,
 // hết các bước thì người chơi tự chơi tiếp. Các bước phải theo một lời giải (test kiểm tra).
@@ -468,22 +479,18 @@
 // các khung không bao giờ lấp kín được như vòng khuyên và chữ C (tối đa 6 tế bào).
 const LEVELS = [
   // ── Khối 1 · Phòng nuôi cấy: Chia, khử 3, đẩy, thay thế (level 1–16)
-  // Bản Unity dạy nhân đôi, đẩy, thay thế, khử 3 và luật thua ở màn hướng dẫn đầu game (unity/.../Levels/Onboarding.txt),
-  // nên các level đầu không còn bàn tay hướng dẫn: người chơi tự áp dụng luật vừa học.
-  // trap = nước cố ý dẫn tới thua để dạy luật khử (bản Unity diễn, không mất tim); hiện không level nào dùng.
-  // card = thẻ "Cơ chế mới" của bản Unity cho thử thách mới không tự nhận ra được từ bàn chơi (tên trong enum Mechanic).
   ['AA.', '##B'],                                           // chữ L · luyện khử 3: vuốt đỏ sang phải là hết màu đỏ
-  ['##B#', 'AA..'],  // chữ T dài · luyện khử 3
   ['.B', '.A'],                                             // vuông 2×2
-  ['.B.', '#A#'],                                           // chữ T · luyện thay thế
+  ['##B#', 'AA..'],                                         // chữ T dài · luyện khử 3
   ['#A#', '...', '#B#'],                                    // dấu cộng
+  ['.B.', '#A#'],                                           // chữ T · luyện thay thế
   ['B..', 'A..'],                                           // chữ nhật 2×3
   ['A#.', 'B..'],                                           // chữ U
   ['.#B', '...', '.#A'],                                    // chữ H
+  ['.B#', '..#', 'A..'],
   ['..A', '...', 'B..'],                                    // vuông 3×3
-  ['#AA#', 'C.BB', 'CAA.', '.CB#'],  // 4×4 khuyết góc · mở rộng
+  ['#AA#', 'C.BB', 'CAA.', '.CB#'],                         // 4×4 khuyết góc · mở rộng
   ['C..A', '....', '##.#', '...B'],                         // 4×4 thắt eo
-  ['.B#', '..#', 'A..'],                                    
   ['CBB.', '.#..', '..AA', '#C.A'],                         // 4×4 hai lỗ · bất ngờ: phải thay thế mèo của mình
   ['BC..', '.#..', '.A..'],                                 // 3×4 khuyết một ô
   ['.AA#', 'BBA.', 'B#.A', '..B.'],                         // 4×4 · bất ngờ: tự khử 3 mèo để có chỗ
@@ -497,16 +504,16 @@ const LEVELS = [
   { rows: ['DB.C', '.CC#', '#B#B', 'D.D.'], goal: ['....', 'B...', '.C..', '.D..'] },  // 4×4 lỗ chỗ · mở rộng
   { rows: ['B..#', '#.A.'], goal: ['..B.', '.A..'] },       // bậc thang
   { rows: ['ABC.', 'C#.C', 'AA#B', 'A.#.', 'C..B'], goal: ['.A..', '...B', '....', '....', '.C..'] },  // 4×5 · bất ngờ
-  { rows: ['.#.B', '...A', '...#'], goal: ['....', '..B.', '..A.'] },  // 3×4 · hộp bắt buộc
   { rows: ['#..#', '.B.A', '#.A#'], goal: ['..A.', '...B', '..A.'] },  // chữ thập rộng
   { rows: ['...B', 'A...'], goal: ['..BA', '....'] },       // chữ nhật 2×4
-  { rows: ['#AC.', '..B#', '..#.', '....'], goal: ['...C', '....', 'A..A', '....'] },  // 4×4 · ba hộp
   { rows: ['AB.C.', 'C.C#.', 'B.#.#', '#.CBB', 'CAA.A'], goal: ['.....', '.A...', '...B.', '.B.A.', '.....'] },  // 5×5 · trùm chương
+  { rows: ['.#.B', '...A', '...#'], goal: ['....', '..B.', '..A.'] },  // 3×4 · hộp bắt buộc
+  { rows: ['#AC.', '..B#', '..#.', '....'], goal: ['...C', '....', 'A..A', '....'] },  // 4×4 · ba hộp
   { rows: ['..#', 'B.A', '#.C'], goal: ['C..', '.A.', '..B'] },  // chữ S
   // ── Khối 3 · Màng và độc: Màng một chiều, ô độc (level 29–37)
   { rows: ['#BAA', '..##'], oneway: [[0, 1, 'down']], tut: [
     [0, 1, 'down', 'Màng chỉ cho đi theo mũi tên: vuốt mèo xanh xuống, xuyên qua màng'],
-    [1, 1, 'left', 'Lấp nốt ô trống']] },  // dạy màng: hàng dưới chỉ vào được qua màng
+    [1, 1, 'left', 'Lấp nốt ô trống']] },                   // dạy màng: hàng dưới chỉ vào được qua màng
   { rows: ['#..', 'AB#', '#.#'], oneway: [[1, 1, 'up']] },  // chữ F · màng một chiều
   { rows: ['...', '.A.', '#E#'], oneway: [[1, 0, 'right'], [0, 2, 'down']], tip: 'Mèo tím đến chơi! Như mọi màu khác, phải giữ lại ít nhất 1 con.' },  // chữ T béo · màng · mèo tím đầu tiên
   { rows: ['CB#.', 'C.#A', '.BAA', 'B##.'], oneway: [[2, 2, 'right'], [0, 1, 'down']] },  // 4×4 · hai màng
@@ -514,63 +521,82 @@ const LEVELS = [
     [0, 1, 'down', 'Nhân đôi mèo xanh xuống dưới'],
     [0, 0, 'right', 'Mèo vào ô độc sẽ biến mất: đẩy mèo xanh vào để dọn chỗ'],
     [0, 1, 'down', 'Lấp nốt ô cuối. Ô độc không cần lấp kín!']] },
-  ['#...', 'BA~.', '.#B.', 'A#~#'],                     // 4×4 · phải bỏ mèo vào ô độc
-  { rows: ['#..#B', '#.~A.', '..A..'], oneway: [[0, 4, 'down']] },  // 5×3 · độc + màng
+  ['#...', 'BA~.', '.#B.', 'A#~#'],                         // 4×4 · phải bỏ mèo vào ô độc
   { rows: ['...#', 'AB~A', '.#..'], oneway: [[1, 0, 'right']] },  // 4×3 · độc + màng
+  { rows: ['#..#B', '#.~A.', '..A..'], oneway: [[0, 4, 'down']] },  // 5×3 · độc + màng
   ['~..~.', 'B..A.'],                                       // chữ nhật 2×5 · ô độc
-  // ── Khối 4 · Ngủ và virus: Tế bào ngủ, virus (level 38–48)
+  // ── Khối 4 · Ngủ và virus: Mèo ngủ, virus (level 38–48)
   { rows: ['B##', 'A.#', '#a.'], tut: [
     [1, 0, 'right', 'Mèo ngủ không vuốt được. Đặt mèo đỏ sát bên để đánh thức nó!'],
     [2, 1, 'right', 'Mèo đã thức: giờ vuốt được rồi!']] },
   ['.B.', '.a#', 'A##'],                                    // tam giác · tế bào ngủ
-  ['..B.', '#..#', '#.cA', '.C..'],                     // 4×4 · phải đánh thức mèo vàng
-    { rows: ['#.b#.', 'bb.A.', '.AB#.'], card: 'ChainWake', tip: 'Ba bé ngủ đều là mèo xanh. Một bé thức dậy sẽ đánh thức luôn bé nằm sát bên!' },  // 5×3 · thức dây chuyền
-  { rows: ['.#', 'A#', 'B#', '>.'], tut: [
-    [1, 0, 'up', 'Sau mỗi nước, virus lan 1 ô theo mũi tên và ăn mèo trên đường. Vuốt mèo đỏ lên'],
-    [2, 0, 'down', 'Hết chỗ đẩy: bản sao xanh đè lên và diệt virus!'],
-    [3, 0, 'right', 'Còn virus là chưa thắng: diệt nốt con cuối!']] },
-  ['~<.AB'],                                                // thanh 5 ô · virus
-  { rows: ['#A..', '#A.B', 'C<Cv', 'A.#B'], tip: 'Hai virus, hai hướng: mỗi con lan theo mũi tên của riêng nó.' },  // 4×4 · hai virus
-  ['A.B', '...', '>.#'],                                    // 3×3 thiếu góc · virus
+  ['..B.', '#..#', '#.cA', '.C..'],                         // 4×4 · phải đánh thức mèo vàng
   ['e.A..', '.E#..'],                                       // 2×5 khuyết · tế bào ngủ
-  ['###.a', '..#.^', 'ABA.b', 'BA.CC', '##BCA'],       // 5×5 · trùm khối: ngủ + virus
-  ['.DBC', '.B.D', 'B#..', '...C', '^.CD'],                 // 4×5 · bất ngờ: để virus ăn bớt mèo
-  // ── Khối 5 · Băng trơn: bản sao trượt trên băng, rồi ôn các cơ chế đã học (level 49–61)
-  // Băng thay cho khối Diệt khuẩn cũ (vi khuẩn bỏ ngày 2026-11-07). Level sinh bằng tools/jobs/ice.json, chọn tay.
+  { rows: ['.#', 'A#', 'B#', '>.'], tut: [
+    [1, 0, 'up', 'Nhìn mắt virus: nó nhìn sang phải, nên sau nước này nó sẽ lan sang phải. Vuốt mèo đỏ lên!'],
+    [2, 0, 'down', 'Thấy chưa, nó lan đúng hướng mắt nhìn! Giờ hết chỗ đẩy: bản sao xanh đè lên và diệt virus.'],
+    [3, 0, 'right', 'Còn virus là chưa thắng: diệt nốt con cuối!']] },
+  { rows: ['##.v', 'A>.A', '##B#'], tip: 'Hai virus, hai hướng mắt: mỗi con lan theo hướng mắt của riêng nó.' },  // 4×3 · hai virus vuông góc
+  ['#A..', '#A.B', 'C<Cv', 'A.#B'],                         // 4×4 · hai virus
+  ['B<.', '.AA', 'B#^'],                                    // 3×3 thiếu góc · hai virus vuông góc
+  { rows: ['#.b#.', 'bb.A.', '.AB#.'], card: 'ChainWake', tip: 'Ba bé ngủ đều là mèo xanh. Một bé thức dậy sẽ đánh thức luôn bé nằm sát bên!' },  // 5×3 · thức dây chuyền
+  ['ba#A#', '#.B.C', '#.A<B', '.....', '#.AC^'],            // 5×5 · trùm khối: ngủ + hai virus
+  ['Bv..', '.D.#', '..D.', '^#C.', 'CB#.'],                 // 4×5 · bất ngờ: hai virus, để virus ăn bớt mèo
+  // ── Khối 5 · Băng trơn: Băng trơn, ôn các cơ chế đã học (level 49–61)
   { rows: ['B==A', 'A#.#'], tut: [
     [0, 3, 'left', 'Trên băng, bản sao trượt tới khi gặp vật cản: vuốt mèo đỏ sang trái!'],
     [0, 0, 'right', 'Vuốt mèo xanh sang phải, đẩy cả dãy'],
-    [0, 2, 'down', 'Lấp nốt ô dưới']] },  // dạy băng
+    [0, 2, 'down', 'Lấp nốt ô dưới']] },                    // dạy băng
   ['B==A', '#.=.'],                                         // 2×4 · luyện băng: trượt rồi đẩy
-  ['.==A', '#=#B'],                                     // 2×4 · trượt hai lần
-  ['ABA', '=#B', '==#'],                                // 3×3 · băng + thay thế
-  ['AB#', 'B#=', 'A=='],                                // 3×3 · băng + thay thế
+  ['ABA', '=#B', '==#'],                                    // 3×3 · băng + thay thế
+  ['AB#', 'B#=', 'A=='],                                    // 3×3 · băng + thay thế
+  ['AE#', '#.#', '#..'],                                    // chữ Z · ôn thay thế
+  ['.B#A', '.~C.', '...#'],                                 // 3×4 · ôn ô độc
+  ['....', 'AAB#', '.CB#'],                                 // 4×3 · ôn khử 3
+  ['BB#=', 'C##=', 'A=AC', 'A==#'],                         // 4×4 · mở rộng băng
+  ['.==A', '#=#B'],                                         // 2×4 · trượt hai lần
   ['C==.', 'B#=.', '#AA='],                                 // 3×4 · băng 3 màu
   ['#A=A', '.#=#', 'CB=='],                                 // 3×4 · băng 3 màu, trượt hai lần
-  ['BB#=', 'C##=', 'A=AC', 'A==#'],                     // 4×4 · mở rộng băng
-  // Ôn các cơ chế đã học
-  ['AE#', '#.#', '#..'],                                     // chữ Z · ôn thay thế
-  ['....', 'AAB#', '.CB#'],                                 // 4×3 · ôn khử 3
-  ['.B#A', '.~C.', '...#'],                             // 3×4 · ôn ô độc
-  ['B.C.', '##..', '.AAv', '#B.A'],                         // 4×4 · ôn virus
   ['DC.B', '.DB#', 'D.D#', '....', '.C.B'],                 // 4×5 · ôn trên bàn lớn
-  // ── Khối 6 · Đại gia đình: Bàn lớn, đông mèo, mọi cơ chế (level 62–68)
-  { rows: ['ECE#C', '..E#D', 'D#.EC', '...#D', '#C#DC'], goal: ['.....', 'E....', '..E..', '..E..', '.....'] },  // 5×5 · hộp
-  ['.#EAA', '.A.#.', 'E##AE', 'E.ACC', '..EC.'],       // 5×5 · bàn đông mèo
-  ['CCAAB', '..A.C', 'CAB..', 'CB#..', 'BABC#'],  // 5×5 · mở rộng
-  ['C...B', 'C#B.B', '.BABA', 'AC.v.', '#A.A#'],       // 5×5 · virus
-  ['.B#C#', '#DC..', 'B..C#', '.<DB.', 'D#B.D'],  // 5×5 · virus + vi khuẩn
+  ['..B#', 'A..A', '#>B<', '..A#'],                         // 4×4 · ôn virus: hai virus đối đầu
+  // ── Khối 6 · Cổng dịch chuyển: Cổng là đường duy nhất sang vùng trống (level 62–67)
+  { rows: ['A.#..'], portal: [[0, 1, 'right', 0, 3]], tut: [
+    [0, 0, 'right', 'Giữa bàn có một cái hố. Cứ vuốt mèo đỏ sang phải nhé!'],
+    [0, 0, 'right', 'Vòng xoáy là cổng dịch chuyển: mèo bị đẩy tới cổng sẽ chui qua và hiện ở bên kia hố!'],
+    [0, 0, 'right', 'Vuốt tiếp: cổng đưa mèo sang bên kia, lấp kín cả bàn!']] },  // 5×1 · hố giữa bàn, cổng nối hai nửa
+  { rows: ['#AAB', '.###', '....'], portal: [[0, 2, 'up', 2, 0]] },  // 4×3 · mèo kẹt ở hàng trên, cổng dẫn xuống vùng trống
+  { rows: ['BA#..', 'A#...', 'B#..#'], portal: [[0, 1, 'up', 2, 2]] },  // 5×3 · vùng trái đông mèo, vùng phải trống
+  { rows: ['..#A#', '.#CBC', '..#AB', '#.##B'], portal: [[0, 3, 'left', 1, 0]] },  // 5×4 · trùm: vùng đông mèo bên phải, vùng trống bên trái
+  { rows: ['....', '##.#', '#C##', 'AABB'], portal: [[3, 0, 'left', 1, 2]] },  // 4×4 · 3 màu, cổng nối góc dưới trái với giữa bàn
+  { rows: ['.~..', '...#', '###C', 'AABB'], portal: [[2, 3, 'left', 0, 3]] },  // 4×4 · cổng + ô độc
+  // ── Khối 7 · Mèo hai màu: Màu hiếm chỉ mèo hai màu mới có (level 68–73)
+  { rows: ['A..', 'B.#'], dual: [[1, 0, 'C', 2, 2]], goal: ['C..', '...'], tut: [
+    [1, 0, 'right', 'Hộp cần mèo vàng mà bàn chưa có con nào! Mèo hai màu sẽ đổi sang vàng: vuốt nó sang phải.'],
+    [0, 0, 'right', 'Chấm nhỏ báo còn 1 nước nữa là mèo xanh thành vàng. Vuốt mèo đỏ sang phải!'],
+    [1, 0, 'up', 'Giờ nó đang vàng: vuốt lên để bản sao vàng đè vào hộp!'],
+    [0, 1, 'right', 'Hộp đã có mèo vàng! Lấp nốt ô cuối nhé.']] },  // 3×2 · hộp vàng, chỉ mèo hai màu có màu vàng
+  { rows: ['..A', '##B', 'A..'], dual: [[1, 2, 'D', 2, 2]], goal: ['..D', '...', '...'] },  // 3×3 · hộp hồng
+  { rows: ['#.#A', '.B.A', '.B#.'], dual: [[0, 3, 'D', 2, 2]], goal: ['...D', '...D', '....'] },  // 4×3 · hai hộp hồng
+  { rows: ['.C..', 'C#.#', 'A...', 'BAB#'], dual: [[0, 1, 'E', 2, 1], [3, 0, 'E', 2, 1]], goal: ['....', 'E...', '.E..', '....'] },  // 4×4 · hai mèo hai màu cùng sinh màu tím
+  { rows: ['ABB.', 'A###', '#...', '....'], portal: [[0, 3, 'down', 2, 1]], dual: [[0, 2, 'D', 2, 2]], goal: ['..D.', '....', '....', '....'] },  // 4×4 · cổng + mèo hai màu
+  { rows: ['..BB', '.#CA', '.#A.', '....'], dual: [[0, 3, 'D', 3, 2]], goal: ['...D', '...D', '....', '....'] },  // 4×4 · chu kỳ 3
+  // ── Khối 8 · Đại gia đình: Bàn lớn, đông mèo, mọi cơ chế (level 74–80)
   { rows: ['.A~.', '##A.', '#.B.'], oneway: [[2, 2, 'up']] },  // 4×3 · độc + màng
-  ['#.AC#', '#>BBA', 'CB.B.', '..#A#', 'B.B.A', '##.CA'],  // 5×6 · trùm chương: virus
-  // ── Khối 7 · Đủ sắc màu: 4 rồi 5 màu cùng lúc (level 69–cuối)
+  { rows: ['ECE#C', '..E#D', 'D#.EC', '...#D', '#C#DC'], goal: ['.....', 'E....', '..E..', '..E..', '.....'] },  // 5×5 · hộp
+  ['.#EAA', '.A.#.', 'E##AE', 'E.ACC', '..EC.'],            // 5×5 · bàn đông mèo
+  ['CCAAB', '..A.C', 'CAB..', 'CB#..', 'BABC#'],            // 5×5 · mở rộng
+  ['B##.', '.<AC', 'B...', 'A#.^', 'C..D'],                 // 4×5 · hai virus
+  ['..CCB', '>B..#', '##BA.', '.C.A.', '.#^.#'],            // 5×5 · trùm chương: hai virus
+  ['.>A#.', '#C.Bv', '....B', 'C#A.B'],                     // 4×5 · hai virus
+  // ── Khối 9 · Đủ sắc màu: 4 rồi 5 màu cùng lúc (level 81–cuối)
   { rows: ['B.DA', '#BCA', '.C#.'], tip: 'Lần đầu 4 màu cùng lúc! Chỉ có 1 bé hồng: đừng để bé bị thay thế, hết màu hồng là thua.' },  // 4×3 · lần đầu 4 màu
   { rows: ['C.#.', 'CBCA', 'B.BA', 'D#A#', '.D..'], goal: ['...C', '....', '....', '....', 'D.A.'] },  // 4×5 · 4 màu + hộp
   ['B.BA', 'CB#.', 'DD.A', 'CA..'],                         // 4×4 · 4 màu, bất ngờ
-  ['dB.B', 'CACA', '..A#', '.>B.', '..D#'],             // 4×5 · ngủ + virus
+  ['.....', 'CA.<.', '###AB', '..D>.', 'CD#.B'],            // 5×5 · 4 màu + hai virus
   { rows: ['#ABA', '.#..', 'DCCB', 'D.#E'], tip: 'Giờ đủ 5 màu cùng lúc! Bé tím chỉ có 1, giữ bé thật kỹ!' },  // 4×4 · lần đầu 5 màu
-  ['..BB#', '..A##', 'BA#.#', 'DC#AD', '#.CEE'],       // 5×5 · 5 màu
-  ['ECB..', '.A.#.', 'E#DD#', 'C#A#B', '...<A'],  // 5×5 · 5 màu + vi khuẩn + virus
-  ['##CBC', 'C#AA.', '..B#v', 'BD..E', '...#E', '##DA#'],  // 5×6 · trùm cuối, 5 màu + virus
+  ['..BB#', '..A##', 'BA#.#', 'DC#AD', '#.CEE'],            // 5×5 · 5 màu
+  ['#..Cv', '.DD..', '^A...', 'C.B.#', 'A.#E#', '.#B<#'],   // 5×6 · trùm cuối: ba virus
+  ['.d..', '.Cv#', 'AB.<', '.C.A', '.#..'],                 // 4×5 · ngủ + hai virus
 ];
 
 const DIRS = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
@@ -581,7 +607,8 @@ const ARROW = { up: '^', down: 'v', left: '<', right: '>' };
 function parseLevel(def) {
   const d = Array.isArray(def) ? { rows: def } : def;
   const h = d.rows.length, w = d.rows[0].length;
-  const level = { h, w, slot: [], toxic: [], ice: [], init: [], target: [], oneway: [], blocked: new Set(), kill: d.kill || null };
+  const level = { h, w, slot: [], toxic: [], ice: [], init: [], target: [], oneway: [], blocked: new Set(), kill: d.kill || null,
+    portal: {}, portals: [] };
   let id = 0;
   for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) {
     const ch = d.rows[r][c], t = d.goal ? d.goal[r][c] : '.';
@@ -601,15 +628,38 @@ function parseLevel(def) {
     level.oneway.push([i, j, dir]);
     level.blocked.add(j + OPPOSITE[dir]);
   }
+  // Cổng dịch chuyển: nối hai ô qua cạnh nhìn ra ngoài bàn
+  const outside = (i, dir) => {
+    const r = Math.floor(i / w) + DIRS[dir][0], c = i % w + DIRS[dir][1];
+    return r < 0 || c < 0 || r >= h || c >= w || !level.slot[r * w + c];
+  };
+  for (const [r, c, dir, r2, c2] of d.portal || []) {
+    const i = r * w + c, j = r2 * w + c2, back = OPPOSITE[dir];
+    if (!level.slot[i] || !level.slot[j] || i === j) throw new Error('Cổng phải nằm trên hai ô khác nhau của thân');
+    if (!outside(i, dir) || !outside(j, back)) throw new Error('Cạnh có cổng phải nhìn ra ngoài bàn');
+    if (level.portal[i + dir] !== undefined || level.portal[j + back] !== undefined) throw new Error('Mỗi cạnh chỉ một cổng');
+    level.portal[i + dir] = j;
+    level.portal[j + back] = i;
+    level.portals.push([i, j, dir]);
+  }
   level.nextId = id;
   level.hasTarget = level.target.some(Boolean);
   level.colors = [...new Set(level.init.filter(c => c && c.color !== 'V' && c.color !== level.kill).map(c => c.color))];
+  // Mèo hai màu: màu hiện tại lấy từ rows; màu kia là màu bất kỳ khác (có thể chưa có con nào trên bàn: mèo hai màu là nguồn duy nhất của màu đó)
+  for (const [r, c, alt, period = 2, left = period] of d.dual || []) {
+    const i = r * w + c, cell = level.init[i];
+    if (!cell || cell.sleep || cell.color === 'V' || alt === cell.color || !/[A-E]/.test(alt) || period < 1 || left < 1 || left > period)
+      throw new Error('Mèo hai màu không hợp lệ ở ô ' + r + ',' + c);
+    level.init[i] = { ...cell, alt, period, left };
+  }
   level.init = wake(level, level.init);
   return level;
 }
 
-// Ô kế tiếp theo hướng; -1 nếu ra ngoài bàn, ngoài cơ thể, hoặc bị màng chặn.
+// Ô kế tiếp theo hướng; -1 nếu ra ngoài bàn, ngoài cơ thể, hoặc bị màng chặn. Cạnh có cổng thì tới ô bên kia cổng.
 function step(level, i, dir) {
+  const through = level.portal[i + dir];
+  if (through !== undefined) return through;          // cổng dịch chuyển: nối thẳng tới ô kia
   const r = Math.floor(i / level.w) + DIRS[dir][0], c = i % level.w + DIRS[dir][1];
   if (r < 0 || c < 0 || r >= level.h || c >= level.w) return -1;
   const j = r * level.w + c;
@@ -673,11 +723,25 @@ function wake(level, cells) {
   return out;
 }
 
-// Kết thúc một lượt sau khi bản sao đã vào chỗ: ô độc giết, khử 3, virus lan (vào ô trống hoặc ăn tế bào),
+// Mèo hai màu (đang thức) đếm lùi một lượt; về 0 thì đổi sang màu kia rồi đếm lại từ chu kỳ. Ghi các con vừa đổi vào `flipped`.
+function tick(level, cells, flipped) {
+  let out = cells;
+  cells.forEach((c, i) => {
+    if (!c || !c.alt || c.sleep) return;
+    if (out === cells) out = cells.slice();
+    if (c.left > 1) { out[i] = { ...c, left: c.left - 1 }; return; }
+    out[i] = { ...c, color: c.alt, alt: c.color, left: c.period };
+    flipped.push([c.id, c.color, c.alt]);
+  });
+  return out;
+}
+
+// Kết thúc một lượt sau khi bản sao đã vào chỗ: ô độc giết, mèo hai màu đổi màu, khử 3, virus lan (vào ô trống hoặc ăn tế bào),
 // ô độc giết tiếp, rồi tế bào ngủ thức dậy. Trả từng chặng để giao diện diễn hoạt.
 function resolve(level, placed, born, nextId) {
   const removed = [];
-  let cells = poison(level, placed, removed);
+  const flipped = [];
+  let cells = tick(level, poison(level, placed, removed), flipped);
   const runs = findRuns(level, cells);
   if (runs.length) {
     cells = cells.slice();
@@ -697,7 +761,7 @@ function resolve(level, placed, born, nextId) {
   const infected = cells;
   const poisoned = [];
   cells = wake(level, poison(level, cells, poisoned));
-  return { moved: placed, removed, cleared, spread, eaten, infected, poisoned, cells, born, nextId };
+  return { moved: placed, removed, cleared, spread, eaten, infected, poisoned, cells, born, nextId, flipped };
 }
 
 // Vuốt tế bào `from` theo `dir`. Bản sao vào ô kề; nếu ô kề có tế bào thì đẩy cả dãy tới ô trống gần nhất
@@ -710,8 +774,8 @@ function swipe(level, cells, from, dir, newId = -1) {
   if (!parent || parent.sleep || parent.color === 'V' || to < 0) return null;
   const chain = [];
   let k = to;
-  while (k >= 0 && cells[k] && !cells[k].sleep) { chain.push(k); k = step(level, k, dir); }
-  if (k >= 0 && cells[k]) k = -1;                    // dãy chạm mèo ngủ: như chạm tường, không còn chỗ đẩy
+  while (k >= 0 && cells[k] && !cells[k].sleep && chain.length < cells.length) { chain.push(k); k = step(level, k, dir); }
+  if (k >= 0 && cells[k]) k = -1;                    // dãy chạm mèo ngủ (hoặc chạy trọn một vòng qua cổng): như chạm tường, không còn chỗ đẩy
   const next = cells.slice();
   let pushed = false, replaced = null;
   if (k >= 0) {
@@ -725,7 +789,7 @@ function swipe(level, cells, from, dir, newId = -1) {
   // (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng (dừng ở ô thường đầu tiên). Dãy bị đẩy và virus không trượt.
   let at = to;
   if (!pushed && !replaced) {
-    while (level.ice[at]) {
+    for (let guard = 0; level.ice[at] && guard < cells.length; guard++) {
       const n = step(level, at, dir);
       if (n < 0 || next[n]) break;
       at = n;
@@ -738,7 +802,7 @@ function swipe(level, cells, from, dir, newId = -1) {
 // Booster Đột biến: đổi một tế bào sang màu loài khác. Không cho đổi tế bào cuối cùng của một loài.
 function mutate(level, cells, i, color, newId = -1) {
   const c = cells[i];
-  if (!c || c.color === 'V' || c.color === color || !level.colors.includes(color)) return null;
+  if (!c || c.color === 'V' || c.alt || c.color === color || !level.colors.includes(color)) return null;
   if (level.colors.includes(c.color) && !cells.some((o, j) => j !== i && o && o.color === c.color)) return null;
   const next = cells.slice();
   next[i] = { color, id: newId };
@@ -756,7 +820,9 @@ function transplant(level, cells, from, to, newId = -1) {
 
 // Lấp kín: mọi ô (trừ ô độc) có tế bào không phải virus.
 const isFull = (level, cells) => level.slot.every((s, i) => !s || level.toxic[i] || (cells[i] && cells[i].color !== 'V'));
-const keyOf = cells => cells.map(c => !c ? '.' : c.color === 'V' ? ARROW[c.dir] : c.sleep ? c.color.toLowerCase() : c.color).join('');
+// Khoá một ô cho bộ giải và test: mèo hai màu thêm màu kia và lượt còn lại, ví dụ [AB2].
+const cellKey = c => !c ? '.' : c.color === 'V' ? ARROW[c.dir] : c.alt ? '[' + c.color + c.alt + c.left + ']' : c.sleep ? c.color.toLowerCase() : c.color;
+const keyOf = cells => cells.map(cellKey).join('');
 
 // Các loài có mặt lúc đầu nhưng nay không còn tế bào nào (kể cả đang ngủ). Có loài tuyệt chủng là thua.
 const extinct = (level, cells) => level.colors.filter(col => !cells.some(c => c && c.color === col));
@@ -872,6 +938,14 @@ const MECHANICS = [
       'Chiều ngược lại màng như bức tường: không nhân đôi qua được, dãy bị đẩy dừng ở màng nên bản sao sẽ thay thế.'],
     demos: [{ def: { rows: ['.BA'], oneway: [[0, 2, 'left']] }, from: 2, dir: 'left', cap: 'Cùng chiều mũi tên: đẩy qua được' },
       { def: { rows: ['AB.'], oneway: [[0, 2, 'left']] }, from: 0, dir: 'right', cap: 'Ngược chiều: bị chặn nên thay thế' }] },
+  { key: 'portal', icon: '🌀', title: 'Cổng dịch chuyển', fresh: true, has: lv => lv.portals.length > 0,
+    points: ['Hai vòng xoáy cùng màu là một cặp cổng. Đi ra khỏi cổng này là bước vào cổng kia.',
+      'Bản sao, dãy bị đẩy, thậm chí virus đều đi qua cổng. Khử 3 thì không: chỉ tính các ô kề thật trên bàn.'],
+    demos: [{ def: { rows: ['A.B'], portal: [[0, 0, 'left', 0, 2]] }, from: 0, dir: 'left', cap: 'Vuốt ra cổng trái: bản sao hiện ở cổng phải, đẩy mèo xanh đi' }] },
+  { key: 'dual', icon: '🎭', title: 'Mèo hai màu', fresh: true, has: lv => lv.init.some(c => c && c.alt),
+    points: ['Huy hiệu ở góc cho biết màu kế tiếp và số nước còn lại trước khi đổi màu.',
+      'Đổi màu xảy ra cuối nước đi, ngay trước khi khử 3: canh đúng lúc để tạo bộ ba, hoặc để khỏi mất màu cuối cùng.'],
+    demos: [{ def: { rows: ['A.B', 'B.A'], dual: [[0, 2, 'A', 1]] }, from: 0, dir: 'right', cap: 'Đổi màu đúng lúc: ba mèo đỏ thẳng hàng bị khử' }] },
   { key: 'toxic', icon: '☠️', title: 'Ô độc', fresh: true, has: lv => lv.toxic.some(Boolean),
     points: ['Mèo nào vào ô độc sẽ chết ngay, kể cả khi bị đẩy vào.',
       'Ô độc không cần lấp kín. Dùng nó để loại bớt mèo, nhưng coi chừng làm một màu tuyệt chủng.'],
@@ -911,12 +985,14 @@ const CHAPTERS = [
   { name: 'Màng và độc', icon: '🚪', note: 'Màng một chiều, ô độc', from: 28, to: 36 },
   { name: 'Ngủ và virus', icon: '🦠', note: 'Mèo ngủ, virus', from: 37, to: 47 },
   { name: 'Băng trơn', icon: '🧊', note: 'Băng trơn, ôn các cơ chế đã học', from: 48, to: 60 },
-  { name: 'Đại gia đình', icon: '🏠', note: 'Bàn lớn, đông mèo, mọi cơ chế', from: 61, to: 67 },
-  { name: 'Đủ sắc màu', icon: '🌈', note: '4 rồi 5 màu cùng lúc', from: 68, to: LEVELS.length - 1 },
+  { name: 'Cổng dịch chuyển', icon: '🌀', note: 'Cổng là đường duy nhất sang vùng trống', from: 61, to: 66 },
+  { name: 'Mèo hai màu', icon: '🎭', note: 'Màu hiếm chỉ mèo hai màu mới có', from: 67, to: 72 },
+  { name: 'Đại gia đình', icon: '🏠', note: 'Bàn lớn, đông mèo, mọi cơ chế', from: 73, to: 79 },
+  { name: 'Đủ sắc màu', icon: '🌈', note: '4 rồi 5 màu cùng lúc', from: 80, to: LEVELS.length - 1 },
 ];
 
 // Kết quả lưu theo nội dung level (khung, mèo, hộp, màng), không theo số thứ tự, để chèn thêm level không làm lệch sao.
-const levelKey = i => { const d = LEVELS[i]; return Array.isArray(d) ? d.join('/') : JSON.stringify([d.rows, d.goal, d.oneway, d.kill]); };
+const levelKey = i => { const d = LEVELS[i]; return Array.isArray(d) ? d.join('/') : JSON.stringify([d.rows, d.goal, d.oneway, d.kill, d.portal, d.dual]); };
 const record = i => save.prog[levelKey(i)];
 
 // Khoá theo thứ tự (qua level trước mới chơi được level sau; level đã qua thì luôn chơi lại được).
@@ -1396,10 +1472,13 @@ function cellBody(c) {
   const art = catArt && CAT[c.color]
     ? `<image class="cat" href="${catSrc(c.color)}" x="${m - 35}" y="${m - 43}" width="70" height="84"/>${c.sleep ? sleepMask(m) : ''}`
     : `${cellShape(c)}${shine(c.color)}${face(c, d)}`;
+  const badge = c.alt ? `<g class="dualBadge" transform="translate(${m + 24} ${m - 34})"><g class="dualPulse">
+      <circle r="17" fill="${COLORS[c.alt][0]}" stroke="#fff" stroke-width="3.5"/>
+      <text y="6" text-anchor="middle" font-size="19" font-weight="900" fill="#fff" stroke="#10206b" stroke-width="3" paint-order="stroke">${c.left}</text></g></g>` : '';
   return `<g class="body"><g class="lean"><g class="jelly" style="animation-delay:-${(d * .55).toFixed(2)}s">
       <ellipse cx="${m}" cy="${m + 38}" rx="25" ry="5" fill="#0a1450" opacity=".25"/>
       ${art}
-    </g></g></g>
+    </g></g>${badge}</g>
     <g class="zz" fill="#fff" stroke="#1a2f8f" stroke-width="5" paint-order="stroke" stroke-linejoin="round" font-weight="800">
       <text x="${SZ - 30}" y="22" font-size="28">z</text><text x="${SZ - 14}" y="6" font-size="19">z</text></g>`;
 }
@@ -1510,6 +1589,21 @@ function wallsSvg(lv) {
   }).join('');
 }
 
+// Cổng dịch chuyển: hai vòng xoáy cùng màu ở mép hai ô, nhìn ra ngoài bàn; vòng xoay chậm cho biết đó là một cặp.
+const GATE_COLORS = ['#b57bff', '#ff7ac8', '#38d9c8'];
+function portalSvg(lv) {
+  const gate = (cell, dir, color) => {
+    const [x, y] = pos(cell, lv), [dr, dc] = DIRS[dir];
+    const cx = x + SZ / 2 + dc * (SZ / 2 - 4), cy = y + SZ / 2 + dr * (SZ / 2 - 4);
+    const vertical = dir === 'left' || dir === 'right';
+    const rx = vertical ? 11 : 36, ry = vertical ? 36 : 11;
+    return `<g class="portal"><ellipse cx="${cx}" cy="${cy}" rx="${rx + 6}" ry="${ry + 6}" fill="${color}" opacity=".28"/>
+      <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#1a0f3c" stroke="${color}" stroke-width="4"/>
+      <ellipse class="swirl" cx="${cx}" cy="${cy}" rx="${rx * .55}" ry="${ry * .55}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 9" stroke-linecap="round"/></g>`;
+  };
+  return lv.portals.map(([i, j, dir], k) => gate(i, dir, GATE_COLORS[k % GATE_COLORS.length]) + gate(j, OPPOSITE[dir], GATE_COLORS[k % GATE_COLORS.length])).join('');
+}
+
 // Mũi tên xem trước hướng chia: trắng nếu chia được, đỏ nếu bị chặn.
 function arrowSvg(lv, from, dir) {
   const [x, y] = pos(from, lv).map(v => v + SZ / 2);
@@ -1527,7 +1621,7 @@ function boardSvg(lv, view, from = -1, dir = null) {
     const [x, y] = pos(i, lv);
     out += `<g class="cell${c.sleep ? ' asleep' : ''}" transform="translate(${x} ${y})">${cellBody(c)}</g>`;
   });
-  out += wallsSvg(lv) + (dir ? arrowSvg(lv, from, dir) : '');
+  out += wallsSvg(lv) + portalSvg(lv) + (dir ? arrowSvg(lv, from, dir) : '');
   return `<svg viewBox="-24 -24 ${lv.w * SZ + 48} ${lv.h * SZ + 52}">${out}</svg>`;
 }
 
@@ -1641,7 +1735,7 @@ function renderCoach() {
 
 function buildBoard() {
   board.setAttribute('viewBox', `-24 -24 ${level.w * SZ + 48} ${level.h * SZ + 52}`);
-  board.innerHTML = `${baseSvg(level)}<g id="layer"></g><g>${wallsSvg(level)}</g><g id="coachLayer"></g><g id="overlay"></g>`;
+  board.innerHTML = `${baseSvg(level)}<g id="layer"></g><g>${wallsSvg(level)}${portalSvg(level)}</g><g id="coachLayer"></g><g id="overlay"></g>`;
   layer = $('layer');
   overlay = $('overlay');
   nodes = new Map();
@@ -1652,6 +1746,7 @@ function makeCell(c) {
   g.setAttribute('class', 'cell');
   g.innerHTML = cellBody(c);
   g.dataset.sleep = c.sleep ? '1' : '';
+  g.dataset.dual = c.alt ? c.color + c.left : '';
   return g;
 }
 
@@ -1680,6 +1775,12 @@ function sync(view, born = null, keep = []) {
       g.innerHTML = cellBody(c);
       g.dataset.sleep = c.sleep ? '1' : '';
       if (!c.sleep) jolt(g, 'waking');
+    } else if ((c.alt ? c.color + c.left : '') !== g.dataset.dual) {
+      // mèo hai màu: đếm lùi hoặc vừa đổi màu thì vẽ lại thân và huy hiệu
+      const flipped = (g.dataset.dual || '')[0] !== c.color;
+      g.innerHTML = cellBody(c);
+      g.dataset.dual = c.alt ? c.color + c.left : '';
+      if (flipped) jolt(g, 'waking');
     }
     g.classList.toggle('asleep', !!c.sleep);
     g.style.transform = `translate(${x}px, ${y}px)`;

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd99f192371ecb4ab8c5232f2b82330, type: 3}
+  m_Name: Portal
+  m_EditorClassIdentifier: 
+  mechanic: 14
+  title: "C\u1ED4NG D\u1ECACH CHUY\u1EC2N"
+  description: "Hai v\xF2ng xo\xE1y c\xF9ng m\xE0u l\xE0 m\u1ED9t c\u1EB7p c\u1ED5ng:
+    \u0111i ra kh\u1ECFi c\u1ED5ng n\xE0y l\xE0 b\u01B0\u1EDBc v\xE0o c\u1ED5ng kia.
+    B\u1EA3n sao v\xE0 c\u1EA3 d\xE3y b\u1ECB \u0111\u1EA9y \u0111\u1EC1u chui qua
+    \u0111\u01B0\u1EE3c. Kh\u1EED 3 th\xEC kh\xF4ng \u0111i qua c\u1ED5ng."
+  demoRows:
+  - A.B
+  demoGoal: []
+  demoMembranes: []
+  demoPortals:
+  - 0 0 left 0 2
+  demoColorSwitches: []
+  demoMove: 0 0 left

@@ -50,7 +50,14 @@ namespace Meowtosis.Domain
         {
             var symbols = new char[pieces.Length];
             for (var cell = 0; cell < pieces.Length; cell++) symbols[cell] = LevelSymbols.SymbolOf(pieces[cell]);
-            return new string(symbols);
+            var key = new string(symbols);
+            // Mèo hai màu: thêm màu kia và lượt còn lại ở cuối khoá (ToRows chỉ lấy phần đầu), để bộ giải phân biệt các thế cờ.
+            for (var cell = 0; cell < pieces.Length; cell++)
+            {
+                if (pieces[cell] is Piece piece && piece.IsTwoColor)
+                    key += $"|{cell}{LevelSymbols.LetterOf(piece.OtherColor.Value)}{piece.TurnsLeft}";
+            }
+            return key;
         }
 
         public IReadOnlyList<string> ToRows()

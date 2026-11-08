@@ -1,7 +1,7 @@
 // Màn hướng dẫn đầu game: một bàn dạy hết luật cơ bản trước level 1. Viết tay, không do tool xuất ra.
 // Định dạng như LevelCatalog.txt (docs/architecture.md, mục "Dữ liệu level"), thêm:
 //   tutorial  một bước người chơi phải làm theo: hàng cột hướng, rồi lời dẫn hiện trong bong bóng
-//   rule      câu luật hiện sau khi đi xong bước ngay trên, chờ bấm "Đã hiểu!"
+//   rule      câu luật hiện sau khi đi xong bước ngay trên, chờ bấm "Đã hiểu!"; nhiều dòng rule liên tiếp thì hiện lần lượt
 //   tip       lời dặn khi hết các bước và người chơi tự lấp nốt ổ
 //   solution  một lời giải trọn vẹn (các bước hướng dẫn rồi phần tự chơi), để test kiểm tra
 // <br> là xuống dòng. Kiểm tra bằng OnboardingTests (npm run test:unity).
@@ -10,13 +10,15 @@ level onboarding
 row BA.
 row A..
 tutorial 0 1 down Vuốt mèo đỏ xuống dưới
-rule Tốt lắm! Mèo nhân đôi vào ô trống.<br>Lấp kín mọi ô để thắng!
+rule Tốt lắm! Mèo nhân đôi vào ô trống.
 tutorial 0 0 right Vuốt mèo xanh sang phải
-rule Ô bên cạnh có mèo thì cả dãy bị đẩy đi.
+rule Còn ô trống thì cả dãy bị đẩy đi.
 tutorial 0 2 left Vuốt mèo đỏ sang trái
-rule Hết chỗ để đẩy: bản sao thay thế mèo bên cạnh.<br>Màu nào cũng phải còn ít nhất 1 bé!
+rule Hết chỗ để đẩy: bản sao thay thế mèo bên cạnh.
 tutorial 0 2 down Vuốt mèo đỏ xuống dưới
-rule 3 mèo cùng màu thẳng hàng sẽ biến mất!
+rule 3 mèo cùng màu thẳng hàng sẽ bị loại!
+rule Luật: Mỗi màu, cần có ít nhất 1 cá thể mèo trên bảng!
+rule Hãy lấp kín ô trống và tuân thủ luật để Thắng!
 tip Giờ tự lấp kín ổ nhé!
 solution 0 1 down
 solution 0 0 right

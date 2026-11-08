@@ -64,6 +64,8 @@ const PHASES = [
     { name: 'băng', match: x => x.def.rows.join('').includes('=') },
     { name: 'ôn tập', match: () => true },
   ],
+  [{ name: 'cổng', match: () => true }],        // Cổng dịch chuyển (2026-11-08)
+  [{ name: 'hai màu', match: () => true }],     // Mèo hai màu (2026-11-08)
   [{ name: 'trộn mọi cơ chế', match: () => true }],
   [
     { name: '4 màu', match: x => x.colors <= 4 },
@@ -157,7 +159,10 @@ console.log(report.join('\n'));
 if (!process.argv.includes('--write')) return;
 
 // --- Ghi lại mảng LEVELS: mỗi level giữ nguyên dòng chú thích hình khung, đầu mỗi khối một dòng tiêu đề ---
-const html = fs.readFileSync(GAME, 'utf8');
+// File game trên Windows có thể dùng CRLF (git autocrlf): đọc theo LF, ghi lại đúng kiểu xuống dòng của file.
+const rawHtml = fs.readFileSync(GAME, 'utf8');
+const usesCrlf = rawHtml.includes('\r\n');
+const html = rawHtml.replace(/\r\n/g, '\n');
 const start = html.indexOf('const LEVELS = [\n'), end = html.indexOf('\n];\n', start);
 const body = html.slice(start + 'const LEVELS = [\n'.length, end + 1);
 // Tách từng level (đếm ngoặc, bỏ qua chuỗi), lấy chú thích cuối dòng cuối của level đó
@@ -185,7 +190,9 @@ function fmt(d) {
   const keys = Object.keys(d).filter(k => k !== 'tut');
   if (keys.length === 1 && !d.tut) return arr(d.rows);
   const parts = keys.map(k => k === 'rows' || k === 'goal' ? `${k}: ${arr(d[k])}`
-    : k === 'oneway' ? `oneway: [${d.oneway.map(([r, c, dir]) => `[${r}, ${c}, ${q(dir)}]`).join(', ')}]` : `${k}: ${q(d[k])}`);
+    : k === 'oneway' ? `oneway: [${d.oneway.map(([r, c, dir]) => `[${r}, ${c}, ${q(dir)}]`).join(', ')}]`
+    : k === 'portal' ? `portal: [${d.portal.map(([r, c, dir, r2, c2]) => `[${r}, ${c}, ${q(dir)}, ${r2}, ${c2}]`).join(', ')}]`
+    : k === 'dual' ? `dual: [${d.dual.map(([r, c, alt, period, left]) => `[${r}, ${c}, ${q(alt)}, ${period}, ${left}]`).join(', ')}]` : `${k}: ${q(d[k])}`);
   if (!d.tut) return `{ ${parts.join(', ')} }`;
   return `{ ${parts.join(', ')}, tut: [\n${d.tut.map(([r, c, dir, text]) => `    [${r}, ${c}, ${q(dir)}, ${q(text)}]`).join(',\n')}] }`;
 }
@@ -199,6 +206,7 @@ CH.forEach((ch, b) => {
     out += lines.join('\n') + '\n';
   }
 });
-fs.writeFileSync(GAME, html.slice(0, start + 'const LEVELS = [\n'.length) + out + html.slice(end + 1));
+const written = html.slice(0, start + 'const LEVELS = [\n'.length) + out + html.slice(end + 1);
+fs.writeFileSync(GAME, usesCrlf ? written.replace(/\n/g, '\r\n') : written);
 fs.writeFileSync(path.join(__dirname, 'jobs', 'order-mapping.json'), JSON.stringify(Object.fromEntries(order.map((x, k) => [x.i + 1, k + 1])), null, 1));
 console.log('Đã ghi thứ tự mới vào', path.relative(process.cwd(), GAME), '· bảng cũ→mới: tools/jobs/order-mapping.json');

@@ -18,6 +18,8 @@ namespace Meowtosis.Presentation
         [SerializeField] private ParticleSystem gateGlowPrefab;
         [Tooltip("Tuyết bung ra khi bản sao trượt qua hoặc dừng trên ô băng.")]
         [SerializeField] private ParticleSystem frostPrefab;
+        [Tooltip("Vạch tốc độ phía sau con mèo đang trượt trên băng. Dựng sẵn theo hướng trượt là +X.")]
+        [SerializeField] private ParticleSystem speedLinesPrefab;
         [SerializeField] private SoulEffect soulPrefab;
         [SerializeField] private JawsEffect jawsPrefab;
         [SerializeField] private DizzyEffect dizzyPrefab;
@@ -47,6 +49,35 @@ namespace Meowtosis.Presentation
         }
 
         public void Frost(Vector3 position) => Spawn(frostPrefab, position, null);
+
+        // Quân đi vào hoặc ra khỏi một đầu cổng: vòng sóng và tàn sáng cùng màu cổng.
+        public void PortalPulse(Vector3 position, Color color)
+        {
+            Spawn(ringPrefab, position, color);
+            Spawn(burstPrefab, position, color);
+        }
+
+        // Mèo hai màu đổi màu: tia và vòng sóng màu mới nổ ra, kèm tàn sáng.
+        public void ColorFlip(Vector3 position, Color from, Color to)
+        {
+            Spawn(burstPrefab, position, from);
+            Spawn(ringPrefab, position, to);
+            Spawn(sparklePrefab, position, null);
+        }
+
+        // Vạch tốc độ bám theo `piece` trong `seconds` giây; vạch đã phát ra thì ở lại phía sau rồi tan.
+        public void SpeedLines(PieceView piece, Direction direction, float seconds)
+        {
+            var offset = BoardLayout.Offset(direction);
+            var angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
+            var effect = Instantiate(speedLinesPrefab, piece.transform);
+            effect.transform.localPosition = Vector3.zero;
+            effect.transform.localRotation = Quaternion.Euler(0f, 0f, angle);
+            var main = effect.main;
+            main.duration = Mathf.Max(seconds, 0.1f);
+            effect.Play();
+            Destroy(effect.gameObject, main.duration + main.startLifetime.constantMax);
+        }
 
         // Confetti rơi từ mép trên màn hình; hạt sáng bay lên từ mép dưới.
         public void Confetti() => SpawnAcrossScreen(confettiPrefab, 1f);

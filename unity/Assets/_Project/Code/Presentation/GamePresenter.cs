@@ -514,6 +514,7 @@ namespace Meowtosis.Presentation
             var hud = views.Hud;
             var session = run.Session;
             hud.ShowLevel(levelIndex + 1);
+            hud.SetGuidedLayout(session.Definition.Tutorial.Count > 0);
             ShowHearts();
             hud.ShowStars(run.Stars, instantly);
             hud.ShowGoal(GoalProgress.Of(session.Board), instantly);
@@ -596,7 +597,6 @@ namespace Meowtosis.Presentation
                 views.Settings.HomeClicked += OnHomeClicked;
                 views.Settings.SoundToggled += OnSoundToggled;
                 views.Settings.MusicToggled += OnMusicToggled;
-                views.Settings.RestartClicked += OnRestartClicked;
                 views.NoHearts.RefillClicked += OnRefillClicked;
                 views.Mechanic.ContinueClicked += OnMechanicContinue;
             }
@@ -625,7 +625,6 @@ namespace Meowtosis.Presentation
                 views.Settings.HomeClicked -= OnHomeClicked;
                 views.Settings.SoundToggled -= OnSoundToggled;
                 views.Settings.MusicToggled -= OnMusicToggled;
-                views.Settings.RestartClicked -= OnRestartClicked;
                 views.NoHearts.RefillClicked -= OnRefillClicked;
                 views.Mechanic.ContinueClicked -= OnMechanicContinue;
             }

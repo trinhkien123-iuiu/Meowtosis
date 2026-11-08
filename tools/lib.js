@@ -16,7 +16,7 @@ function loadLogic(htmlPath = GAME) {
   // const/let ở top-level không gắn vào context, nên xuất các tên cần dùng qua globalThis.
   vm.runInContext(m[1] + `
 Object.assign(globalThis, { LEVELS, DIRS, parseLevel, step, swipe, resolve, findRuns, allMoves, solve,
-  isFull, isComplete, isWon, isLost, keyOf, targetsDone, mutate, transplant, extinct, wake });`, ctx, { filename: htmlPath });
+  isFull, isComplete, isWon, isLost, keyOf, cellKey, targetsDone, mutate, transplant, extinct, wake, tick });`, ctx, { filename: htmlPath });
   return ctx;
 }
 
@@ -64,7 +64,7 @@ function rng(seed) {
 // Chạy một lời giải, đếm các sự kiện. Dùng để biết cơ chế nào thật sự cần và để chấm "bất ngờ".
 function events(ctx, lv, path) {
   const ev = { push: 0, longPush: 0, replace: 0, clear: 0, cleared: 0, toxic: 0, wake: 0, chainWake: 0, wakeUse: 0,
-    spread: 0, eaten: 0, virusDie: 0, germDie: 0, germClear: 0, slide: 0 };
+    spread: 0, eaten: 0, virusDie: 0, germDie: 0, germClear: 0, slide: 0, portal: 0, flip: 0 };
   const sleepers = new Set(lv.init.filter(x => x && x.sleep).map(x => x.id));
   let c = lv.init, id = lv.nextId;   // cấp id mới như game, để mèo sinh ra và virus lan ra không trùng id cũ
   for (const [f, d] of path) {
@@ -78,6 +78,11 @@ function events(ctx, lv, path) {
     }
     if (r.replaced) ev.replace++;
     if (r.slid) ev.slide++;
+    // Qua cổng dịch chuyển: bản sao hoặc dãy bị đẩy đi xuyên một cổng; mèo hai màu đổi màu
+    const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
+    if (lv.portals.some(([i, j, pd]) => [[i, pd, j], [j, OPP[pd], i]].some(([gi, gd, gj]) =>
+      (f === gi && d === gd) || (c[gi] && r.moved[gj] && r.moved[gj].id === c[gi].id)))) ev.portal++;
+    ev.flip += r.flipped.length;
     const killed = [r.replaced, ...r.removed, ...r.poisoned, ...r.eaten].filter(Boolean);
     ev.virusDie += killed.filter(x => x.color === 'V').length;
     ev.germDie += killed.filter(x => x.color === lv.kill).length;
@@ -174,7 +179,8 @@ function census(def) {
     fill: [...flat].filter(ch => ch !== '#' && ch !== '~' && !/[A-Fa-f]/.test(ch)).length,
     colors: new Set([...flat].filter(ch => /[A-Fa-f]/.test(ch)).map(ch => ch.toUpperCase())).size,
     mech: [d.goal && 'hộp', d.oneway && d.oneway.length && 'màng', flat.includes('~') && 'độc', /[a-f]/.test(flat) && 'ngủ',
-      /[<>^v]/.test(flat) && 'virus', d.kill && 'khuẩn', flat.includes('=') && 'băng'].filter(Boolean),
+      /[<>^v]/.test(flat) && 'virus', d.kill && 'khuẩn', flat.includes('=') && 'băng',
+      d.portal && d.portal.length && 'cổng', d.dual && d.dual.length && 'hai màu'].filter(Boolean),
   };
 }
 

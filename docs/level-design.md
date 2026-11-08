@@ -112,6 +112,7 @@ Mọi công cụ đọc luật **thẳng từ khối `// ==LOGIC==` của game**
 | `serve.js` | Máy chủ chơi thử (`npm start`, `npm run lan`, thêm `--port=` để đổi cổng) |
 | `difficulty.js` | Đo độ khó theo quyết định của mọi level, song song, nhớ kết quả trong `jobs/difficulty.json` (`npm run difficulty`; chỉ đo level mới hoặc vừa sửa) |
 | `order.js` | Sắp level từ dễ đến khó trong từng khối (mục 3). `npm run order` chỉ in đề xuất; `node tools/order.js --write` ghi vào game và lưu bảng cũ → mới ở `jobs/order-mapping.json` |
+| `pick-virus.js` | Lọc ứng viên level virus theo ý đồ: mọi virus có ô để lan ngay từ đầu, mắt các virus không cùng hướng, lời giải ngắn nhất có virus lan nhiều lần |
 | `test-lose.js`, `test-boosters.js`, `test-mechanics.js` | Test luật: thua khi tuyệt chủng, booster, các cơ chế |
 | `jobs/*.json` | Các job đã dùng (giữ lại để sinh lại hoặc làm tiếp); `jobs/picks*.json` là ứng viên đã đo lại khi máy rảnh |
 | `jobs/out/` | Kết quả từng lần chạy: `<job>.txt` (đọc được) và `<job>.json`; `jobs/run*.log` là log tương ứng |
@@ -490,3 +491,43 @@ Mỗi level chơi 200 ván cho mỗi kiểu (`tools/study-clear.js`). Cơ chế 
   - Băng (49): bản sao trượt tới khi gặp vật cản.
 - **Bản Unity:** mỗi bước hướng dẫn làm tối phần bàn không liên quan, chừa sáng các ô nước đó chạm tới (`MoveFocus`, gồm cả đường trượt trên băng). Vùng sáng giữ nguyên trong lúc nước đi đang diễn để thấy rõ kết quả.
 - **Còn lại** mẹo màu mới (18, 31, 69, 73), thức dây chuyền (41) và hai virus (44). Bản Unity hiện không hiện mẹo đầu màn (`GamePresenter.CurrentTip` chỉ hiện lời hướng dẫn), nên các mẹo này chỉ còn thấy ở bản web.
+
+### Thiết kế lại level virus: nhìn mắt, rồi khó chịu (2026-11-08)
+
+- **Ý đồ:** level virus đầu tiên là màn hướng dẫn để người chơi **nhìn ánh mắt virus** (mắt nhìn đâu thì lượt sau nó lan tới đó). Từ level virus thứ hai trở đi, **mọi level có ít nhất 2 virus mắt khác hướng nhau**, để người chơi tự nhận ra cách virus lan và thấy sự khó chịu của nó khi phải lấp kín ổ; giải được mới thấy level hay.
+- **Level hướng dẫn (cũ 42):** giữ khung `.# / A# / B# / >.`, viết lại ba lời dẫn xoay quanh ánh mắt. Trong Unity, bước hướng dẫn chừa sáng **mọi virus và ô ngay trước mắt chúng** (`MoveFocus.AddVirusGaze`) để lời "nhìn mắt virus" chỉ đúng chỗ.
+- **Thay 11 level virus một con** (cũ 43, 45, 47, 48, 60, 65, 66, 68, 72, 75, 76) bằng level hai đến ba virus, giữ vai trò cũ (cỡ bàn, ngủ, bất ngờ, trùm khối). Sinh bằng `tools/jobs/virus-redesign.json` và `virus-redesign2.json` (`virus` đặt sẵn chuỗi hướng, `need: ["virus"]`, `strict`), lọc bằng `pick-virus.js`: virus đối đầu hoặc vuông góc, lan 2 lần trở lên, ưu tiên level có virus ăn mèo, độ khó đo được 8–13 (tương đương các level virus cũ, không tăng đường cong).
+- **Kết quả:** level 42 hướng dẫn (1 virus), level 43 là màn hai virus đầu tiên (nhỏ nhất, par 5), mọi level virus còn lại có 2 hoặc 3 virus (kiểm tra trên danh mục Unity).
+- **Bài học:**
+  - Bàn lớn mà ít mèo (5×5 trở lên, 8 mèo) khiến bộ giải quá giới hạn và không ra ứng viên: phải nới `maxMs`/`nodes` và thu gọn bàn.
+  - Số virus càng nhiều, par càng dài (11–15) dù mèo ít: chọn bàn nhỏ để level không dài quá.
+  - Mẹo chữ đầu màn không hiện trong game (chỉ bước hướng dẫn có chữ), nên màn hai virus đầu tiên để người chơi tự quan sát.
+  - `order.js --write` giờ đọc và ghi được file game dùng CRLF; chạy `node tools/order.js --write` đã dời 36 level theo độ khó đo lại, gồm cả level không liên quan virus.
+
+### Hai cơ chế mới: cổng dịch chuyển và mèo hai màu (2026-11-08)
+
+- **Công cụ:** `gen.js` thêm `portals`, `dual`, `period`, `phase`; `need` thêm `portal`, `dual`; `lib.events` đếm `portal` (qua cổng) và `flip` (đổi màu); `mechanic-use.js` thêm hai cơ chế: **cổng** bắt buộc khi cấm mọi nước đi xuyên cổng thì không thắng được, **hai màu** bắt buộc khi lời giải ngắn nhất của bàn không có tính hai màu không còn thắng trên bàn có. `order.js` thêm hai giai đoạn (`cổng`, `hai màu`) và chịu được file game dùng CRLF.
+- **Thêm 2 khối, 11 level (nay 87 level, 9 khối):**
+  - Khối 6 **Cổng dịch chuyển** (5 level, level 62–66): màn hướng dẫn tự thiết kế `A.#..` (hố giữa bàn, chỉ cổng nối hai nửa; lời giải là ba lần vuốt cùng một nước, nước 2 và 3 đẩy dãy chui qua cổng), rồi 4 level sinh bằng `jobs/portal-dual.json`, `portal-dual-intro.json`.
+  - Khối 7 **Mèo hai màu** (6 level, level 67–72): màn hướng dẫn `..###/#AABB` (mèo xanh đổi sang đỏ, hướng dẫn ba bước), 4 level luyện (một rồi hai mèo hai màu, lệch nhịp), và một level kết hợp cổng + hai màu.
+- **Độ khó đo được** (`bit` quyết định, chuẩn của `tools/difficulty.js`): khối cổng 1 → 22, khối hai màu 8 → 42.
+- **Bài học:**
+  - Khung nhỏ (3×2, 4×2) đã bị level cũ dùng hết, bộ sinh không ra: phải tự thiết kế màn nhập môn bằng tay hoặc đổi cỡ khung. Màn nhập môn cổng dùng **hố giữa bàn** để cổng là cách duy nhất qua hố.
+  - Cổng đặt ở cạnh nhìn ra ngoài nên bộ sinh chỉ chọn ô có cạnh sát mép hoặc lỗ; nhiều ứng viên bị loại vì "cổng trang trí" (lời giải không cổng vẫn thắng): cần `strict` và bàn có lỗ.
+  - Mèo hai màu cần số nước tối ưu ≥ 3 mới thấy được đổi màu; chu kỳ 2 dễ đọc hơn chu kỳ 1 (con số 1 luôn hiện).
+  - Chữ nổi báo đổi màu phải ngắn (`→ VÀNG!`): chữ dài bị cắt ở mép màn hình khi mèo đứng sát mép.
+
+### Làm lại cổng và mèo hai màu: bỏ cơ chế đi thì không thắng được (2026-11-08)
+
+- **Phản hồi:** hai level cổng cũ xếp cổng cạnh ô đã vuốt ngang được (cổng thừa), huy hiệu số của mèo hai màu vướng mắt, và người chơi không cần dùng cơ chế vẫn thắng.
+- **Chuẩn mới "bắt buộc":** gỡ cơ chế khỏi level (cổng thành tường, mèo hai màu thành mèo thường) thì level phải **không thể thắng**. `tools/mechanic-use.js` chứng minh bằng hai cách: (1) cấu trúc, cổng nối hai vùng mà một vùng có ô cần lấp nhưng không có mèo, mèo hai màu sinh một màu mà hộp cần, bàn không có con nào màu đó; (2) không chứng minh được thì giải vét cạn bản đã gỡ cơ chế, thua hết mới tính là bắt buộc. Chạy `node tools/mechanic-use.js`: 0 level trang trí.
+- **Luật mới đi kèm:** màu kia của mèo hai màu được phép là **màu chưa có con nào trên bàn** (mèo hai màu là nguồn duy nhất của màu ấy), màu ấy không tính vào việc hết màu.
+- **Bộ sinh:** `gen.js` thêm `split` (cổng nối hai vùng tách rời, mèo chỉ đặt ở một vùng), `hidden` (màu kia và hộp chỉ ở màu ẩn), `allowUsed`. Job mới `tools/jobs/portal-dual-v2.json`.
+- **Level mới (sau `order.js`):** cổng là level 62–67 (62 là màn hướng dẫn `A.#..`), mèo hai màu là 68–73 (68 là màn hướng dẫn: hộp vàng mà bàn không có mèo vàng); level cổng + hai màu nằm trong khối hai màu. 88 level, 9 khối.
+- **Giao diện mèo hai màu mới:** bỏ đĩa số. Bản đầu cắt nửa thân mèo đổi màu (`SpriteMask`) nhưng trông rợn, nên đổi sang **bong bóng**: thân mèo giữ một màu, góc trên phải ô có bong bóng chứa mèo màu kế tiếp, chấm dưới bong bóng là số nước còn lại (còn 1 thì nhấp nháy), đổi màu thì bong bóng phồng lên (`TwoToneCat`). Thẻ cơ chế dùng `DemoCell` có bong bóng + đầu mèo + chấm.
+- **Bài học:**
+  - `SpriteMask` ở chế độ khoảng tuỳ chỉnh không tác động lên ảnh có đúng thứ tự vẽ bằng hai đầu khoảng: phải nới `front = order + 1`, `back = order - 1`; `PieceView.SetHighlightOrder` đổi thứ tự vẽ nên mặt nạ phải theo dõi.
+  - Cổng thừa là lỗi thiết kế dễ mắc nhất: luôn hỏi "bỏ cổng đi level còn thắng được không".
+  - Tự mở level để thử: đặt `GameBootstrap.openLevelNumber`, xoá `PlayerPrefs` thì sẽ vào hướng dẫn đầu game (gọi `StartGame` để bỏ qua).
+- **Onboarding gọn:** màn hướng dẫn đầu game ẩn cả thanh trên (TopBar, HeartPill, RestartButton) ngoài các phần đã ẩn từ trước, chỉ còn bàn chơi, hàng đếm mèo và lời hướng dẫn (danh sách OnboardingView.hiddenWhileOnboarding trong scene Game).
+- **Vòng sáng ô (Highlight):** vòng cũ là sprite vuông to hơn ô gỗ nên bị hở; thay bằng viền ôm đúng hình bóng ô (sprite `CellOutline` sinh từ alpha của `WoodCube`: quầng vàng, dải trắng, dải vàng, ruột vàng nhạt; lệch xuống 0,05 như thân ô), prefab `Prefabs/Board/Highlight`.

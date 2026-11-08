@@ -16,6 +16,7 @@ namespace Meowtosis.Domain
         public static TurnResolver CreateStandard() => new TurnResolver(new ITurnStep[]
         {
             new PoisonStep(),
+            new ColorSwitchStep(),
             new ClearRunsStep(),
             new VirusSpreadStep(),
             new PoisonStep(),

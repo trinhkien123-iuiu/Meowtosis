@@ -276,6 +276,105 @@ namespace Meowtosis.Tests
             Assert.That(Rules.Boosters.TryTransplant(board, 0, 2, out _), Is.False);
         }
 
+        // Cổng dịch chuyển
+
+        private static TestLevel Gate(params string[] rows) => TestLevel.FromRows(rows).WithPortal(0, 0, Direction.Left, 0, 2);
+
+        [Test, Description("P1")]
+        public void CopyThroughAPortalAppearsOnTheOtherSide() =>
+            Assert.That(Gate("A..").Play("0 0 left").Rows, Is.EqualTo(Rows("A.A")));
+
+        [Test, Description("P2")]
+        public void ACatBehindThePortalIsPushedOn() =>
+            Assert.That(Gate("A.B").Play("0 0 left").Rows, Is.EqualTo(Rows("ABA")));
+
+        [Test, Description("P3")]
+        public void SwipingBackFromTheOtherSideEntersThePortal() =>
+            Assert.That(Gate("..A").Play("0 2 right").Rows, Is.EqualTo(Rows("A.A")));
+
+        [Test, Description("P4")]
+        public void APortalCanJoinDifferentRows() =>
+            Assert.That(TestLevel.FromRows("A.", ".B").WithPortal(0, 0, Direction.Left, 1, 1).Play("0 0 left").Rows,
+                Is.EqualTo(Rows("A.", "BA")));
+
+        [Test, Description("P5")]
+        public void VirusesSpreadThroughAPortal() =>
+            Assert.That(Gate("<A.").Play("0 1 right").Rows, Is.EqualTo(Rows("<A<")));
+
+        [Test, Description("P6")]
+        public void ARingWithNoEmptyCellBecomesAReplace()
+        {
+            var play = TestLevel.FromRows("AB").WithPortal(0, 1, Direction.Right, 0, 0).Play("0 0 right");
+            Assert.That(play.Rows, Is.EqualTo(Rows("AA")));
+            Assert.That(play.LastResult.Replaced.HasValue, Is.True);
+            Assert.That(play.IsLost, Is.True);
+        }
+
+        [Test, Description("P7")]
+        public void APortalSideMustFaceOutsideTheBoard() =>
+            Assert.Throws<System.FormatException>(() => TestLevel.FromRows("A.").WithPortal(0, 0, Direction.Right, 0, 1).Build());
+
+        // Mèo hai màu
+
+        [Test, Description("D1")]
+        public void APushedTwoColourCatKeepsCountingDown()
+        {
+            var play = TestLevel.FromRows("AB.").WithColorSwitch(0, 1, Species.Red, 2).Play("0 0 right");
+            Assert.That(play.Rows, Is.EqualTo(Rows("AAB")));
+            Assert.That(play.Board[2].Value.TurnsLeft, Is.EqualTo(1));
+        }
+
+        [Test, Description("D2")]
+        public void ChangingColourJustInTimeMakesAClearableRun()
+        {
+            var play = TestLevel.FromRows("A.B", "B.A").WithColorSwitch(0, 2, Species.Red, 1).Play("0 0 right");
+            Assert.That(play.Rows, Is.EqualTo(Rows("...", "B.A")));
+            Assert.That(play.IsLost, Is.False);
+        }
+
+        [Test, Description("D3")]
+        public void TheCountdownTakesTwoMovesBeforeTheChange()
+        {
+            var level = TestLevel.FromRows("A.B", "...").WithColorSwitch(0, 2, Species.Red, 2);
+            var first = level.Play("0 0 down");
+            Assert.That(first.Rows, Is.EqualTo(Rows("A.B", "A..")));
+            Assert.That(first.Board[2].Value.TurnsLeft, Is.EqualTo(1));
+            Assert.That(level.Play("0 0 down", "0 0 right").Rows, Is.EqualTo(Rows("...", "A..")));
+        }
+
+        [Test, Description("D4")]
+        public void TheCopyOfATwoColourCatIsAnOrdinaryCat()
+        {
+            var play = TestLevel.FromRows("B.A").WithColorSwitch(0, 0, Species.Red, 3).Play("0 0 right");
+            Assert.That(play.Rows, Is.EqualTo(Rows("BBA")));
+            Assert.That(play.Board[1].Value.IsTwoColor, Is.False);
+            Assert.That(play.Board[0].Value.TurnsLeft, Is.EqualTo(2));
+        }
+
+        [Test, Description("D5")]
+        public void ChangingColourCanMakeAColourExtinct() =>
+            Assert.That(TestLevel.FromRows("A.", "B.").WithColorSwitch(1, 0, Species.Red, 1).Play("0 0 right").IsLost, Is.True);
+
+        [Test, Description("D6")]
+        public void MutateDoesNotWorkOnATwoColourCat()
+        {
+            var board = TestLevel.FromRows("AB.").WithColorSwitch(0, 1, Species.Red, 2).Start();
+            Assert.That(Rules.Boosters.TryMutate(board, 1, Species.Red, out _), Is.False);
+        }
+
+        [Test, Description("D7")]
+        public void TheOtherColourMustDifferFromTheCurrentOne() =>
+            Assert.Throws<System.FormatException>(() => TestLevel.FromRows("AB.").WithColorSwitch(0, 1, Species.Blue, 2).Build());
+
+        [Test, Description("D8")]
+        public void ABoxForAColourNobodyHasCanOnlyBeFilledByATwoColourCat()
+        {
+            var withSwitch = TestLevel.FromRows("AB.").WithGoal("..C").WithColorSwitch(0, 1, Species.Yellow, 1).Start();
+            Assert.That(Rules.Solver.Solve(withSwitch).IsSolved, Is.True);
+            var plain = TestLevel.FromRows("AB.").WithGoal("..C").Start();
+            Assert.That(Rules.Solver.Solve(plain).Status, Is.EqualTo(SolveStatus.Unsolvable));
+        }
+
         [Test, Description("B4")]
         public void BoostersEndTheTurnSoVirusesStillGrow()
         {

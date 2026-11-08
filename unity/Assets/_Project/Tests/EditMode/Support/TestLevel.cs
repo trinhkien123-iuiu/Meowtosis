@@ -26,6 +26,18 @@ namespace Meowtosis.Tests
             return this;
         }
 
+        public TestLevel WithPortal(int row, int column, Direction direction, int targetRow, int targetColumn)
+        {
+            definition.Portals.Add(new Portal(row, column, direction, targetRow, targetColumn));
+            return this;
+        }
+
+        public TestLevel WithColorSwitch(int row, int column, Species otherColor, int period, int turnsLeft = 0)
+        {
+            definition.ColorSwitches.Add(new ColorSwitch(row, column, otherColor, period, turnsLeft == 0 ? period : turnsLeft));
+            return this;
+        }
+
         public Level Build() => new Level(definition);
 
         public Board Start() => Build().CreateStartBoard();

@@ -21,6 +21,8 @@ namespace Meowtosis.Presentation
         [SerializeField] private SpriteRenderer shadow;
         [SerializeField] private GameObject sleepMarks;
         [SerializeField] private GameObject sweatDrop;
+        [Tooltip("Nửa thân màu kế tiếp và chấm đếm lượt của mèo hai màu; tự ẩn với quân khác.")]
+        [SerializeField] private TwoToneCat twoToneCat;
         [Tooltip("Bề rộng ảnh mèo, tính bằng ô (prototype: 70/90).")]
         [SerializeField] private float catWidth = 0.778f;
         [Tooltip("Ảnh mèo cao hơn tâm ô một chút (prototype: 1/90 ô).")]
@@ -41,6 +43,10 @@ namespace Meowtosis.Presentation
 
         private BoardArt art;
         private Vector3 targetPosition;
+        private Vector3 slideStart;
+        private Vector3 slideTarget;
+        private float slideSeconds;
+        private float slideElapsed;
         private PieceMotion motion;
         private Vector2 motionDirection;
         private float motionDelay;
@@ -56,6 +62,9 @@ namespace Meowtosis.Presentation
         private Vector2 lean;
 
         public Transform Visual => visual;
+
+        // Tốc độ trượt về ô đích, tính bằng ô mỗi giây (để hiệu ứng đi theo biết trượt bao lâu).
+        public float SlideSpeed => slideSpeed;
 
         public Piece Piece { get; private set; }
 
@@ -81,9 +90,24 @@ namespace Meowtosis.Presentation
             if (piece.IsVirus) SetBody(art.VirusSprite(piece.Facing), placeholderWidth, 0f);
             else SetBody(art.CatSprite(piece.Species, isHappy), catWidth, catLift);
             sleepMarks.SetActive(piece.IsAsleep);
+            if (twoToneCat != null) twoToneCat.Show(piece, art, catWidth, catLift);
         }
 
-        public void MoveTo(Vector3 position) => targetPosition = position;
+        public void MoveTo(Vector3 position)
+        {
+            targetPosition = position;
+            if (position != slideTarget) slideElapsed = slideSeconds;   // đích đổi thì thôi lướt, về trượt thường
+        }
+
+        // Lướt tới `position` trong `seconds` giây: nhanh lúc đầu rồi chậm dần, để mắt kịp thấy chỗ dừng (dùng cho băng).
+        public void SlideTo(Vector3 position, float seconds)
+        {
+            slideStart = transform.localPosition;
+            slideTarget = position;
+            targetPosition = position;
+            slideSeconds = Mathf.Max(seconds, 0.01f);
+            slideElapsed = 0f;
+        }
 
         // Nghiêng người theo ngón tay đang kéo: `amount` từ 0 tới 1, (0, 0) là đứng thẳng.
         public void Lean(Vector2 amount) => leanTarget = amount;
@@ -168,7 +192,14 @@ namespace Meowtosis.Presentation
 
         private void Update()
         {
-            transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, slideSpeed * Time.deltaTime);
+            if (slideElapsed < slideSeconds)
+            {
+                slideElapsed = Mathf.Min(slideElapsed + Time.deltaTime, slideSeconds);
+                var progress = slideElapsed / slideSeconds;
+                var eased = 1f - (1f - progress) * (1f - progress) * (1f - progress);
+                transform.localPosition = Vector3.LerpUnclamped(slideStart, slideTarget, eased);
+            }
+            else transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, slideSpeed * Time.deltaTime);
             UpdateTimers();
             ApplyPose();
         }

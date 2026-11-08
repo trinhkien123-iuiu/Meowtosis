@@ -32,6 +32,12 @@ namespace Meowtosis.Presentation
         [SerializeField] private TMP_Text toastText;
         [SerializeField] private float toastSeconds = 2.4f;
 
+        [Header("Level có hướng dẫn")]
+        [Tooltip("Các phần HUD ẩn khi level có bước hướng dẫn: thanh trên, tim, nút, thanh sao, viên mục tiêu.")]
+        [SerializeField] private GameObject[] hiddenWhileGuided;
+        [Tooltip("Độ cao của bong bóng lời thoại (neo trên) khi level có hướng dẫn; bình thường thì giữ vị trí đặt trong scene.")]
+        [SerializeField] private float guidedTipY = -250f;
+
         [Header("Mèo")]
         [SerializeField] private BoardArt art;
         [SerializeField] private SpeciesChip speciesChipPrefab;
@@ -48,6 +54,8 @@ namespace Meowtosis.Presentation
         private readonly List<SpeciesChip> speciesChips = new List<SpeciesChip>();
         private readonly List<SpeciesChip> colorChoices = new List<SpeciesChip>();
         private float toastTimeLeft;
+        private float normalTipY;
+        private bool hasNormalTipY;
 
         public event Action SettingsClicked;
 
@@ -81,6 +89,22 @@ namespace Meowtosis.Presentation
             // Cỡ chữ, tự co, màu, viền chỉnh trên TipText trong scene Game.
             if (tipText != null) tipText.text = text;
             if (tipBubble != null) tipBubble.SetActive(!string.IsNullOrEmpty(text));
+        }
+
+        public void SetGuidedLayout(bool guided)
+        {
+            foreach (var part in hiddenWhileGuided)
+            {
+                if (part != null) part.SetActive(!guided);
+            }
+            if (tipBubble == null) return;
+            var bubble = (RectTransform)tipBubble.transform;
+            if (!hasNormalTipY)
+            {
+                normalTipY = bubble.anchoredPosition.y;
+                hasNormalTipY = true;
+            }
+            bubble.anchoredPosition = new Vector2(bubble.anchoredPosition.x, guided ? guidedTipY : normalTipY);
         }
 
         public void ShowSpecies(IReadOnlyList<SpeciesCount> counts)

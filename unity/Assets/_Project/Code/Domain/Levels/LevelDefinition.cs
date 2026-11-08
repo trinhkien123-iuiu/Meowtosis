@@ -22,6 +22,12 @@ namespace Meowtosis.Domain
 
         public List<Membrane> Membranes { get; } = new List<Membrane>();
 
+        // Các cặp cổng dịch chuyển nối hai phía của bàn.
+        public List<Portal> Portals { get; } = new List<Portal>();
+
+        // Các mèo hai màu lúc bắt đầu (màu hiện tại lấy từ Rows).
+        public List<ColorSwitch> ColorSwitches { get; } = new List<ColorSwitch>();
+
         public List<TutorialStep> Tutorial { get; } = new List<TutorialStep>();
 
         // Tên thẻ cơ chế riêng của level (thử thách mới không tự nhận ra được từ bàn chơi); rỗng nếu không có.

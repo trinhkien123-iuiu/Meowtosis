@@ -76,14 +76,30 @@ def cube(top_colors, front_colors, grain, seed, decorate=None):
     return image.resize((TOP, TOP + FRONT), Image.LANCZOS)
 
 
+# Vũng độc nằm trong mặt trên của khối độc: chiếm 76% x 72% mặt trên, lệch tâm một chút. Là một ảnh riêng để chuyển động trong game
+# mà khung khối bên ngoài đứng yên.
+POOL_WIDTH, POOL_HEIGHT = round(0.76 * TOP), round(0.72 * TOP)
+
+
 def goo(top):
-    rnd = random.Random(3)
-    draw = ImageDraw.Draw(top)
-    for _ in range(9):
-        cx, cy = rnd.uniform(0.15, 0.85) * top.width, rnd.uniform(0.15, 0.85) * top.height
-        rr = rnd.uniform(0.04, 0.09) * top.width
-        draw.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), fill=(170, 230, 110, 170), outline=(90, 150, 50, 200), width=2 * SCALE)
-        draw.ellipse((cx - rr * 0.45, cy - rr * 0.6, cx - rr * 0.1, cy - rr * 0.25), fill=(235, 255, 210, 200))
+    # Khung khối chỉ còn mặt trên phẳng; vũng độc là lớp riêng (ToxicPool.png).
+    return
+
+
+def pool():
+    # Vũng độc lõm: bờ sáng ở trên, lòng đậm dần xuống dưới, vài vệt sáng ướt.
+    w, h = POOL_WIDTH * SCALE, POOL_HEIGHT * SCALE
+    img = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+    mask = Image.new('L', (w, h), 0)
+    radius = round(0.22 * TOP * SCALE)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, w - 1, h - 1), radius=radius, fill=255)
+    img.paste(vertical_gradient((w, h), (112, 176, 62), (62, 118, 40)), (0, 0), mask)
+    draw = ImageDraw.Draw(img)
+    draw.rounded_rectangle((0, 0, w - 1, h - 1), radius=radius, outline=(74, 128, 44, 255), width=4 * SCALE)
+    draw.arc((0, 0, w - 1, h - 1), 200, 330, fill=(206, 240, 150, 220), width=3 * SCALE)
+    draw.ellipse((0.14 * w, 0.14 * h, 0.35 * w, 0.20 * h), fill=(225, 252, 190, 190))
+    draw.ellipse((0.66 * w, 0.72 * h, 0.80 * w, 0.76 * h), fill=(200, 238, 150, 150))
+    return img.resize((POOL_WIDTH, POOL_HEIGHT), Image.LANCZOS)
 
 
 def frost(top):
@@ -99,6 +115,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     cube(((236, 186, 124), (214, 152, 92)), ((196, 132, 78), (170, 108, 60)), (150, 95, 50, 70), 11).save(OUT / 'WoodCube.png')
     cube(((150, 205, 92), (104, 168, 62)), ((92, 148, 56), (74, 122, 44)), None, 0, goo).save(OUT / 'ToxicCube.png')
+    pool().save(OUT / 'ToxicPool.png')
     cube(((214, 241, 255), (150, 206, 240)), ((150, 196, 228), (124, 172, 210)), None, 0, frost).save(OUT / 'IceCube.png')
     t = TOP * SCALE
     mask = Image.new('RGBA', (t, t), (0, 0, 0, 0))

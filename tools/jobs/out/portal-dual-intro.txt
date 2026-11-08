@@ -1,0 +1,40 @@
+== hai màu nhập môn 4x2 (4 ứng viên) · bị loại: {"hai màu trang trí":5,"không đổi màu":1}
+  {"rows":["AA..","B##."],"dual":[[0,1,"B",2,2]]} par=5 ms=0 mèo=3 ô=6 đầu=3/1/1 cụt=0.00 thừa=2 khó=7.17 bấtngờ=5.33 [replace2 flip2]
+  {"rows":["..#B","#A.A"],"dual":[[1,3,"B",2,2]]} par=3 ms=1 mèo=3 ô=6 đầu=4/2/1 cụt=0.00 thừa=0 khó=5.42 bấtngờ=3 [flip1]
+  {"rows":["BAA.","..#."],"dual":[[0,0,"A",2,2]]} par=4 ms=0 mèo=3 ô=7 đầu=5/3/3 cụt=0.00 thừa=0 khó=5.98 bấtngờ=2 [push1 longPush1 flip2]
+  {"rows":[".BA.","A.##"],"dual":[[0,2,"B",2,2]]} par=3 ms=0 mèo=3 ô=6 đầu=7/7/6 cụt=0.00 thừa=0 khó=4.43 bấtngờ=0.29 [push1 longPush1 flip1]
+== hai màu nhập môn 3x3 (10 ứng viên) · bị loại: {"quá ngắn":4018,"hai màu trang trí":16,"hai màu không chắc":251,"quá dài":1,"không đổi màu":1,"không giải được":740}
+  {"rows":["A.#","#A#",".BB"],"dual":[[1,1,"B",2,2]]} par=3 ms=0 mèo=4 ô=6 đầu=4/3/2 cụt=0.08 thừa=1 khó=5.75 bấtngờ=3.25 [push1 replace1 flip1]
+  {"rows":["BA.","##B","..A"],"dual":[[1,2,"A",2,2]]} par=4 ms=2 mèo=4 ô=7 đầu=7/7/1 cụt=0.21 thừa=1 khó=7.71 bấtngờ=3.21 [push1 replace1 flip2]
+  {"rows":["BAB","..#","#A."],"dual":[[0,1,"B",2,2]]} par=4 ms=1 mèo=4 ô=7 đầu=6/4/4 cụt=0.00 thừa=1 khó=5.77 bấtngờ=3.17 [replace1 flip2]
+  {"rows":["BA#","B..","A##"],"dual":[[2,0,"B",2,2]]} par=3 ms=0 mèo=4 ô=6 đầu=6/5/3 cụt=0.00 thừa=1 khó=5.5 bấtngờ=3 [replace1 flip1]
+  {"rows":["A..","B##","BA#"],"dual":[[0,0,"B",2,2]]} par=3 ms=0 mèo=4 ô=6 đầu=5/4/3 cụt=0.39 thừa=1 khó=6.58 bấtngờ=2.9 [replace1 flip1]
+  {"rows":["#.#","A.A","BB#"],"dual":[[1,2,"B",2,2]]} par=3 ms=0 mèo=4 ô=6 đầu=4/3/3 cụt=0.00 thừa=1 khó=4.98 bấtngờ=2.75 [push1 replace1 flip1]
+  {"rows":["#.#","BBA",".#A"],"dual":[[1,2,"B",2,2]]} par=3 ms=0 mèo=4 ô=6 đầu=4/3/3 cụt=0.00 thừa=1 khó=3.78 bấtngờ=2.75 [replace1 flip1]
+  {"rows":[".B.",".BA","#.A"],"dual":[[1,1,"A",2,2]]} par=4 ms=3 mèo=4 ô=8 đầu=8/6/1 cụt=? thừa=0 khó=7.09 bấtngờ=2.5 [push2 flip2]
+== hai màu nhập môn 5x2 (25 ứng viên) · bị loại: {"hai màu trang trí":3070,"hai màu không chắc":212,"quá ngắn":2258,"quá dài":2,"không giải được":2}
+  {"rows":["..###","#AABB"],"dual":[[1,3,"A",2,2]]} par=3 ms=0 mèo=4 ô=6 đầu=3/1/1 cụt=0.00 thừa=1 khó=5.99 bấtngờ=4.83 [replace1 flip1]
+  {"rows":[".ABB#","##A.."],"dual":[[0,1,"B",2,2]]} par=4 ms=1 mèo=4 ô=7 đầu=6/5/2 cụt=0.03 thừa=1 khó=6.66 bấtngờ=3.33 [push1 longPush1 replace1 flip2]
+  {"rows":["##..B","..AAB"],"dual":[[0,4,"A",2,2]]} par=5 ms=3 mèo=4 ô=8 đầu=6/4/4 cụt=? thừa=1 khó=6.67 bấtngờ=3.17 [push2 longPush2 replace1 flip2]
+  {"rows":["#.###","ABBA."],"dual":[[1,3,"B",2,2]]} par=3 ms=0 mèo=4 ô=6 đầu=6/4/4 cụt=0.09 thừa=1 khó=5.55 bấtngờ=3.17 [push1 longPush1 replace1 flip1]
+  {"rows":["..#BB",".A.A#"],"dual":[[0,3,"A",2,2]]} par=5 ms=0 mèo=4 ô=8 đầu=5/4/3 cụt=? thừa=1 khó=6.38 bấtngờ=2.9 [replace1 flip2]
+  {"rows":["B####","AAB.."],"dual":[[1,2,"A",2,2]]} par=3 ms=0 mèo=4 ô=6 đầu=5/4/3 cụt=0.10 thừa=1 khó=5.61 bấtngờ=2.9 [replace1 flip1]
+  {"rows":["ABB##",".#.A."],"dual":[[0,0,"B",2,2]]} par=4 ms=0 mèo=4 ô=7 đầu=6/5/4 cụt=0.19 thừa=1 khó=6.5 bấtngờ=2.67 [replace1 flip2]
+  {"rows":["B.B.A","##A#."],"dual":[[0,4,"B",2,2]]} par=3 ms=0 mèo=4 ô=7 đầu=6/5/2 cụt=0.18 thừa=0 khó=6.49 bấtngờ=1.83 [push1 longPush1 flip1]
+== cổng vừa 5x3 (1 ứng viên) · bị loại: {"cổng trang trí":93,"không qua cổng":30,"quá dài":4,"cổng không chắc":4,"cổng trùng ô":12,"quá giới hạn giải":4}
+  {"rows":["A..B.","BA##.",".#..C"],"portal":[[0,3,"down",2,3]]} par=8 ms=76 mèo=5 ô=12 đầu=11/11/6 cụt=? thừa=1 khó=8.71 bấtngờ=2.41 [push3 replace1 portal2]
+== cổng vừa 4x4 b (0 ứng viên) · bị loại: {"cổng trang trí":102,"không qua cổng":47,"quá giới hạn giải":4,"cổng trùng ô":8,"cổng không chắc":6,"quá dài":5}
+== cổng + băng (0 ứng viên) · bị loại: {"không qua cổng":30,"quá dài":433,"băng không đổi gì":40,"quá giới hạn giải":13,"cổng trùng ô":19,"băng trang trí":11,"không trượt":2,"không giải được":2}
+== cổng + hai màu nhỏ (2 ứng viên) · bị loại: {"cổng trang trí":282,"không qua cổng":193,"quá ngắn":126,"cổng không chắc":8,"cổng trùng ô":26,"hai màu trang trí":3}
+  {"rows":["B#AA",".#.C","B..#"],"portal":[[2,1,"up",2,0]],"dual":[[0,3,"C",2,2]]} par=6 ms=16 mèo=5 ô=9 đầu=6/4/1 cụt=? thừa=2 khó=8.27 bấtngờ=4.67 [push2 replace2 portal1 flip3]
+  {"rows":["ABBA","C#..",".##."],"portal":[[1,3,"right",2,3]],"dual":[[0,0,"B",2,2]]} par=5 ms=1 mèo=5 ô=9 đầu=9/7/5 cụt=? thừa=1 khó=6.87 bấtngờ=3.06 [push2 replace1 portal1 flip2]
+== hai màu trùm 5x4 (30 ứng viên) · bị loại: {"quá dài":23,"hai màu trang trí":7,"quá giới hạn giải":4}
+  {"rows":["C.ACA","B.#B.","..#B.","....."],"dual":[[0,3,"A",2,1],[0,4,"B",2,2]]} par=11 ms=51 mèo=7 ô=18 đầu=14/2/1 cụt=? thừa=0 khó=11.46 bấtngờ=4.43 [push4 longPush3 flip11]
+  {"rows":["#CAC.","..B..","#B#..","BA..."],"dual":[[2,1,"A",2,2],[0,2,"C",2,1]]} par=10 ms=58 mèo=7 ô=17 đầu=14/5/1 cụt=? thừa=0 khó=10.86 bấtngờ=3.79 [push5 longPush4 flip10]
+  {"rows":["B....","...B#",".#.AC","BC.A."],"dual":[[2,3,"C",2,1],[3,3,"B",2,1]]} par=11 ms=2 mèo=7 ô=18 đầu=17/6/5 cụt=? thừa=0 khó=11.01 bấtngờ=3.35 [push3 longPush2 flip12]
+  {"rows":[".A.B.","..##.","C.CB.","B..A."],"dual":[[2,2,"B",2,2],[3,3,"B",2,2]]} par=11 ms=6 mèo=7 ô=18 đầu=18/15/12 cụt=? thừa=0 khó=10.27 bấtngờ=1.17 [push1 flip10]
+  {"rows":["...BB","..C#A","..#..","B.CA."],"dual":[[3,0,"A",2,1],[0,3,"A",2,2]]} par=11 ms=3 mèo=7 ô=18 đầu=13/10/10 cụt=? thừa=0 khó=10.06 bấtngờ=1.15 [push3 longPush1 flip11]
+  {"rows":["B.BC#","B....","..#A.","..A.C"],"dual":[[3,2,"C",2,1],[0,2,"C",2,1]]} par=11 ms=4 mèo=7 ô=18 đầu=13/12/8 cụt=? thừa=0 khó=10.37 bấtngờ=1 [push4 longPush1 flip12]
+  {"rows":["B...#","#.#..","A.CBC","..AB."],"dual":[[0,0,"C",2,1],[2,2,"B",2,2]]} par=10 ms=182 mèo=7 ô=17 đầu=17/16/11 cụt=? thừa=0 khó=9.71 bấtngờ=0.88 [push6 longPush2 flip10]
+  {"rows":["B..CC","#B...","....B","A.#.A"],"dual":[[0,4,"B",2,2],[2,4,"A",2,1]]} par=11 ms=7 mèo=7 ô=18 đầu=13/12/9 cụt=? thừa=0 khó=10.22 bấtngờ=0.85 [push3 longPush1 flip11]
+== cổng trùm 5x4 (0 ứng viên) · bị loại: {"cổng trang trí":67,"quá dài":45,"cổng không chắc":4,"cổng trùng ô":9,"không qua cổng":5,"quá giới hạn giải":6}

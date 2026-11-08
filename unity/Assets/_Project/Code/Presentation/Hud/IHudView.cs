@@ -35,6 +35,10 @@ namespace Meowtosis.Presentation
         // Bong bóng lời thoại: mẹo, hướng dẫn, gợi ý; chuỗi rỗng thì ẩn.
         void ShowTip(string text);
 
+        // Bố trí của level có bước hướng dẫn (như màn hướng dẫn đầu game): ẩn thanh trên và thanh sao,
+        // đưa bong bóng lời thoại lên sát đỉnh để không đè lên bàn chơi.
+        void SetGuidedLayout(bool guided);
+
         void ShowSpecies(IReadOnlyList<SpeciesCount> counts);
 
         void ShowBooster(BoosterKind kind, int count, bool selected);

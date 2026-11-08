@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,26 +14,29 @@ namespace Meowtosis.Presentation
 
         event Action MusicToggled;
 
-        event Action RestartClicked;
-
         void Show(bool soundOn, bool musicOn);
 
         void Hide();
     }
 
-    // Popup cài đặt: bật/tắt âm thanh và nhạc, chơi lại màn, về Home. Các nút để test nằm ở bảng cheat (CheatPopup).
+    // Popup cài đặt: ba nút tròn bật/tắt âm thanh, bật/tắt nhạc và về Home, dùng cùng bộ hình (Bounce) với trang Setting ở Home.
+    // Chơi lại màn có nút riêng trên thanh trên; các nút để test nằm ở bảng cheat (CheatPopup).
     public sealed class SettingsPopup : PopupView, ISettingsPopup
     {
         [SerializeField] private Button soundButton;
+        [SerializeField] private Image soundBackground;
         [SerializeField] private Image soundIcon;
         [SerializeField] private Sprite soundOnSprite;
         [SerializeField] private Sprite soundOffSprite;
         [SerializeField] private Button musicButton;
+        [SerializeField] private Image musicBackground;
         [SerializeField] private Image musicIcon;
-        [SerializeField] private Color offColor = new Color(1f, 1f, 1f, 0.35f);
-        [SerializeField] private Button restartButton;
-        [SerializeField] private Button closeButton;
+        [SerializeField] private Sprite musicOnSprite;
+        [SerializeField] private Sprite musicOffSprite;
+        [SerializeField] private Sprite toggleOnSprite;
+        [SerializeField] private Sprite toggleOffSprite;
         [SerializeField] private Button homeButton;
+        [SerializeField] private Button closeButton;
 
         public event Action HomeClicked;
 
@@ -42,12 +44,12 @@ namespace Meowtosis.Presentation
 
         public event Action MusicToggled;
 
-        public event Action RestartClicked;
-
         public void Show(bool soundOn, bool musicOn)
         {
             soundIcon.sprite = soundOn ? soundOnSprite : soundOffSprite;
-            musicIcon.color = musicOn ? Color.white : offColor;
+            soundBackground.sprite = soundOn ? toggleOnSprite : toggleOffSprite;
+            musicIcon.sprite = musicOn ? musicOnSprite : musicOffSprite;
+            musicBackground.sprite = musicOn ? toggleOnSprite : toggleOffSprite;
             if (!IsOpen) Open();
         }
 
@@ -55,7 +57,6 @@ namespace Meowtosis.Presentation
         {
             soundButton.onClick.AddListener(() => SoundToggled?.Invoke());
             musicButton.onClick.AddListener(() => MusicToggled?.Invoke());
-            restartButton.onClick.AddListener(() => RestartClicked?.Invoke());
             closeButton.onClick.AddListener(Hide);
             homeButton.onClick.AddListener(() => HomeClicked?.Invoke());
         }

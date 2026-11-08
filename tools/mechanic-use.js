@@ -9,6 +9,11 @@
 //   ngủ   : có nước đánh thức mèo ngủ
 //   màng  : có nước đưa quân đi xuyên màng (bản sao hoặc dãy bị đẩy, theo chiều mũi tên)
 //   hộp   : (điều kiện thắng, không cấm được) bỏ hộp đi thì lời giải ngắn nhất không còn đúng hộp
+//   cổng  : (không cấm được) bỏ hẳn cổng đi thì bàn không còn thắng được
+//   hai màu: (không cấm được) bỏ tính hai màu (mèo giữ mãi màu hiện tại) thì bàn không còn thắng được
+// Hai cơ chế này dùng phép thử mạnh hơn: người chơi coi cổng như tường, coi mèo hai màu như mèo thường mà vẫn thắng thì
+// cơ chế chỉ là trang trí. Có chứng minh nhanh bằng cấu trúc (vùng bàn tách rời không có mèo; hộp đòi màu không ai có)
+// rồi mới tới tìm kiếm vét cạn.
 //   virus : còn virus thì chưa thắng, nên luôn bắt buộc
 const { loadLogic, asDef } = require('./lib');
 
@@ -20,7 +25,11 @@ const has = {
   'ngủ': lv => lv.init.some(c => c && c.sleep),
   'màng': lv => lv.oneway.length > 0,
   'hộp': lv => lv.hasTarget,
+  'cổng': lv => lv.portals.length > 0,
+  'hai màu': lv => lv.init.some(c => c && c.alt),
 };
+
+const OPPOSITE = { up: 'down', down: 'up', left: 'right', right: 'left' };
 
 // Nước `res` (vuốt `from` theo `dir` từ bàn `before`) có dùng cơ chế `name` không.
 function uses(ctx, lv, name, before, from, dir, res) {
@@ -81,12 +90,55 @@ function boxesMatter(ctx, def) {
   return ctx.isWon(lv, c) ? 'trang trí' : 'bắt buộc';
 }
 
+// Các vùng liền nhau của bàn (theo ô kề thật, không tính cổng).
+function regions(lv) {
+  const seen = new Set(), out = [];
+  for (let i = 0; i < lv.slot.length; i++) {
+    if (!lv.slot[i] || seen.has(i)) continue;
+    const region = [i];
+    seen.add(i);
+    for (let k = 0; k < region.length; k++) {
+      const r = Math.floor(region[k] / lv.w), c = region[k] % lv.w;
+      for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const rr = r + dr, cc = c + dc, j = rr * lv.w + cc;
+        if (rr >= 0 && cc >= 0 && rr < lv.h && cc < lv.w && lv.slot[j] && !seen.has(j)) { seen.add(j); region.push(j); }
+      }
+    }
+    out.push(region);
+  }
+  return out;
+}
+
+// Bỏ cơ chế đi (bàn `plain`) mà vẫn thắng được thì cơ chế chỉ là trang trí.
+function plainResult(ctx, plain) {
+  const path = ctx.solve(plain, plain.init, MAX_NODES, MAX_MS);
+  if (path) return 'trang trí';
+  return ctx.solve.cut ? 'không chắc' : 'bắt buộc';
+}
+
+// Cổng bắt buộc khi bỏ cổng thì không thắng được: chứng minh nhanh nếu có vùng bàn cần lấp mà lúc đầu không có quân nào.
+function portalMatters(ctx, def) {
+  const plain = ctx.parseLevel({ ...def, portal: undefined });
+  const emptyRegion = regions(plain).some(region => region.some(i => !plain.toxic[i]) && region.every(i => !plain.init[i]));
+  return emptyRegion ? 'bắt buộc' : plainResult(ctx, plain);
+}
+
+// Mèo hai màu bắt buộc khi bỏ tính hai màu thì không thắng được: chứng minh nhanh nếu có hộp đòi một màu không con nào có.
+function dualMatters(ctx, def) {
+  const plain = ctx.parseLevel({ ...def, dual: undefined });
+  const have = new Set(plain.init.filter(c => c && c.color !== 'V').map(c => c.color));
+  if (plain.target.some(t => t && !have.has(t))) return 'bắt buộc';
+  return plainResult(ctx, plain);
+}
+
 // Kết quả từng cơ chế có trong level: 'bắt buộc' | 'trang trí' | 'không chắc'.
 function check(ctx, raw) {
   const def = asDef(raw), lv = ctx.parseLevel(def), out = {};
   for (const name of Object.keys(has)) {
     if (!has[name](lv)) continue;
     if (name === 'hộp') { out[name] = boxesMatter(ctx, def); continue; }
+    if (name === 'hai màu') { out[name] = dualMatters(ctx, def); continue; }
+    if (name === 'cổng') { out[name] = portalMatters(ctx, def); continue; }
     const r = winsWithout(ctx, lv, (before, from, dir, res) => uses(ctx, lv, name, before, from, dir, res));
     out[name] = r === 'thắng' ? 'trang trí' : r === 'không thắng' ? 'bắt buộc' : 'không chắc';
   }
@@ -108,4 +160,4 @@ if (require.main === module) {
   console.log(`\n${bad} level có cơ chế chỉ là trang trí, ${unsure} level chưa chắc (hết giới hạn tìm)`);
 }
 
-module.exports = { check, uses, winsWithout };
+module.exports = { check, uses, winsWithout, regions };

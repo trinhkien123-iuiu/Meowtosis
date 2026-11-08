@@ -18,12 +18,16 @@ namespace Meowtosis.Presentation
             [SerializeField] private Sprite image;
             [Tooltip("Hiện lớp hoạ tiết chân mèo phủ trên nền.")]
             [SerializeField] private bool showPattern = true;
+            [Tooltip("Màu nhân lên ảnh nền; tối hơn thì ô gỗ nổi rõ hơn khỏi nền.")]
+            [SerializeField] private Color tint = Color.white;
 
             public string DisplayName => displayName;
 
             public Sprite Image => image;
 
             public bool ShowPattern => showPattern;
+
+            public Color Tint => tint;
         }
 
         [SerializeField] private SpriteRenderer background;
@@ -56,6 +60,7 @@ namespace Meowtosis.Presentation
             if (looks.Length == 0) return;
             var look = looks[index];
             background.sprite = look.Image;
+            background.color = look.Tint;
             pattern.enabled = look.ShowPattern;
             framing.Refit();
             if (switchLabel != null) switchLabel.text = GameTexts.BackgroundButton(look.DisplayName);

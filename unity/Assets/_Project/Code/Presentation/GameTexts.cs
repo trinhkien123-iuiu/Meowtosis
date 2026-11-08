@@ -92,6 +92,8 @@ namespace Meowtosis.Presentation
 
         public static string Refunded(BoosterKind kind) => $"Đã trả lại booster {BoosterName(kind)}";
 
+        // Chữ nổi khi mèo hai màu đổi màu.
+
         public static string ColorName(Species species) => species switch
         {
             Species.Red => "đỏ",

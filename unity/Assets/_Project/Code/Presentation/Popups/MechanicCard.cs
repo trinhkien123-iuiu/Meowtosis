@@ -20,6 +20,10 @@ namespace Meowtosis.Presentation
         [SerializeField] private string[] demoGoal = Array.Empty<string>();
         [Tooltip("Mỗi dòng \"hàng cột hướng\", ví dụ \"0 2 left\".")]
         [SerializeField] private string[] demoMembranes = Array.Empty<string>();
+        [Tooltip("Mỗi dòng \"hàng cột hướng hàng-kia cột-kia\", ví dụ \"0 0 left 0 2\".")]
+        [SerializeField] private string[] demoPortals = Array.Empty<string>();
+        [Tooltip("Mỗi dòng \"hàng cột màu-kia chu-kỳ lượt-còn-lại\", ví dụ \"0 2 A 1 1\" (màu: A đỏ, B xanh, C vàng, D hồng, E tím).")]
+        [SerializeField] private string[] demoColorSwitches = Array.Empty<string>();
         [Tooltip("Nước vuốt \"hàng cột hướng\", ví dụ \"0 0 right\".")]
         [SerializeField] private string demoMove = "0 0 right";
 
@@ -41,6 +45,8 @@ namespace Meowtosis.Presentation
                 var position = Move.Parse(text);
                 definition.Membranes.Add(new Membrane(position.Row, position.Column, position.Direction));
             }
+            foreach (var text in demoPortals) definition.Portals.Add(LevelCatalogParser.ParsePortal(text));
+            foreach (var text in demoColorSwitches) definition.ColorSwitches.Add(LevelCatalogParser.ParseColorSwitch(text));
             return definition;
         }
     }

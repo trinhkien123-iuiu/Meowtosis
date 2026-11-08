@@ -7,7 +7,8 @@ const ctx = loadLogic();
 
 const DIR = { r: 'right', l: 'left', u: 'up', d: 'down' };
 // Bàn dạng chữ như trong tài liệu (khoá của game theo từng hàng)
-const rows = (lv, cells) => { const k = ctx.keyOf(cells); return Array.from({ length: lv.h }, (_, r) => k.slice(r * lv.w, r * lv.w + lv.w)); };
+const show = c => (c && c.alt ? c.color : ctx.cellKey(c));
+const rows = (lv, cells) => { const k = cells.map(show).join(''); return Array.from({ length: lv.h }, (_, r) => k.slice(r * lv.w, r * lv.w + lv.w)); };
 // Chơi lần lượt các nước [hàng, cột, 'r'|'l'|'u'|'d']; trả kết quả của từng nước để kiểm tra
 function play(def, moves) {
   const lv = ctx.parseLevel(def);
@@ -167,6 +168,54 @@ ex('B3', 'Cấy ghép: bản sao mọc ở ô trống bất kỳ, không đẩy 
 ex('B4', 'sau booster vẫn kết thúc lượt như thường: virus vẫn lan', () => {
   const lv = ctx.parseLevel({ rows: ['A..', '>..'] });
   assert.strictEqual(viruses(ctx.transplant(lv, lv.init, 0, 2).cells), 2);
+});
+
+// --- Cổng dịch chuyển ---
+const GATE = [[0, 0, 'left', 0, 2]];
+ex('P1', 'bản sao đi qua cổng, hiện ở ô bên kia', () => assert.deepStrictEqual(play({ rows: ['A..'], portal: GATE }, [[0, 0, 'l']]).rows, ['A.A']));
+ex('P2', 'ô bên kia cổng có mèo thì bị đẩy đi tiếp', () => assert.deepStrictEqual(play({ rows: ['A.B'], portal: GATE }, [[0, 0, 'l']]).rows, ['ABA']));
+ex('P3', 'đi ngược lại từ phía kia cũng vào được cổng', () => assert.deepStrictEqual(play({ rows: ['..A'], portal: GATE }, [[0, 2, 'r']]).rows, ['A.A']));
+ex('P4', 'cổng nối hai hàng khác nhau', () => assert.deepStrictEqual(play({ rows: ['A.', '.B'], portal: [[0, 0, 'left', 1, 1]] }, [[0, 0, 'l']]).rows, ['A.', 'BA']));
+ex('P5', 'virus lan qua cổng và ăn mèo ở bên kia', () => assert.deepStrictEqual(play({ rows: ['<A.'], portal: GATE }, [[0, 1, 'r']]).rows, ['<A<']));
+ex('P6', 'vòng kín không còn ô trống: bản sao thay thế', () => {
+  const g = play({ rows: ['AB'], portal: [[0, 1, 'right', 0, 0]] }, [[0, 0, 'r']]);
+  assert.deepStrictEqual(g.rows, ['AA']); assert(g.last.replaced && g.lost);
+});
+ex('P7', 'cạnh có cổng phải nhìn ra ngoài bàn', () => assert.throws(() => ctx.parseLevel({ rows: ['A.'], portal: [[0, 0, 'right', 0, 1]] })));
+
+// --- Mèo hai màu ---
+const dualAt = (g, r, c) => g.cells[r * g.lv.w + c];
+ex('D1', 'bị đẩy vẫn giữ lượt đếm, đếm lùi 1', () => {
+  const g = play({ rows: ['AB.'], dual: [[0, 1, 'A', 2]] }, [[0, 0, 'r']]);
+  assert.deepStrictEqual(g.rows, ['AAB']); assert.strictEqual(dualAt(g, 0, 2).left, 1);
+});
+ex('D2', 'đổi màu đúng lúc tạo bộ ba thì bộ ba bị khử', () => {
+  const g = play({ rows: ['A.B', 'B.A'], dual: [[0, 2, 'A', 1]] }, [[0, 0, 'r']]);
+  assert.deepStrictEqual(g.rows, ['...', 'B.A']); assert(!g.lost);
+});
+ex('D3', 'đếm lùi hai nước rồi mới đổi màu', () => {
+  const def = { rows: ['A.B', '...'], dual: [[0, 2, 'A', 2]] };
+  const one = play(def, [[0, 0, 'd']]);
+  assert.deepStrictEqual(one.rows, ['A.B', 'A..']); assert.strictEqual(dualAt(one, 0, 2).left, 1);
+  const two = play(def, [[0, 0, 'd'], [0, 0, 'r']]);
+  assert.deepStrictEqual(two.rows, ['...', 'A..']);
+});
+ex('D4', 'bản sao của mèo hai màu là mèo thường', () => {
+  const g = play({ rows: ['B.A'], dual: [[0, 0, 'A', 3]] }, [[0, 0, 'r']]);
+  assert.deepStrictEqual(g.rows, ['BBA']); assert(!dualAt(g, 0, 1).alt); assert.strictEqual(dualAt(g, 0, 0).left, 2);
+});
+ex('D5', 'đổi màu làm một màu tuyệt chủng là thua', () => assert(play({ rows: ['A.', 'B.'], dual: [[1, 0, 'A', 1]] }, [[0, 0, 'r']]).lost));
+ex('D6', 'Đột biến không dùng được trên mèo hai màu', () => {
+  const lv = ctx.parseLevel({ rows: ['AB.'], dual: [[0, 1, 'A', 2]] });
+  assert.strictEqual(ctx.mutate(lv, lv.init, 1, 'A'), null);
+});
+ex('D7', 'màu kia không được trùng màu hiện tại', () => assert.throws(() => ctx.parseLevel({ rows: ['AB.'], dual: [[0, 1, 'B', 2]] })));
+ex('D8', 'màu kia có thể là màu chưa có trên bàn: hộp đòi màu đó chỉ đạt được nhờ mèo hai màu', () => {
+  const def = { rows: ['AB.'], goal: ['..C'], dual: [[0, 1, 'C', 1]] };
+  const lv = ctx.parseLevel(def);
+  assert(ctx.solve(lv, lv.init, 5000, 2000));
+  const plain = ctx.parseLevel({ rows: ['AB.'], goal: ['..C'] });
+  assert.strictEqual(ctx.solve(plain, plain.init, 20000, 2000), null);
 });
 
 let failed = 0;

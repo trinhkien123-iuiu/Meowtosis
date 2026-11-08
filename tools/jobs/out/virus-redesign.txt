@@ -1,0 +1,52 @@
+== v43 thanh/dải 2 virus đối đầu (1 ứng viên) · bị loại: {"độc trang trí":2}
+  {"rows":["<>~A","B.#A"]} par=3 ms=1 mèo=3 ô=6 đầu=3/3/2 cụt=0.00 thừa=0 khó=2.47 bấtngờ=3.67 [replace2 toxic1 spread1 virusDie3]
+== v45 3x3 2 virus vuông góc (4 ứng viên) · bị loại: {"quá ngắn":15,"thiếu virus":3,"không giải được":22}
+  {"rows":["B<.",".AA","B#^"]} par=7 ms=3 mèo=4 ô=8 đầu=6/1/1 cụt=? thừa=3 khó=8.87 bấtngờ=8.67 [replace5 spread1 eaten1 virusDie3]
+  {"rows":[".B<","##^","ABA"]} par=5 ms=0 mèo=4 ô=7 đầu=6/1/1 cụt=0.93 thừa=2 khó=10.46 bấtngờ=8.17 [replace4 spread1 eaten1 virusDie3]
+  {"rows":["B<#","A^A","B#."]} par=5 ms=1 mèo=4 ô=7 đầu=6/3/1 cụt=0.00 thừa=2 khó=7.65 bấtngờ=7.17 [replace4 spread1 eaten1 virusDie3]
+  {"rows":["..A","^#B","<BA"]} par=5 ms=2 mèo=4 ô=8 đầu=6/2/2 cụt=0.69 thừa=1 khó=9.41 bấtngờ=5.83 [replace4 spread1 virusDie3]
+== v47 5x5 ngủ + 2 virus (4 ứng viên) · bị loại: {"quá giới hạn giải":114,"quá dài":16,"thiếu virus":6,"ngủ trang trí":4,"ngủ không chắc":1}
+  {"rows":["ba#A#","#.B.C","#.A<B",".....","#.AC^"]} par=12 ms=26 mèo=9 ô=20 đầu=18/14/1 cụt=? thừa=1 khó=12.09 bấtngờ=6.06 [push3 longPush2 replace4 spread2 eaten1 virusDie4]
+  {"rows":[".#bC.","^.A#<",".B#a.",".AA.C","#B..."]} par=12 ms=155 mèo=9 ô=21 đầu=14/4/4 cụt=? thừa=0 khó=11.63 bấtngờ=5.57 [push2 longPush2 replace3 wake1 wakeUse1 spread1 virusDie3]
+  {"rows":[".a.C.","C.A#b",".<###","BA..A","#B.^."]} par=11 ms=10 mèo=9 ô=20 đầu=15/8/6 cụt=? thừa=0 khó=10.8 bấtngờ=4.6 [push1 longPush1 replace4 wake1 spread2 virusDie4]
+  {"rows":["a..BC",".##.#",".C..A","B#^#A","<..Ab"]} par=11 ms=21 mèo=9 ô=20 đầu=10/10/5 cụt=? thừa=0 khó=10.6 bấtngờ=3 [push1 longPush1 replace3 spread1 virusDie3]
+== v48 4x5 bất ngờ 2 virus (11 ứng viên) · bị loại: {"quá giới hạn giải":54,"nước đầu dễ đoán":4,"quá dài":19,"thiếu virus":4}
+  {"rows":["Bv..",".D.#","..D.","^#C.","CB#."]} par=12 ms=15 mèo=6 ô=17 đầu=13/2/1 cụt=? thừa=1 khó=12.05 bấtngờ=7.88 [push3 replace5 spread3 eaten1 virusDie5]
+  {"rows":["B...","...B","D..v","CD^C","###."]} par=12 ms=56 mèo=6 ô=17 đầu=14/6/1 cụt=? thừa=1 khó=12.06 bấtngờ=7.07 [push4 longPush1 replace4 spread2 eaten1 virusDie4]
+  {"rows":["v.DC","....",".B#B",".C.D","##.^"]} par=11 ms=5 mèo=6 ô=17 đầu=16/1/1 cụt=? thừa=0 khó=11.47 bấtngờ=6.69 [push1 replace5 spread3 virusDie5]
+  {"rows":["B..B","DDv.","^..C","C#..",".#.."]} par=12 ms=15 mèo=6 ô=18 đầu=14/2/1 cụt=? thừa=0 khó=12.06 bấtngờ=6.43 [push4 longPush2 replace5 spread3 virusDie5]
+  {"rows":["..Cv",".B##","D...",".^.#","BDC."]} par=12 ms=288 mèo=6 ô=17 đầu=15/8/4 cụt=? thừa=1 khó=11.67 bấtngờ=6.37 [push4 longPush1 replace4 spread2 eaten1 virusDie4]
+  {"rows":["#.vD","..#.","B#DB",".C^.","C..."]} par=12 ms=172 mèo=6 ô=17 đầu=12/9/2 cụt=? thừa=1 khó=11.87 bấtngờ=5.92 [push3 longPush2 replace3 spread1 eaten1 virusDie3]
+  {"rows":["#vD.","...C","..^.","D..B","CB##"]} par=12 ms=6 mèo=6 ô=17 đầu=14/14/1 cụt=? thừa=1 khó=12.06 bấtngờ=5.36 [push2 replace4 spread2 eaten1 virusDie4]
+  {"rows":["....","^C.#","C.##",".BDv","..DB"]} par=11 ms=25 mèo=6 ô=17 đầu=16/11/1 cụt=? thừa=0 khó=11.47 bấtngờ=4.81 [push4 longPush1 replace3 spread1 virusDie3]
+== v60 4x4 ôn virus đối đầu (36 ứng viên) · bị loại: {"quá dài":26,"quá giới hạn giải":18,"thiếu virus":33,"không giải được":3}
+  {"rows":["..#A",".<#B",">AB.","..A#"]} par=9 ms=31 mèo=5 ô=13 đầu=10/3/1 cụt=? thừa=1 khó=10.2 bấtngờ=6.4 [push2 longPush1 replace5 spread2 virusDie4]
+  {"rows":["..B#","A..A","#>B<","..A#"]} par=10 ms=85 mèo=5 ô=13 đầu=11/10/1 cụt=? thừa=2 khó=10.82 bấtngờ=6.09 [push1 replace4 spread2 eaten2 virusDie4]
+  {"rows":[".AA.","A<#.",">.B.","B#.#"]} par=9 ms=10 mèo=5 ô=13 đầu=8/6/1 cụt=? thừa=1 khó=10.15 bấtngờ=6 [push3 longPush3 replace3 spread1 eaten1 virusDie3]
+  {"rows":["#A#.","B<A.",">..A",".#B."]} par=10 ms=67 mèo=5 ô=13 đầu=9/8/2 cụt=? thừa=2 khó=10.56 bấtngờ=5.89 [push3 longPush1 replace4 spread1 eaten1 virusDie3]
+  {"rows":[".#B.","..#A",".#A.","A<B>"]} par=10 ms=39 mèo=5 ô=13 đầu=9/8/2 cụt=? thừa=2 khó=10.56 bấtngờ=5.89 [push2 longPush1 replace4 spread1 eaten1 virusDie3]
+  {"rows":["><..",".A.A","#B.A","#B#."]} par=10 ms=39 mèo=5 ô=13 đầu=8/7/3 cụt=? thừa=2 khó=10.25 bấtngờ=5.63 [push3 longPush3 replace4 spread1 eaten1 virusDie3]
+  {"rows":["..##","A.>B","..A.","A<.B"]} par=10 ms=14 mèo=5 ô=14 đầu=11/10/1 cụt=? thừa=1 khó=10.82 bấtngờ=5.59 [push3 replace3 spread1 eaten1 virusDie3]
+  {"rows":[".#A.","B.A.",".<>B",".#A."]} par=10 ms=38 mèo=5 ô=14 đầu=11/10/1 cụt=? thừa=1 khó=10.82 bấtngờ=5.59 [push1 replace4 spread2 eaten1 virusDie4]
+== v65 5x5 2 virus (0 ứng viên) · bị loại: {"quá giới hạn giải":176,"quá dài":32}
+== v66 5x5 2 virus (0 ứng viên) · bị loại: {"quá giới hạn giải":165,"quá dài":69,"không giải được":1}
+== v68 5x6 trùm chương 2 virus (0 ứng viên) · bị loại: {"quá giới hạn giải":173,"quá dài":13}
+== v72 4x5 ngủ + 2 virus (4 ứng viên) · bị loại: {"quá giới hạn giải":131,"quá dài":52,"không giải được":18,"thiếu virus":18,"ngủ trang trí":26}
+  {"rows":["...#","dBA.","C<..",".vC.","A..#"]} par=12 ms=15 mèo=6 ô=18 đầu=15/12/1 cụt=? thừa=0 khó=12.07 bấtngờ=4.47 [push6 longPush1 replace3 spread1 virusDie3]
+  {"rows":[".d..",".Cv#","AB.<",".C.A",".#.."]} par=12 ms=98 mèo=6 ô=18 đầu=15/11/3 cụt=? thừa=0 khó=11.8 bấtngờ=4.4 [push3 replace5 spread3 virusDie5]
+  {"rows":["dv.#","....","B#.#","C<CA",".A.."]} par=12 ms=95 mèo=6 ô=17 đầu=12/10/4 cụt=? thừa=1 khó=11.53 bấtngờ=4.33 [push5 longPush2 replace4 spread1 virusDie3]
+  {"rows":["#.dC","BvCA","A#..","..#.","..<."]} par=11 ms=68 mèo=6 ô=17 đầu=11/8/4 cụt=? thừa=0 khó=10.87 bấtngờ=4.09 [push2 longPush1 replace4 spread2 virusDie4]
+== v75 5x5 4 màu 2 virus (10 ứng viên) · bị loại: {"quá giới hạn giải":103,"quá dài":23,"thiếu virus":8}
+  {"rows":["<####","..A..","C>..D","BC.B#",".D..A"]} par=13 ms=102 mèo=8 ô=20 đầu=22/12/10 cụt=? thừa=1 khó=11.89 bấtngờ=5.95 [push2 longPush2 replace6 spread4 eaten1 virusDie6]
+  {"rows":["#.C##","A<>.A","#....",".B..#","DCD.B"]} par=13 ms=3 mèo=8 ô=20 đầu=18/16/1 cụt=? thừa=1 khó=12.69 bấtngờ=5.72 [push3 replace5 spread3 eaten1 virusDie5]
+  {"rows":["#....","A#.D.",".#D.C","CB>A.",".<B#."]} par=13 ms=31 mèo=8 ô=21 đầu=20/11/1 cụt=? thừa=0 khó=12.7 bấtngờ=5.25 [push5 longPush2 replace3 spread1 virusDie3]
+  {"rows":[".....","CA.<.","###AB","..D>.","CD#.B"]} par=13 ms=6 mèo=8 ô=21 đầu=17/13/1 cụt=? thừa=0 khó=12.68 bấtngờ=4.59 [push4 longPush1 replace6 spread4 virusDie6]
+  {"rows":["C<..#","#B>.#",".D..D","##A..","B..AC"]} par=12 ms=22 mèo=8 ô=20 đầu=16/13/1 cụt=? thừa=0 khó=12.07 bấtngờ=4.44 [push5 longPush2 replace3 spread1 virusDie3]
+  {"rows":[">.##D","<C.A.","#B#.D","...CB","..A.#"]} par=12 ms=9 mèo=8 ô=20 đầu=21/15/13 cụt=? thừa=0 khó=10.96 bấtngờ=3.62 [push5 replace3 spread1 virusDie3]
+  {"rows":["<#.B.","..#>.","CD.#C",".AA..","..DB#"]} par=13 ms=3 mèo=8 ô=21 đầu=22/17/13 cụt=? thừa=0 khó=11.62 bấtngờ=3.5 [push5 longPush3 replace3 spread1 virusDie3]
+  {"rows":["..B..","A...C","#.<D#","..#.C","DA>#B"]} par=13 ms=34 mèo=8 ô=21 đầu=18/16/14 cụt=? thừa=0 khó=11.24 bấtngờ=2.78 [push3 longPush1 replace3 spread1 virusDie3]
+== v76 5x6 trùm cuối 3 virus (4 ứng viên) · bị loại: {"quá giới hạn giải":134,"quá dài":29,"không giải được":3,"giải chậm":1}
+  {"rows":["^BA<#","#.BC.","#...#","D....","#E.v.","ADC.#"]} par=15 ms=14 mèo=9 ô=24 đầu=22/15/2 cụt=? thừa=0 khó=13.82 bấtngờ=4.77 [push4 longPush1 replace4 spread1 virusDie4]
+  {"rows":["#..Cv",".DD..","^A...","C.B.#","A.#E#",".#B<#"]} par=15 ms=54 mèo=9 ô=24 đầu=24/20/2 cụt=? thừa=0 khó=13.83 bấtngờ=4.33 [push4 longPush1 replace6 spread3 virusDie6]
+  {"rows":["CA#^.","C...#","B....",".#<.#","vDAD#",".#BE."]} par=15 ms=20 mèo=9 ô=24 đầu=21/15/9 cụt=? thừa=0 khó=13.14 bấtngờ=4 [push5 longPush1 replace4 spread1 virusDie4]
+  {"rows":["DB#.#","AC.C.","#.<.^","B.#..",".DA..","##v.E"]} par=15 ms=200 mèo=9 ô=24 đầu=22/20/12 cụt=? thừa=0 khó=12.91 bấtngờ=3.18 [push3 longPush1 replace5 spread2 virusDie5]

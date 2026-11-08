@@ -14,12 +14,12 @@ namespace Meowtosis.Domain
         }
 
         // Hoán đổi: biến một mèo thành mèo màu khác có trong level. Mèo ngủ thì thức dậy.
-        // Không dùng được cho virus và cho con mèo cuối cùng của một màu.
+        // Không dùng được cho virus, mèo hai màu và con mèo cuối cùng của một màu.
         public bool TryMutate(Board board, int cell, Species color, out MoveResult result)
         {
             result = null;
             var level = board.Level;
-            if (!(board[cell] is Piece piece) || piece.IsVirus || piece.Species == color || !level.StartingColors.Contains(color)) return false;
+            if (!(board[cell] is Piece piece) || piece.IsVirus || piece.IsTwoColor || piece.Species == color || !level.StartingColors.Contains(color)) return false;
             if (level.StartingColors.Contains(piece.Species) && board.Count(other => other.Species == piece.Species) == 1) return false;
 
             var pieces = board.CopyPieces();

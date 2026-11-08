@@ -29,6 +29,10 @@ namespace Meowtosis.Presentation
         [SerializeField] private SpriteRenderer boxPrefab;
         [Tooltip("Màng cho đi qua sang phải; hướng khác xoay theo.")]
         [SerializeField] private Transform membranePrefab;
+        [Tooltip("Một đầu cổng dịch chuyển, dựng sẵn theo hướng ra ngoài là +X; hướng khác xoay theo.")]
+        [SerializeField] private PortalGateView portalGatePrefab;
+        [Tooltip("Màu từng cặp cổng, theo thứ tự trong level.")]
+        [SerializeField] private Color[] portalColors = { new Color(0.72f, 0.48f, 1f), new Color(1f, 0.48f, 0.78f), new Color(0.22f, 0.85f, 0.78f) };
         [SerializeField] private PieceView piecePrefab;
         [SerializeField] private Transform highlightPrefab;
         [Tooltip("Mũi tên gợi ý chỉ sang phải; hướng khác xoay theo.")]
@@ -53,6 +57,9 @@ namespace Meowtosis.Presentation
         private readonly Dictionary<int, Transform> tiles = new Dictionary<int, Transform>();
         // Vật gắn với một ô nhưng không phải quân: hộp mục tiêu và màng ngăn. Rơi cùng khối gỗ của ô khi thắng.
         private readonly Dictionary<int, List<Transform>> cellExtras = new Dictionary<int, List<Transform>>();
+        // Các đầu cổng theo khoá GateKey(ô, hướng đi ra), và ô của từng quân ở lần hiển thị trước (nhận ra quân vừa đi xuyên cổng).
+        private readonly Dictionary<int, PortalGateView> gates = new Dictionary<int, PortalGateView>();
+        private readonly Dictionary<int, int> pieceCells = new Dictionary<int, int>();
         private MovePlayback playback;
         private Transform boardRoot;
         private Transform pieceRoot;
@@ -82,6 +89,8 @@ namespace Meowtosis.Presentation
             focusParts.Clear();
             tiles.Clear();
             cellExtras.Clear();
+            gates.Clear();
+            pieceCells.Clear();
             highlightedPiece = null;
             level = newLevel;
             layout = new BoardLayout(level);
@@ -94,6 +103,7 @@ namespace Meowtosis.Presentation
                 if (level.IsSlot(cell)) BuildCell(cell, cellRoot);
             }
             foreach (var membrane in level.Membranes) BuildMembrane(membrane, cellRoot);
+            BuildPortals(cellRoot);
 
             hintArrow = Instantiate(hintArrowPrefab, boardRoot);
             hintArrow.gameObject.SetActive(false);
@@ -147,6 +157,7 @@ namespace Meowtosis.Presentation
                 view.PlayMotion(motions.Hop);
             }
             sounds.Play(SoundId.Win);
+            foreach (var gate in gates.Values) gate.Close();
             HideHint();
             ClearSpotlight();
             HideTutorial();
@@ -320,6 +331,9 @@ namespace Meowtosis.Presentation
 
         internal Vector3 CellPosition(int cell) => boardRoot.TransformPoint(layout.CellCenter(cell));
 
+        // Cho quân lướt chậm tới ô `cell` trong `seconds` giây (trượt trên băng).
+        internal void SlidePieceTo(PieceView view, int cell, float seconds) => view.SlideTo(layout.CellCenter(cell), seconds);
+
         // Mép trên của khối gỗ ở ô này trong không gian thế giới (không tính bóng đổ); ô không có khối thì lấy mép trên của ô.
         internal float TileTop(int cell)
         {
@@ -367,6 +381,7 @@ namespace Meowtosis.Presentation
             currentBoard = board;
             var newPieceId = move?.Placed[move.PlacedCell]?.Id;
             var shownIds = new HashSet<int>();
+            var portalUsed = false;
             for (var cell = 0; cell < board.CellCount; cell++)
             {
                 if (!(board[cell] is Piece piece)) continue;
@@ -375,13 +390,27 @@ namespace Meowtosis.Presentation
                 if (!pieceViews.TryGetValue(piece.Id, out var view))
                 {
                     view = Instantiate(piecePrefab, pieceRoot);
-                    view.Place(piece.Id == newPieceId ? layout.CellCenter(move.SourceCell) : position);
+                    var isCopy = piece.Id == newPieceId;
+                    var startCell = isCopy ? move.SourceCell : cell;
+                    view.Place(layout.CellCenter(startCell));
+                    if (isCopy && move.SwipeDirection.HasValue) TryTeleport(startCell, move.SwipeDirection.Value, view, Level.NoCell, ref portalUsed);
                     view.PlayMotion(motions.Born);
                     pieceViews.Add(piece.Id, view);
+                }
+                else if (move != null && move.SwipeDirection.HasValue && pieceCells.TryGetValue(piece.Id, out var previousCell) && previousCell != cell)
+                {
+                    // Quân bị đẩy xuyên cổng: hiện ra từ đầu cổng bên kia thay vì trượt ngang qua cả bàn.
+                    TryTeleport(previousCell, move.SwipeDirection.Value, view, cell, ref portalUsed);
                 }
                 view.Show(piece, art, piece.IsCat && level.TargetAt(cell) == piece.Species);
                 view.MoveTo(position);
             }
+            pieceCells.Clear();
+            for (var cell = 0; cell < board.CellCount; cell++)
+            {
+                if (board[cell] is Piece placed) pieceCells[placed.Id] = cell;
+            }
+            if (portalUsed) sounds.Play(SoundId.Portal);
 
             foreach (var id in pieceViews.Keys.Where(id => !shownIds.Contains(id)).ToList())
             {
@@ -538,6 +567,48 @@ namespace Meowtosis.Presentation
         {
             if (!cellExtras.TryGetValue(cell, out var extras)) cellExtras[cell] = extras = new List<Transform>();
             extras.Add(extra);
+        }
+
+        // Mỗi cặp cổng dịch chuyển: hai đầu ở cạnh nhìn ra ngoài bàn của hai ô, cùng một màu, xoay theo hướng ra ngoài.
+        private void BuildPortals(Transform parent)
+        {
+            if (portalGatePrefab == null) return;
+            for (var index = 0; index < level.Portals.Count; index++)
+            {
+                var portal = level.Portals[index];
+                var color = portalColors[index % portalColors.Length];
+                AddGate(parent, level.IndexOf(portal.Row, portal.Column), portal.Direction, color);
+                AddGate(parent, level.IndexOf(portal.TargetRow, portal.TargetColumn), portal.Direction.Opposite(), color);
+            }
+        }
+
+        private void AddGate(Transform parent, int cell, Direction outward, Color color)
+        {
+            var gate = Instantiate(portalGatePrefab, parent);
+            gate.transform.localPosition = layout.CellCenter(cell) + BoardLayout.Offset(outward) * 0.52f;
+            gate.transform.localRotation = Quaternion.Euler(0f, 0f, AngleOf(outward));
+            gate.SetColor(color);
+            gates[GateKey(cell, outward)] = gate;
+        }
+
+        private static int GateKey(int cell, Direction direction) => cell * 4 + (int)direction;
+
+        // Quân đi một bước từ ô `from` theo `direction` mà xuyên một cổng: hai đầu cổng sáng lên và quân hiện ra từ đầu cổng bên kia.
+        // `arrival` là ô quân phải tới (bản sao thì Level.NoCell: lấy ô bên kia cổng). Trả false nếu bước đó không qua cổng.
+        private bool TryTeleport(int from, Direction direction, PieceView view, int arrival, ref bool used)
+        {
+            if (!gates.TryGetValue(GateKey(from, direction), out var entry)) return false;
+            var landing = level.Step(from, direction);
+            if (landing == Level.NoCell || (arrival != Level.NoCell && landing != arrival)) return false;
+            if (!gates.TryGetValue(GateKey(landing, direction.Opposite()), out var exit)) return false;
+
+            view.Place(layout.CellCenter(landing) + BoardLayout.Offset(direction.Opposite()) * 0.7f);
+            entry.Flash();
+            exit.Flash();
+            effects.PortalPulse(entry.transform.position, entry.Tint);
+            effects.PortalPulse(exit.transform.position, exit.Tint);
+            used = true;
+            return true;
         }
 
         // Màng nằm trên cạnh giữa hai ô; mũi tên chỉ chiều được đi qua.

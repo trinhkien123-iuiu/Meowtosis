@@ -12,6 +12,8 @@ namespace Meowtosis.Domain
     //   row AB..
     //   goal ..B.
     //   membrane 0 1 left
+    //   portal 0 1 right 0 3         (đi ra ô (0,1) theo hướng phải thì vào ô (0,3); chiều ngược lại cũng vậy)
+    //   dual 0 2 A 2 2               (mèo hai màu ở (0,2): màu kia là đỏ, chu kỳ 2 lượt, còn 2 lượt)
     //   tutorial 0 0 right Đẩy mèo xanh vào hộp xanh
     //   rule Câu luật hiện sau nước hướng dẫn ngay trên (chỉ dùng trong Levels/Onboarding.txt)
     //   tip Một câu mẹo
@@ -69,6 +71,12 @@ namespace Meowtosis.Domain
                     var position = Move.Parse(value);
                     level.Membranes.Add(new Membrane(position.Row, position.Column, position.Direction));
                     break;
+                case "portal":
+                    level.Portals.Add(ParsePortal(value));
+                    break;
+                case "dual":
+                    level.ColorSwitches.Add(ParseColorSwitch(value));
+                    break;
                 case "tutorial":
                     level.Tutorial.Add(ParseStep(value));
                     break;
@@ -92,6 +100,24 @@ namespace Meowtosis.Domain
                 default:
                     throw new FormatException($"Không rõ từ khoá '{keyword}'");
             }
+        }
+
+        public static Portal ParsePortal(string value)
+        {
+            var parts = value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length != 5) throw new FormatException($"Cần 'hàng cột hướng hàng-kia cột-kia' nhưng gặp '{value}'");
+            var from = Move.Parse($"{parts[0]} {parts[1]} {parts[2]}");
+            return new Portal(from.Row, from.Column, from.Direction,
+                int.Parse(parts[3], CultureInfo.InvariantCulture), int.Parse(parts[4], CultureInfo.InvariantCulture));
+        }
+
+        public static ColorSwitch ParseColorSwitch(string value)
+        {
+            var parts = value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length != 5 || parts[2].Length != 1 || !LevelSymbols.TryReadSpecies(parts[2][0], out var other))
+                throw new FormatException($"Cần 'hàng cột màu-kia chu-kỳ lượt-còn-lại' nhưng gặp '{value}'");
+            return new ColorSwitch(int.Parse(parts[0], CultureInfo.InvariantCulture), int.Parse(parts[1], CultureInfo.InvariantCulture),
+                other, int.Parse(parts[3], CultureInfo.InvariantCulture), int.Parse(parts[4], CultureInfo.InvariantCulture));
         }
 
         private static TutorialStep ParseStep(string value)

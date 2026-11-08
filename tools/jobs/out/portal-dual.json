@@ -1,0 +1,1066 @@
+[
+ {
+  "job": "cổng luyện 4x3",
+  "def": {
+   "rows": [
+    "A#.#",
+    "....",
+    "AB#."
+   ],
+   "portal": [
+    [
+     2,
+     3,
+     "left",
+     1,
+     3
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 0,
+  "cats": 3,
+  "slots": 9,
+  "first": 4,
+  "firstOk": 2,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.2,
+  "surprise": 4,
+  "feats": "push2 longPush1 replace1 portal1"
+ },
+ {
+  "job": "cổng luyện 4x3",
+  "def": {
+   "rows": [
+    "..#.",
+    "#.AA",
+    "..B#"
+   ],
+   "portal": [
+    [
+     0,
+     3,
+     "left",
+     0,
+     1
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 4,
+  "cats": 3,
+  "slots": 9,
+  "first": 5,
+  "firstOk": 3,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.38,
+  "surprise": 3.9,
+  "feats": "replace1 portal1"
+ },
+ {
+  "job": "cổng luyện 4x3",
+  "def": {
+   "rows": [
+    "#...",
+    "AA##",
+    "B..."
+   ],
+   "portal": [
+    [
+     0,
+     3,
+     "up",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 3,
+  "cats": 3,
+  "slots": 9,
+  "first": 5,
+  "firstOk": 4,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.4,
+  "surprise": 3.3,
+  "feats": "push2 replace1 portal1"
+ },
+ {
+  "job": "cổng luyện 4x3",
+  "def": {
+   "rows": [
+    ".#.B",
+    "..#.",
+    "#AA."
+   ],
+   "portal": [
+    [
+     2,
+     2,
+     "up",
+     0,
+     2
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 4,
+  "cats": 3,
+  "slots": 9,
+  "first": 5,
+  "firstOk": 4,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.96,
+  "surprise": 2.9,
+  "feats": "replace1 portal1"
+ },
+ {
+  "job": "cổng luyện 4x3",
+  "def": {
+   "rows": [
+    "#AB#",
+    "..#A",
+    "...."
+   ],
+   "portal": [
+    [
+     1,
+     0,
+     "left",
+     2,
+     3
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 2,
+  "cats": 3,
+  "slots": 9,
+  "first": 4,
+  "firstOk": 3,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.62,
+  "surprise": 2.75,
+  "feats": "push4 longPush1 replace1 portal3"
+ },
+ {
+  "job": "cổng luyện 4x3",
+  "def": {
+   "rows": [
+    ".#..",
+    ".#..",
+    ".ABA"
+   ],
+   "portal": [
+    [
+     1,
+     0,
+     "left",
+     1,
+     3
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 16,
+  "cats": 3,
+  "slots": 10,
+  "first": 7,
+  "firstOk": 6,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.91,
+  "surprise": 2.14,
+  "feats": "push3 longPush1 portal1"
+ },
+ {
+  "job": "cổng luyện 4x3",
+  "def": {
+   "rows": [
+    ".##.",
+    "A.A.",
+    ".#B."
+   ],
+   "portal": [
+    [
+     2,
+     3,
+     "down",
+     0,
+     0
+    ]
+   ]
+  },
+  "par": 6,
+  "ms": 1,
+  "cats": 3,
+  "slots": 9,
+  "first": 7,
+  "firstOk": 5,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 7.42,
+  "surprise": 1.71,
+  "feats": "push2 longPush2 portal3"
+ },
+ {
+  "job": "cổng luyện 4x3",
+  "def": {
+   "rows": [
+    "...A",
+    ".#.#",
+    ".BA#"
+   ],
+   "portal": [
+    [
+     2,
+     2,
+     "right",
+     1,
+     0
+    ]
+   ]
+  },
+  "par": 6,
+  "ms": 7,
+  "cats": 3,
+  "slots": 9,
+  "first": 6,
+  "firstOk": 6,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.27,
+  "surprise": 1.67,
+  "feats": "push4 longPush1 portal2"
+ },
+ {
+  "job": "hai màu luyện 4x3",
+  "def": {
+   "rows": [
+    "CBB.",
+    ".#..",
+    "A.A#"
+   ],
+   "dual": [
+    [
+     0,
+     0,
+     "B",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 20,
+  "cats": 5,
+  "slots": 10,
+  "first": 8,
+  "firstOk": 5,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 7.95,
+  "surprise": 3.88,
+  "feats": "push1 longPush1 replace2 flip3"
+ },
+ {
+  "job": "hai màu luyện 4x3",
+  "def": {
+   "rows": [
+    ".ACB",
+    "..#.",
+    "BA#."
+   ],
+   "dual": [
+    [
+     0,
+     1,
+     "C",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 169,
+  "cats": 5,
+  "slots": 10,
+  "first": 10,
+  "firstOk": 8,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 8.4,
+  "surprise": 3.8,
+  "feats": "push2 longPush1 replace2 flip3"
+ },
+ {
+  "job": "hai màu luyện 4x3",
+  "def": {
+   "rows": [
+    "BACB",
+    ".A#.",
+    "##.."
+   ],
+   "dual": [
+    [
+     0,
+     1,
+     "C",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 6,
+  "ms": 10,
+  "cats": 5,
+  "slots": 9,
+  "first": 9,
+  "firstOk": 7,
+  "firstOpt": 4,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 7.69,
+  "surprise": 3.78,
+  "feats": "replace2 flip1"
+ },
+ {
+  "job": "hai màu luyện 4x3",
+  "def": {
+   "rows": [
+    "C##.",
+    "B..B",
+    "AA#."
+   ],
+   "dual": [
+    [
+     1,
+     0,
+     "A",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 5,
+  "ms": 11,
+  "cats": 5,
+  "slots": 9,
+  "first": 9,
+  "firstOk": 8,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.76,
+  "surprise": 3.61,
+  "feats": "push1 replace1 flip2"
+ },
+ {
+  "job": "hai màu luyện 4x3",
+  "def": {
+   "rows": [
+    "A#C#",
+    ".#B.",
+    ".A.B"
+   ],
+   "dual": [
+    [
+     2,
+     3,
+     "C",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 5,
+  "ms": 11,
+  "cats": 5,
+  "slots": 9,
+  "first": 7,
+  "firstOk": 6,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.43,
+  "surprise": 3.36,
+  "feats": "push1 longPush1 replace1 flip2"
+ },
+ {
+  "job": "hai màu luyện 4x3",
+  "def": {
+   "rows": [
+    "CA.A",
+    ".#.#",
+    "BB.."
+   ],
+   "dual": [
+    [
+     2,
+     0,
+     "C",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 5,
+  "ms": 0,
+  "cats": 5,
+  "slots": 10,
+  "first": 6,
+  "firstOk": 3,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 7.31,
+  "surprise": 2.83,
+  "feats": "push3 longPush1 flip2"
+ },
+ {
+  "job": "hai màu luyện 4x3",
+  "def": {
+   "rows": [
+    ".BBC",
+    "#A.#",
+    ".A.#"
+   ],
+   "dual": [
+    [
+     0,
+     1,
+     "A",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 4,
+  "ms": 3,
+  "cats": 5,
+  "slots": 9,
+  "first": 9,
+  "firstOk": 6,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 7.18,
+  "surprise": 2.78,
+  "feats": "push1 longPush1 flip2"
+ },
+ {
+  "job": "hai màu luyện 4x3",
+  "def": {
+   "rows": [
+    ".ABC",
+    ".A#B",
+    ".#.."
+   ],
+   "dual": [
+    [
+     0,
+     3,
+     "A",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 6,
+  "ms": 5,
+  "cats": 5,
+  "slots": 10,
+  "first": 8,
+  "firstOk": 7,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 7.33,
+  "surprise": 2.63,
+  "feats": "push2 replace1 flip3"
+ },
+ {
+  "job": "hai màu vừa 4x4",
+  "def": {
+   "rows": [
+    ".#..",
+    "..A.",
+    "ACB#",
+    "..CB"
+   ],
+   "dual": [
+    [
+     2,
+     2,
+     "C",
+     2,
+     1
+    ],
+    [
+     2,
+     0,
+     "C",
+     2,
+     1
+    ]
+   ]
+  },
+  "par": 9,
+  "ms": 11,
+  "cats": 6,
+  "slots": 14,
+  "first": 16,
+  "firstOk": 13,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.02,
+  "surprise": 3.69,
+  "feats": "push5 longPush2 replace1 flip10"
+ },
+ {
+  "job": "hai màu vừa 4x4",
+  "def": {
+   "rows": [
+    "#A..",
+    ".CC.",
+    "#.B.",
+    "BA#."
+   ],
+   "dual": [
+    [
+     3,
+     1,
+     "B",
+     2,
+     1
+    ],
+    [
+     0,
+     1,
+     "C",
+     2,
+     1
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 1,
+  "cats": 6,
+  "slots": 13,
+  "first": 13,
+  "firstOk": 4,
+  "firstOpt": 3,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.74,
+  "surprise": 3.62,
+  "feats": "push3 flip8"
+ },
+ {
+  "job": "hai màu vừa 4x4",
+  "def": {
+   "rows": [
+    "##.B",
+    "...A",
+    "BA.C",
+    "...C"
+   ],
+   "dual": [
+    [
+     1,
+     3,
+     "C",
+     2,
+     2
+    ],
+    [
+     3,
+     3,
+     "A",
+     2,
+     1
+    ]
+   ]
+  },
+  "par": 9,
+  "ms": 16,
+  "cats": 6,
+  "slots": 14,
+  "first": 15,
+  "firstOk": 14,
+  "firstOpt": 11,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.93,
+  "surprise": 2.23,
+  "feats": "push3 longPush1 replace1 flip6"
+ },
+ {
+  "job": "hai màu vừa 4x4",
+  "def": {
+   "rows": [
+    "C#..",
+    ".B.B",
+    "C..A",
+    "A#.."
+   ],
+   "dual": [
+    [
+     0,
+     0,
+     "A",
+     2,
+     2
+    ],
+    [
+     2,
+     0,
+     "A",
+     2,
+     1
+    ]
+   ]
+  },
+  "par": 8,
+  "ms": 6,
+  "cats": 6,
+  "slots": 14,
+  "first": 12,
+  "firstOk": 11,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 9.63,
+  "surprise": 2.08,
+  "feats": "push2 flip8"
+ },
+ {
+  "job": "hai màu vừa 4x4",
+  "def": {
+   "rows": [
+    "#.CA",
+    "C.##",
+    "B...",
+    "A..B"
+   ],
+   "dual": [
+    [
+     3,
+     0,
+     "B",
+     2,
+     2
+    ],
+    [
+     1,
+     0,
+     "B",
+     2,
+     1
+    ]
+   ]
+  },
+  "par": 8,
+  "ms": 1,
+  "cats": 6,
+  "slots": 13,
+  "first": 12,
+  "firstOk": 12,
+  "firstOpt": 9,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 8.3,
+  "surprise": 2,
+  "feats": "replace1 flip8"
+ },
+ {
+  "job": "hai màu vừa 4x4",
+  "def": {
+   "rows": [
+    "#A.C",
+    "..#C",
+    "..B.",
+    "#.AB"
+   ],
+   "dual": [
+    [
+     0,
+     1,
+     "C",
+     2,
+     2
+    ],
+    [
+     3,
+     3,
+     "A",
+     2,
+     1
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 0,
+  "cats": 6,
+  "slots": 13,
+  "first": 11,
+  "firstOk": 9,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.29,
+  "surprise": 1.64,
+  "feats": "push2 longPush1 flip7"
+ },
+ {
+  "job": "hai màu vừa 4x4",
+  "def": {
+   "rows": [
+    "#B.B",
+    "C...",
+    "C...",
+    "A.A#"
+   ],
+   "dual": [
+    [
+     1,
+     0,
+     "B",
+     2,
+     1
+    ],
+    [
+     0,
+     1,
+     "C",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 8,
+  "ms": 2,
+  "cats": 6,
+  "slots": 14,
+  "first": 9,
+  "firstOk": 7,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.69,
+  "surprise": 1.56,
+  "feats": "push1 flip8"
+ },
+ {
+  "job": "hai màu vừa 4x4",
+  "def": {
+   "rows": [
+    ".#A#",
+    "C#AB",
+    "C...",
+    "..B."
+   ],
+   "dual": [
+    [
+     1,
+     0,
+     "B",
+     2,
+     2
+    ],
+    [
+     3,
+     2,
+     "C",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 7,
+  "ms": 4,
+  "cats": 6,
+  "slots": 13,
+  "first": 9,
+  "firstOk": 7,
+  "firstOpt": 5,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 8.09,
+  "surprise": 1.56,
+  "feats": "push2 longPush1 flip6"
+ },
+ {
+  "job": "hai màu + virus",
+  "def": {
+   "rows": [
+    ".C<#",
+    "#A#B",
+    ".^..",
+    "BA.."
+   ],
+   "dual": [
+    [
+     3,
+     1,
+     "B",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 10,
+  "ms": 4,
+  "cats": 5,
+  "slots": 13,
+  "first": 9,
+  "firstOk": 1,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.78,
+  "surprise": 8.44,
+  "feats": "push3 longPush1 replace4 spread2 eaten2 virusDie4 flip5"
+ },
+ {
+  "job": "hai màu + virus",
+  "def": {
+   "rows": [
+    "A..<",
+    "..BB",
+    ".C.A",
+    "#^#."
+   ],
+   "dual": [
+    [
+     2,
+     1,
+     "A",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 10,
+  "ms": 9,
+  "cats": 5,
+  "slots": 14,
+  "first": 14,
+  "firstOk": 1,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.86,
+  "surprise": 8.14,
+  "feats": "push1 replace5 spread3 eaten1 virusDie5 flip5"
+ },
+ {
+  "job": "hai màu + virus",
+  "def": {
+   "rows": [
+    "#BC<",
+    "AA..",
+    ".^B#",
+    ".#.."
+   ],
+   "dual": [
+    [
+     1,
+     0,
+     "C",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 10,
+  "ms": 3,
+  "cats": 5,
+  "slots": 13,
+  "first": 11,
+  "firstOk": 3,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.82,
+  "surprise": 8,
+  "feats": "push1 replace4 spread2 eaten2 virusDie4 flip5"
+ },
+ {
+  "job": "hai màu + virus",
+  "def": {
+   "rows": [
+    "B<#.",
+    "A.#.",
+    "A#B.",
+    ".C^."
+   ],
+   "dual": [
+    [
+     1,
+     0,
+     "B",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 10,
+  "ms": 70,
+  "cats": 5,
+  "slots": 13,
+  "first": 8,
+  "firstOk": 3,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.75,
+  "surprise": 7.63,
+  "feats": "push3 longPush1 replace4 spread1 eaten1 virusDie3 flip5"
+ },
+ {
+  "job": "hai màu + virus",
+  "def": {
+   "rows": [
+    "#C<B",
+    "#^..",
+    ".#.A",
+    ".A.B"
+   ],
+   "dual": [
+    [
+     2,
+     3,
+     "B",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 9,
+  "ms": 2,
+  "cats": 5,
+  "slots": 13,
+  "first": 11,
+  "firstOk": 2,
+  "firstOpt": 2,
+  "deadFrac": null,
+  "extra": 1,
+  "difficulty": 10.04,
+  "surprise": 7.59,
+  "feats": "replace3 spread1 eaten1 virusDie3 flip4"
+ },
+ {
+  "job": "hai màu + virus",
+  "def": {
+   "rows": [
+    "..CA",
+    "^A.#",
+    "..B<",
+    ".B.."
+   ],
+   "dual": [
+    [
+     0,
+     2,
+     "A",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 10,
+  "ms": 176,
+  "cats": 5,
+  "slots": 15,
+  "first": 13,
+  "firstOk": 1,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 10.85,
+  "surprise": 6.62,
+  "feats": "push2 replace3 spread1 virusDie3 flip5"
+ },
+ {
+  "job": "hai màu + virus",
+  "def": {
+   "rows": [
+    "#B#.",
+    "#AA.",
+    "C.^.",
+    ".B<."
+   ],
+   "dual": [
+    [
+     1,
+     1,
+     "B",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 10,
+  "ms": 13,
+  "cats": 5,
+  "slots": 13,
+  "first": 10,
+  "firstOk": 8,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 2,
+  "difficulty": 10.8,
+  "surprise": 6.4,
+  "feats": "push2 longPush1 replace5 spread2 eaten1 virusDie4 flip5"
+ },
+ {
+  "job": "hai màu + virus",
+  "def": {
+   "rows": [
+    "..B.",
+    "##BA",
+    "A#C.",
+    ".<^."
+   ],
+   "dual": [
+    [
+     0,
+     2,
+     "A",
+     2,
+     2
+    ]
+   ]
+  },
+  "par": 8,
+  "ms": 22,
+  "cats": 5,
+  "slots": 13,
+  "first": 11,
+  "firstOk": 2,
+  "firstOpt": 1,
+  "deadFrac": null,
+  "extra": 0,
+  "difficulty": 9.62,
+  "surprise": 6.27,
+  "feats": "push1 longPush1 replace3 spread1 virusDie3 flip4"
+ }
+]

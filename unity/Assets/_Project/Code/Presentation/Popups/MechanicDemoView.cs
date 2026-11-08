@@ -13,6 +13,9 @@ namespace Meowtosis.Presentation
         [SerializeField] private RectTransform boardArea;
         [SerializeField] private DemoCell cellPrefab;
         [SerializeField] private RectTransform membranePrefab;
+        [SerializeField] private DemoPortalGate portalGatePrefab;
+        [Tooltip("Màu từng cặp cổng, theo thứ tự trong level (giống bàn thật).")]
+        [SerializeField] private Color[] portalColors = { new Color(0.72f, 0.48f, 1f), new Color(1f, 0.48f, 0.78f), new Color(0.22f, 0.85f, 0.78f) };
         [SerializeField] private RectTransform hand;
         [SerializeField] private float maximumCellSize = 170f;
         [SerializeField] private float beforeSeconds = 0.9f;
@@ -21,6 +24,7 @@ namespace Meowtosis.Presentation
 
         private readonly List<DemoCell> cells = new List<DemoCell>();
         private readonly List<RectTransform> membranes = new List<RectTransform>();
+        private readonly List<DemoPortalGate> portals = new List<DemoPortalGate>();
         private float cellSize;
 
         public void Play(LevelDefinition definition, Move move)
@@ -38,8 +42,10 @@ namespace Meowtosis.Presentation
         {
             foreach (var cell in cells) Destroy(cell.gameObject);
             foreach (var membrane in membranes) Destroy(membrane.gameObject);
+            foreach (var portal in portals) Destroy(portal.gameObject);
             cells.Clear();
             membranes.Clear();
+            portals.Clear();
 
             var area = boardArea.rect.size;
             cellSize = Mathf.Min(maximumCellSize, area.x / level.Width, area.y / level.Height);
@@ -60,7 +66,29 @@ namespace Meowtosis.Presentation
                 view.localScale = Vector3.one * (cellSize / view.rect.width);
                 membranes.Add(view);
             }
+            if (portalGatePrefab != null)
+            {
+                for (var index = 0; index < level.Portals.Count; index++)
+                {
+                    var portal = level.Portals[index];
+                    var color = portalColors[index % portalColors.Length];
+                    AddPortalGate(level, level.IndexOf(portal.Row, portal.Column), portal.Direction, color);
+                    AddPortalGate(level, level.IndexOf(portal.TargetRow, portal.TargetColumn), portal.Direction.Opposite(), color);
+                }
+            }
             hand.SetAsLastSibling();
+        }
+
+        // Một đầu cổng nằm ở cạnh ô nhìn ra ngoài bàn, xoay theo hướng ra ngoài.
+        private void AddPortalGate(Level level, int cell, Direction outward, Color color)
+        {
+            var gate = Instantiate(portalGatePrefab, boardArea);
+            var rect = (RectTransform)gate.transform;
+            rect.anchoredPosition = CellPosition(level, cell) + (Vector2)(BoardLayout.Offset(outward) * cellSize * 0.52f);
+            rect.localRotation = Quaternion.Euler(0f, 0f, BoardView.AngleOf(outward));
+            rect.localScale = Vector3.one * (cellSize / rect.rect.width);
+            gate.SetColor(color);
+            portals.Add(gate);
         }
 
         private IEnumerator Loop(Level level, Board before, Board after, Move move)

@@ -86,6 +86,8 @@ namespace Meowtosis.Presentation
             }
             // Quân tự trượt về ô và thở trong PieceView.Update: dừng lại để hoạt cảnh rơi điều khiển vị trí.
             if (target.TryGetComponent<PieceView>(out var piece)) piece.enabled = false;
+            // Ô độc đang nhúc nhích bằng ToxicTileView: dừng để hoạt cảnh rơi điều khiển.
+            foreach (var toxic in target.GetComponentsInChildren<ToxicTileView>()) toxic.enabled = false;
             var renderers = target.GetComponentsInChildren<SpriteRenderer>();
             var colors = new Color[renderers.Length];
             for (var index = 0; index < renderers.Length; index++) colors[index] = renderers[index].color;

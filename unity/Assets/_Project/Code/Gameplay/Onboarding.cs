@@ -33,6 +33,7 @@ namespace Meowtosis.Gameplay
         private readonly SwipeRule swipeRule;
         private readonly Solver solver;
         private int stepIndex;
+        private int ruleIndex;   // câu luật đang hiện của bước hiện tại (một bước có thể có nhiều câu luật nối nhau)
 
         public Onboarding(LevelDefinition definition, SwipeRule swipeRule, Solver solver)
         {
@@ -54,7 +55,7 @@ namespace Meowtosis.Gameplay
         public string Text => Stage switch
         {
             OnboardingStage.Guided => CurrentStep.Text,
-            OnboardingStage.ShowingRule => CurrentStep.Rule,
+            OnboardingStage.ShowingRule => CurrentStep.Rules[ruleIndex],
             OnboardingStage.Free => Session.Definition.Tip,
             _ => "",
         };
@@ -111,14 +112,17 @@ namespace Meowtosis.Gameplay
             }
         }
 
-        // Người chơi bấm "Đã hiểu!": sang bước kế tiếp.
+        // Người chơi bấm "Đã hiểu!": sang câu luật kế của bước, hết câu thì sang bước kế tiếp.
         public void AcknowledgeRule()
         {
-            if (Stage == OnboardingStage.ShowingRule) NextStep();
+            if (Stage != OnboardingStage.ShowingRule) return;
+            if (ruleIndex + 1 < CurrentStep.Rules.Count) ruleIndex++;
+            else NextStep();
         }
 
         private void NextStep()
         {
+            ruleIndex = 0;
             stepIndex++;
             if (Session.Status == SessionStatus.Won) Stage = OnboardingStage.Finished;
             else Stage = stepIndex < Steps.Count ? OnboardingStage.Guided : OnboardingStage.Free;

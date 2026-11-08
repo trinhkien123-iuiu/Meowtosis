@@ -21,6 +21,8 @@ namespace Meowtosis.Gameplay
         ClearForRoom = 10,
         ChainWake = 11,
         Ice = 13,
+        Portal = 14,
+        TwoColor = 15,
     }
 
     // Level nào có cơ chế gì, theo nội dung level. Bốn cơ chế cơ bản (nhân đôi, đẩy, thay thế, khử 3) không tính ở đây:
@@ -47,6 +49,8 @@ namespace Meowtosis.Gameplay
             if (start.Count(piece => piece.IsAsleep) > 0) found.Add(Mechanic.Sleep);
             if (start.Count(piece => piece.IsVirus) > 0) found.Add(Mechanic.Virus);
             if (Enumerable.Range(0, level.CellCount).Any(level.IsIce)) found.Add(Mechanic.Ice);
+            if (level.Portals.Count > 0) found.Add(Mechanic.Portal);
+            if (level.ColorSwitches.Count > 0) found.Add(Mechanic.TwoColor);
             return found;
         }
     }

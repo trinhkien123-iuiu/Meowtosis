@@ -5,6 +5,11 @@
 //   shape: { w, h, holes: [a, b] } khung ngẫu nhiên w×h khoét a..b ô (vẫn liền một khối, không trùng khung đã có)
 //   cells: 'AAABBc'                mèo đặt ngẫu nhiên (chữ thường = đang ngủ, G = vi khuẩn)
 //   toxic: n, ice: n (ô băng trơn), virus: n | '<>', membranes: n
+//   portals: n (số cặp cổng dịch chuyển, đặt ở cạnh nhìn ra ngoài bàn)
+//   split: true -> khung gồm 2 vùng tách rời, mèo chỉ ở một vùng, cổng nối hai vùng (bỏ cổng thì không thắng được)
+//   dual: n (số mèo hai màu, chọn trong các mèo thức), period: chu kỳ đổi màu (mặc định 2), phase: 'random' (lượt còn lại ngẫu nhiên)
+//   allowUsed: true -> cho phép khung đã có ở level khác (màn hướng dẫn nhỏ)
+//   hidden: true -> màu kia của mèo hai màu là màu chưa có con nào; kèm mode: 'target' thì hộp chỉ đặt ở ô cuối ván có màu đó
 //   mode: 'fill' | 'target' | 'kill', targets: n (số hộp)
 //   need: ['clear', 'replace', ...]  sự kiện bắt buộc có trong lời giải ngắn nhất (tên như trong lib.events,
 //                                    thêm 'ice' = băng làm đổi lời giải,
@@ -23,6 +28,39 @@ const outFile = process.argv[3];
 const used = new Set(ctx.LEVELS.map(d => canon(asDef(d).rows)));
 const ARROWS = ['^', 'v', '<', '>'];
 const results = [];
+
+// Các vùng liền nhau của một khung (theo ô kề thật), mỗi vùng là mảng chỉ số ô.
+function frameRegions(rows) {
+  const w = rows[0].length, h = rows.length, g = rows.join('').split(''), seen = new Set(), out = [];
+  g.forEach((ch, i) => {
+    if (ch === '#' || seen.has(i)) return;
+    const region = [i]; seen.add(i);
+    for (let k = 0; k < region.length; k++) {
+      const r = Math.floor(region[k] / w), c = region[k] % w;
+      for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const rr = r + dr, cc = c + dc, j = rr * w + cc;
+        if (rr >= 0 && cc >= 0 && rr < h && cc < w && g[j] !== '#' && !seen.has(j)) { seen.add(j); region.push(j); }
+      }
+    }
+    out.push(region);
+  });
+  return out;
+}
+
+// Khung tách rời: chữ nhật w×h khoét lỗ sao cho có đúng hai vùng, mỗi vùng ít nhất `minRegion` ô.
+function splitFrame(rnd, w, h, holes, minRegion = 3) {
+  for (let tries = 0; tries < 400; tries++) {
+    const g = Array(w * h).fill('.');
+    const n = holes[0] + Math.floor(rnd() * (holes[1] - holes[0] + 1));
+    for (let k = 0; k < n; k++) g[Math.floor(rnd() * w * h)] = '#';
+    const rows = [];
+    for (let r = 0; r < h; r++) rows.push(g.slice(r * w, r * w + w).join(''));
+    if (rows.some(row => !row.includes('.'))) continue;
+    const regions = frameRegions(rows);
+    if (regions.length === 2 && regions.every(region => region.length >= minRegion)) return rows;
+  }
+  return null;
+}
 
 // Khung ngẫu nhiên: chữ nhật w×h khoét lỗ, giữ liền khối và giữ đủ hàng/cột.
 function randomFrame(rnd, w, h, holes) {
@@ -51,25 +89,30 @@ function randomFrame(rnd, w, h, holes) {
 }
 
 for (const job of jobs) {
-  const { name, frame, shape, cells: put = 'AB', toxic = 0, ice = 0, virus = 0, membranes = 0, mode = 'fill', targets = 2,
+  const { name, frame, shape, cells: put = 'AB', toxic = 0, ice = 0, virus = 0, membranes = 0, portals = 0, dual = 0, period = 2, phase = null,
+    mode = 'fill', targets = 2, split = false, hidden = false, allowUsed = false,
     need = [], strict = false, min = 3, max = 99, maxMs = 300, twist = false, ms = 20000, seed = 1, nodes = 80000, top = 4 } = job;
   const rnd = rng(seed);
   const why = {};
   const no = reason => { why[reason] = (why[reason] || 0) + 1; return null; };
 
   function attempt() {
-    const rows0 = frame || randomFrame(rnd, shape.w, shape.h, shape.holes);
+    const rows0 = frame || (split ? splitFrame(rnd, shape.w, shape.h, shape.holes) : randomFrame(rnd, shape.w, shape.h, shape.holes));
     if (!rows0) return null;
     const key = canon(rows0);
-    if (used.has(key)) return null;
+    if (!allowUsed && used.has(key)) return null;
     const W = rows0[0].length, H = rows0.length;
     const g = rows0.join('').split('');
+    // Khung tách rời: mèo chỉ đặt ở vùng đầu (chọn ngẫu nhiên), vùng kia để trống cho cổng.
+    const regions = split ? frameRegions(rows0).sort(() => rnd() - 0.5) : null;
+    const catZone = regions ? new Set(regions[0]) : null;
     const free = () => g.map((ch, j) => ch === '.' ? j : -1).filter(j => j >= 0);
+    const freeForCats = () => free().filter(j => !catZone || catZone.has(j));
     for (let n = 0; n < toxic; n++) g[rnd.pick(free())] = '~';
     for (let n = 0; n < ice; n++) { const f = free(); if (!f.length) return null; g[rnd.pick(f)] = '='; }
-    for (const ch of put) { const f = free(); if (!f.length) return null; g[rnd.pick(f)] = ch; }
+    for (const ch of put) { const f = freeForCats(); if (!f.length) return null; g[rnd.pick(f)] = ch; }
     const arrows = typeof virus === 'string' ? [...virus] : Array.from({ length: virus }, () => rnd.pick(ARROWS));
-    for (const a of arrows) g[rnd.pick(free())] = a;
+    for (const a of arrows) { const f = freeForCats(); if (!f.length) return null; g[rnd.pick(f)] = a; }
     const toRows = arr => { const rows = []; for (let r = 0; r < H; r++) rows.push(arr.slice(r * W, r * W + W).join('')); return rows; };
     const def = { rows: toRows(g) };
     if (membranes) {
@@ -82,6 +125,40 @@ for (const job of jobs) {
       for (let n = 0; n < membranes && edges.length; n++) {
         const [i, j, dir] = edges.splice(Math.floor(rnd() * edges.length), 1)[0];
         def.oneway.push(rnd() < 0.5 ? [Math.floor(i / W), i % W, dir] : [Math.floor(j / W), j % W, dir === 'right' ? 'left' : 'up']);
+      }
+    }
+    if (portals) {
+      // Mỗi cặp: cổng thứ nhất ở cạnh `d` của một ô, cổng thứ hai ở cạnh ngược lại của ô khác; cả hai cạnh nhìn ra ngoài bàn
+      const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
+      const outside = (i, d) => {
+        const r = Math.floor(i / W) + ctx.DIRS[d][0], c = i % W + ctx.DIRS[d][1];
+        return r < 0 || c < 0 || r >= H || c >= W || g[r * W + c] === '#';
+      };
+      const usedSides = new Set();
+      def.portal = [];
+      for (let n = 0; n < portals; n++) {
+        const d = rnd.pick(['up', 'down', 'left', 'right']);
+        const sides = (dir, zone) => g.map((ch, i) => ch !== '#' && outside(i, dir) && !usedSides.has(i + dir) && (!zone || zone.has(i)) ? i : -1).filter(i => i >= 0);
+        // Khung tách rời: một đầu cổng ở vùng có mèo, đầu kia ở vùng trống, nên cổng là đường duy nhất sang vùng trống
+        const a = sides(d, split ? new Set(regions[0]) : null), b = sides(OPP[d], split ? new Set(regions[1]) : null);
+        if (!a.length || !b.length) return no('không đủ cạnh cho cổng');
+        const i = rnd.pick(a), j = rnd.pick(b);
+        if (i === j) return no('cổng trùng ô');
+        usedSides.add(i + d); usedSides.add(j + OPP[d]);
+        def.portal.push([Math.floor(i / W), i % W, d, Math.floor(j / W), j % W]);
+      }
+    }
+    if (dual) {
+      // Chọn mèo hai màu trong các mèo thức; màu kia là một màu khác đang có trong level
+      const cats = g.map((ch, i) => /[A-Z]/.test(ch) ? i : -1).filter(i => i >= 0);
+      const colors = [...new Set(cats.map(i => g[i]))];
+      const hiddenColors = ['A', 'B', 'C', 'D', 'E'].filter(col => !colors.includes(col));
+      if (cats.length < dual || (hidden ? !hiddenColors.length : colors.length < 2)) return no('không đủ mèo hoặc màu cho hai màu');
+      def.dual = [];
+      for (let n = 0; n < dual; n++) {
+        const i = cats.splice(Math.floor(rnd() * cats.length), 1)[0];
+        const alt = rnd.pick(hidden ? hiddenColors : colors.filter(col => col !== g[i]));
+        def.dual.push([Math.floor(i / W), i % W, alt, period, phase === 'random' ? 1 + Math.floor(rnd() * period) : period]);
       }
     }
     if (mode === 'kill') def.kill = 'G';
@@ -114,7 +191,9 @@ for (const job of jobs) {
       }
       if (!end) return no('không tìm được trạng thái kín');
       // Ưu tiên hộp ở ô lúc đầu trống hoặc khác màu, để hộp thật sự đòi người chơi làm gì đó
-      const occ = end.map((c, i) => c && c.color !== 'V' && c.color !== lv.kill && (!lv.init[i] || lv.init[i].color !== c.color) ? i : -1)
+      const startColors = new Set(lv.init.filter(c => c && c.color !== 'V').map(c => c.color));
+      const occ = end.map((c, i) => c && c.color !== 'V' && c.color !== lv.kill && (!lv.init[i] || lv.init[i].color !== c.color)
+        && (!hidden || !startColors.has(c.color)) ? i : -1)
         .filter(i => i >= 0);
       if (occ.length < targets) return no('ít ô cho hộp');
       const goal = Array(W * H).fill('.');
@@ -151,6 +230,8 @@ for (const job of jobs) {
         }
         if (!ev.slide) return no('không trượt');
       } else if (n === 'virus') { if (!ev.spread || !ev.virusDie) return no('thiếu ' + n); }
+      else if (n === 'portal') { if (!ev.portal) return no('không qua cổng'); }
+      else if (n === 'dual') { if (!ev.flip) return no('không đổi màu'); }
       else if (!ev[n]) return no('thiếu ' + n);
     }
     if (strict) {
@@ -166,7 +247,7 @@ for (const job of jobs) {
     const ex = explore(ctx, lv, 3000);
     const info = { def, ...census(def), ...ex, ...fm, par: path.length, ms: solveMs, ...randomPlay(ctx, lv, 150), ev };
     const sc = scores(info);
-    if (!frame) used.add(key);   // khung ngẫu nhiên: mỗi khung chỉ giữ một level
+    if (!frame && !allowUsed) used.add(key);   // khung ngẫu nhiên: mỗi khung chỉ giữ một level
     return { ...info, ...sc };
   }
 

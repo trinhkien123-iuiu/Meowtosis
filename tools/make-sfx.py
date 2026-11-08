@@ -87,6 +87,12 @@ if __name__ == '__main__':
     # Chọn level: tiếng "bộp" đi lên rồi 3 nốt vui, phải ngắn hơn hiệu ứng chọn (0,38 giây) vì sang scene mới là tắt.
     save('LevelSelect', [tone(330, 660, 0.09, 'sine', 0.13), tone(784, 792, 0.14, 'triangle', 0.1, 0.05),
                          tone(1047, 1058, 0.16, 'triangle', 0.1, 0.1), tone(1319, 1333, 0.2, 'sine', 0.09, 0.15)])
+    # Qua cổng dịch chuyển: tiếng hút vút xuống rồi bật ra vút lên, kèm hơi gió.
+    save('Portal', [tone(900, 160, 0.16, 'sine', 0.1), hiss(0.22, 1800, 1.2, 0.07),
+                    tone(220, 1040, 0.2, 'triangle', 0.1, 0.12), tone(1568, 1580, 0.16, 'sine', 0.05, 0.24)])
+    # Mèo hai màu đổi màu: hai nốt "tính tính" đi lên rồi lướt, như tắc kè đổi sắc.
+    save('ColorSwitch', [tone(660, 680, 0.1, 'triangle', 0.11), tone(880, 900, 0.1, 'triangle', 0.11, 0.07),
+                         tone(1320, 1980, 0.18, 'sine', 0.09, 0.14), hiss(0.2, 6000, volume=0.03, delay=0.1)])
     # Bấm level chưa mở: hai nhịp trầm đi xuống kèm tiếng lách cách của ổ khoá, báo chưa được nhưng không gắt.
     save('LevelLocked', [tone(233, 165, 0.1, 'triangle', 0.14), hiss(0.03, 3400, 2.0, 0.07),
                          tone(175, 117, 0.13, 'triangle', 0.13, 0.1), hiss(0.03, 2800, 2.0, 0.06, 0.1)])

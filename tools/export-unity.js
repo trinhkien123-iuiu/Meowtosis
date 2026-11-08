@@ -1,6 +1,6 @@
 // Ghi danh sách level cho Unity: unity/Assets/_Project/Levels/LevelCatalog.txt (định dạng ở docs/architecture.md §5).
 // Đọc data/levels.json (đã có par và lời giải), nên chạy sau export-levels.js (npm run export làm cả hai).
-// Mỗi level có id cố định lưu ở data/level-ids.json, gắn theo nội dung chơi (rows, goal, oneway, kill):
+// Mỗi level có id cố định lưu ở data/level-ids.json, gắn theo nội dung chơi (rows, goal, oneway, portal, dual, kill):
 // đổi thứ tự level không đổi id, sửa lời thoại/mẹo không đổi id; level mới nhận số kế tiếp.
 // Sửa nội dung chơi của một level mà muốn giữ tiến độ người chơi: sửa khoá của id đó trong level-ids.json.
 //   node tools/export-unity.js
@@ -17,6 +17,8 @@ function contentKey(level) {
   const parts = [level.rows.join('/')];
   if (level.goal) parts.push('goal ' + level.goal.join('/'));
   if (level.oneway) parts.push('oneway ' + level.oneway.map(m => m.join(',')).join(' '));
+  if (level.portal) parts.push('portal ' + level.portal.map(m => m.join(',')).join(' '));
+  if (level.dual) parts.push('dual ' + level.dual.map(m => m.join(',')).join(' '));
   if (level.kill) parts.push('kill ' + level.kill);
   return parts.join(' | ');
 }
@@ -52,6 +54,8 @@ function catalogText(levels, ids) {
     for (const row of level.rows) lines.push(`row ${row}`);
     for (const row of level.goal || []) lines.push(`goal ${row}`);
     for (const [r, c, dir] of level.oneway || []) lines.push(`membrane ${r} ${c} ${dir}`);
+    for (const [r, c, dir, r2, c2] of level.portal || []) lines.push(`portal ${r} ${c} ${dir} ${r2} ${c2}`);
+    for (const [r, c, alt, period, left] of level.dual || []) lines.push(`dual ${r} ${c} ${alt} ${period} ${left}`);
     if (level.kill) lines.push(`kill ${level.kill}`);
     if (level.card) lines.push(`card ${level.card}`);
     if (level.trap) lines.push(`trap ${level.trap.join(' ')}`);

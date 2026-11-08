@@ -25,6 +25,8 @@ namespace Meowtosis.Presentation
         AngryMeow,
         LevelSelect,
         LevelLocked,
+        Portal,
+        ColorSwitch,
     }
 
     // Phát âm thanh, nhìn từ phía presenter và phần diễn hoạt.

@@ -7,6 +7,7 @@ namespace Meowtosis.Domain
         Eaten,          // virus lan vào ô và ăn quân ở đó
         VirusSpread,    // virus mới mọc vào ô, lan từ virus ở SourceCell
         WokeUp,         // mèo ngủ thức dậy
+        ColorChanged,   // mèo hai màu đổi màu (Piece là quân sau khi đổi; màu cũ nằm ở OtherColor)
     }
 
     // Một việc xảy ra ở một ô lúc cuối lượt, để giao diện diễn hoạt.

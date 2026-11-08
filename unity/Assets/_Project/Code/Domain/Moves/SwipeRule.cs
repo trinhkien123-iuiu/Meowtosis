@@ -25,7 +25,7 @@ namespace Meowtosis.Domain
         private static int SlideFrom(Level level, Piece?[] pieces, int start, Direction direction)
         {
             var at = start;
-            while (level.IsIce(at))
+            for (var guard = 0; level.IsIce(at) && guard < level.CellCount; guard++)
             {
                 var next = level.Step(at, direction);
                 if (next == Level.NoCell || pieces[next].HasValue) break;
@@ -44,7 +44,8 @@ namespace Meowtosis.Domain
 
             var line = new List<int>();
             var end = target;
-            while (end != Level.NoCell && board[end] is Piece piece && !piece.IsAsleep)
+            // Dãy chạy trọn một vòng qua cổng (line.Count tới số ô) thì coi như hết chỗ đẩy.
+            while (end != Level.NoCell && board[end] is Piece piece && !piece.IsAsleep && line.Count < board.CellCount)
             {
                 line.Add(end);
                 end = level.Step(end, direction);

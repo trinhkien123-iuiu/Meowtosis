@@ -50,13 +50,16 @@ namespace Meowtosis.Domain
             }
 
             Membranes = definition.Membranes.ToList();
-            nextCells = CreateNextCells(Membranes);
+            Portals = definition.Portals.ToList();
+            nextCells = CreateNextCells(Membranes, Portals);
             neighbours = CreateNeighbours();
             StartingColors = startPieces
                 .Where(piece => piece.HasValue && !piece.Value.IsVirus)
                 .Select(piece => piece.Value.Species)
                 .Distinct()
                 .ToList();
+            ColorSwitches = definition.ColorSwitches.ToList();
+            foreach (var colorSwitch in ColorSwitches) ApplyColorSwitch(colorSwitch);
             CellsToFill = Enumerable.Range(0, CellCount).Count(cell => isSlot[cell] && !isToxic[cell]);
             HasTargets = targets.Any(target => target.HasValue);
             Goals = CreateGoals();
@@ -71,6 +74,12 @@ namespace Meowtosis.Domain
         public int CellCount => Width * Height;
 
         public IReadOnlyList<Membrane> Membranes { get; }
+
+        // Các cặp cổng dịch chuyển. Step đã đi xuyên cổng; danh sách này để giao diện vẽ cổng.
+        public IReadOnlyList<Portal> Portals { get; }
+
+        // Các mèo hai màu lúc bắt đầu level.
+        public IReadOnlyList<ColorSwitch> ColorSwitches { get; }
 
         // Các màu mèo có trên bàn lúc đầu. Mất hết mèo của một màu là thua.
         public IReadOnlyList<Species> StartingColors { get; }
@@ -102,7 +111,7 @@ namespace Meowtosis.Domain
         public Species? TargetAt(int cell) => targets[cell];
 
         // Ô mà quân tới được khi đi một bước, hoặc NoCell nếu ra ngoài bàn,
-        // rơi vào lỗ hoặc đi ngược chiều màng.
+        // rơi vào lỗ hoặc đi ngược chiều màng. Cạnh có cổng dịch chuyển thì tới ô bên kia cổng.
         public int Step(int cell, Direction direction) => nextCells[cell * DirectionCount + (int)direction];
 
         public IReadOnlyList<int> Neighbours(int cell) => neighbours[cell];
@@ -117,7 +126,23 @@ namespace Meowtosis.Domain
                 throw new FormatException($"Level '{Id}': phải có {Height} dòng {name}, mỗi dòng rộng {Width} ô");
         }
 
-        private int[] CreateNextCells(IReadOnlyList<Membrane> membranes)
+        // Mèo hai màu: chỉ gắn vào mèo đang thức; màu kia khác màu hiện tại và có thể là màu chưa có con nào trên bàn
+        // (khi đó mèo hai màu là nguồn duy nhất của màu ấy).
+        private void ApplyColorSwitch(ColorSwitch colorSwitch)
+        {
+            var text = $"mèo hai màu ở {colorSwitch.Row} {colorSwitch.Column}";
+            if (!Contains(colorSwitch.Row, colorSwitch.Column)) throw new FormatException($"Level '{Id}': {text} nằm ngoài bàn");
+            var cell = IndexOf(colorSwitch.Row, colorSwitch.Column);
+            if (!(startPieces[cell] is Piece piece) || piece.IsVirus || piece.IsAsleep || piece.IsTwoColor)
+                throw new FormatException($"Level '{Id}': {text} phải đứng trên một con mèo đang thức");
+            if (colorSwitch.OtherColor == piece.Species)
+                throw new FormatException($"Level '{Id}': {text} có màu kia không hợp lệ");
+            if (colorSwitch.Period < 1 || colorSwitch.TurnsLeft < 1 || colorSwitch.TurnsLeft > colorSwitch.Period)
+                throw new FormatException($"Level '{Id}': {text} có chu kỳ hoặc số lượt còn lại không hợp lệ");
+            startPieces[cell] = new Piece(piece.Id, piece.Species, false, piece.Facing, colorSwitch.OtherColor, colorSwitch.Period, colorSwitch.TurnsLeft);
+        }
+
+        private int[] CreateNextCells(IReadOnlyList<Membrane> membranes, IReadOnlyList<Portal> portals)
         {
             // Màng chỉ cho đi qua theo hướng của nó, nên từ ô bên kia đi ngược lại bị chặn.
             var closedExits = new bool[CellCount * DirectionCount];
@@ -139,6 +164,26 @@ namespace Meowtosis.Domain
                     var next = AdjacentSlot(cell, direction);
                     result[exit] = closedExits[exit] ? NoCell : next;
                 }
+            }
+
+            // Cổng dịch chuyển nối thẳng hai ô qua cạnh nhìn ra ngoài bàn, cả hai chiều.
+            foreach (var portal in portals)
+            {
+                if (!Contains(portal.Row, portal.Column) || !Contains(portal.TargetRow, portal.TargetColumn))
+                    throw new FormatException($"Level '{Id}': cổng ở {portal.Row} {portal.Column} nằm ngoài bàn");
+                var from = IndexOf(portal.Row, portal.Column);
+                var to = IndexOf(portal.TargetRow, portal.TargetColumn);
+                if (!isSlot[from] || !isSlot[to] || from == to)
+                    throw new FormatException($"Level '{Id}': cổng phải nối hai ô khác nhau của thân");
+                var back = portal.Direction.Opposite();
+                if (AdjacentSlot(from, portal.Direction) != NoCell || AdjacentSlot(to, back) != NoCell)
+                    throw new FormatException($"Level '{Id}': cạnh có cổng phải nhìn ra ngoài bàn");
+                var exitFrom = from * DirectionCount + (int)portal.Direction;
+                var exitTo = to * DirectionCount + (int)back;
+                if (result[exitFrom] != NoCell || result[exitTo] != NoCell)
+                    throw new FormatException($"Level '{Id}': mỗi cạnh chỉ một cổng");
+                result[exitFrom] = to;
+                result[exitTo] = from;
             }
             return result;
         }

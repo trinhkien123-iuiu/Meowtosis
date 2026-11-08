@@ -57,7 +57,7 @@ namespace Meowtosis.Tests
             foreach (var move in script.Solution)
             {
                 Assert.That(Play(onboarding, move), Is.True, $"nước {move} bị từ chối");
-                onboarding.AcknowledgeRule();
+                AcknowledgeAll(onboarding);
             }
             Assert.That(onboarding.Stage, Is.EqualTo(OnboardingStage.Finished));
             Assert.That(GameOutcome.IsWon(onboarding.Session.Board), Is.True);
@@ -81,13 +81,41 @@ namespace Meowtosis.Tests
             var first = onboarding.CurrentStep;
             Assert.That(Play(onboarding, first.Move), Is.True);
             Assert.That(onboarding.Stage, Is.EqualTo(OnboardingStage.ShowingRule));
-            Assert.That(onboarding.Text, Is.EqualTo(first.Rule));
+            Assert.That(onboarding.Text, Is.EqualTo(first.Rules[0]));
 
             var second = Script.Tutorial[1].Move;
             Assert.That(Play(onboarding, second), Is.False, "đang hiện câu luật mà vẫn nhận nước");
             onboarding.AcknowledgeRule();
             Assert.That(onboarding.Stage, Is.EqualTo(OnboardingStage.Guided));
             Assert.That(onboarding.Text, Is.EqualTo(Script.Tutorial[1].Text));
+        }
+
+        [Test]
+        public void ClearStepShowsThreeRulesOneAfterAnother()
+        {
+            var onboarding = Start();
+            var clearStep = Script.Tutorial[Script.Tutorial.Count - 1];
+            Assert.That(clearStep.Rules.Count, Is.EqualTo(3));
+            for (var index = 0; index < Script.Tutorial.Count - 1; index++)
+            {
+                Play(onboarding, Script.Tutorial[index].Move);
+                AcknowledgeAll(onboarding);
+            }
+            Play(onboarding, clearStep.Move);
+            Assert.That(onboarding.Text, Is.EqualTo(clearStep.Rules[0]));
+            onboarding.AcknowledgeRule();
+            Assert.That(onboarding.Stage, Is.EqualTo(OnboardingStage.ShowingRule));
+            Assert.That(onboarding.Text, Is.EqualTo(clearStep.Rules[1]));
+            onboarding.AcknowledgeRule();
+            Assert.That(onboarding.Stage, Is.EqualTo(OnboardingStage.ShowingRule));
+            Assert.That(onboarding.Text, Is.EqualTo(clearStep.Rules[2]));
+            onboarding.AcknowledgeRule();
+            Assert.That(onboarding.Stage, Is.EqualTo(OnboardingStage.Free));
+        }
+
+        private static void AcknowledgeAll(Onboarding onboarding)
+        {
+            while (onboarding.Stage == OnboardingStage.ShowingRule) onboarding.AcknowledgeRule();
         }
 
         [Test]
@@ -108,7 +136,7 @@ namespace Meowtosis.Tests
             foreach (var step in Script.Tutorial)
             {
                 Play(onboarding, step.Move);
-                onboarding.AcknowledgeRule();
+                AcknowledgeAll(onboarding);
             }
             Assert.That(onboarding.Stage, Is.EqualTo(OnboardingStage.Free));
             Assert.That(onboarding.Text, Is.EqualTo(Script.Tip));

@@ -23,7 +23,9 @@ namespace Meowtosis.Presentation
         private const float ChainDelay = 0.1f;
         private const float ChainStep = 0.05f;
         private const float GateGlowDelay = 0.08f;
-        private const float FrostStep = 0.07f;
+        private const float ColorChangeSeconds = 0.42f;
+        private const float IceSlideSecondsPerCell = 0.17f;   // lướt chậm để mắt kịp nhìn
+        private const float IceSlideMinimumSeconds = 0.4f;
 
         private readonly BoardView board;
         private readonly BoardEffects effects;
@@ -42,7 +44,8 @@ namespace Meowtosis.Presentation
 
         public IEnumerator Run(MoveResult move, Action finished, bool lingerOnClear)
         {
-            PlacePiece(move);
+            var slideSeconds = PlacePiece(move);
+            if (slideSeconds > 0f) yield return new WaitForSeconds(slideSeconds);
             var removedAlready = false;
             foreach (var stage in move.Stages)
             {
@@ -50,6 +53,13 @@ namespace Meowtosis.Presentation
                 var cleared = EventsOf(stage, TurnEventKind.Cleared);
                 var spreads = EventsOf(stage, TurnEventKind.VirusSpread);
                 var woken = EventsOf(stage, TurnEventKind.WokeUp);
+                var flips = EventsOf(stage, TurnEventKind.ColorChanged);
+
+                if (flips.Count > 0)
+                {
+                    PlayColorChanges(stage, flips);
+                    yield return new WaitForSeconds(ColorChangeSeconds);
+                }
 
                 if (poisoned.Count > 0 || cleared.Count > 0)
                 {
@@ -82,7 +92,8 @@ namespace Meowtosis.Presentation
         private static List<TurnEvent> EventsOf(TurnStage stage, TurnEventKind kind) =>
             stage.Events.Where(turnEvent => turnEvent.Kind == kind).ToList();
 
-        private void PlacePiece(MoveResult move)
+        // Trả về số giây bản sao lướt trên băng (0 nếu không lướt): bước sau chờ chừng đó mới diễn tiếp.
+        private float PlacePiece(MoveResult move)
         {
             var parent = move.Before[move.SourceCell];
             if (move.Replaced is Piece replaced)
@@ -96,10 +107,11 @@ namespace Meowtosis.Presentation
             {
                 effects.Sparkle(board.CellPosition(move.PlacedCell));
             }
-            if (move.SwipeDirection.HasValue) PlayMechanics(move, move.SwipeDirection.Value);
+            var slideSeconds = move.SwipeDirection.HasValue ? PlayMechanics(move, move.SwipeDirection.Value) : 0f;
 
             if (move.SwipeDirection.HasValue) PlaySwipe(move, parent.Value, move.SwipeDirection.Value);
             else PlayBooster(move, parent);
+            return slideSeconds;
         }
 
         private void PlaySwipe(MoveResult move, Piece parent, Direction direction)
@@ -130,7 +142,8 @@ namespace Meowtosis.Presentation
 
         // Hiệu ứng riêng của cơ chế trên đường đi của cú vuốt: màng một chiều phát hào quang khi có quân đi qua,
         // bản sao trượt trên băng để lại tuyết ở từng ô băng đi qua.
-        private void PlayMechanics(MoveResult move, Direction direction)
+        // Trả về số giây bản sao lướt trên băng (0 nếu không lướt).
+        private float PlayMechanics(MoveResult move, Direction direction)
         {
             var level = move.Before.Level;
             var crossings = new List<KeyValuePair<int, int>>();
@@ -154,10 +167,26 @@ namespace Meowtosis.Presentation
                 }
             }
 
-            board.StartCoroutine(PlayMechanicsLater(level, direction, crossings, frostCells));
+            // Bản sao trượt xa hơn ô đầu tiên (do băng): lướt chậm tới ô dừng, vạch tốc độ bám theo suốt quãng lướt.
+            var slideSeconds = 0f;
+            if (target != Level.NoCell && move.PlacedCell != target && move.Placed[move.PlacedCell] is Piece slider)
+            {
+                var view = board.PieceViewOf(slider.Id);
+                if (view != null)
+                {
+                    var distance = Vector3.Distance(board.CellPosition(move.SourceCell), board.CellPosition(move.PlacedCell));
+                    slideSeconds = Mathf.Max(IceSlideMinimumSeconds, distance * IceSlideSecondsPerCell);
+                    board.SlidePieceTo(view, move.PlacedCell, slideSeconds);
+                    effects.SpeedLines(view, direction, slideSeconds);
+                }
+            }
+
+            var frostStep = frostCells.Count > 0 ? Mathf.Max(slideSeconds, 0.1f) / frostCells.Count : 0.07f;
+            board.StartCoroutine(PlayMechanicsLater(level, direction, crossings, frostCells, frostStep));
+            return slideSeconds;
         }
 
-        private IEnumerator PlayMechanicsLater(Level level, Direction direction, List<KeyValuePair<int, int>> crossings, List<int> frostCells)
+        private IEnumerator PlayMechanicsLater(Level level, Direction direction, List<KeyValuePair<int, int>> crossings, List<int> frostCells, float frostStep)
         {
             yield return new WaitForSeconds(GateGlowDelay);
             var passed = false;
@@ -173,7 +202,7 @@ namespace Meowtosis.Presentation
             foreach (var cell in frostCells)
             {
                 effects.Frost(board.CellPosition(cell));
-                yield return new WaitForSeconds(FrostStep);
+                yield return new WaitForSeconds(frostStep);
             }
         }
 
@@ -212,6 +241,19 @@ namespace Meowtosis.Presentation
                 effects.Sparkle(position);
                 if (parent.HasValue) sounds.PlayMeow(parent.Value.Species);
             }
+        }
+
+        // Mèo hai màu đổi màu: vẽ lại đúng màu mới, thân biến hình một nhịp, tia sáng màu mới nổ ra.
+        private void PlayColorChanges(TurnStage stage, List<TurnEvent> flips)
+        {
+            board.ShowPieces(stage.Board, null);
+            foreach (var turnEvent in flips)
+            {
+                var piece = turnEvent.Piece;
+                board.PieceViewOf(piece.Id)?.PlayMotion(motions.Morph);
+                effects.ColorFlip(board.CellPosition(turnEvent.Cell), art.ColorOf(piece.OtherColor.Value), art.ColorOf(piece.Species));
+            }
+            sounds.Play(SoundId.ColorSwitch);
         }
 
         private void RemovePoisoned(List<TurnEvent> poisoned)
