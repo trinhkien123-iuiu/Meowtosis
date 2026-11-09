@@ -249,8 +249,12 @@ namespace Meowtosis.Tests
         }
 
         [Test, Description("I5")]
-        public void PushedRowsDoNotSlide() =>
-            Assert.That(TestLevel.FromRows("AB==").Play("0 0 right").Rows, Is.EqualTo(Rows("AAB.")));
+        public void CatPushedOntoIceSlidesToTheEdge() =>
+            Assert.That(TestLevel.FromRows("AB==").Play("0 0 right").Rows, Is.EqualTo(Rows("AA.B")));
+
+        [Test, Description("I7")]
+        public void OnlyTheFrontOfAPushedRowSlides() =>
+            Assert.That(TestLevel.FromRows("ABC=..").Play("0 0 right").Rows, Is.EqualTo(Rows("AAB.C.")));
 
         [Test, Description("I6")]
         public void VirusSpreadsOneCellOntoIce() =>
@@ -268,11 +272,18 @@ namespace Meowtosis.Tests
         }
 
         [Test, Description("B2")]
-        public void MutateWakesSleepingCats()
+        public void MutateRefusesSleepingCats()
         {
             var sleeping = TestLevel.FromRows("A.", "Bc", "C.").Start();
-            Assert.That(Rules.Boosters.TryMutate(sleeping, 3, Species.Red, out var fromSleeping), Is.True);
-            Assert.That(fromSleeping.After[3].Value.IsAsleep, Is.False);
+            Assert.That(Rules.Boosters.TryMutate(sleeping, 3, Species.Red, out _), Is.False);
+        }
+
+        [Test, Description("B5")]
+        public void TransplantRefusesSleepingCatsAsSource()
+        {
+            var board = TestLevel.FromRows("Ac.", "B..").Start();
+            Assert.That(Rules.Boosters.TryTransplant(board, 1, 2, out _), Is.False);
+            Assert.That(Rules.Boosters.TryTransplant(board, 0, 2, out _), Is.True);
         }
 
         [Test, Description("B3")]

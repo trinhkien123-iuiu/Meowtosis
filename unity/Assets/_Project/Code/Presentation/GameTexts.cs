@@ -8,7 +8,7 @@ namespace Meowtosis.Presentation
     // nằm thẳng trong scene.
     public static class GameTexts
     {
-        public const string HeartsFull = "Đầy";
+        public const string HeartsFull = "Full";
 
         public static string LevelBadge(int levelNumber) => $"Lv{levelNumber}";
 
@@ -76,6 +76,11 @@ namespace Meowtosis.Presentation
         public const string TransplantPickTarget = "Chạm ô trống để cấy bản sao";
         public const string NoOtherColor = "Không có màu khác để đổi";
         public const string NotOnVirus = "Booster không dùng được lên virus";
+        public const string DefaultAvatar = "Mặc định";
+        public const string AvatarTitle = "AVATAR";
+        public const string AvatarSave = "Lưu";
+        public const string AvatarHint = "Chọn chú mèo đại diện cho bạn";
+        public const string NotOnSleeping = "Mèo đang ngủ, booster không dùng được";
         public const string NotOnToxic = "Không cấy vào ô độc được";
         public const string Revived = "Hồi sinh: đã quay lại trước nước thua và trả lại tim";
         public const string FollowTheHand = "Làm theo ngón tay trước nhé";

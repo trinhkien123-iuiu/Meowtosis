@@ -193,11 +193,11 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
 
 - **Ký hiệu:** `=` (ô băng đang trống).
 - **Xuất hiện:** level 49 (hướng dẫn tương tác), khối 5.
-- **Luật:** ô băng là ô thường phải lấp. Bản sao **vuốt vào ô băng đang trống** thì trượt tiếp theo hướng vuốt, qua các ô băng trống, cho tới khi:
+- **Luật:** ô băng là ô thường phải lấp. Quân nào **đi vào ô băng đang trống** thì trượt tiếp theo hướng vuốt, qua các ô băng trống, cho tới khi gặp vật cản. Áp dụng cho bản sao (I1–I4) và **con đầu của dãy bị đẩy** (I5, I7):
   - ô phía trước là mép, lỗ, màng chặn hoặc có quân (I1, I2): dừng lại trên băng;
   - ô phía trước không phải băng: trượt sang ô đó rồi dừng (I3); ô đó là ô độc thì bản sao chết (I4).
   Trượt xảy ra ở bước 1 (đặt bản sao), trước mọi bước khác của lượt.
-- **Không trượt:** dãy bị đẩy (I5), bản sao thay thế (ô đích đã có quân), virus lan (I6), booster Cấy ghép.
+- **Không trượt:** các con phía sau trong dãy bị đẩy (chỉ con đầu dãy vào ô trống), bản sao thay thế (ô đích đã có quân), con cuối dãy ăn virus (ô đó không trống), virus lan (I6), booster Cấy ghép.
 - **Cách lấp một dải băng:** lấp từ đầu xa trước, bản sao sau trượt tới và dừng sát bản sao trước; hoặc vuốt vào băng từ bên cạnh dải (vuông góc), khi đó bản sao dừng ngay vì ô kế là mép hoặc quân.
 - **Ý nghĩa đo được** (`tools/study-mechanics.js`, 8 level): băng làm đổi lời giải (bộ sinh loại level mà lời giải không băng vẫn thắng), thường **rút ngắn** đường đưa mèo đi xa (par giảm trung bình 0,75 nước, tới 3 nước ở level 54–55), số quyết định gần như không đổi. Băng là cơ chế giúp sức, hợp người chơi casual.
 
@@ -207,7 +207,8 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
 | I2 | `A==A` | (0,0) phải | `A.AA`: dừng ngay trước mèo |
 | I3 | `A=.=` | (0,0) phải | `A.A.`: ra khỏi băng là dừng |
 | I4 | `A==~` | (0,0) phải | `A...`: trượt vào ô độc và chết |
-| I5 | `AB==` | (0,0) phải | `AAB.`: dãy bị đẩy chỉ đi 1 ô |
+| I5 | `AB==` | (0,0) phải | `AA.B`: con bị đẩy lên băng trượt tới mép, bản sao đứng ở ô cũ của nó |
+| I7 | `ABC=..` | (0,0) phải | `AAB.C.`: chỉ con đầu dãy (`C`) trượt, ra khỏi băng thì dừng ở ô thường đầu tiên; `B` đứng yên |
 | I6 | `>== / A..` | (1,0) phải | `>>. / AA.`: virus lan lên băng 1 ô |
 
 ### Vi khuẩn (đã bỏ)
@@ -275,7 +276,7 @@ Bỏ ngày 2026-11-07. Đo bằng `tools/study-mechanics.js` cho thấy đổi v
 | Bị khử 3 | Có | Có | **Không** |
 | Chết trên ô độc | Có | Có | Có |
 | Bị virus ăn | Có | Có | Không (virus không lan vào virus) |
-| Đột biến | Có (trừ con cuối của một màu) | Có, và thức luôn | **Không** |
+| Đột biến, Cấy ghép | Có (Đột biến trừ con cuối của một màu) | **Không** | **Không** |
 | Tính là đã lấp ô | Có | Có | **Không** |
 | Là màu mèo (hết là thua) | Có | Có | Không |
 
@@ -287,8 +288,8 @@ Mỗi booster dùng là **một nước** (tính vào số nước, ảnh hưở
 
 | Booster | Làm gì | Không dùng được khi | Mã |
 |---|---|---|---|
-| **Đột biến** | Đổi một tế bào sang màu khác có trong màn. Mèo ngủ bị đổi thì thức luôn | Chọn virus; chọn con cuối cùng của một màu (đổi đi là tuyệt chủng) | B1, B2 |
-| **Cấy ghép** | Chọn một tế bào, bản sao của nó mọc ở **bất kỳ** ô trống nào, không đẩy gì | Ô đích là ô độc hoặc đã có tế bào; tế bào nguồn là virus | B3 |
+| **Đột biến** | Đổi một tế bào sang màu khác có trong màn | Chọn virus; chọn **mèo ngủ**; chọn con cuối cùng của một màu (đổi đi là tuyệt chủng) | B1, B2 |
+| **Cấy ghép** | Chọn một tế bào, bản sao của nó mọc ở **bất kỳ** ô trống nào, không đẩy gì | Ô đích là ô độc hoặc đã có tế bào; tế bào nguồn là virus hoặc **mèo ngủ** | B3, B5 |
 | **Hồi sinh** | Chỉ dùng ngay sau khi thua: quay lại trước nước thua, trả lại 1 tim và booster đã dùng ở nước đó | Chưa thua | — |
 
 Số lượt booster lúc đầu: mỗi loại 3.
@@ -300,7 +301,7 @@ Số lượt booster lúc đầu: mỗi loại 3.
 | Câu hỏi | Trả lời | Mã |
 |---|---|---|
 | Sao bản sao chạy tuốt ra xa? | Nó vào ô băng trống nên trượt tới khi gặp vật cản hoặc ra khỏi băng | I1, I2, I3 |
-| Sao dãy bị đẩy lên băng mà không trượt? | Chỉ bản sao vừa vào ô băng trống mới trượt | I5 |
+| Con bị đẩy lên băng có trượt không? | Có: con đầu dãy vào ô băng trống thì trượt như bản sao; các con phía sau đứng yên | I5, I7 |
 | Virus mỗi lượt sinh mấy con? | Mỗi virus không bị chặn sinh 1. Dãy nối đuôi thì chỉ con đầu sinh, nên mỗi nguồn thêm 1 con/lượt | V1, V2 |
 | Sao màn này virus sinh 2, màn kia sinh 1? | Số nguồn virus đang lan được khác nhau | V2 |
 | Diệt con virus gốc có hết lây không? | Không. Con nào cũng lây; phải diệt hết, từ đuôi lên đầu | V4, V5 |

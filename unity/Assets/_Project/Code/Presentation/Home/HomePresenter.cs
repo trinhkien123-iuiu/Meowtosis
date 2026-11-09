@@ -33,6 +33,8 @@ namespace Meowtosis.Presentation
             view.TabClicked += OnTabClicked;
             view.SoundToggled += OnSoundToggled;
             view.MusicToggled += OnMusicToggled;
+            view.AvatarClicked += OnAvatarClicked;
+            view.AvatarChosen += OnAvatarChosen;
             map.LevelClicked += OnLevelClicked;
             map.BackClicked += OnMapBack;
             map.ResetClicked += OnMapReset;
@@ -45,6 +47,8 @@ namespace Meowtosis.Presentation
             view.TabClicked -= OnTabClicked;
             view.SoundToggled -= OnSoundToggled;
             view.MusicToggled -= OnMusicToggled;
+            view.AvatarClicked -= OnAvatarClicked;
+            view.AvatarChosen -= OnAvatarChosen;
             map.LevelClicked -= OnLevelClicked;
             map.BackClicked -= OnMapBack;
             map.ResetClicked -= OnMapReset;
@@ -59,6 +63,7 @@ namespace Meowtosis.Presentation
             view.ShowCoins(progress.Coins);
             view.ShowLevel(LevelMap.CurrentIndex(levels, progress) + 1);
             view.ShowAudio(progress.SoundOn, progress.MusicOn);
+            view.ShowAvatar(progress.AvatarId);
             view.ShowTab(HomeTab.Home, false);
             ShowHearts();
             if (navigator.TakeMapRequest()) OpenMap();
@@ -77,6 +82,21 @@ namespace Meowtosis.Presentation
         {
             var timer = GameTexts.HeartTimer(progress.TimeToNextHeart(clock.UtcNow));
             view.ShowHearts(progress.Hearts, timer.Length > 0 ? timer : GameTexts.HeartsFull);
+        }
+
+        private void OnAvatarClicked()
+        {
+            sound.Play(SoundId.PopupOpen);
+            view.ShowAvatarPicker(progress.AvatarId);
+        }
+
+        private void OnAvatarChosen(string avatarId)
+        {
+            sound.Play(SoundId.ButtonTap);
+            if (progress.AvatarId == avatarId) return;
+            progress.AvatarId = avatarId;
+            store.Save(progress);
+            view.ShowAvatar(avatarId);
         }
 
         private void OnPlayClicked()

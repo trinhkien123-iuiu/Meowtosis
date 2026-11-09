@@ -13,13 +13,13 @@ namespace Meowtosis.Domain
             this.turnResolver = turnResolver;
         }
 
-        // Hoán đổi: biến một mèo thành mèo màu khác có trong level. Mèo ngủ thì thức dậy.
-        // Không dùng được cho virus, mèo hai màu và con mèo cuối cùng của một màu.
+        // Hoán đổi: biến một mèo thành mèo màu khác có trong level.
+        // Không dùng được cho virus, mèo ngủ (say như hòn đá), mèo hai màu và con mèo cuối cùng của một màu.
         public bool TryMutate(Board board, int cell, Species color, out MoveResult result)
         {
             result = null;
             var level = board.Level;
-            if (!(board[cell] is Piece piece) || piece.IsVirus || piece.IsTwoColor || piece.Species == color || !level.StartingColors.Contains(color)) return false;
+            if (!(board[cell] is Piece piece) || piece.IsVirus || piece.IsAsleep || piece.IsTwoColor || piece.Species == color || !level.StartingColors.Contains(color)) return false;
             if (level.StartingColors.Contains(piece.Species) && board.Count(other => other.Species == piece.Species) == 1) return false;
 
             var pieces = board.CopyPieces();
@@ -29,12 +29,12 @@ namespace Meowtosis.Domain
         }
 
         // Nhân bản: bản sao của quân ở `from` mọc ở một ô trống bất kỳ, không đẩy gì.
-        // Không dùng được cho virus và không cấy vào ô độc.
+        // Không dùng được cho virus, mèo ngủ và không cấy vào ô độc.
         public bool TryTransplant(Board board, int from, int to, out MoveResult result)
         {
             result = null;
             var level = board.Level;
-            if (!(board[from] is Piece piece) || piece.IsVirus || !level.IsSlot(to) || level.IsToxic(to) || board[to].HasValue) return false;
+            if (!(board[from] is Piece piece) || piece.IsVirus || piece.IsAsleep || !level.IsSlot(to) || level.IsToxic(to) || board[to].HasValue) return false;
 
             var pieces = board.CopyPieces();
             pieces[to] = new Piece(board.NextPieceId, piece.Species);

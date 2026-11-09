@@ -21,6 +21,12 @@ namespace Meowtosis.Presentation
 
         event Action MusicToggled;
 
+        // Chạm vào avatar ở trang Home.
+        event Action AvatarClicked;
+
+        // Chọn một avatar trong bảng chọn (id rỗng là mặc định).
+        event Action<string> AvatarChosen;
+
         void ShowCoins(int coins);
 
         // `status` là thời gian tới tim kế tiếp, hoặc chữ báo tim đã đầy.
@@ -34,5 +40,10 @@ namespace Meowtosis.Presentation
         void SetSwipeEnabled(bool isEnabled);
 
         void ShowAudio(bool soundOn, bool musicOn);
+
+        void ShowAvatar(string avatarId);
+
+        // Mở bảng chọn avatar, đánh dấu avatar đang dùng.
+        void ShowAvatarPicker(string selectedId);
     }
 }

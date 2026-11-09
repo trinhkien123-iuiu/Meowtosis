@@ -1,0 +1,2 @@
+
+Avatars (2026-11-09): ../Avatars/<Kiểu>/Avatar_<Màu>[_Happy].png + Frame_<Kiểu>.png (10 kiểu × 12 màu × 2 biểu cảm, khung vuông bo góc 256×256) do tools/make-avatars.py ghép từ Image_Cat_<Màu>(EndGame).png trong thư mục này. Cùng nguồn Shikacat nên chỉ dùng tạm.

@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3513bf23d4117e84c9386a2dd2266119, type: 3}
+  m_Name: AvatarCatalog
+  m_EditorClassIdentifier: 
+  defaultPicture: {fileID: 21300000, guid: 6ff5c6b167886dc43bdd9afbbe2390a8, type: 3}
+  options:
+  - id: Classic-Orange
+    title: "C\u1ED5 \u0111i\u1EC3n"
+    picture: {fileID: 21300000, guid: 91a31048bb938d648b2e2240cc6f9e7b, type: 3}
+  - id: Ocean-Teal
+    title: "\u0110\u1EA1i d\u01B0\u01A1ng"
+    picture: {fileID: 21300000, guid: 951f67e8fbc2492488fb5287781335a6, type: 3}
+  - id: Night-Purple
+    title: "\u0110\xEAm sao"
+    picture: {fileID: 21300000, guid: 5caf790b7faa05145910a5c2e8f53bae, type: 3}
+  - id: Summer-BabyBlue
+    title: "M\xF9a h\xE8"
+    picture: {fileID: 21300000, guid: dc79033b9ea938b45b09402218bdb9b3, type: 3}
+  - id: Halloween-Lime
+    title: Halloween
+    picture: {fileID: 21300000, guid: db172f74d6ae12344a28790792d2a84b, type: 3}
+  - id: Christmas-Red
+    title: "Gi\xE1ng sinh"
+    picture: {fileID: 21300000, guid: 61ef1b6f0d34acb4480d5860771cb2e2, type: 3}
+  - id: Tet-Yellow_Happy
+    title: "T\u1EBFt"
+    picture: {fileID: 21300000, guid: 1c833bd38214a1246b08528931a5197b, type: 3}
+  - id: Valentine-Pink_Happy
+    title: Valentine
+    picture: {fileID: 21300000, guid: fd090365e3770c446b0e273e15168854, type: 3}
+  - id: Beach-WarmPink
+    title: "\u0110i bi\u1EC3n"
+    picture: {fileID: 21300000, guid: 6dcbc1896cd85cd438a23a5ebdea00ed, type: 3}
+  - id: Desert-Yellow
+    title: "Sa m\u1EA1c"
+    picture: {fileID: 21300000, guid: f6ad332f1f8b75c41887193a4524af3f, type: 3}
+  - id: Pirate-Red
+    title: "C\u01B0\u1EDBp bi\u1EC3n"
+    picture: {fileID: 21300000, guid: b59231e20ff554746beaddcbef590e3f, type: 3}
+  - id: Chef-Orange
+    title: "\u0110\u1EA7u b\u1EBFp"
+    picture: {fileID: 21300000, guid: e42751b83ddb97d46b932c87ffaee541, type: 3}
+  - id: Wizard-Green
+    title: "Ph\xF9 th\u1EE7y"
+    picture: {fileID: 21300000, guid: 95e83760ffa2f2f4480a82547507a90c, type: 3}
+  - id: Astronaut-ElectricBlue
+    title: "Phi h\xE0nh gia"
+    picture: {fileID: 21300000, guid: 2816d3e4a7c0c8c4eb22b01e4681cb86, type: 3}
+  - id: Royal-Purple
+    title: "Ho\xE0ng gia"
+    picture: {fileID: 21300000, guid: 560e16391b58ebe4d8c366f9237973c1, type: 3}
+  - id: Cowboy-Blue
+    title: "Cao b\u1ED3i"
+    picture: {fileID: 21300000, guid: 44f29a1ee30f41e429448076b07c5408, type: 3}
+  - id: Ninja-Red
+    title: Ninja
+    picture: {fileID: 21300000, guid: 27d2c5abd3514f84782aaf63d66e64aa, type: 3}
+  - id: Party-BabyBlue_Happy
+    title: "Ti\u1EC7c t\xF9ng"
+    picture: {fileID: 21300000, guid: d72e595ef708a94489c238e25c7d84b1, type: 3}
+  - id: Sailor-Blue
+    title: "Th\u1EE7y th\u1EE7"
+    picture: {fileID: 21300000, guid: c8fc0670d267d8b49b47a657a0c0d3b8, type: 3}
+  - id: Winter-WarmPink
+    title: "M\xF9a \u0111\xF4ng"
+    picture: {fileID: 21300000, guid: b9ad52c597a44c74ebcb563e79af2047, type: 3}

@@ -18,6 +18,11 @@ namespace Meowtosis.Presentation
         [SerializeField] private Button playButton;
         [SerializeField] private TMP_Text levelText;
 
+        [Header("Avatar")]
+        [SerializeField] private Button avatarButton;
+        [SerializeField] private AvatarSlot avatarSlot;
+        [SerializeField] private AvatarPopup avatarPopup;
+
         [Header("Trang Setting")]
         [SerializeField] private HomeToggleRow soundRow;
         [SerializeField] private HomeToggleRow musicRow;
@@ -29,6 +34,10 @@ namespace Meowtosis.Presentation
         public event Action SoundToggled;
 
         public event Action MusicToggled;
+
+        public event Action AvatarClicked;
+
+        public event Action<string> AvatarChosen;
 
         public void ShowCoins(int coins) => coinsText.text = coins.ToString();
 
@@ -50,8 +59,17 @@ namespace Meowtosis.Presentation
             musicRow.Show(musicOn);
         }
 
+        public void ShowAvatar(string avatarId)
+        {
+            avatarSlot.Show(avatarId);
+        }
+
+        public void ShowAvatarPicker(string selectedId) => avatarPopup.Show(selectedId);
+
         private void Awake()
         {
+            avatarButton.onClick.AddListener(() => AvatarClicked?.Invoke());
+            avatarPopup.Chosen += id => AvatarChosen?.Invoke(id);
             playButton.onClick.AddListener(() => PlayClicked?.Invoke());
             bottomBar.TabClicked += index => TabClicked?.Invoke((HomeTab)index);
             pager.PositionChanged += bottomBar.ShowPosition;

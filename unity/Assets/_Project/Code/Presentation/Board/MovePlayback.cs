@@ -184,7 +184,10 @@ namespace Meowtosis.Presentation
             var crossings = new List<KeyValuePair<int, int>>();
             var target = level.Step(move.SourceCell, direction);
             if (target != Level.NoCell) crossings.Add(new KeyValuePair<int, int>(move.SourceCell, target));
-            foreach (var shift in move.Pushes) crossings.Add(new KeyValuePair<int, int>(shift.From, shift.To));
+            foreach (var shift in move.Pushes)
+            {
+                if (level.Step(shift.From, direction) == shift.To) crossings.Add(new KeyValuePair<int, int>(shift.From, shift.To));
+            }
 
             // Bản sao trượt từ ô đầu tiên tới ô dừng; mỗi ô băng đi qua có một làn tuyết.
             var frostCells = new List<int>();
@@ -214,6 +217,28 @@ namespace Meowtosis.Presentation
                     board.SlidePieceTo(view, move.PlacedCell, slideSeconds);
                     effects.SpeedLines(view, direction, slideSeconds);
                 }
+            }
+
+            // Con đầu dãy bị đẩy lên băng và trượt xa hơn một ô: lướt chậm như bản sao, kèm vạch tốc độ và tuyết.
+            foreach (var shift in move.Pushes)
+            {
+                if (level.Step(shift.From, direction) == shift.To || !(move.Before[shift.From] is Piece pushed)) continue;
+                var at = shift.From;
+                for (var guard = 0; guard < level.CellCount && at != shift.To; guard++)
+                {
+                    var next = level.Step(at, direction);
+                    if (next == Level.NoCell) break;
+                    if (level.IsIce(next)) frostCells.Add(next);
+                    crossings.Add(new KeyValuePair<int, int>(at, next));
+                    at = next;
+                }
+                var pushedView = board.PieceViewOf(pushed.Id);
+                if (pushedView == null) continue;
+                var pushedDistance = Vector3.Distance(board.CellPosition(shift.From), board.CellPosition(shift.To));
+                var pushedSeconds = Mathf.Max(IceSlideMinimumSeconds, pushedDistance * IceSlideSecondsPerCell);
+                board.SlidePieceTo(pushedView, shift.To, pushedSeconds);
+                effects.SpeedLines(pushedView, direction, pushedSeconds);
+                slideSeconds = Mathf.Max(slideSeconds, pushedSeconds);
             }
 
             var frostStep = frostCells.Count > 0 ? Mathf.Max(slideSeconds, 0.1f) / frostCells.Count : 0.07f;

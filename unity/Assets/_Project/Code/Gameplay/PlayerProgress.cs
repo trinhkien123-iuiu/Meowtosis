@@ -50,6 +50,9 @@ namespace Meowtosis.Gameplay
         // Đã đi hết màn hướng dẫn đầu game (Levels/Onboarding.txt) thì không chạy lại.
         public bool HasFinishedOnboarding { get; set; }
 
+        // Avatar người chơi chọn (id trong danh mục avatar của giao diện); rỗng là avatar mặc định.
+        public string AvatarId { get; set; } = "";
+
         public IReadOnlyDictionary<BoosterKind, int> Boosters => boosters;
 
         public IReadOnlyDictionary<string, int> BestStars => bestStars;

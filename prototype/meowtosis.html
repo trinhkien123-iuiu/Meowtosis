@@ -784,16 +784,27 @@ function swipe(level, cells, from, dir, newId = -1) {
   }
   const next = cells.slice();
   let pushed = false, replaced = null;
+  let chainSlid = false;
   if (k >= 0) {
     for (let i = chain.length - 1; i >= 0; i--) next[step(level, chain[i], dir)] = cells[chain[i]];
     pushed = chain.length > 0;
     replaced = eats;
+    // Con đầu dãy bị đẩy vào ô băng đang trống thì trượt tiếp như bản sao, tới khi gặp vật cản hoặc ra khỏi băng.
+    if (pushed && !eats && level.ice[k]) {
+      let end = k;
+      for (let guard = 0; level.ice[end] && guard < cells.length; guard++) {
+        const n = step(level, end, dir);
+        if (n < 0 || next[n]) break;
+        end = n;
+      }
+      if (end !== k) { next[end] = next[k]; next[k] = null; chainSlid = true; }
+    }
   } else {
     if (cells[to].color === parent.color || cells[to].sleep) return null;
     replaced = cells[to];
   }
-  // Băng trơn: bản sao vào ô băng đang trống thì trượt tiếp theo hướng vuốt, qua các ô băng trống, tới khi gặp vật cản
-  // (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng (dừng ở ô thường đầu tiên). Dãy bị đẩy và virus không trượt.
+  // Băng trơn: quân nào vào ô băng đang trống (bản sao, hoặc con đầu của dãy bị đẩy) thì trượt tiếp theo hướng vuốt, qua các
+  // ô băng trống, tới khi gặp vật cản (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng (dừng ở ô thường đầu tiên). Virus lan không trượt.
   let at = to;
   if (!pushed && !replaced) {
     for (let guard = 0; level.ice[at] && guard < cells.length; guard++) {
@@ -803,13 +814,14 @@ function swipe(level, cells, from, dir, newId = -1) {
     }
   }
   next[at] = { color: parent.color, id: newId };
-  return { ...resolve(level, next, [newId, from], newId + 1), pushed, replaced, slid: at !== to };
+  return { ...resolve(level, next, [newId, from], newId + 1), pushed, replaced, slid: at !== to || chainSlid };
 }
 
 // Booster Đột biến: đổi một tế bào sang màu loài khác. Không cho đổi tế bào cuối cùng của một loài.
+// Mèo ngủ say như hòn đá: booster không dùng được lên nó (như vuốt, đẩy, đè).
 function mutate(level, cells, i, color, newId = -1) {
   const c = cells[i];
-  if (!c || c.color === 'V' || c.alt || c.color === color || !level.colors.includes(color)) return null;
+  if (!c || c.color === 'V' || c.sleep || c.alt || c.color === color || !level.colors.includes(color)) return null;
   if (level.colors.includes(c.color) && !cells.some((o, j) => j !== i && o && o.color === c.color)) return null;
   const next = cells.slice();
   next[i] = { color, id: newId };
@@ -819,7 +831,7 @@ function mutate(level, cells, i, color, newId = -1) {
 // Booster Cấy ghép: bản sao của tế bào `from` mọc ở một ô trống bất kỳ (trừ ô độc), không đẩy gì.
 function transplant(level, cells, from, to, newId = -1) {
   const c = cells[from];
-  if (!c || c.color === 'V' || !level.slot[to] || level.toxic[to] || cells[to]) return null;
+  if (!c || c.color === 'V' || c.sleep || !level.slot[to] || level.toxic[to] || cells[to]) return null;
   const next = cells.slice();
   next[to] = { color: c.color, id: newId };
   return resolve(level, next, [newId, from], newId + 1);
@@ -2247,7 +2259,7 @@ function drawMode() {
     out += mark(mode.from, 'mark sel');
     level.slot.forEach((s, i) => { if (s && !level.toxic[i] && !cells[i]) out += mark(i); });
   } else {
-    cells.forEach((c, i) => { if (c && c.color !== 'V') out += mark(i); });
+    cells.forEach((c, i) => { if (c && c.color !== 'V' && !c.sleep) out += mark(i); });
   }
   overlay.innerHTML = out;
   toast(modeHint(), 0);
@@ -2278,6 +2290,7 @@ function onModeTap(ev) {
   const pick = ev.target.closest('[data-pick]');
   const i = slotAt(toBoard(ev));
   if (i >= 0 && cells[i] && cells[i].color === 'V') { refuse(i, 'Booster không dùng được lên virus'); return; }
+  if (i >= 0 && cells[i] && cells[i].sleep) { refuse(i, 'Mèo đang ngủ, booster không dùng được'); return; }
   if (mode.kind === 'mutate') {
     if (pick) {
       const at = mode.cell;

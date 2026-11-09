@@ -9,8 +9,8 @@ namespace Meowtosis.Domain
     // Virus KHÔNG BAO GIỜ bị đẩy: ô kề là virus, hoặc dãy mèo bị đẩy kết thúc bằng virus, thì bản sao (hoặc con cuối của dãy)
     // chiếm ô virus và virus chết, dù phía sau virus còn trống hay không.
     // Không vuốt được mèo ngủ và virus; bản sao không bao giờ thay thế mèo ngủ hoặc quân cùng loài.
-    // Băng trơn: bản sao vào ô băng đang trống thì trượt tiếp theo hướng vuốt, qua các ô băng trống, tới khi gặp vật cản
-    // (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng (dừng ở ô thường đầu tiên). Dãy bị đẩy không trượt.
+    // Băng trơn: quân nào vào ô băng đang trống (bản sao, hoặc con đầu của dãy bị đẩy) thì trượt tiếp theo hướng vuốt,
+    // qua các ô băng trống, tới khi gặp vật cản (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng (dừng ở ô thường đầu tiên).
     public sealed class SwipeRule
     {
         private readonly TurnResolver turnResolver;
@@ -23,7 +23,7 @@ namespace Meowtosis.Domain
         public bool TrySwipe(Board board, Move move, out MoveResult result) =>
             TrySwipe(board, board.Level.IndexOf(move.Row, move.Column), move.Direction, out result);
 
-        // Ô bản sao dừng lại khi vào ô trống `start`: đứng yên nếu không phải băng, trên băng thì trượt tiếp.
+        // Ô một quân dừng lại khi vào ô trống `start`: đứng yên nếu không phải băng, trên băng thì trượt tiếp.
         private static int SlideFrom(Level level, Piece?[] pieces, int start, Direction direction)
         {
             var at = start;
@@ -68,6 +68,17 @@ namespace Meowtosis.Domain
                     var to = level.Step(from, direction);
                     pieces[to] = board[from];
                     shifts.Add(new CellShift(from, to));
+                }
+                // Con đầu dãy (shifts[0]) bị đẩy vào ô băng đang trống thì trượt tiếp như bản sao.
+                if (!eaten.HasValue && line.Count > 0 && level.IsIce(end))
+                {
+                    var stop = SlideFrom(level, pieces, end, direction);
+                    if (stop != end)
+                    {
+                        pieces[stop] = pieces[end];
+                        pieces[end] = null;
+                        shifts[0] = new CellShift(shifts[0].From, stop);
+                    }
                 }
                 pushes = shifts;
                 replaced = eaten;

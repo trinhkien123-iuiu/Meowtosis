@@ -22,3 +22,5 @@ IconRetry.png       <- retry.png        icon chơi lại
 IconPause.png       <- pause.png        icon tạm dừng (mở Cài đặt)
 
 BoosterBarWood.png  <- bot_bter.png     nền gỗ thanh booster ở đáy màn chơi
+
+Avatar mèo cam đúng bản gốc (2026-11-09): IpAvatar/IP_ingame.{skel.bytes,atlas.txt,png} <- TextAsset/IP_ingame.skel.bytes, IP_ingame.atlas.bytes, Texture2D/IP_ingame.png (Spine 4.2.43, mascot "IP" của Catdom, có khung avatar BgAva, mắt chớp, tay, miệng). Thay trước khi phát hành.

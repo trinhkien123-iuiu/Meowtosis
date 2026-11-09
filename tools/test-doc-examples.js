@@ -154,7 +154,8 @@ ex('I4', 'trượt vào ô độc thì chết', () => {
   assert.deepStrictEqual(g.rows, ['A...']);
   assert(!g.lost);
 });
-ex('I5', 'dãy bị đẩy không trượt, chỉ đi 1 ô', () => assert.deepStrictEqual(play({ rows: ['AB=='] }, [[0, 0, 'r']]).rows, ['AAB.']));
+ex('I5', 'con bị đẩy lên băng trượt tới mép', () => assert.deepStrictEqual(play({ rows: ['AB=='] }, [[0, 0, 'r']]).rows, ['AA.B']));
+ex('I7', 'chỉ con đầu dãy bị đẩy trượt, ra khỏi băng thì dừng', () => assert.deepStrictEqual(play({ rows: ['ABC=..'] }, [[0, 0, 'r']]).rows, ['AAB.C.']));
 ex('I6', 'virus lan lên băng cũng chỉ 1 ô', () => assert.deepStrictEqual(play({ rows: ['>==', 'A..'] }, [[1, 0, 'r']]).rows, ['>>.', 'AA.']));
 
 // --- Booster ---
@@ -164,10 +165,14 @@ ex('B1', 'Đột biến: không đổi được virus, không đổi con cuối 
   assert.strictEqual(ctx.mutate(lv, lv.init, 0, 'B'), null);
   assert(ctx.mutate(lv, lv.init, 2, 'A'));
 });
-ex('B2', 'Đột biến biến mèo ngủ thành mèo thức', () => {
+ex('B2', 'Đột biến không dùng được lên mèo ngủ (mèo ngủ say như hòn đá)', () => {
   const lv2 = ctx.parseLevel({ rows: ['A.', 'Bc', 'C.'] });
-  const r = ctx.mutate(lv2, lv2.init, 3, 'A');
-  assert(r && !r.cells[3].sleep);
+  assert.strictEqual(ctx.mutate(lv2, lv2.init, 3, 'A'), null);
+});
+ex('B5', 'Cấy ghép không lấy mèo ngủ làm nguồn (không "nhân" ra một con thức)', () => {
+  const lv = ctx.parseLevel({ rows: ['Ac.', 'B..'] });
+  assert.strictEqual(ctx.transplant(lv, lv.init, 1, 2), null);
+  assert(ctx.transplant(lv, lv.init, 0, 2));
 });
 ex('B3', 'Cấy ghép: bản sao mọc ở ô trống bất kỳ, không đẩy gì; không vào ô độc', () => {
   const lv = ctx.parseLevel({ rows: ['A.~', 'B..'] });

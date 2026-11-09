@@ -58,6 +58,11 @@ namespace Meowtosis.Presentation
                 hud.ShowToast(GameTexts.NotOnVirus);
                 return null;
             }
+            if (piece.HasValue && piece.Value.IsAsleep)
+            {
+                hud.ShowToast(GameTexts.NotOnSleeping);
+                return null;
+            }
             return Kind == BoosterKind.Mutate ? TapForMutate(cell, piece, current) : TapForTransplant(cell, piece, current);
         }
 
@@ -109,7 +114,7 @@ namespace Meowtosis.Presentation
         }
 
         private static IEnumerable<int> PiecesThatCanBeUsed(Board current) =>
-            Enumerable.Range(0, current.CellCount).Where(cell => current[cell].HasValue && !current[cell].Value.IsVirus);
+            Enumerable.Range(0, current.CellCount).Where(cell => current[cell].HasValue && !current[cell].Value.IsVirus && !current[cell].Value.IsAsleep);
 
         private static IEnumerable<int> EmptyCells(Board current) =>
             Enumerable.Range(0, current.CellCount)
