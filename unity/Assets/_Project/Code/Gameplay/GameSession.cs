@@ -32,6 +32,9 @@ namespace Meowtosis.Gameplay
 
         public int MovesMade => history.Count;
 
+        // Số lần vuốt thật (không tính nước dùng booster): dùng để chấm sao, nên dùng booster không bị trừ bước.
+        public int SwipesMade => history.Count(move => move.Booster == BoosterKind.None);
+
         public bool CanUndo => history.Count > 0;
 
         // Các bàn trước đó, gần nhất trước.

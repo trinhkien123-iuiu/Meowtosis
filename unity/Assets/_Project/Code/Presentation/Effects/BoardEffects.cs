@@ -10,6 +10,7 @@ namespace Meowtosis.Presentation
         [SerializeField] private ParticleSystem ringPrefab;
         [SerializeField] private ParticleSystem sparklePrefab;
         [SerializeField] private ParticleSystem smokePrefab;
+        [SerializeField] private ParticleSystem dustPrefab;
         [SerializeField] private ParticleSystem splatPrefab;
         [SerializeField] private ParticleSystem rainbowPrefab;
         [SerializeField] private ParticleSystem confettiPrefab;
@@ -35,6 +36,9 @@ namespace Meowtosis.Presentation
         public void Sparkle(Vector3 position) => Spawn(sparklePrefab, position, null);
 
         public void Smoke(Vector3 position) => Spawn(smokePrefab, position, null);
+
+        // Bụi trắng kem tung sang hai bên sát mặt ô, như vừa đáp đất từ trên cao (bản sao của Nhân bản đáp xuống).
+        public void Dust(Vector3 position) => Spawn(dustPrefab, position, null);
 
         public void Splat(Vector3 position) => Spawn(splatPrefab, position, null);
 
@@ -90,7 +94,8 @@ namespace Meowtosis.Presentation
 
         public void Dizzy(PieceView piece) => Instantiate(dizzyPrefab, piece.Visual);
 
-        public void FloatText(Vector3 position, string text) => Instantiate(floatingTextPrefab, position, Quaternion.identity, transform).Show(text);
+        public void FloatText(Vector3 position, string text) =>
+            Instantiate(floatingTextPrefab, position, Quaternion.identity, transform).Show(text, targetCamera);
 
         private void Spawn(ParticleSystem prefab, Vector3 position, Color? color, Quaternion? rotation = null)
         {

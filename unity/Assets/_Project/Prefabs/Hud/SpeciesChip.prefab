@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 6519891803501538375}
   - component: {fileID: 4425750661464274357}
   - component: {fileID: 2991538863152449372}
+  - component: {fileID: 4772057478952973575}
   m_Layer: 0
   m_Name: SpeciesChip
   m_TagString: Untagged
@@ -227,6 +228,27 @@ MonoBehaviour:
   icon: {fileID: 676420081689556550}
   label: {fileID: 1737009933008790575}
   button: {fileID: 0}
+  sleepEffect: {fileID: 4772057478952973575}
+--- !u!114 &4772057478952973575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5236324400902109269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f97ebdc2bb3e84f953c3d40e1b700c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  letter: {fileID: 21300000, guid: 85efeaae3d1728e4fae79085f149c2ef, type: 3}
+  anchor: {fileID: 8792123908394618535}
+  letterSeconds: 1.6
+  letterEvery: 0.7
+  startSize: 14
+  endSize: 26
+  travel: {x: 14, y: 38}
+  swayWidth: 5
 --- !u!1 &7138520354832201018
 GameObject:
   m_ObjectHideFlags: 0

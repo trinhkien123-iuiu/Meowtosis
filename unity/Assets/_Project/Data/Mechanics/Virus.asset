@@ -14,10 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mechanic: 8
   title: VIRUS
-  description: "Sau m\u1ED7i l\u01B0\u1EE3t, virus lan 1 \xF4 theo h\u01B0\u1EDBng
-    m\u1EAFt nh\xECn v\xE0 \u0103n con \u1EDF \u0111\xF3. Di\u1EC7t b\u1EB1ng b\u1EA3n
-    sao thay th\u1EBF (t\u1EEB \u0111u\xF4i l\xEAn \u0111\u1EA7u) ho\u1EB7c \u0111\u1EA9y
-    v\xE0o \xF4 \u0111\u1ED9c."
+  description: "Sau mỗi lượt, virus lan 1 ô theo hướng mắt nhìn và ăn con ở đó. Virus không bị đẩy: vuốt mèo vào virus là ăn nó (từ đuôi dãy lên đầu), hoặc để virus lan vào ô độc."
   demoRows:
   - '>.A'
   demoGoal: []

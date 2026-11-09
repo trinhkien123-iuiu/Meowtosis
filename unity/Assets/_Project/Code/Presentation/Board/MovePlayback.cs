@@ -32,9 +32,11 @@ namespace Meowtosis.Presentation
         private readonly ISoundPlayer sounds;
         private readonly PieceMotions motions;
         private readonly BoardArt art;
+        private readonly BoosterPlayback boosters;
 
         public MovePlayback(BoardView board, BoardEffects effects, ISoundPlayer sounds, PieceMotions motions, BoardArt art)
         {
+            boosters = new BoosterPlayback(board, effects, sounds, motions, art);
             this.board = board;
             this.effects = effects;
             this.sounds = sounds;
@@ -89,28 +91,40 @@ namespace Meowtosis.Presentation
             finished?.Invoke();
         }
 
+        // Ô mà quân `pieceId` đang đứng trong `board` (dự phòng: `fallback`).
+        private static int CellOf(Board board, int pieceId, int fallback)
+        {
+            for (var cell = 0; cell < board.CellCount; cell++)
+            {
+                if (board[cell] is Piece piece && piece.Id == pieceId) return cell;
+            }
+            return fallback;
+        }
+
         private static List<TurnEvent> EventsOf(TurnStage stage, TurnEventKind kind) =>
             stage.Events.Where(turnEvent => turnEvent.Kind == kind).ToList();
 
         // Trả về số giây bản sao lướt trên băng (0 nếu không lướt): bước sau chờ chừng đó mới diễn tiếp.
         private float PlacePiece(MoveResult move)
         {
+            // Booster (Hoán đổi, Nhân bản) có diễn hoạt riêng, chờ nó xong rồi mới khử 3, virus lan...
+            if (!move.SwipeDirection.HasValue) return boosters.Play(move);
             var parent = move.Before[move.SourceCell];
             if (move.Replaced is Piece replaced)
             {
                 board.TakePieceView(replaced.Id)?.PlayThenDestroy(motions.Pop);
-                effects.Burst(board.CellPosition(move.PlacedCell), art.ColorOf(replaced.Species));
+                // Dãy mèo bị đẩy tới virus thì virus chết ở ô của nó, không phải ở ô bản sao.
+                effects.Burst(board.CellPosition(CellOf(move.Before, replaced.Id, move.PlacedCell)), art.ColorOf(replaced.Species));
                 sounds.Play(SoundId.Replace);
             }
             board.ShowPieces(move.Placed, move);
             if (move.PlacedCell != move.SourceCell)
             {
                 effects.Sparkle(board.CellPosition(move.PlacedCell));
+                effects.Dust(board.CellPosition(move.PlacedCell));   // bản sao đáp xuống ô, tung chút bụi
             }
-            var slideSeconds = move.SwipeDirection.HasValue ? PlayMechanics(move, move.SwipeDirection.Value) : 0f;
-
-            if (move.SwipeDirection.HasValue) PlaySwipe(move, parent.Value, move.SwipeDirection.Value);
-            else PlayBooster(move, parent);
+            var slideSeconds = PlayMechanics(move, move.SwipeDirection.Value);
+            PlaySwipe(move, parent.Value, move.SwipeDirection.Value);
             return slideSeconds;
         }
 
@@ -226,23 +240,6 @@ namespace Meowtosis.Presentation
             effects.Dizzy(view);
         }
 
-        private void PlayBooster(MoveResult move, Piece? parent)
-        {
-            sounds.Play(SoundId.Booster);
-            var position = board.CellPosition(move.PlacedCell);
-            var newPiece = move.Placed[move.PlacedCell];
-            if (move.PlacedCell == move.SourceCell)
-            {
-                effects.Rainbow(position);
-                if (newPiece.HasValue) board.PieceViewOf(newPiece.Value.Id)?.PlayMotion(motions.Morph);
-            }
-            else
-            {
-                effects.Sparkle(position);
-                if (parent.HasValue) sounds.PlayMeow(parent.Value.Species);
-            }
-        }
-
         // Mèo hai màu đổi màu: vẽ lại đúng màu mới, thân biến hình một nhịp, tia sáng màu mới nổ ra.
         private void PlayColorChanges(TurnStage stage, List<TurnEvent> flips)
         {
@@ -292,9 +289,8 @@ namespace Meowtosis.Presentation
                     effects.Burst(position, new Color(1f, 0.25f, 0.25f));
                 }
 
-                sounds.Play(SoundId.AngryMeow);
-                sounds.Play(SoundId.Lose);
-                board.Shake();
+                sounds.Play(SoundId.AngryMeow);   // tiếng thua và rung bàn đã nằm trong board.Mourn()
+                board.SlowMotion(0.35f, 0.7f);
                 effects.FloatText(board.CellPosition(cleared[cleared.Count / 2].Cell), $"HẾT MÈO {GameTexts.ColorName(species).ToUpper()}!");
             }
             else
@@ -303,14 +299,14 @@ namespace Meowtosis.Presentation
                 {
                     board.TakePieceView(turnEvent.Piece.Id)?.PlayThenDestroy(motions.Pop);
                     var position = board.CellPosition(turnEvent.Cell);
-                    var color = art.ColorOf(turnEvent.Piece.Species);
-                    effects.Burst(position, color);
-                    effects.Ring(position, color);
+                    // Dọn chỗ chứ không ăn mừng: một làn bụi mềm và vòng sóng mờ cùng màu mèo, không pháo hoa.
+                    effects.Dust(position);
+                    effects.Ring(position, Color.Lerp(art.ColorOf(turnEvent.Piece.Species), Color.white, 0.5f));
                 }
 
+                // Khử 3 an toàn chỉ là dọn chỗ, không phải tiến triển: tiếng trung tính (bụp, phụt), không có nhạc thưởng.
                 sounds.Play(SoundId.Clear);
-                sounds.Play(SoundId.Sparkle);
-                board.Shake();
+                board.Shake(0.35f);
                 effects.FloatText(board.CellPosition(cleared[cleared.Count / 2].Cell), $"+{cleared.Count} Ô TRỐNG!");
             }
         }

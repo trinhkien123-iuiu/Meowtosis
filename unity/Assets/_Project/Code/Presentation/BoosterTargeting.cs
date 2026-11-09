@@ -37,7 +37,7 @@ namespace Meowtosis.Presentation
             sourceCell = Level.NoCell;
             Prompt = kind == BoosterKind.Mutate ? GameTexts.MutatePickCat : GameTexts.TransplantPickSource;
             board.Highlight(PiecesThatCanBeUsed(current));
-            hud.ShowColorChoices(Array.Empty<Species>());
+            hud.ShowColorChoices(Array.Empty<Species>(), default);
         }
 
         public void Cancel()
@@ -46,7 +46,7 @@ namespace Meowtosis.Presentation
             sourceCell = Level.NoCell;
             Prompt = "";
             board.Highlight(Array.Empty<int>());
-            hud.ShowColorChoices(Array.Empty<Species>());
+            hud.ShowColorChoices(Array.Empty<Species>(), default);
         }
 
         // Chạm một ô khi đang chọn; trả lệnh khi đã đủ mục tiêu, không thì null.
@@ -85,7 +85,7 @@ namespace Meowtosis.Presentation
             sourceCell = cell;
             Prompt = GameTexts.MutatePickColor;
             board.Highlight(new[] { cell });
-            hud.ShowColorChoices(otherColors);
+            hud.ShowColorChoices(otherColors, board.ScreenPointOf(cell));
             return null;
         }
 

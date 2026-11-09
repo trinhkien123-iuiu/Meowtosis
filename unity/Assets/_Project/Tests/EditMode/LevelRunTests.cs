@@ -66,6 +66,18 @@ namespace Meowtosis.Tests
         }
 
         [Test]
+        public void BoosterMovesDoNotCostStars()
+        {
+            var run = Run(1, "A..", "B..");
+            var full = run.Stars;
+            Assert.That(run.TryPlay(new TransplantCommand(Rules.Boosters, 0, 2), out _), Is.True);
+            Assert.That(run.Session.MovesMade, Is.EqualTo(1));
+            Assert.That(run.Session.SwipesMade, Is.EqualTo(0));
+            Assert.That(run.Stars.Fill, Is.EqualTo(full.Fill), "dùng booster không bị trừ bước");
+            Assert.That(run.Stars.Stars, Is.EqualTo(3));
+        }
+
+        [Test]
         public void BoosterIsSpentAndRefundedOnUndo()
         {
             var run = Run(2, "A..", "B..");
@@ -107,11 +119,10 @@ namespace Meowtosis.Tests
         {
             var progress = PlayerProgress.CreateNew();
             Assert.That(progress.TryBuyBooster(BoosterKind.Mutate), Is.False);
-            progress.RecordWin("a", 3);
-            progress.RecordWin("b", 3);
+            foreach (var id in new[] { "a", "b", "c", "d", "e" }) progress.RecordWin(id, 3);
             Assert.That(progress.TryBuyBooster(BoosterKind.Mutate), Is.True);
-            Assert.That(progress.Coins, Is.EqualTo(60 - PlayerProgress.BoosterPrice));
-            Assert.That(progress.BoosterCount(BoosterKind.Mutate), Is.EqualTo(PlayerProgress.StartingBoosters + 1));
+            Assert.That(progress.Coins, Is.EqualTo(150 - PlayerProgress.BoosterPrice));
+            Assert.That(progress.BoosterCount(BoosterKind.Mutate), Is.EqualTo(PlayerProgress.StartingBoosters + PlayerProgress.BoosterPackSize));
         }
 
         [TestCase(0, 4, 1f, 3)]

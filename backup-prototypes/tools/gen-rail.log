@@ -1,0 +1,8 @@
+màn 24: KHÔNG sinh được (mix)
+màn 25 [mix]: 9 toa, tối ưu 7, giới hạn 9, 125 trạng thái, ngõ cụt 44%, bắt buộc {"tunnel":true}
+màn 26 [mix]: 7 toa, tối ưu 6, giới hạn 8, 108 trạng thái, ngõ cụt 50%, bắt buộc {"gate":"+3 chuyến"}
+màn 27 [mix]: 7 toa, tối ưu 7, giới hạn 9, 328 trạng thái, ngõ cụt 20%, bắt buộc {"tunnel":true}
+màn 28 [mix]: 7 toa, tối ưu 5, giới hạn 7, 30 trạng thái, ngõ cụt 50%, bắt buộc {"tunnel":true}
+màn 29 [mix]: 6 toa, tối ưu 4, giới hạn 6, 175 trạng thái, ngõ cụt 49%, bắt buộc {"gate":"+2 chuyến"}
+màn 30 [mix]: 7 toa, tối ưu 6, giới hạn 8, 92 trạng thái, ngõ cụt 52%, bắt buộc {"tunnel":true}
+đã ghi 29 màn vào rail-levels.js

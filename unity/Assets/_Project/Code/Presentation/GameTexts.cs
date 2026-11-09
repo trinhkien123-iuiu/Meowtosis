@@ -57,6 +57,19 @@ namespace Meowtosis.Presentation
             _ => "",
         };
 
+        // Lời giới thiệu trong popup mua booster.
+        public static string BoosterInfo(BoosterKind kind) => kind switch
+        {
+            BoosterKind.Mutate => "Chạm một chú mèo rồi chọn màu mới: phép thuật biến mèo sang màu đó ngay.",
+            BoosterKind.Transplant => "Chạm một chú mèo rồi chạm ô trống bất kỳ: bản sao bay tới và mọc ra ở đó.",
+            BoosterKind.Hint => "Mèo mách chỉ cho bạn nước vuốt tốt nhất lúc này.",
+            _ => "",
+        };
+
+        public static string CoinsOwned(int coins) => $"Bạn đang có {coins} xu";
+        public static string NotEnoughCoins(int coins) => $"Chưa đủ xu! Bạn mới có {coins} xu";
+        public static string BoughtPack(BoosterKind kind, int amount) => $"+{amount} {BoosterName(kind)}!";
+
         public const string MutatePickCat = "Chạm con mèo muốn đổi màu";
         public const string MutatePickColor = "Chọn màu mới cho mèo";
         public const string TransplantPickSource = "Chạm con mèo để nhân bản";

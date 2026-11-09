@@ -42,17 +42,31 @@ namespace Meowtosis.Presentation
         [SerializeField] private BoardArt art;
         [SerializeField] private SpeciesChip speciesChipPrefab;
         [SerializeField] private Transform speciesRow;
-        [SerializeField] private GameObject colorPicker;
-        [SerializeField] private Transform colorChoiceRow;
-        [SerializeField] private SpeciesChip colorChoicePrefab;
+        [Tooltip("Bong bóng tròn chọn màu của Hoán đổi, bật ra trên con mèo vừa chạm.")]
+        [SerializeField] private ColorChoiceBubble colorBubble;
 
         [Header("Booster")]
         [SerializeField] private BoosterButton hintButton;
         [SerializeField] private BoosterButton mutateButton;
         [SerializeField] private BoosterButton transplantButton;
 
+        [Header("Đang dùng booster: viên lời nhắn dưới bàn (cùng kiểu thông báo ngắn); icon, tên, nút huỷ để trống cũng được")]
+        [SerializeField] private GameObject boosterPanel;
+        [SerializeField] private Image boosterPanelIcon;
+        [SerializeField] private TMP_Text boosterPanelTitle;
+        [SerializeField] private TMP_Text boosterPanelText;
+        [SerializeField] private Button boosterPanelClose;
+        [SerializeField] private Sprite mutateIcon;
+        [SerializeField] private Sprite transplantIcon;
+        [SerializeField] private Color promptColor = new Color(0.36f, 0.2f, 0.12f);
+        [SerializeField] private Color warningColor = new Color(0.85f, 0.2f, 0.18f);
+        [Tooltip("Ẩn đi khi đang chọn mục tiêu booster (hàng booster, hàng đếm mèo, nền hàng booster).")]
+        [SerializeField] private GameObject[] hiddenWhileTargeting;
+
         private readonly List<SpeciesChip> speciesChips = new List<SpeciesChip>();
-        private readonly List<SpeciesChip> colorChoices = new List<SpeciesChip>();
+        private bool[] activeBeforeTargeting;
+        private string boosterPrompt = "";
+        private float warningTimeLeft;
         private float toastTimeLeft;
         private float normalTipY;
         private bool hasNormalTipY;
@@ -60,6 +74,10 @@ namespace Meowtosis.Presentation
         public event Action SettingsClicked;
 
         public event Action RestartClicked;
+
+        public event Action BoosterCancelClicked;
+
+        public event Action<int> StarLost;
 
         public event Action HintClicked;
 
@@ -113,7 +131,7 @@ namespace Meowtosis.Presentation
             for (var index = 0; index < counts.Count; index++)
             {
                 var species = counts[index].Species;
-                speciesChips[index].ShowCount(species, art.CatSprite(species, false), counts[index].Count);
+                speciesChips[index].ShowCount(species, art.CatSprite(species, false), counts[index].Count, counts[index].AllAsleep);
             }
         }
 
@@ -131,19 +149,59 @@ namespace Meowtosis.Presentation
 
         public void SetHintEnabled(bool enabled) => hintButton.SetInteractable(enabled);
 
+        public void ShowBoosterPrompt(BoosterKind kind, string prompt)
+        {
+            if (boosterPanel == null) return;
+            var show = kind == BoosterKind.Mutate || kind == BoosterKind.Transplant;
+            if (show && !boosterPanel.activeSelf)
+            {
+                activeBeforeTargeting = new bool[hiddenWhileTargeting.Length];
+                for (var index = 0; index < hiddenWhileTargeting.Length; index++)
+                {
+                    if (hiddenWhileTargeting[index] == null) continue;
+                    activeBeforeTargeting[index] = hiddenWhileTargeting[index].activeSelf;
+                    hiddenWhileTargeting[index].SetActive(false);
+                }
+            }
+            else if (!show && boosterPanel.activeSelf && activeBeforeTargeting != null)
+            {
+                for (var index = 0; index < hiddenWhileTargeting.Length && index < activeBeforeTargeting.Length; index++)
+                {
+                    if (hiddenWhileTargeting[index] != null) hiddenWhileTargeting[index].SetActive(activeBeforeTargeting[index]);
+                }
+            }
+            boosterPanel.SetActive(show);
+            if (!show) return;
+            if (boosterPanelIcon != null) boosterPanelIcon.sprite = kind == BoosterKind.Mutate ? mutateIcon : transplantIcon;
+            if (boosterPanelTitle != null) boosterPanelTitle.text = GameTexts.BoosterName(kind);
+            boosterPrompt = prompt;
+            if (warningTimeLeft <= 0f) ShowPromptText(prompt, false);
+        }
+
+        private void ShowPromptText(string text, bool warning)
+        {
+            boosterPanelText.text = text;
+            boosterPanelText.color = warning ? warningColor : promptColor;
+        }
+
         public void ShowToast(string text)
         {
+            // Đang chọn mục tiêu booster: báo lỗi ngay trong thanh booster (đỏ một lúc) thay vì bật thông báo đè lên bàn.
+            if (boosterPanel != null && boosterPanel.activeSelf && text.Length > 0)
+            {
+                ShowPromptText(text, true);
+                warningTimeLeft = toastSeconds * 0.7f;
+                return;
+            }
             toastText.text = text;
             toastPanel.SetActive(text.Length > 0);
             toastTimeLeft = toastSeconds;
         }
 
-        public void ShowColorChoices(IReadOnlyList<Species> colors)
+        public void ShowColorChoices(IReadOnlyList<Species> colors, Vector2 screenPoint)
         {
-            colorPicker.SetActive(colors.Count > 0);
-            EnsureChips(colorChoices, colorChoicePrefab, colorChoiceRow, colors.Count);
-            for (var index = 0; index < colors.Count; index++)
-                colorChoices[index].Show(colors[index], art.CatSprite(colors[index], false), GameTexts.ColorName(colors[index]));
+            if (colors.Count == 0) colorBubble.Hide();
+            else colorBubble.Show(colors, screenPoint);
         }
 
         private void Awake()
@@ -155,7 +213,11 @@ namespace Meowtosis.Presentation
             mutateButton.Clicked += () => BoosterClicked?.Invoke(BoosterKind.Mutate);
             transplantButton.Clicked += () => BoosterClicked?.Invoke(BoosterKind.Transplant);
             toastPanel.SetActive(false);
-            colorPicker.SetActive(false);
+            colorBubble.Chosen += color => ColorChosen?.Invoke(color);
+            starMeter.StarLost += lost => StarLost?.Invoke(lost);
+            colorBubble.Hide();
+            if (boosterPanelClose != null) boosterPanelClose.onClick.AddListener(() => BoosterCancelClicked?.Invoke());
+            if (boosterPanel != null) boosterPanel.SetActive(false);
         }
 
         // Đếm số lần chạm liên tiếp, mỗi lần cách nhau không quá tripleTapSeconds.
@@ -170,6 +232,7 @@ namespace Meowtosis.Presentation
 
         private void Update()
         {
+            if (warningTimeLeft > 0f && (warningTimeLeft -= Time.deltaTime) <= 0f) ShowPromptText(boosterPrompt, false);
             if (toastTimeLeft <= 0f) return;
             toastTimeLeft -= Time.deltaTime;
             if (toastTimeLeft <= 0f) toastPanel.SetActive(false);

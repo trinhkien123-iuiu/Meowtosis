@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mèo trượt</title>
+<link rel="stylesheet" href="cozy.css">
+<style>
+  #stage { width: min(94vw, 480px); aspect-ratio: var(--ratio, 1); background: var(--wood); border-radius: 20px; box-shadow: 0 6px 0 var(--wood-dark); padding: 10px; margin: 6px 0; }
+  #board { position: relative; width: 100%; height: 100%; }
+  .slot { position: absolute; border-radius: 12px; background: #e6c99a; box-shadow: inset 0 3px 6px rgba(0,0,0,.15); }
+  .slot.wall { background: #7a5233; box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+  .cat { position: absolute; padding: 4px; transition: left .18s ease-out, top .18s ease-out, transform .25s, opacity .25s; cursor: pointer; }
+  .cat .body { position: relative; width: 100%; height: 100%; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+               font-size: min(8vw, 34px); box-shadow: 0 4px 0 rgba(0,0,0,.22), inset 0 3px 0 rgba(255,255,255,.35); }
+  .cat .arrow { position: absolute; color: #fff; font-size: .55em; text-shadow: 0 1px 2px rgba(0,0,0,.5); line-height: 1; }
+  .cat .arrow.U { top: 3px; left: 50%; transform: translateX(-50%); }
+  .cat .arrow.D { bottom: 3px; left: 50%; transform: translateX(-50%); }
+  .cat .arrow.L { left: 4px; top: 50%; transform: translateY(-50%); }
+  .cat .arrow.R { right: 4px; top: 50%; transform: translateY(-50%); }
+  .cat.pop { transform: scale(0); opacity: 0; }
+  .cat.shake { animation: shake .25s; }
+  .cat.hint .body { animation: pulse .5s 3; outline: 4px solid #fff; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  @keyframes pulse { 50% { transform: scale(1.12); } }
+  #legend { font-size: .9rem; padding: 0 16px 24px; text-align: center; max-width: 560px; }
+  .stars { font-size: 2.2rem; }
+</style>
+</head>
+<body>
+<div class="top"><a class="btn small" href="index.html">← Menu</a><h1>🐾 Mèo trượt</h1><button class="btn small" id="reset">Làm lại</button></div>
+<div class="info" id="info"></div>
+<div id="stage"><div id="board"></div></div>
+<div class="bar"><button class="btn small" id="undo">↶ Hoàn tác</button><button class="btn small" id="hint">💡 Gợi ý</button><span class="pill" id="level"></span><span class="pill" id="moves"></span><button class="btn small" id="prev">◀</button><button class="btn small" id="next">▶</button></div>
+<div id="legend">Chạm một chú mèo: nó trượt thẳng theo mũi tên tới khi gặp mép, tường hoặc mèo khác. Ba mèo cùng màu nằm liền nhau (hàng hoặc cột) thì biến mất. Dọn sạch bàn để thắng.</div>
+<div class="win" id="win"><div class="card"><div class="big">😻</div><h2>Sạch bàn rồi!</h2><div class="stars" id="stars"></div><p id="winText"></p><button class="btn green" id="winNext">Màn tiếp ▶</button></div></div>
+<script src="slide-core.js"></script>
+<script src="slide-levels.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const levels = window.SLIDE_LEVELS;
+const COLORS = ['#e8627c', '#4aa3df', '#f0b429', '#58b368'];
+const ARROWS = { U: '▲', D: '▼', L: '◀', R: '▶' };
+
+let levelIndex = 0, level, board, positions, history, moves, busy, catEls, winTimer;
+
+function loadLevel(index) {
+  clearTimeout(winTimer);
+  levelIndex = (index + levels.length) % levels.length;
+  level = levels[levelIndex];
+  board = Slide.prepare(level);
+  positions = Slide.startPositions(level);
+  history = [];
+  moves = 0;
+  busy = false;
+  $('win').classList.remove('show');
+  build();
+  refresh();
+}
+
+const place = (el, cell) => {
+  el.style.left = (cell % level.W) / level.W * 100 + '%';
+  el.style.top = Math.floor(cell / level.W) / level.H * 100 + '%';
+};
+
+function build() {
+  const root = $('board');
+  root.innerHTML = '';
+  $('stage').style.setProperty('--ratio', level.W / level.H);
+  const size = { width: 100 / level.W + '%', height: 100 / level.H + '%' };
+  for (let cell = 0; cell < level.W * level.H; cell++) {
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (board.walls.has(cell) ? ' wall' : '');
+    slot.style.width = `calc(${size.width} - 4px)`;
+    slot.style.height = `calc(${size.height} - 4px)`;
+    slot.style.margin = '2px';
+    place(slot, cell);
+    if (board.walls.has(cell)) slot.textContent = '📦';
+    root.appendChild(slot);
+  }
+  catEls = level.cats.map((cat, index) => {
+    const el = document.createElement('div');
+    el.className = 'cat';
+    el.style.width = size.width;
+    el.style.height = size.height;
+    el.innerHTML = `<div class="body" style="background:${COLORS[cat.color]}">🐱<span class="arrow ${cat.dir}">${ARROWS[cat.dir]}</span></div>`;
+    el.addEventListener('pointerdown', () => tap(index));
+    place(el, positions[index]);
+    root.appendChild(el);
+    return el;
+  });
+}
+
+function sync(skipTransition) {
+  positions.forEach((cell, index) => {
+    const el = catEls[index];
+    el.style.display = cell < 0 ? 'none' : '';
+    if (cell >= 0) place(el, cell);
+    el.classList.remove('pop', 'hint');
+  });
+}
+
+function refresh() {
+  $('level').textContent = `Màn ${levelIndex + 1}/${levels.length}`;
+  $('moves').textContent = `Nước ${moves} · tối ưu ${level.par}`;
+  $('undo').disabled = history.length === 0 || busy;
+  const left = positions.filter((cell) => cell >= 0).length;
+  if (Slide.isWon(positions)) { $('info').textContent = 'Tuyệt vời!'; return; }
+  const next = Slide.hint(board, positions);
+  $('info').textContent = next < 0 ? 'Hết đường thắng rồi, bấm Hoàn tác nhé 🐾' : `Còn ${left} chú mèo trên bàn`;
+}
+
+function tap(index) {
+  if (busy || positions[index] < 0) return;
+  const result = Slide.move(board, positions, index);
+  if (!result) {
+    catEls[index].classList.remove('shake');
+    void catEls[index].offsetWidth;
+    catEls[index].classList.add('shake');
+    return;
+  }
+  history.push(positions.slice());
+  moves++;
+  busy = true;
+  clearHints();
+  place(catEls[index], result.landed);
+  setTimeout(() => {
+    result.cleared.forEach((cat) => catEls[cat].classList.add('pop'));
+    setTimeout(() => {
+      positions = result.next;
+      sync();
+      busy = false;
+      refresh();
+      if (Slide.isWon(positions)) finish();
+    }, 260);
+  }, 200);
+}
+
+function clearHints() { catEls.forEach((el) => el.classList.remove('hint')); }
+
+function finish() {
+  const stars = moves <= level.par ? 3 : moves <= level.par + 2 ? 2 : 1;
+  $('stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  $('winText').textContent = `${moves} nước (tối ưu ${level.par})`;
+  winTimer = setTimeout(() => $('win').classList.add('show'), 300);
+}
+
+$('undo').onclick = () => {
+  if (busy || !history.length) return;
+  positions = history.pop();
+  moves--;
+  clearHints();
+  sync();
+  refresh();
+};
+$('hint').onclick = () => {
+  if (busy) return;
+  const next = Slide.hint(board, positions);
+  clearHints();
+  if (next >= 0) catEls[next].classList.add('hint');
+};
+$('reset').onclick = () => loadLevel(levelIndex);
+$('prev').onclick = () => loadLevel(levelIndex - 1);
+$('next').onclick = () => loadLevel(levelIndex + 1);
+$('winNext').onclick = () => loadLevel(levelIndex + 1);
+loadLevel(0);
+</script>
+</body>
+</html>

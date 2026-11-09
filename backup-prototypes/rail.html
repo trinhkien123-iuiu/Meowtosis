@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Tàu mèo</title>
+<!-- Bản thử ý 5 làm lại: mèo ngồi trên toa tàu chạy theo đường ray, 3 toa cùng màu nối đuôi thì rời bến.
+     Hình mèo, nền, hình thắng/thua và âm thanh lấy từ prototype/shikacat (hình tạm của bản thử, không phát hành).
+     Toa tàu, đường ray, ghi, toa hàng tự vẽ bằng CSS/SVG. Phải mở qua máy chủ tĩnh (python -m http.server) để tải hình và tiếng. -->
+<style>
+  :root {
+    --ink: #3a2457; --gold: #ffd34a; --gold-dark: #e09a12; --purple: #5b3fd6; --purple-dark: #3a26a0;
+    --cream: #fff7e6; --green: #4fd14a; --green-dark: #2c9a2a; --orange: #ff7a2e; --orange-dark: #c84d10;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body { font-family: "Baloo 2", "Nunito", "Segoe UI", system-ui, sans-serif; color: #fff; user-select: none; overflow: hidden;
+         background: #241743 url("../prototype/shikacat/ui/Background_Core.png") center / cover fixed; }
+  #app { position: relative; width: min(100vw, 480px); height: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+
+  /* ── Thanh trên */
+  .hud { width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 12px 4px; }
+  .round { width: 46px; height: 46px; border-radius: 50%; border: 3px solid var(--gold); background: radial-gradient(circle at 35% 30%, #8b6cff, var(--purple) 60%, var(--purple-dark));
+           color: #fff; font-size: 20px; display: grid; place-items: center; box-shadow: 0 4px 0 #1f1360; cursor: pointer; padding: 0; }
+  .round:active { transform: translateY(3px); box-shadow: 0 1px 0 #1f1360; }
+  .title { flex: 1; text-align: center; line-height: 1.05; }
+  .title b { display: block; font-size: 22px; text-shadow: 0 3px 0 rgba(0,0,0,.35); letter-spacing: .5px; }
+  .title span { font-size: 13px; opacity: .9; background: rgba(0,0,0,.25); padding: 1px 10px; border-radius: 99px; }
+  .coins { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,.3); border: 2px solid rgba(255,255,255,.25); border-radius: 99px; padding: 3px 12px 3px 4px; font-weight: 800; }
+  .coin { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff3a0, var(--gold) 45%, var(--gold-dark)); border: 2px solid #b8740a; box-shadow: inset 0 -2px 0 rgba(0,0,0,.2); }
+
+  /* ── Mục tiêu: số chuyến còn lại và số mèo từng màu */
+  .goals { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 6px 12px; }
+  .ticket { display: flex; align-items: center; gap: 6px; background: linear-gradient(#ffe48a, var(--gold)); color: #6b3b00; border-radius: 14px; padding: 4px 12px;
+            border: 3px solid #fff3c4; box-shadow: 0 4px 0 #b97a0a; font-weight: 900; }
+  .ticket b { font-size: 24px; min-width: 26px; text-align: center; }
+  .ticket small { font-size: 12px; font-weight: 800; }
+  .ticket.low { animation: beat .6s infinite; background: linear-gradient(#ffb0a0, #ff6d55); color: #fff; box-shadow: 0 4px 0 #b4362a; }
+  #chips { display: flex; gap: 6px; }
+  .chip { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,.92); color: var(--ink); border-radius: 99px; padding: 2px 10px 2px 2px; font-weight: 900; box-shadow: 0 3px 0 rgba(0,0,0,.25); }
+  .chip img { width: 30px; height: 30px; object-fit: contain; }
+  .chip.done { opacity: .45; }
+  .chip.pop { animation: pop .4s; }
+
+  /* Onboarding (3 màn đầu): chỉ giữ bàn chơi, số mèo và lời dẫn */
+  #app.onboard .boosters, #app.onboard .coins, #app.onboard .ticket, #app.onboard .waitbtn { display: none !important; }
+  #ruleBtn { margin: 14px auto 0; display: none; animation: beat 1s infinite; }
+  .waitbtn { cursor: pointer; font: inherit; background: linear-gradient(#9ff0b0, #3ddc6e); color: #0d5a25; border-color: #e6ffe9; box-shadow: 0 4px 0 #23964b; }
+  .waitbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 #23964b; }
+  .waitbtn.hintpulse { animation: beat .6s infinite; outline: 4px solid #fff; }
+  .rail.gflip .barrier { transform-box: fill-box; transform-origin: center; animation: gsnap .45s cubic-bezier(.3, 1.6, .5, 1); }
+  @keyframes gsnap { 0% { transform: scale(1.6) rotate(var(--gr, 0deg)); filter: brightness(1.8); } 100% { transform: scale(1); } }
+
+  /* ── Bong bóng lời dẫn */
+  .bubble { position: relative; width: calc(100% - 24px); min-height: 52px; margin: 4px 0 8px; padding: 8px 14px; border-radius: 16px; text-align: center;
+            background: var(--cream); color: var(--ink); font-weight: 800; font-size: 15px; line-height: 1.25; border: 3px solid #f0d9a8; box-shadow: 0 5px 0 #c7a46a;
+            display: flex; align-items: center; justify-content: center; transition: transform .2s; }
+  .bubble.warn { background: #ffe1dc; border-color: #ffb3a6; box-shadow: 0 5px 0 #d9786a; animation: shake .4s; }
+  .bubble.mode { background: #e9e2ff; border-color: #c4b5ff; box-shadow: 0 5px 0 #8f78e8; }
+
+  /* ── Bàn chơi */
+  #stage { position: relative; padding: 12px; border-radius: 26px; background: linear-gradient(#5fa64a, #3f8a34); box-shadow: 0 7px 0 #2c6024, 0 14px 30px rgba(0,0,0,.4), inset 0 2px 0 rgba(255,255,255,.3); }
+  #stage.shake { animation: shake .45s; }
+  #board { position: relative; border-radius: 16px; overflow: visible; }
+  .ground { position: absolute; border-radius: 6px; }
+  .ground.g0 { background: #86c766; } .ground.g1 { background: #7cbd5c; }
+  .ground .tuft { position: absolute; width: 10px; height: 6px; border-radius: 50% 50% 0 0; background: #5fa244; }
+  .ground .flower { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px #ffcf4a inset; }
+  .rail { position: absolute; }
+  .rail svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .rail .route { transition: opacity .25s; }
+  .lever { position: absolute; z-index: 20; width: 44%; height: 44%; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+           background: radial-gradient(circle at 35% 30%, #fff, #ffe27a 45%, #f0a91c); border: 3px solid #fff; box-shadow: 0 3px 0 #a86a00, 0 0 0 3px rgba(0,0,0,.15);
+           transition: transform .25s cubic-bezier(.3,1.6,.5,1); }
+  .lever svg { width: 70%; height: 70%; transition: transform .3s cubic-bezier(.3,1.6,.5,1); }
+  .lever.flip { animation: lever .35s; }
+  .lever.locked { filter: grayscale(.8) brightness(.85); }
+
+  /* ── Toa tàu (nhìn từ trên xuống, xoay theo hướng ray), mèo ngồi thẳng trên toa */
+  .car { position: absolute; left: 0; top: 0; z-index: 10; cursor: pointer; will-change: transform; }
+  .car .shadow { position: absolute; left: 14%; top: 30%; width: 72%; height: 52%; border-radius: 30%; background: rgba(0,0,0,.28); filter: blur(3px); transform: rotate(var(--rot)) translateY(6%); }
+  .wagon { position: absolute; left: 7%; top: 21%; width: 86%; height: 58%; transform: rotate(var(--rot)); transform-origin: 50% 50%; }
+  .wagon .wh { position: absolute; width: 22%; height: 20%; background: #2c2c38; border-radius: 4px; border: 2px solid #15151d; }
+  .wagon .wh.a { left: 10%; top: -12%; } .wagon .wh.b { right: 10%; top: -12%; } .wagon .wh.c { left: 10%; bottom: -12%; } .wagon .wh.d { right: 10%; bottom: -12%; }
+  .car.rolling .wh { animation: rattle .12s linear infinite; }
+  .wagon .hitch { position: absolute; top: 40%; width: 12%; height: 20%; background: #4a4a58; border-radius: 3px; }
+  .wagon .hitch.back { left: -10%; } .wagon .hitch.front { right: -10%; }
+  .wagon .body { position: absolute; inset: 0; border-radius: 22% / 34%; background: linear-gradient(160deg, var(--c2), var(--c) 55%, var(--cd)); border: 3px solid #fff6df;
+                 box-shadow: 0 3px 0 var(--cd), inset 0 -4px 0 rgba(0,0,0,.18); }
+  .wagon .floor { position: absolute; left: 13%; right: 22%; top: 18%; bottom: 18%; border-radius: 16% / 26%; background: rgba(255,255,255,.28); }
+  .wagon .nose { position: absolute; right: 4%; top: 22%; width: 15%; height: 56%; border-radius: 0 40% 40% 0; background: rgba(0,0,0,.22); }
+  .wagon .lamp { position: absolute; right: 6%; top: 40%; width: 9%; height: 20%; border-radius: 50%; background: #fff8b0; box-shadow: 0 0 8px 3px rgba(255,240,140,.9); }
+  .wagon .arrow { position: absolute; right: -27%; top: 30%; width: 0; height: 0; border-style: solid; border-width: 8px 0 8px 12px; border-color: transparent transparent transparent #fff;
+                  filter: drop-shadow(0 0 2px rgba(0,0,0,.8)); animation: nudge .9s ease-in-out infinite; }
+  .car.stuck .arrow { opacity: .3; animation: none; }
+  .car .cat { position: absolute; left: 50%; bottom: 30%; width: 50%; transform: translateX(-50%); pointer-events: none; transform-origin: 50% 100%; filter: drop-shadow(0 3px 0 rgba(0,0,0,.2)); }
+  .car .crate { position: absolute; left: 27%; top: 23%; width: 46%; height: 46%; border-radius: 6px; background: linear-gradient(135deg, #c98a4b, #a1652e);
+                border: 3px solid #6e4019; box-shadow: inset 0 0 0 4px #d9a065, 0 3px 0 rgba(0,0,0,.3); pointer-events: none; }
+  .car .crate::before, .car .crate::after { content: ""; position: absolute; left: 44%; top: -6%; width: 12%; height: 112%; background: #6e4019; transform: rotate(45deg); }
+  .car .crate::after { transform: rotate(-45deg); }
+  .car.cargo .wagon .body { background: linear-gradient(160deg, #b8c2cc, #8d98a5 55%, #66717d); }
+  .car.squash .cat { animation: squash .3s; }
+  .car.hop .cat { animation: hop .45s ease-out; }
+  .car.linked .wagon .body { box-shadow: 0 0 0 4px var(--gold), 0 0 18px 6px rgba(255,211,74,.85); }
+  .car.linked .hitch { background: var(--gold); }
+  .car.hint { animation: hintPulse .7s infinite; }
+  .car.pick { animation: hintPulse .7s infinite; }
+  .car.lifted { z-index: 60; }
+  .car.lifted .shadow { transform: rotate(var(--rot)) translateY(28%) scale(.8); opacity: .5; }
+  /* Rung bằng thuộc tính `translate` riêng (cộng thêm vào transform), không dùng `transform` vì nó đang giữ vị trí ô của toa. */
+  .car.deny { animation: shakeCar .3s; }
+  .target { position: absolute; z-index: 5; border-radius: 12px; border: 3px dashed rgba(255,255,255,.9); background: rgba(255,255,255,.18); animation: blink .8s infinite; cursor: pointer; }
+
+  /* ── Hiệu ứng */
+  #fx { position: absolute; inset: 0; pointer-events: none; z-index: 50; }
+  .puff { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff, #e6e6f0 70%); opacity: .95; animation: puff .8s ease-out forwards; }
+  .spark { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: #fff6a0; box-shadow: 0 0 6px 2px #ffcf3a; animation: spark .45s ease-out forwards; }
+  .confetti { position: absolute; width: 8px; height: 12px; border-radius: 2px; animation: confetti 1s ease-out forwards; }
+  .float { position: absolute; z-index: 70; transform: translate(-50%, -50%); font-weight: 900; font-size: 22px; color: #fff; text-shadow: 0 3px 0 #b9400a, 0 0 8px rgba(0,0,0,.4); white-space: nowrap; animation: floatUp 1.1s ease-out forwards; }
+  .cross { position: absolute; z-index: 70; font-size: 26px; font-weight: 900; color: #ff4a3a; text-shadow: 0 2px 0 #fff; transform: translate(-50%, -50%); animation: floatUp .7s ease-out forwards; }
+  .hand { position: absolute; z-index: 80; font-size: 40px; pointer-events: none; animation: tapHand 1s ease-in-out infinite; filter: drop-shadow(0 3px 2px rgba(0,0,0,.4)); }
+  .hook { position: absolute; z-index: 90; width: 6px; background: #3b3b48; transform-origin: top; }
+  .hook::after { content: "🪝"; position: absolute; left: 50%; bottom: -26px; transform: translateX(-50%); font-size: 28px; }
+  .rain { position: fixed; top: -20px; z-index: 300; width: 10px; height: 14px; border-radius: 2px; animation: rain 2.2s linear forwards; pointer-events: none; }
+
+  /* ── Booster */
+  .boosters { margin-top: auto; width: 100%; display: flex; justify-content: space-around; padding: 10px 10px 18px; background: linear-gradient(transparent, rgba(0,0,0,.35)); }
+  .boost { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: 0; color: #fff; font: inherit; cursor: pointer; padding: 0; }
+  .boost .orb { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 30px; border: 4px solid var(--gold);
+                background: radial-gradient(circle at 35% 30%, #9a80ff, var(--purple) 60%, var(--purple-dark)); box-shadow: 0 5px 0 #1f1360, inset 0 3px 0 rgba(255,255,255,.35); transition: transform .15s; }
+  .boost:active .orb { transform: translateY(3px) scale(.96); }
+  .boost .badge { position: absolute; right: -2px; top: 40px; min-width: 26px; height: 26px; border-radius: 13px; background: #ff4f6d; border: 3px solid #fff; display: grid; place-items: center; font-size: 13px; font-weight: 900; }
+  .boost .badge.buy { background: var(--green); }
+  .boost label { font-size: 12px; font-weight: 900; text-shadow: 0 2px 0 rgba(0,0,0,.4); cursor: pointer; }
+  .boost.active .orb { border-color: #7dff7a; box-shadow: 0 0 0 4px rgba(125,255,122,.5), 0 5px 0 #1f1360; animation: beat .7s infinite; }
+  .boost:disabled { opacity: .45; cursor: default; }
+
+  /* ── Popup */
+  .pop { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; background: rgba(16, 8, 40, .72); padding: 20px; }
+  .pop.show { display: flex; animation: fade .2s; }
+  .card { position: relative; width: min(360px, 100%); border-radius: 26px; padding: 26px 18px 20px; text-align: center; background: linear-gradient(#6d52ff, #4b31d2);
+          border: 4px solid var(--gold); box-shadow: 0 8px 0 #2a1a8a, 0 20px 40px rgba(0,0,0,.5); animation: popIn .35s cubic-bezier(.3,1.5,.5,1); }
+  .card h2 { margin: 0 0 6px; font-size: 30px; text-shadow: 0 3px 0 rgba(0,0,0,.35); }
+  .card p { margin: 6px 0 12px; font-weight: 700; }
+  .card .art { max-height: 150px; max-width: 80%; }
+  .tab { position: absolute; left: 50%; top: -22px; transform: translateX(-50%); background: linear-gradient(#ffe48a, var(--gold)); color: #6b3b00; border: 3px solid #fff3c4;
+         border-radius: 14px; padding: 2px 18px; font-weight: 900; box-shadow: 0 4px 0 #b97a0a; white-space: nowrap; }
+  .btn { display: inline-block; min-width: 140px; margin: 6px 4px 0; padding: 10px 18px; border-radius: 16px; border: 3px solid #fff8; font: inherit; font-weight: 900; font-size: 17px; color: #fff; cursor: pointer;
+         background: linear-gradient(#6af065, var(--green)); box-shadow: 0 5px 0 var(--green-dark); text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+  .btn.orange { background: linear-gradient(#ffa168, var(--orange)); box-shadow: 0 5px 0 var(--orange-dark); }
+  .btn.ghost { background: rgba(255,255,255,.15); box-shadow: 0 5px 0 rgba(0,0,0,.25); }
+  .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,.3); }
+  .stars { display: flex; justify-content: center; gap: 6px; margin: 8px 0; }
+  .stars span { font-size: 46px; filter: drop-shadow(0 3px 0 rgba(0,0,0,.3)); transform: scale(0); }
+  .stars span.on { animation: starPop .45s cubic-bezier(.3,1.7,.5,1) forwards; }
+  .stars span.off { filter: grayscale(1) brightness(.6); animation: starPop .45s forwards; }
+  .reward { display: inline-flex; align-items: center; gap: 6px; font-size: 22px; font-weight: 900; background: rgba(0,0,0,.25); padding: 4px 14px; border-radius: 99px; }
+  .mech { display: flex; justify-content: center; gap: 10px; margin: 10px 0; }
+  .mech .tile { width: 84px; height: 84px; border-radius: 14px; background: #86c766; padding: 4px; box-shadow: inset 0 0 0 3px rgba(255,255,255,.3); position: relative; }
+  .levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 8px; }
+  .lv { position: relative; aspect-ratio: 1; border-radius: 14px; border: 3px solid #fff8; background: linear-gradient(#ffb36a, var(--orange)); color: #fff; font: inherit; font-weight: 900; font-size: 18px;
+        box-shadow: 0 4px 0 var(--orange-dark); cursor: pointer; padding: 0; }
+  .lv small { position: absolute; left: 0; right: 0; bottom: 1px; font-size: 9px; letter-spacing: -1px; }
+  .lv.cur { background: linear-gradient(#7dff7a, var(--green)); box-shadow: 0 4px 0 var(--green-dark); }
+  .lv .ico { position: absolute; right: -6px; top: -8px; font-size: 14px; }
+  .blockname { grid-column: 1 / -1; text-align: left; font-weight: 900; font-size: 13px; margin-top: 4px; opacity: .9; }
+
+  @keyframes rattle { 50% { transform: translateY(1px); } }
+  @keyframes nudge { 50% { transform: translateX(4px); } }
+  @keyframes squash { 30% { transform: translateX(-50%) scale(1.14, .84); } 65% { transform: translateX(-50%) scale(.94, 1.07); } }
+  @keyframes hop { 40% { transform: translateX(-50%) translateY(-18px) scale(1.05); } }
+  @keyframes hintPulse { 50% { filter: brightness(1.35) drop-shadow(0 0 10px #fff); } }
+  @keyframes shakeCar { 20% { translate: -6px 0; } 40% { translate: 6px 0; } 60% { translate: -4px 0; } 80% { translate: 4px 0; } }
+  @keyframes shake { 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+  @keyframes puff { from { transform: translate(-50%, -50%) scale(.5); opacity: .95; } to { transform: translate(-50%, -150%) scale(2); opacity: 0; } }
+  @keyframes spark { to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; } }
+  @keyframes confetti { from { transform: translate(0, 0) rotate(0); opacity: 1; } to { transform: translate(var(--dx), var(--dy)) rotate(540deg); opacity: 0; } }
+  @keyframes floatUp { from { opacity: 0; transform: translate(-50%, -20%) scale(.6); } 20% { opacity: 1; transform: translate(-50%, -60%) scale(1.15); } to { opacity: 0; transform: translate(-50%, -180%) scale(1); } }
+  @keyframes tapHand { 0%, 100% { transform: translate(-30%, 10%); } 50% { transform: translate(-30%, -10%) scale(.9); } }
+  @keyframes beat { 50% { transform: scale(1.08); } }
+  @keyframes pop { 50% { transform: scale(1.3); } }
+  @keyframes lever { 40% { transform: scale(1.3) rotate(-20deg); } }
+  @keyframes blink { 50% { opacity: .45; } }
+  @keyframes fade { from { opacity: 0; } }
+  @keyframes popIn { from { transform: scale(.6); opacity: 0; } }
+  @keyframes starPop { from { transform: scale(0) rotate(-40deg); } to { transform: scale(1) rotate(0); } }
+  @keyframes rain { to { transform: translate(var(--dx), 110vh) rotate(720deg); } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="hud">
+    <button class="round" id="mapBtn" title="Chọn màn">☰</button>
+    <div class="title"><b id="lvTitle">Màn 1</b><span id="lvBlock">Đường ray</span></div>
+    <div class="coins"><div class="coin"></div><span id="coins">0</span></div>
+    <button class="round" id="soundBtn" title="Âm thanh">🔊</button>
+  </div>
+  <div class="goals">
+    <div class="ticket" id="ticket"><span>🎫</span><b id="movesLeft">0</b><small>chuyến</small></div>
+    <div id="chips"></div>
+    <button class="ticket waitbtn" id="waitBtn" style="display:none" title="Không chạy toa nào, chỉ để đèn đổi (tốn 1 chuyến)">🚦 <small>Chờ</small></button>
+  </div>
+  <div class="bubble" id="bubble"><span id="bubbleText"></span></div>
+  <div id="stage"><div id="board"></div><div id="fx"></div></div>
+  <button class="btn" id="ruleBtn">Đã hiểu!</button>
+  <div class="boosters">
+    <button class="boost" id="bHint"><div class="orb">💡</div><div class="badge" id="nHint"></div><label>Gợi ý</label></button>
+    <button class="boost" id="bUndo"><div class="orb">↩️</div><div class="badge" id="nUndo"></div><label>Hoàn tác</label></button>
+    <button class="boost" id="bCrane"><div class="orb">🏗️</div><div class="badge" id="nCrane"></div><label>Cần cẩu</label></button>
+    <button class="boost" id="bReverse"><div class="orb">🔄</div><div class="badge" id="nReverse"></div><label>Quay đầu</label></button>
+  </div>
+</div>
+
+<div class="pop" id="cardPop"><div class="card"><div class="tab">Cơ chế mới!</div><h2 id="cardTitle"></h2><div class="mech" id="cardTiles"></div><p id="cardText"></p><button class="btn" id="cardOk">Chơi thôi!</button></div></div>
+<div class="pop" id="winPop"><div class="card"><div class="tab">Hoàn thành!</div><img class="art" src="../prototype/shikacat/ui/Image_Win_Front.png" alt=""><div class="stars" id="stars"></div>
+  <div class="reward"><div class="coin"></div><span id="winCoins">+0</span></div><p id="winText"></p><button class="btn ghost" id="winRetry">Chơi lại</button><button class="btn" id="winNext">Màn tiếp ▶</button></div></div>
+<div class="pop" id="losePop"><div class="card"><div class="tab">Hết chuyến!</div><img class="art" src="../prototype/shikacat/ui/Image_Lose_Front.png" alt=""><p id="loseText"></p>
+  <button class="btn" id="loseMore">+3 chuyến <span class="coin" style="display:inline-block;width:18px;height:18px;vertical-align:-3px"></span> 60</button><button class="btn orange" id="loseRetry">Chơi lại</button></div></div>
+<div class="pop" id="mapPop"><div class="card"><div class="tab">Bãi tàu</div><div class="levels" id="levels"></div><button class="btn ghost" id="mapClose">Đóng</button></div></div>
+
+<script src="rail-core.js?v=5"></script>
+<script src="rail-levels.js?v=5"></script>
+<script src="rail-game.js?v=5"></script>
+</body>
+</html>

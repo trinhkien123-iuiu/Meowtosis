@@ -126,9 +126,18 @@ ex('V6', 'virus lan vào ô độc thì chết, nhưng con gốc vẫn còn', ()
 });
 ex('V7', 'virus bị màng chặn thì không lan', () => assert.strictEqual(viruses(play({ rows: ['A..', '>..'], oneway: [[1, 1, 'left']] }, [[0, 0, 'r']]).cells), 1));
 ex('V8', 'virus ăn con mèo cuối cùng của một màu là thua', () => assert(play({ rows: ['B.', '>A'] }, [[0, 0, 'r']]).lost));
-ex('V10', 'không vuốt được virus; virus bị đẩy theo dãy như mọi con khác', () => {
+ex('V10', 'không vuốt được virus; virus không bị đẩy: vuốt vào virus là ăn nó, dù phía sau còn trống', () => {
   assert.strictEqual(play({ rows: ['>.', 'A.'] }, [[0, 0, 'r']]).last, null);
-  assert.deepStrictEqual(play({ rows: ['A>.', '...'] }, [[0, 0, 'r']]).rows, ['AA>', '...']);
+  assert.deepStrictEqual(play({ rows: ['A>.', '...'] }, [[0, 0, 'r']]).rows, ['AA.', '...']);
+});
+ex('V12', 'đẩy dãy mèo tới virus: con cuối của dãy chiếm ô virus, virus chết', () => {
+  const g = play({ rows: ['AB>.'] }, [[0, 0, 'r']]);
+  assert.deepStrictEqual(g.rows, ['AAB.']);
+  assert.strictEqual(viruses(g.cells), 0);
+});
+ex('V13', 'virus giữa hai dãy mèo vẫn là điểm dừng: dãy chỉ đẩy tới virus gần nhất, mèo phía sau virus đứng yên', () => {
+  const g = play({ rows: ['ABB>C.'] }, [[0, 0, 'r']]);
+  assert.deepStrictEqual(g.rows, ['AABBC.']);
 });
 ex('V11', 'virus không tạo dãy 3 và không tính là ô đã lấp', () => {
   const lv = ctx.parseLevel({ rows: ['>>>', 'AAB'] });

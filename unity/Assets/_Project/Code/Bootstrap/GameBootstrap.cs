@@ -23,6 +23,7 @@ namespace Meowtosis.Bootstrap
         [SerializeField] private SoundPlayer soundPlayer;
         [SerializeField] private AmbientEvents ambientEvents;
         [SerializeField] private CheatPopup cheatPopup;
+        [SerializeField] private BoosterOfferPopup boosterOfferPopup;
         [Tooltip("Để test: lớn hơn 0 thì luôn mở level này thay vì level chơi gần nhất.")]
         [SerializeField, Min(0)] private int openLevelNumber;
         [Tooltip("Để test: luôn chạy hướng dẫn đầu game, kể cả khi tiến độ đã ghi là xong.")]
@@ -56,7 +57,7 @@ namespace Meowtosis.Bootstrap
             onboarding?.Dispose();
             onboarding = null;
             var levels = LevelCatalogParser.Parse(levelCatalog.text);
-            var views = new GameViews(boardView, hudView, winPopup, losePopup, settingsPopup, noHeartsPopup, mechanicPopup, soundPlayer, ambientEvents, cheatPopup);
+            var views = new GameViews(boardView, hudView, winPopup, losePopup, settingsPopup, noHeartsPopup, mechanicPopup, soundPlayer, ambientEvents, cheatPopup, boosterOfferPopup);
             presenter = new GamePresenter(levels, rules, progress, store, new SystemClock(), views, new SceneNavigator());
             presenter.Start(openLevelNumber);
         }

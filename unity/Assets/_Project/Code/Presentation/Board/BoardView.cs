@@ -34,7 +34,12 @@ namespace Meowtosis.Presentation
         [Tooltip("Màu từng cặp cổng, theo thứ tự trong level.")]
         [SerializeField] private Color[] portalColors = { new Color(0.72f, 0.48f, 1f), new Color(1f, 0.48f, 0.78f), new Color(0.22f, 0.85f, 0.78f) };
         [SerializeField] private PieceView piecePrefab;
-        [SerializeField] private Transform highlightPrefab;
+        [Tooltip("Vòng ma thuật đánh dấu ô (MagicCircle).")]
+        [SerializeField] private MagicCircle highlightPrefab;
+        [Tooltip("Ô có mèo: vòng nằm dưới chân mèo, thấp hơn tâm ô chừng này (tính bằng ô).")]
+        [SerializeField] private float highlightFeetDrop = 0.27f;
+        [Tooltip("Ô trống: vòng nằm giữa mặt ô gỗ, thấp hơn tâm ô chừng này.")]
+        [SerializeField] private float highlightEmptyDrop = 0.06f;
         [Tooltip("Mũi tên gợi ý chỉ sang phải; hướng khác xoay theo.")]
         [SerializeField] private Transform hintArrowPrefab;
         [SerializeField] private TutorialHand tutorialHandPrefab;
@@ -184,8 +189,13 @@ namespace Meowtosis.Presentation
             return columns;
         }
 
+        private float lastMournTime = -100f;
+
+        // Khóc, rung bàn, tiếng thua. Cảnh thua có thể gọi từ hai nơi (diễn hoạt khử 3 và lúc nước đi kết thúc): chỉ chạy một lần.
         public void Mourn()
         {
+            if (Time.unscaledTime - lastMournTime < 3f) return;
+            lastMournTime = Time.unscaledTime;
             foreach (var view in pieceViews.Values) view.ShowSadMood();
             Shake();
             sounds.Play(SoundId.Lose);
@@ -203,8 +213,8 @@ namespace Meowtosis.Presentation
             highlights.Clear();
             foreach (var cell in cells)
             {
-                var marker = Instantiate(highlightPrefab, boardRoot);
-                marker.localPosition = layout.CellCenter(cell);
+                var marker = Instantiate(highlightPrefab, boardRoot).transform;
+                marker.localPosition = HighlightSpot(cell);
                 highlights.Add(marker);
             }
         }
@@ -331,6 +341,23 @@ namespace Meowtosis.Presentation
 
         internal Vector3 CellPosition(int cell) => boardRoot.TransformPoint(layout.CellCenter(cell));
 
+        public Vector2 ScreenPointOf(int cell) => Camera.main.WorldToScreenPoint(CellPosition(cell));
+
+        // Chỗ đặt vòng ma thuật: dưới chân mèo nếu ô có quân, giữa mặt ô nếu ô trống.
+        private Vector3 HighlightSpot(int cell)
+        {
+            var hasPiece = currentBoard != null && currentBoard[cell].HasValue;
+            return layout.CellCenter(cell) + Vector3.down * (hasPiece ? highlightFeetDrop : highlightEmptyDrop);
+        }
+
+        // Vòng ma thuật loé một lần ở ô (booster vừa tác động).
+        internal void MagicFlare(int cell, Color color)
+        {
+            var flare = Instantiate(highlightPrefab, boardRoot);
+            flare.transform.localPosition = layout.CellCenter(cell) + Vector3.down * highlightEmptyDrop;
+            flare.Flare(color);
+        }
+
         // Cho quân lướt chậm tới ô `cell` trong `seconds` giây (trượt trên băng).
         internal void SlidePieceTo(PieceView view, int cell, float seconds) => view.SlideTo(layout.CellCenter(cell), seconds);
 
@@ -365,7 +392,18 @@ namespace Meowtosis.Presentation
             return view;
         }
 
-        internal void Shake() => StartCoroutine(RunShake());
+        // `strength` 1 là rung đầy đủ (thua, nổ); khử 3 an toàn chỉ rung nhẹ.
+        internal void Shake(float strength = 1f) => StartCoroutine(RunShake(strength));
+
+        // Làm chậm thời gian trong `seconds` giây thật (không bị chính nó kéo dài), để người chơi kịp nhìn thấy vì sao thua.
+        internal void SlowMotion(float timeScale, float seconds) => StartCoroutine(RunSlowMotion(timeScale, seconds));
+
+        private IEnumerator RunSlowMotion(float timeScale, float seconds)
+        {
+            Time.timeScale = timeScale;
+            yield return new WaitForSecondsRealtime(seconds);
+            Time.timeScale = 1f;
+        }
 
         // Mèo đang thức, chưa làm gì, để chọn làm động tác lúc rảnh.
         internal PieceView RandomRestingCat()
@@ -431,6 +469,7 @@ namespace Meowtosis.Presentation
 
         private void OnDisable()
         {
+            Time.timeScale = 1f;
             swipeInput.Swiped -= OnSwiped;
             swipeInput.Tapped -= OnTapped;
             swipeInput.Dragged -= OnDragged;
@@ -534,12 +573,12 @@ namespace Meowtosis.Presentation
             return layout != null && layout.TryGetCell(transform.InverseTransformPoint(worldPoint), out cell);
         }
 
-        private IEnumerator RunShake()
+        private IEnumerator RunShake(float strength)
         {
             for (var time = 0f; time < shakeSeconds; time += Time.deltaTime)
             {
                 var progress = time / shakeSeconds;
-                boardRoot.localPosition = new Vector3(shakeX.Evaluate(progress), shakeY.Evaluate(progress), 0f);
+                boardRoot.localPosition = new Vector3(shakeX.Evaluate(progress), shakeY.Evaluate(progress), 0f) * strength;
                 yield return null;
             }
             boardRoot.localPosition = Vector3.zero;

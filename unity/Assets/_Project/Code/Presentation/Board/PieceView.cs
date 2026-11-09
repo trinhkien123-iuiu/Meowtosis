@@ -20,6 +20,8 @@ namespace Meowtosis.Presentation
         [SerializeField] private SpriteRenderer face;
         [SerializeField] private SpriteRenderer shadow;
         [SerializeField] private GameObject sleepMarks;
+        [Tooltip("Chữ Z bay lên và bong bóng mũi, nằm trong SleepMarks.")]
+        [SerializeField] private SleepyEffect sleepyEffect;
         [SerializeField] private GameObject sweatDrop;
         [Tooltip("Nửa thân màu kế tiếp và chấm đếm lượt của mèo hai màu; tự ẩn với quân khác.")]
         [SerializeField] private TwoToneCat twoToneCat;
@@ -90,6 +92,7 @@ namespace Meowtosis.Presentation
             if (piece.IsVirus) SetBody(art.VirusSprite(piece.Facing), placeholderWidth, 0f);
             else SetBody(art.CatSprite(piece.Species, isHappy), catWidth, catLift);
             sleepMarks.SetActive(piece.IsAsleep);
+            if (sleepyEffect != null) sleepyEffect.Setup(piece.Id);
             if (twoToneCat != null) twoToneCat.Show(piece, art, catWidth, catLift);
         }
 

@@ -11,7 +11,9 @@ namespace Meowtosis.Gameplay
         public const int MaximumHearts = 3;
         public const int StartingBoosters = 3;
         public const int CoinsPerStar = 10;
-        public const int BoosterPrice = 60;
+        // Mua booster theo gói: BoosterPrice xu được BoosterPackSize lượt.
+        public const int BoosterPrice = 150;
+        public const int BoosterPackSize = 3;
         public static readonly TimeSpan HeartRecoveryTime = TimeSpan.FromMinutes(10);
 
         private static readonly BoosterKind[] BoosterKinds = { BoosterKind.Mutate, BoosterKind.Transplant, BoosterKind.Revive, BoosterKind.Hint };
@@ -119,7 +121,7 @@ namespace Meowtosis.Gameplay
         {
             if (kind == BoosterKind.None || Coins < BoosterPrice) return false;
             Coins -= BoosterPrice;
-            RefundBooster(kind);
+            boosters[kind] = BoosterCount(kind) + BoosterPackSize;
             return true;
         }
 

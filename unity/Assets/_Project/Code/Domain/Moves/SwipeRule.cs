@@ -4,8 +4,10 @@ using System.Collections.Generic;
 namespace Meowtosis.Domain
 {
     // Một lần vuốt: mèo nhân đôi, bản sao vào ô kế bên theo hướng vuốt.
-    // Ô đó có quân thì cả dãy bị đẩy tới ô trống gần nhất. Hết chỗ đẩy
+    // Ô đó có mèo thì cả dãy mèo bị đẩy tới ô trống gần nhất. Hết chỗ đẩy
     // (mép bàn, lỗ, màng chặn, hoặc mèo ngủ đứng như bức tường) thì bản sao thay thế quân kề.
+    // Virus KHÔNG BAO GIỜ bị đẩy: ô kề là virus, hoặc dãy mèo bị đẩy kết thúc bằng virus, thì bản sao (hoặc con cuối của dãy)
+    // chiếm ô virus và virus chết, dù phía sau virus còn trống hay không.
     // Không vuốt được mèo ngủ và virus; bản sao không bao giờ thay thế mèo ngủ hoặc quân cùng loài.
     // Băng trơn: bản sao vào ô băng đang trống thì trượt tiếp theo hướng vuốt, qua các ô băng trống, tới khi gặp vật cản
     // (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng (dừng ở ô thường đầu tiên). Dãy bị đẩy không trượt.
@@ -45,12 +47,14 @@ namespace Meowtosis.Domain
             var line = new List<int>();
             var end = target;
             // Dãy chạy trọn một vòng qua cổng (line.Count tới số ô) thì coi như hết chỗ đẩy.
-            while (end != Level.NoCell && board[end] is Piece piece && !piece.IsAsleep && line.Count < board.CellCount)
+            while (end != Level.NoCell && board[end] is Piece piece && !piece.IsAsleep && !piece.IsVirus && line.Count < board.CellCount)
             {
                 line.Add(end);
                 end = level.Step(end, direction);
             }
-            var hasRoom = end != Level.NoCell && !board[end].HasValue;
+            // Virus ở cuối dãy: bị ăn (con cuối của dãy hoặc bản sao chiếm ô của nó), nên coi như còn chỗ.
+            var eaten = end != Level.NoCell && line.Count < board.CellCount && board[end] is Piece atEnd && atEnd.IsVirus ? board[end] : null;
+            var hasRoom = end != Level.NoCell && (!board[end].HasValue || eaten.HasValue);
 
             var pieces = board.CopyPieces();
             IReadOnlyList<CellShift> pushes = Array.Empty<CellShift>();
@@ -66,6 +70,7 @@ namespace Meowtosis.Domain
                     shifts.Add(new CellShift(from, to));
                 }
                 pushes = shifts;
+                replaced = eaten;
             }
             else
             {
@@ -74,7 +79,7 @@ namespace Meowtosis.Domain
                 replaced = neighbour;
             }
 
-            var landing = line.Count == 0 && hasRoom ? SlideFrom(level, pieces, target, direction) : target;
+            var landing = line.Count == 0 && hasRoom && !eaten.HasValue ? SlideFrom(level, pieces, target, direction) : target;
             pieces[landing] = new Piece(board.NextPieceId, parent.Species);
             var placed = board.With(pieces, board.NextPieceId + 1);
             result = new MoveResult(board, placed, cell, landing, pushes, replaced, turnResolver.Resolve(placed), direction);

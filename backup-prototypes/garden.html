@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vườn mèo lát gạch</title>
+<link rel="stylesheet" href="cozy.css">
+<style>
+  #stage { width: min(600px, 100%); height: min(56vh, 460px); background: #cfe3b4; border: 4px solid var(--wood); border-radius: 20px; box-shadow: 0 6px 0 var(--wood-dark); margin: 6px 0; }
+  svg { width: 100%; height: 100%; display: block; }
+  .slot { fill: rgba(255,255,255,.28); stroke: rgba(74,51,34,.35); stroke-width: 2; stroke-dasharray: 6 5; cursor: pointer; }
+  .slot:hover { fill: rgba(255,255,255,.55); }
+  .tile polygon.edge { stroke: rgba(255,255,255,.55); stroke-width: 1; }
+  .tile polygon.rim { fill: none; stroke: #6b4a2b; stroke-width: 3; }
+  .pop { font-weight: 800; fill: #b04a6a; paint-order: stroke; stroke: #fff; stroke-width: 4px; pointer-events: none; }
+  #hand { display: flex; align-items: center; gap: 14px; padding: 6px 16px; }
+  #legend { font-size: .9rem; padding: 0 16px 24px; text-align: center; max-width: 560px; }
+</style>
+</head>
+<body>
+<div class="top"><a class="btn small" href="index.html">← Menu</a><h1>🌿 Vườn mèo lát gạch</h1><button class="btn small" id="reset">Chơi lại</button></div>
+<div class="info" id="info"></div>
+<div id="stage"><svg id="svg"></svg></div>
+<div id="hand">
+  <svg id="next" width="96" height="96" viewBox="-50 -50 100 100" style="cursor:pointer"></svg>
+  <div style="display:grid;gap:8px"><button class="btn small" id="rot">⟳ Xoay (R)</button><button class="btn small" id="undo">↶ Hoàn tác</button></div>
+  <div class="pill" id="score"></div>
+</div>
+<div id="legend">Đặt mảnh vào ô viền đứt. Mỗi cạnh chạm cạnh cùng loại đất được +1. Khớp hết mọi cạnh được thưởng (+3, mảnh có mèo +6 😻).<br>🟩 cỏ · 🟦 nước · 🌲 rừng · 🟨 ruộng lúa</div>
+<div class="win" id="win"><div class="card"><div class="big" id="stars"></div><h2 id="winTitle"></h2><p id="winText"></p><button class="btn green" id="again">Chơi lại</button></div></div>
+<script>
+const $ = (id) => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const SIZE = 46;
+const TYPES = ['#a8d070', '#7cc0e8', '#4f9a5a', '#f0d080']; // cỏ, nước, rừng, ruộng
+const DIRS = [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]]; // E, SE, SW, W, NW, NE theo chiều kim đồng hồ
+const TOTAL = 24;
+const STARS = [50, 75, 100]; // đo bằng bot: đặt bừa ~12-26 điểm, đặt tối ưu từng mảnh ~120
+
+const key = (q, r) => q + ',' + r;
+const center = (q, r) => [SIZE * Math.sqrt(3) * (q + r / 2), SIZE * 1.5 * r];
+const vertex = (cx, cy, angleDeg, radius) => [cx + radius * Math.cos(angleDeg * Math.PI / 180), cy + radius * Math.sin(angleDeg * Math.PI / 180)];
+
+function makeTile() {
+  const edges = Array(6).fill(Math.floor(Math.random() * 4));
+  for (let i = Math.random() < 0.5 ? 1 : 2; i > 0; i--) {
+    const type = Math.floor(Math.random() * 4);
+    const start = Math.floor(Math.random() * 6);
+    const length = 1 + Math.floor(Math.random() * 3);
+    for (let k = 0; k < length; k++) edges[(start + k) % 6] = type;
+  }
+  return { edges, cat: Math.random() < 0.22 };
+}
+
+let tiles, deck, deckIndex, rotation, score, history, hoverKey;
+
+function reset() {
+  tiles = new Map();
+  tiles.set(key(0, 0), { edges: [0, 0, 1, 1, 2, 2], cat: false });
+  deck = Array.from({ length: TOTAL }, makeTile);
+  deckIndex = 0;
+  rotation = 0;
+  score = 0;
+  history = [];
+  hoverKey = null;
+  $('win').classList.remove('show');
+  render();
+}
+
+const rotated = (edges, turns) => edges.map((_, i) => edges[(i - turns + 6 * 10) % 6]);
+const current = () => (deckIndex < deck.length ? { ...deck[deckIndex], edges: rotated(deck[deckIndex].edges, rotation) } : null);
+
+function evaluate(q, r, tile) {
+  let matches = 0, neighbours = 0;
+  DIRS.forEach(([dq, dr], i) => {
+    const other = tiles.get(key(q + dq, r + dr));
+    if (!other) return;
+    neighbours++;
+    if (other.edges[(i + 3) % 6] === tile.edges[i]) matches++;
+  });
+  const perfect = neighbours >= 2 && matches === neighbours;
+  return { matches, neighbours, perfect, points: matches + (perfect ? (tile.cat ? 6 : 3) : 0) };
+}
+
+function emptySlots() {
+  const slots = new Map();
+  for (const k of tiles.keys()) {
+    const [q, r] = k.split(',').map(Number);
+    for (const [dq, dr] of DIRS) {
+      const n = key(q + dq, r + dr);
+      if (!tiles.has(n)) slots.set(n, [q + dq, r + dr]);
+    }
+  }
+  return slots;
+}
+
+function drawTile(group, cx, cy, tile, opacity = 1) {
+  const g = document.createElementNS(NS, 'g');
+  g.setAttribute('class', 'tile');
+  g.setAttribute('opacity', opacity);
+  for (let i = 0; i < 6; i++) {
+    const [x1, y1] = vertex(cx, cy, 60 * i - 30, SIZE);
+    const [x2, y2] = vertex(cx, cy, 60 * i + 30, SIZE);
+    const wedge = document.createElementNS(NS, 'polygon');
+    wedge.setAttribute('points', `${cx},${cy} ${x1},${y1} ${x2},${y2}`);
+    wedge.setAttribute('fill', TYPES[tile.edges[i]]);
+    wedge.setAttribute('class', 'edge');
+    g.appendChild(wedge);
+  }
+  const rim = document.createElementNS(NS, 'polygon');
+  rim.setAttribute('points', Array.from({ length: 6 }, (_, i) => vertex(cx, cy, 60 * i - 30, SIZE).join(',')).join(' '));
+  rim.setAttribute('class', 'rim');
+  g.appendChild(rim);
+  if (tile.cat) {
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', cx); t.setAttribute('y', cy + 9); t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', 26);
+    t.textContent = '🐱';
+    g.appendChild(t);
+  }
+  group.appendChild(g);
+  return g;
+}
+
+function render(popup) {
+  const svg = $('svg');
+  svg.innerHTML = '';
+  const slots = deckIndex < deck.length ? emptySlots() : new Map();
+  const all = [...[...tiles.keys()].map((k) => k.split(',').map(Number)), ...slots.values()];
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const [q, r] of all) { const [x, y] = center(q, r); minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y); }
+  const pad = SIZE + 14;
+  const w = Math.max(maxX - minX + pad * 2, 360), h = Math.max(maxY - minY + pad * 2, 300);
+  const cx0 = (minX + maxX) / 2, cy0 = (minY + maxY) / 2;
+  svg.setAttribute('viewBox', `${cx0 - w / 2} ${cy0 - h / 2} ${w} ${h}`);
+  const layer = document.createElementNS(NS, 'g');
+  svg.appendChild(layer);
+
+  for (const [k, tile] of tiles) { const [q, r] = k.split(',').map(Number); const [x, y] = center(q, r); drawTile(layer, x, y, tile); }
+
+  const next = current();
+  for (const [k, [q, r]] of slots) {
+    const [x, y] = center(q, r);
+    const hex = document.createElementNS(NS, 'polygon');
+    hex.setAttribute('points', Array.from({ length: 6 }, (_, i) => vertex(x, y, 60 * i - 30, SIZE - 2).join(',')).join(' '));
+    hex.setAttribute('class', 'slot');
+    hex.addEventListener('click', () => place(q, r));
+    hex.addEventListener('mouseenter', () => { hoverKey = k; render(); });
+    layer.appendChild(hex);
+    if (hoverKey === k && next) {
+      drawTile(layer, x, y, next, 0.75).style.pointerEvents = 'none';
+      const result = evaluate(q, r, next);
+      const label = document.createElementNS(NS, 'text');
+      label.setAttribute('x', x); label.setAttribute('y', y - SIZE - 4); label.setAttribute('text-anchor', 'middle'); label.setAttribute('class', 'pop'); label.setAttribute('font-size', 18);
+      label.textContent = `+${result.points}`;
+      layer.appendChild(label);
+    }
+  }
+  if (popup) {
+    const [x, y] = center(popup.q, popup.r);
+    const label = document.createElementNS(NS, 'text');
+    label.setAttribute('x', x); label.setAttribute('y', y); label.setAttribute('text-anchor', 'middle'); label.setAttribute('class', 'pop'); label.setAttribute('font-size', 28);
+    label.textContent = (popup.perfect ? (popup.cat ? '😻 ' : '✨ ') : '') + '+' + popup.points;
+    layer.appendChild(label);
+  }
+
+  const hand = $('next');
+  hand.innerHTML = '';
+  if (next) drawTile(hand, 0, 0, next); else hand.innerHTML = '';
+  $('score').textContent = `Điểm ${score}`;
+  $('info').textContent = next ? `Còn ${deck.length - deckIndex} mảnh · mốc sao: ${STARS.join(' / ')}` : 'Hết mảnh rồi!';
+  $('undo').disabled = history.length === 0;
+}
+
+function place(q, r) {
+  const tile = current();
+  if (!tile) return;
+  history.push({ tiles: new Map(tiles), deckIndex, rotation, score });
+  const result = evaluate(q, r, tile);
+  tiles.set(key(q, r), tile);
+  score += result.points;
+  deckIndex++;
+  rotation = 0;
+  hoverKey = null;
+  render({ q, r, points: result.points, perfect: result.perfect, cat: tile.cat });
+  if (deckIndex >= deck.length) finish();
+}
+
+function finish() {
+  const stars = STARS.filter((limit) => score >= limit).length;
+  $('stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  $('winTitle').textContent = ['Vườn xinh rồi!', 'Vườn dễ thương!', 'Vườn mơ ước!', 'Vườn hoàn hảo!'][stars];
+  $('winText').textContent = `Tổng điểm: ${score}`;
+  setTimeout(() => $('win').classList.add('show'), 900);
+}
+
+function undo() {
+  const last = history.pop();
+  if (!last) return;
+  tiles = last.tiles; deckIndex = last.deckIndex; rotation = last.rotation; score = last.score;
+  $('win').classList.remove('show');
+  render();
+}
+
+function turn() { rotation = (rotation + 1) % 6; render(); }
+$('rot').onclick = turn;
+$('next').onclick = turn;
+$('undo').onclick = undo;
+$('reset').onclick = reset;
+$('again').onclick = reset;
+document.addEventListener('keydown', (e) => { if (e.key === 'r' || e.key === 'R') turn(); });
+document.addEventListener('contextmenu', (e) => { e.preventDefault(); turn(); });
+reset();
+</script>
+</body>
+</html>

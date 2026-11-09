@@ -27,6 +27,9 @@ namespace Meowtosis.Presentation
         LevelLocked,
         Portal,
         ColorSwitch,
+        MutateMagic,
+        CloneMagic,
+        StarLost,
     }
 
     // Phát âm thanh, nhìn từ phía presenter và phần diễn hoạt.

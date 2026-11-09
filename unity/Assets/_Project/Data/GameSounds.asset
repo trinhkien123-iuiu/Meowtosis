@@ -26,8 +26,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 6d9f87414400f6546957a8dd2492ceb3, type: 3}
     volume: 0.8
   - id: 4
-    clip: {fileID: 8300000, guid: 3e7e255b10c0c674c84762fbe2e5de91, type: 3}
-    volume: 0.7
+    clip: {fileID: 8300000, guid: 8343f8f5f5cd9994e8ab3e85f0d89218, type: 3}
+    volume: 0.8
   - id: 5
     clip: {fileID: 8300000, guid: f2d9d0b08fd0f994fac5dcbbe1001449, type: 3}
     volume: 0.25
@@ -81,6 +81,15 @@ MonoBehaviour:
     volume: 0.6
   - id: 22
     clip: {fileID: 8300000, guid: 8ecef5a96c6ac9749a9e5241ccdc1166, type: 3}
+    volume: 0.6
+  - id: 23
+    clip: {fileID: 8300000, guid: 98d07dae8106165459c97f6b630eb958, type: 3}
+    volume: 0.6
+  - id: 24
+    clip: {fileID: 8300000, guid: aba92cf2694d71346a1adf46ce5a88d4, type: 3}
+    volume: 0.6
+  - id: 25
+    clip: {fileID: 8300000, guid: 784d67cf05f1e55478a1a7dc21ee7c7e, type: 3}
     volume: 0.6
   meows:
   - {fileID: 8300000, guid: a7af78920ea06b54ebec0bd3da4831e1, type: 3}

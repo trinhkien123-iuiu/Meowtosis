@@ -118,8 +118,59 @@ def color_aura():
     return Image.alpha_composite(soft, img.filter(ImageFilter.GaussianBlur(1.5)))
 
 
+def magic_outer():
+    # Vòng ma thuật ngoài dưới chân mèo (ô được chọn khi dùng booster): hai vành tròn, giữa là dải ký tự (gạch, chấm, tam giác nhỏ).
+    import math
+    scale = 2
+    size = 256 * scale
+    img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    c = size / 2
+    for radius, width in ((118, 5), (96, 3)):
+        r = radius * scale
+        draw.ellipse((c - r, c - r, c + r, c + r), outline=(255, 255, 255, 255), width=width * scale)
+    for index in range(24):
+        a = index / 24 * math.tau
+        r = 107 * scale
+        x, y = c + math.cos(a) * r, c + math.sin(a) * r
+        if index % 3 == 0:
+            s = 7 * scale
+            points = [(x + math.cos(a) * s, y + math.sin(a) * s), (x + math.cos(a + 2.2) * s, y + math.sin(a + 2.2) * s), (x + math.cos(a - 2.2) * s, y + math.sin(a - 2.2) * s)]
+            draw.polygon(points, fill=(255, 255, 255, 255))
+        elif index % 3 == 1:
+            s = 3 * scale
+            draw.ellipse((x - s, y - s, x + s, y + s), fill=(255, 255, 255, 230))
+        else:
+            dx, dy = -math.sin(a) * 6 * scale, math.cos(a) * 6 * scale
+            draw.line((x - dx, y - dy, x + dx, y + dy), fill=(255, 255, 255, 230), width=3 * scale)
+    img = img.resize((256, 256), Image.LANCZOS)
+    return Image.alpha_composite(img.filter(ImageFilter.GaussianBlur(4)), img)
+
+
+def magic_inner():
+    # Lõi vòng ma thuật: ngôi sao sáu cánh trong một vành tròn, xoay ngược chiều với vòng ngoài.
+    import math
+    scale = 2
+    size = 256 * scale
+    img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    c = size / 2
+    r = 78 * scale
+    draw.ellipse((c - r, c - r, c + r, c + r), outline=(255, 255, 255, 255), width=4 * scale)
+    for start in (0, math.pi / 3):
+        points = [(c + math.cos(start + k * math.tau / 3 - math.pi / 2) * r, c + math.sin(start + k * math.tau / 3 - math.pi / 2) * r) for k in range(3)]
+        draw.polygon(points, outline=(255, 255, 255, 255), width=3 * scale)
+    s = 9 * scale
+    draw.ellipse((c - s, c - s, c + s, c + s), fill=(255, 255, 255, 255))
+    img = img.resize((256, 256), Image.LANCZOS)
+    return Image.alpha_composite(img.filter(ImageFilter.GaussianBlur(3)), img)
+
+
 if __name__ == '__main__':
     OUT.mkdir(parents=True, exist_ok=True)
+    magic_outer().save(BOARD / 'MagicCircleOuter.png')
+    magic_inner().save(BOARD / 'MagicCircleInner.png')
+    print('saved MagicCircleOuter, MagicCircleInner')
     for name, make in (('ParticleBubble', bubble), ('ParticleGas', gas), ('ParticleGlint', glint)):
         make().save(OUT / f'{name}.png')
         print('saved', name)

@@ -44,6 +44,9 @@ namespace Meowtosis.Presentation
         // Viền sáng các ô đang chọn được (booster); danh sách rỗng thì tắt.
         void Highlight(IEnumerable<int> cells);
 
+        // Tâm ô trên màn hình (pixel), để HUD đặt bong bóng chỉ vào đúng con mèo.
+        UnityEngine.Vector2 ScreenPointOf(int cell);
+
         // Mũi tên gợi ý từ ô `cell` theo hướng `direction`.
         void ShowHint(int cell, Direction direction);
 

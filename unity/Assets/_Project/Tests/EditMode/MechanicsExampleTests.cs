@@ -204,11 +204,19 @@ namespace Meowtosis.Tests
             Assert.That(TestLevel.FromRows("B.", ">A").Play("0 0 right").IsLost, Is.True);
 
         [Test, Description("V10")]
-        public void VirusCannotBeSwipedButIsPushedLikeAnyPiece()
+        public void VirusCannotBeSwipedAndIsNeverPushedSoSwipingIntoItEatsIt()
         {
             Assert.That(TestLevel.FromRows(">.", "A.").Play("0 0 right").LastMoveRefused, Is.True);
-            Assert.That(TestLevel.FromRows("A>.", "...").Play("0 0 right").Rows, Is.EqualTo(Rows("AA>", "...")));
+            Assert.That(TestLevel.FromRows("A>.", "...").Play("0 0 right").Rows, Is.EqualTo(Rows("AA.", "...")));
         }
+
+        [Test, Description("V12")]
+        public void PushingARowOfCatsIntoAVirusLetsTheLastCatTakeItsCell() =>
+            Assert.That(TestLevel.FromRows("AB>.").Play("0 0 right").Rows, Is.EqualTo(Rows("AAB.")));
+
+        [Test, Description("V13")]
+        public void ARowOnlyPushesUpToTheNearestVirus() =>
+            Assert.That(TestLevel.FromRows("ABB>C.").Play("0 0 right").Rows, Is.EqualTo(Rows("AABBC.")));
 
         [Test, Description("V11")]
         public void VirusesNeitherFormRunsNorFillCells()

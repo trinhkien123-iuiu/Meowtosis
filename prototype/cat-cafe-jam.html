@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Cat Café Jam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap">
+<style>
+  html, body { margin: 0; height: 100%; background: #f6cfae; overflow: hidden; touch-action: none;
+    font-family: 'Baloo 2', system-ui, sans-serif; user-select: none; -webkit-user-select: none; }
+  #wrap { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+  canvas { display: block; touch-action: none; }
+  /* ----- modal thắng / thua ----- */
+  #modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    background: rgba(60, 24, 20, .55); z-index: 5; }
+  #modal.show { display: flex; animation: fade .3s ease-out; }
+  .card { width: min(86vw, 380px); text-align: center; color: #fff; animation: pop .55s cubic-bezier(.2, 1.6, .4, 1); }
+  .card img { max-width: 78%; max-height: 36vh; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .35)); animation: bob 2.4s ease-in-out infinite; }
+  .card h2 { margin: 6px 0 0; font-size: 44px; font-weight: 800; text-shadow: 0 4px 0 #b5527a, 0 8px 18px rgba(0, 0, 0, .35); }
+  .card p { margin: 2px 0 14px; font-size: 22px; font-weight: 700; color: #ffe3ef; }
+  .card button, .big { font: 800 26px 'Baloo 2', sans-serif; color: #fff; border: 0; border-radius: 40px; padding: 8px 40px 12px;
+    background: linear-gradient(#5be07b, #2fb84f); box-shadow: 0 6px 0 #1f8a3a, 0 12px 20px rgba(0, 0, 0, .3); cursor: pointer; }
+  .card button:active, .big:active { transform: translateY(4px); box-shadow: 0 2px 0 #1f8a3a; }
+  .card button.alt { display: block; margin: 14px auto 0; font-size: 20px; padding: 4px 26px 8px;
+    background: linear-gradient(#7fb5ff, #4f8cf0); box-shadow: 0 5px 0 #2f62b8, 0 10px 16px rgba(0, 0, 0, .3); }
+  /* ----- chọn màn ----- */
+  #lv { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; z-index: 4; overflow-y: auto;
+    touch-action: pan-y; background: linear-gradient(#ffc9de, #ffe7d6 45%, #f9d2b0); }
+  #lv.show { display: flex; }
+  #lv .head { text-align: center; padding: 18px 12px 6px; width: 100%; box-sizing: border-box; position: sticky; top: 0; z-index: 2;
+    background: linear-gradient(#ffc9de 70%, rgba(255, 201, 222, 0)); }
+  #lv .head img { height: 76px; filter: drop-shadow(0 4px 6px rgba(120, 40, 70, .35)); animation: bob 2.4s ease-in-out infinite; }
+  #lv h1 { margin: 0; font-size: 36px; font-weight: 800; color: #fff; text-shadow: 0 3px 0 #d6558a, 0 6px 12px rgba(120, 40, 70, .3); line-height: 1; }
+  #lv .sub { margin: 2px 0 0; font-weight: 700; color: #b5527a; }
+  #grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 12px; width: min(94vw, 460px); padding: 8px 0 12px; }
+  .lvb { position: relative; aspect-ratio: 1 / 1.08; border: 0; border-radius: 22px; cursor: pointer; font-family: inherit; color: #fff;
+    background: linear-gradient(#ff8fb8, #f0508f); box-shadow: 0 6px 0 #b8326a, 0 10px 14px rgba(120, 40, 70, .25); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 0; }
+  .lvb.done { background: linear-gradient(#6fe08a, #2fb84f); box-shadow: 0 6px 0 #1f8a3a, 0 10px 14px rgba(20, 90, 40, .25); }
+  .lvb:active { transform: translateY(4px); box-shadow: 0 2px 0 #b8326a; }
+  .lvb.locked { background: linear-gradient(#cfc4d6, #a99bb4); box-shadow: 0 6px 0 #7d6f88; cursor: default; opacity: .85; }
+  .lvb .num { font-size: 32px; font-weight: 800; line-height: 1; text-shadow: 0 2px 0 rgba(0, 0, 0, .2); }
+  .lvb .stars { font-size: 15px; letter-spacing: 1px; margin-top: 2px; color: rgba(255, 255, 255, .55); }
+  .lvb .stars b { color: #ffe14a; text-shadow: 0 1px 0 rgba(0, 0, 0, .3); font-weight: 400; }
+  .lvb .bdg { position: absolute; top: -9px; right: -7px; font-style: normal; font-size: 18px; background: #fff; color: #333; width: 30px; height: 30px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0, 0, 0, .3); }
+  #lv .foot { padding: 6px 12px 26px; text-align: center; font-size: 15px; font-weight: 700; color: #b5527a; }
+  #lv .foot a { color: #3d7bff; text-decoration: underline; cursor: pointer; }
+  @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes pop { from { transform: scale(.3); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+  @keyframes bob { 50% { transform: translateY(-8px) rotate(1.5deg) } }
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="c"></canvas></div>
+<div id="lv">
+  <div class="head"><img src="shikacat/cats/Image_Cat_Orange.png" alt=""><h1>Cat Café Jam</h1><p class="sub">Chọn màn chơi</p></div>
+  <div id="grid"></div>
+  <div class="foot">🍽 bàn 2/4 chỗ · ❓ mèo bí ẩn · 💤 mèo ngủ<br><a id="unlockAll">Demo: mở khóa tất cả màn</a></div>
+</div>
+<div id="modal"><div class="card">
+  <img id="mimg" alt="">
+  <h2 id="mtitle"></h2>
+  <p id="msub"></p>
+  <button id="mbtn"></button>
+  <button id="mbtn2" class="alt">☰ Chọn màn</button>
+</div></div>
+
+<script>
+'use strict';
+/* ============================== Cat Café Jam — prototype ==============================
+   Bus Jam × Mèo × Quán cà phê.
+   - Hàng đợi mèo (lưới cột). Chỉ mèo ở HÀNG ĐẦU của mỗi cột mới chạm được.
+   - Chạm mèo: cùng màu bàn đang mở -> nhảy lên ghế. Khác màu -> ghế chờ (có giới hạn).
+   - Bàn đủ chỗ -> ăn xong, rời đi; bàn kế trượt vào, mèo ở ghế chờ cùng màu tự nhảy lên.
+   Cơ chế thêm: bàn 2/3/4 chỗ · mèo bí ẩn "?" (lộ màu khi lên hàng đầu) · mèo ngủ 💤 (dậy sau n bàn).
+   ====================================================================================== */
+const W = 540, H = 960;
+const A = 'shikacat/';
+const COLORS = [
+  { key: 'Orange', hex: '#ff9f2e' }, { key: 'Pink', hex: '#ff6fae' }, { key: 'Blue', hex: '#3d7bff' },
+  { key: 'Green', hex: '#3ccf5a' }, { key: 'Purple', hex: '#9a5cff' }, { key: 'Red', hex: '#ff4a4a' },
+  { key: 'Yellow', hex: '#ffd93a' },
+];
+const CAT_ASPECT = 565 / 681;
+
+/* ---------- danh sách màn (dữ liệu) ----------
+   L(màu, cột, tổng mèo≈, ghế chờ, kích cỡ bàn[], mèo ngủ [số con, dậy tối đa sau n bàn], % mèo bí ẩn, mechanic mới) */
+const L = (colors, cols, cats, slots, sizes, sleep, mystery, intro) =>
+  ({ colors, cols, cats, slots, sizes, sleep: sleep || null, mystery: mystery || 0, intro: intro || null });
+const LEVELS = [
+  L(3, 3, 9, 5, [3]), L(4, 4, 12, 5, [3]), L(4, 4, 18, 5, [3]), L(5, 4, 21, 5, [3]), L(5, 5, 24, 5, [3]),
+  L(4, 4, 16, 5, [2, 3], 0, 0, 'size'), L(5, 5, 24, 5, [2, 3]), L(5, 5, 28, 4, [2, 3, 4]), L(6, 5, 30, 4, [2, 3, 4]),
+  L(5, 5, 25, 4, [3], 0, .35, 'mystery'), L(6, 5, 30, 4, [3], 0, .5), L(6, 5, 30, 4, [2, 3, 4], 0, .4),
+  L(4, 4, 18, 5, [3], [2, 2], 0, 'sleep'), L(5, 5, 24, 5, [3], [3, 3]), L(5, 5, 28, 4, [2, 3, 4], [3, 4], .3), L(6, 5, 30, 4, [3], [4, 5]),
+  L(5, 5, 24, 3, [3]), L(6, 5, 30, 3, [2, 3], [3, 3]), L(6, 6, 36, 4, [2, 3, 4], 0, .5), L(7, 6, 36, 4, [3], [4, 5], .4),
+  L(7, 6, 42, 4, [2, 3, 4], [5, 6], .5), L(7, 6, 44, 4, [2, 3, 4], [5, 6], .6),
+];
+const levelCfg = n => LEVELS[Math.min(n, LEVELS.length) - 1];
+const BADGE = { size: '🍽', mystery: '❓', sleep: '💤' };
+const INTRO = {
+  size: ['Bàn 2 & 4 chỗ!', 'Bàn nhỏ ăn nhanh, bàn to cần 4 mèo'],
+  mystery: ['Mèo bí ẩn "?"', 'Lên hàng đầu mới lộ màu'],
+  sleep: ['Mèo ngủ 💤', 'Dậy sau khi đủ số bàn phục vụ'],
+};
+
+/* ---------- tiến độ ---------- */
+const prog = { unlocked: 1, stars: {}, all: false };
+try { Object.assign(prog, JSON.parse(localStorage.getItem('ccj-prog') || '{}')); } catch (e) {}
+const saveProg = () => { try { localStorage.setItem('ccj-prog', JSON.stringify(prog)); } catch (e) {} };
+
+/* ---------- assets ---------- */
+const IMG = { cat: [], happy: [], box: [] };
+const loadImg = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(i); i.src = src; });
+const SOUND_SRC = {
+  seat: A + 'audio/SC_SFX_Gameplay_Box_Created_01.ogg', serve: A + 'audio/SC_SFX_Gameplay_AllBoxesCreated_01.ogg',
+  tap: A + 'audio/SC_SFX_UI_Button_01.ogg', no: A + 'audio/SC_Gameplay_Mistake_01.ogg',
+  win: A + 'audio/SC_SFX_UI_Win_01.ogg', lose: A + 'audio/SC_SFX_UI_Lose_01.ogg', bgm: A + 'audio/SC_BGM_01.ogg',
+  m0: 'sfx/meow-sweet.mp3', m1: 'sfx/meow-cartoon.mp3', m2: 'sfx/meow-attention.mp3', m3: 'sfx/meow-hungry.mp3',
+};
+const SND = {}; let muted = false, bgmStarted = false;
+for (const k in SOUND_SRC) { const a = new Audio(SOUND_SRC[k]); a.preload = 'auto'; SND[k] = a; }
+function play(name, rate = 1, vol = 1) {
+  if (muted) return;
+  try {
+    const a = SND[name].cloneNode(); a.volume = Math.min(1, vol);
+    a.preservesPitch = false; a.mozPreservesPitch = false; a.webkitPreservesPitch = false; a.playbackRate = rate;
+    a.play().catch(() => {});
+  } catch (e) {}
+}
+function startBgm() {
+  if (bgmStarted) return; bgmStarted = true;
+  SND.bgm.loop = true; SND.bgm.volume = .22; if (!muted) SND.bgm.play().catch(() => { bgmStarted = false; });
+}
+const SIL = {};
+function silhouette(color, fill) {
+  const key = color + fill; if (SIL[key]) return SIL[key];
+  const img = IMG.cat[color], c = document.createElement('canvas'); c.width = img.width >> 1; c.height = img.height >> 1;
+  const g = c.getContext('2d'); g.drawImage(img, 0, 0, c.width, c.height); g.globalCompositeOperation = 'source-in'; g.fillStyle = fill; g.fillRect(0, 0, c.width, c.height);
+  return SIL[key] = c;
+}
+
+/* ---------- canvas ---------- */
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let dpr = 1, vScale = 1, bgCanvas = null;
+function resize() {
+  dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  vScale = Math.min(innerWidth / W, innerHeight / H);
+  cv.style.width = W * vScale + 'px'; cv.style.height = H * vScale + 'px';
+  cv.width = Math.round(W * vScale * dpr); cv.height = Math.round(H * vScale * dpr);
+  bgCanvas = null;
+}
+addEventListener('resize', resize);
+
+/* ---------- helpers ---------- */
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const rnd = n => Math.floor(Math.random() * n);
+const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); };
+const easeInOut = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+const easeOutBack = t => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function spring(o, key, target, dt, k = 190, d = 17) {
+  const v = key + 'V'; o[v] = (o[v] || 0) + ((target - o[key]) * k - (o[v] || 0) * d) * dt; o[key] += o[v] * dt;
+}
+
+/* ---------- solver: đảm bảo màn luôn giải được (cùng luật với game) ---------- */
+function solve(cols, tables, slots) {
+  const memo = new Set(); let nodes = 0; const path = []; let waits = 0;
+  function dfs(ptr, wait, ti, seat, wc, ws) {
+    if (ti >= tables.length) { waits = ws; return true; }
+    if (++nodes > 40000) return false;
+    const key = ptr.join(',') + '|' + wait.join('') + '|' + ti + '|' + seat;
+    if (memo.has(key)) return false;
+    const order = [];
+    for (let c = 0; c < cols.length; c++) if (ptr[c] < cols[c].length && cols[c][ptr[c]].wake <= ti) order.push(c);
+    order.sort((a, b) => (cols[b][ptr[b]].color === tables[ti].color) - (cols[a][ptr[a]].color === tables[ti].color));
+    for (const c of order) {
+      const color = cols[c][ptr[c]].color; const w = wait.slice(); let t = ti, s = seat, wcount = wc, wsum = ws;
+      if (color === tables[t].color) {
+        s++;
+        if (s === tables[t].cap) {
+          t++; s = 0;
+          while (t < tables.length) {
+            const tb = tables[t], n = Math.min(w[tb.color], tb.cap - s); w[tb.color] -= n; wcount -= n; s += n;
+            if (s === tb.cap) { t++; s = 0; } else break;
+          }
+        }
+      } else { if (wcount >= slots) continue; w[color]++; wcount++; wsum++; }
+      const np = ptr.slice(); np[c]++; path.push(c);
+      if (dfs(np, w, t, s, wcount, wsum)) return true;
+      path.pop();
+    }
+    memo.add(key); return false;
+  }
+  const ok = dfs(cols.map(() => 0), new Array(COLORS.length).fill(0), 0, 0, 0, 0);
+  return ok ? { path: path.slice(), waits } : null;
+}
+function generate(cfg) {
+  let best = null;
+  for (let tries = 1; tries <= 80; tries++) {
+    const tables = []; let sum = 0, k = 0;
+    while (sum < cfg.cats) { const cap = cfg.sizes[rnd(cfg.sizes.length)]; tables.push({ color: k < cfg.colors ? k : rnd(cfg.colors), cap }); k++; sum += cap; }
+    shuffle(tables);
+    const cats = []; tables.forEach(t => { for (let i = 0; i < t.cap; i++) cats.push({ color: t.color, wake: 0, mystery: false }); }); shuffle(cats);
+    if (cfg.sleep) shuffle(cats.map((_, i) => i)).slice(0, cfg.sleep[0]).forEach(i => cats[i].wake = 1 + rnd(cfg.sleep[1]));
+    if (cfg.mystery) cats.forEach(c => { if (Math.random() < cfg.mystery) c.mystery = true; });
+    const cols = Array.from({ length: cfg.cols }, () => []); cats.forEach((c, i) => cols[i % cfg.cols].push(c));
+    cols.forEach(col => { if (col[0]) col[0].mystery = false; });
+    const res = solve(cols, tables, cfg.slots);
+    best = { cols, tables, res, tries }; if (res) break;
+  }
+  return best;
+}
+
+/* ---------- game state ---------- */
+let G = null, level = 1, particles = [], popups = [], shake = 0, now = 0;
+const TABLE_Y = 190, PREV_Y = 322, SLOT_Y = 452, FRONT_Y = 622;
+const colPitch = () => Math.min(100, 480 / G.cfg.cols);
+const colX = ci => W / 2 + (ci - (G.cfg.cols - 1) / 2) * colPitch();
+const rowPitch = () => Math.min(82, (925 - FRONT_Y) / Math.max(1, G.rows - 1));
+const rowY = ri => FRONT_Y + ri * rowPitch();
+const rowScale = ri => Math.max(.76, 1 - .035 * ri);
+const baseCatH = () => Math.min(94, colPitch() * 1.12);
+const slotPitch = () => Math.min(98, 500 / G.cfg.slots);
+const slotX = i => W / 2 + (i - (G.cfg.slots - 1) / 2) * slotPitch();
+
+function newLevel(n) {
+  level = n;
+  let cfg = levelCfg(n), gen = generate(cfg);
+  for (let extra = 0; !gen.res && extra < 3; extra++) { cfg = Object.assign({}, cfg, { slots: cfg.slots + 1 }); gen = generate(cfg); } // dự phòng hiếm gặp
+  G = { n, cfg, cols: [], tables: [], serving: [], cats: [], wait: new Array(cfg.slots).fill(null),
+        served: 0, advanced: 0, total: gen.tables.length, combo: 0, lastServe: -99, over: false, idle: 0,
+        loseTimer: -1, solution: gen.res ? gen.res.path : [], solWaits: gen.res ? gen.res.waits : 0, tries: gen.tries,
+        moves: 0, waitsUsed: 0, rows: Math.max(...gen.cols.map(c => c.length)) };
+  gen.cols.forEach((arr, ci) => {
+    const col = []; arr.forEach((d, ri) => {
+      const c = { color: d.color, wake: d.wake, mystery: d.mystery, col: ci, row: ri, state: 'queue', x: colX(ci), y: rowY(ri), h: baseCatH() * rowScale(ri),
+                  sq: 0, sqV: 0, happy: false, phase: Math.random() * 6.28, intro: -(ri * .07 + ci * .05) - .1 };
+      col.push(c); G.cats.push(c);
+    }); G.cols.push(col);
+  });
+  gen.tables.forEach(t => G.tables.push(makeTable(t.color, t.cap)));
+  particles = []; popups = []; shake = 0;
+  if (cfg.intro) { const [a, b] = INTRO[cfg.intro]; popups.push({ text: a, x: W / 2, y: 500, color: '#fff', size: 40, t: -.9, life: 3.2 }, { text: b, x: W / 2, y: 548, color: '#ffe3a8', size: 22, t: -.9, life: 3.2 }); }
+  document.getElementById('modal').classList.remove('show');
+  console.log(`[Cat Café Jam] level ${n}: ${gen.cols.reduce((s, c) => s + c.length, 0)} cats, ${gen.tables.length} tables, solvable=${!!gen.res}, tries=${gen.tries}`);
+}
+function makeTable(color, cap) { return { color, cap, x: W + 260, y: PREV_Y, s: .5, a: 1, seats: [], reserved: 0, arrived: 0, phase: 'queue', pt: 0, sq: 0, sqV: 0 }; }
+
+/* ---------- gameplay ---------- */
+const seatGap = t => t.cap === 4 ? 92 : 106;
+const seatPos = (t, i) => ({ x: t.x + (i - (t.cap - 1) / 2) * seatGap(t) * t.s, y: t.y + 40 * t.s, h: (t.cap === 4 ? 70 : 78) * t.s });
+const waitPos = i => ({ x: slotX(i), y: SLOT_Y + 36, h: 68 });
+const isAwake = c => c.wake <= G.advanced;
+
+function startFlight(c, dest, delay) {
+  c.state = 'fly'; c.fly = { t: -delay, dest, started: false, x0: 0, y0: 0, h0: 0, dur: .4 }; c.sq = 0; c.sqV = 0;
+}
+function destPos(d) { return d.kind === 'seat' ? seatPos(d.table, d.i) : waitPos(d.slot); }
+
+function reserveSeat(c, t, delay) {
+  const i = t.reserved++; t.seats[i] = c; c.table = t; c.seatIdx = i;
+  if (c.slot != null) { G.wait[c.slot] = null; c.slot = null; }
+  startFlight(c, { kind: 'seat', table: t, i }, delay);
+  if (t.reserved === t.cap) advance(t);
+}
+function advance(t) {
+  G.tables.shift(); G.serving.push(t); t.phase = 'filling'; G.advanced++;
+  for (const c of G.cats) if (c.state === 'queue' && c.wake === G.advanced) { c.sq = 1.3; burst(c.x, c.y - c.h * .5, '#ffffff', 1, 'ring'); popup('Dậy rồi!', c.x, c.y - c.h - 8, '#fff', 24); play('m' + rnd(4), 1.4, .3); }
+  const nt = G.tables[0];
+  if (nt) {
+    let k = 0;
+    for (let s = 0; s < G.wait.length && nt.reserved < nt.cap; s++) {
+      const c = G.wait[s];
+      if (c && c.state === 'wait' && c.color === nt.color) reserveSeat(c, nt, .45 + (k++) * .17);
+    }
+  }
+}
+const frontCats = () => G.cols.map(col => col[0]).filter(Boolean);
+
+function tapCat(c) {
+  if (!G || G.over || c.state !== 'queue') return;
+  startBgm(); G.idle = 0;
+  if (c.row !== 0) { c.sq = .7; c.sqV = 0; play('no', 1, .35); return; }
+  if (!isAwake(c)) { c.sq = .8; c.sqV = 0; play('no', 1, .5); popup('Zzz… còn ' + (c.wake - G.advanced) + ' bàn', c.x, c.y - c.h - 8, '#bcd0ff', 24); return; }
+  const t0 = G.tables[0];
+  if (t0 && c.color === t0.color && t0.reserved < t0.cap) {
+    reserveSeat(c, t0, .06);
+  } else {
+    const slot = G.wait.indexOf(null);
+    if (slot < 0) { c.sq = 1; c.sqV = 0; shake = Math.max(shake, 6); play('no', 1, .8); popup('Hết ghế chờ!', c.x, c.y - c.h - 10, '#ff6a6a', 30); return; }
+    G.wait[slot] = c; c.slot = slot; G.waitsUsed++; startFlight(c, { kind: 'wait', slot }, .06); play('tap', 1.1, .8);
+  }
+  const col = G.cols[c.col]; col.shift(); col.forEach((k, i) => { k.row = i; });
+  const nf = col[0]; if (nf && nf.mystery) { nf.mystery = false; nf.sq = 1.2; burst(nf.x, nf.y - nf.h * .5, '#ffffff', 6, 'puff'); play('seat', 1.5, .4); }
+  G.moves++;
+}
+
+function onLand(c) {
+  const d = c.fly.dest; c.sq = 1.1; c.sqV = 0;
+  if (d.kind === 'seat') {
+    const t = d.table; c.state = 'seat'; t.arrived++;
+    play('seat', 1 + .13 * (t.arrived - 1), .9);
+    const sp = seatPos(t, d.i); burst(sp.x, sp.y - 34 * t.s, COLORS[c.color].hex, 7, 'star');
+    if (t.arrived === t.cap) celebrate(t);
+  } else {
+    c.state = 'wait'; play('seat', .75, .5);
+    burst(waitPos(d.slot).x, waitPos(d.slot).y - 8, '#ffffff', 5, 'puff');
+    // bàn cùng màu đã mở trong lúc mèo còn đang bay tới ghế chờ -> nhảy thẳng lên bàn
+    const open = G.tables[0];
+    if (open && open.color === c.color && open.reserved < open.cap) { reserveSeat(c, open, .12); return; }
+    if (G.wait.every(Boolean)) { popup('Ghế chờ đầy!', W / 2, SLOT_Y - 56, '#ffb64d', 28); shake = Math.max(shake, 5); }
+  }
+}
+
+function celebrate(t) {
+  t.phase = 'celebrate'; t.pt = 0; t.sq = -1.2; t.sqV = 0;
+  const hex = COLORS[t.color].hex;
+  t.seats.forEach((c, i) => { c.happy = true; c.sq = -1.3; c.sqV = 0; const p = seatPos(t, i); burst(p.x, p.y - 50 * t.s, hex, 6, 'heart'); });
+  burst(t.x, t.y, '#ffffff', 1, 'ring');
+  G.combo = (now - G.lastServe < 5) ? G.combo + 1 : 1; G.lastServe = now; G.served++;
+  const words = ['Yummy!', 'Nyaa~', 'Purrfect!', 'Meow!', 'Ngon quá!'];
+  popup(words[rnd(words.length)], t.x, t.y - 80, '#fff', 38);
+  if (G.combo >= 2) popup('COMBO x' + G.combo, W / 2, 250, '#ffe14a', 54 + Math.min(G.combo, 5) * 3);
+  play('serve', 1 + Math.min(G.combo - 1, 4) * .06, 1); play('m' + rnd(4), 1 + Math.random() * .25, .55);
+  shake = Math.max(shake, 5 + G.combo);
+  if (G.combo >= 3) for (let i = 0; i < 18; i++) confetti(t.x, t.y);
+}
+
+// còn nước đi hợp lệ không? (mèo hàng đầu đã tỉnh, và hợp bàn hoặc còn ghế chờ)
+function canMove() {
+  const t0 = G.tables[0];
+  return frontCats().some(c => isAwake(c) && ((t0 && c.color === t0.color && t0.reserved < t0.cap) || G.wait.includes(null)));
+}
+function checkEnd(dt) {
+  if (G.over) return;
+  if (G.served === G.total && !G.serving.length) { G.over = true; win(); setTimeout(showWin, 450); return; }
+  if (!G.tables[0] || G.cats.some(c => c.state === 'fly') || canMove()) { G.loseTimer = -1; return; }
+  G.loseTimer = G.loseTimer < 0 ? 0 : G.loseTimer + dt;
+  if (G.loseTimer > .5) { G.over = true; shake = 14; play('lose'); setTimeout(showLose, 700); }
+}
+function win() { play('win'); for (let i = 0; i < 90; i++) confetti(W / 2 + (Math.random() - .5) * 200, 260, true); }
+
+function starsFor() { const d = G.waitsUsed - G.solWaits; return d <= 1 ? 3 : d <= 4 ? 2 : 1; }
+function showWin() {
+  const st = starsFor(); prog.stars[G.n] = Math.max(prog.stars[G.n] || 0, st); prog.unlocked = Math.max(prog.unlocked, G.n + 1); saveProg();
+  modal('shikacat/ui/Image_Win_Front.png', 'Tuyệt vời!', '★'.repeat(st) + '☆'.repeat(3 - st) + `  ·  ${G.waitsUsed} lần ngồi ghế chờ`, 'Màn tiếp ▶', () => newLevel(G.n + 1));
+}
+function showLose() {
+  const stuck = frontCats().some(c => !isAwake(c)) ? 'Mèo ngủ chưa dậy, ghế chờ đã đầy…' : 'Mèo đói đang chờ quá lâu…';
+  modal('shikacat/ui/Image_Lose_Front.png', 'Hết ghế rồi!', stuck, 'Thử lại ↻', () => newLevel(G.n));
+}
+function modal(img, title, sub, btn, fn) {
+  document.getElementById('mimg').src = img; document.getElementById('mtitle').textContent = title;
+  document.getElementById('msub').textContent = sub; const b = document.getElementById('mbtn'); b.textContent = btn;
+  b.onclick = () => { play('tap'); fn(); }; document.getElementById('modal').classList.add('show');
+}
+
+/* ---------- chọn màn ---------- */
+const lvEl = document.getElementById('lv');
+function buildLevels() {
+  const g = document.getElementById('grid'); g.innerHTML = '';
+  LEVELS.forEach((cfg, i) => {
+    const n = i + 1, locked = n > prog.unlocked && !prog.all, st = prog.stars[n] || 0, b = document.createElement('button');
+    b.className = 'lvb' + (locked ? ' locked' : '') + (st ? ' done' : '');
+    b.innerHTML = `<span class="num">${locked ? '🔒' : n}</span>${cfg.intro ? `<i class="bdg">${BADGE[cfg.intro]}</i>` : ''}` +
+      `<span class="stars">${[1, 2, 3].map(k => k <= st ? '<b>★</b>' : '☆').join('')}</span>`;
+    if (!locked) b.onclick = () => { play('tap'); startLevel(n); };
+    g.appendChild(b);
+  });
+}
+function showLevels() { document.getElementById('modal').classList.remove('show'); buildLevels(); lvEl.classList.add('show'); lvEl.scrollTop = 0; }
+function startLevel(n) { lvEl.classList.remove('show'); newLevel(n); }
+document.getElementById('unlockAll').onclick = () => { prog.all = true; saveProg(); buildLevels(); };
+document.getElementById('mbtn2').onclick = () => { play('tap'); showLevels(); };
+
+/* ---------- particles ---------- */
+function burst(x, y, color, n, type) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * 6.28, sp = 70 + Math.random() * 170;
+    if (type === 'ring') { particles.push({ type, x, y, vx: 0, vy: 0, g: 0, life: .55, max: .55, size: 20, color }); continue; }
+    particles.push({ type, x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - (type === 'heart' ? 150 : 40), g: type === 'puff' ? -40 : 260,
+      life: .6 + Math.random() * .5, max: 1.1, size: type === 'heart' ? 13 + Math.random() * 9 : 7 + Math.random() * 6, color, rot: Math.random() * 6, vr: (Math.random() - .5) * 9 });
+  }
+}
+function confetti(x, y, wide) {
+  const a = -Math.PI / 2 + (Math.random() - .5) * (wide ? 2.6 : 2), sp = 220 + Math.random() * 380;
+  particles.push({ type: 'conf', x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 560, life: 1.6 + Math.random(), max: 2.5, size: 8 + Math.random() * 6,
+    color: COLORS[rnd(COLORS.length)].hex, rot: Math.random() * 6, vr: (Math.random() - .5) * 16 });
+}
+function popup(text, x, y, color, size) { popups.push({ text, x, y, color, size, t: 0, life: 1.1 }); }
+function heartPath(s) {
+  ctx.beginPath(); ctx.moveTo(0, s * .35); ctx.bezierCurveTo(-s, -s * .25, -s * .55, -s * .95, 0, -s * .45);
+  ctx.bezierCurveTo(s * .55, -s * .95, s, -s * .25, 0, s * .35); ctx.closePath();
+}
+
+/* ---------- update ---------- */
+function update(dt) {
+  now += dt; G.idle += dt; shake *= Math.pow(.0025, dt);
+  if (shake < .2) shake = 0;
+  for (const c of G.cats) {
+    c.intro += dt;
+    spring(c, 'sq', 0, dt, 260, 11);
+    if (c.state === 'queue') {
+      const tx = colX(c.col), ty = rowY(c.row), th = baseCatH() * rowScale(c.row), k = 1 - Math.exp(-dt * 13);
+      c.x += (tx - c.x) * k; c.y += (ty - c.y) * k; c.h += (th - c.h) * k;
+    } else if (c.state === 'fly') {
+      const f = c.fly; f.t += dt;
+      if (f.t < 0) { c.sq = 1.2; c.sqV = 0; continue; } // anticipation squash
+      const d = destPos(f.dest);
+      if (!f.started) { f.started = true; f.x0 = c.x; f.y0 = c.y; f.h0 = c.h; f.dur = .36 + Math.hypot(d.x - c.x, d.y - c.y) / 1900; play('tap', 1.25 + Math.random() * .15, .4); }
+      const p = clamp(f.t / f.dur, 0, 1), e = easeInOut(p), dist = Math.hypot(d.x - f.x0, d.y - f.y0);
+      c.x = lerp(f.x0, d.x, e); c.y = lerp(f.y0, d.y, e) - Math.sin(Math.PI * p) * (50 + dist * .16); c.h = lerp(f.h0, d.h, e);
+      c.rot = Math.sin(Math.PI * p) * clamp((d.x - f.x0) / 500, -.5, .5); c.p = p;
+      if (p >= 1) { c.x = d.x; c.y = d.y; c.h = d.h; c.rot = 0; onLand(c); }
+    }
+  }
+  const busy = G.serving.some(t => t.phase === 'filling' || t.phase === 'celebrate');
+  G.tables.forEach((t, i) => {
+    let tx, ty, ts; const slot = busy ? i + 1 : i;
+    if (slot === 0) { tx = W / 2; ty = TABLE_Y; ts = 1; }
+    else if (slot === 1) { tx = W / 2 - 105; ty = PREV_Y; ts = .5; }
+    else if (slot === 2) { tx = W / 2 + 105; ty = PREV_Y; ts = .5; }
+    else { tx = W + 260; ty = PREV_Y; ts = .5; }
+    spring(t, 'x', tx, dt, 150, 15); spring(t, 'y', ty, dt, 150, 15); spring(t, 's', ts, dt, 150, 14); t.a += (1 - t.a) * .3;
+    spring(t, 'sq', 0, dt, 200, 9);
+  });
+  for (const t of G.serving) {
+    spring(t, 'sq', 0, dt, 200, 9);
+    if (t.phase === 'filling') { spring(t, 'x', W / 2, dt); spring(t, 'y', TABLE_Y, dt); spring(t, 's', 1, dt); }
+    else if (t.phase === 'celebrate') { t.pt += dt; if (t.pt > .75) { t.phase = 'leaving'; t.pt = 0; } }
+    else if (t.phase === 'leaving') {
+      t.pt += dt; const k = clamp(t.pt / .45, 0, 1); t.y = TABLE_Y - 240 * k * k; t.a = 1 - k;
+      if (k >= 1) { t.phase = 'gone'; t.seats.forEach(c => { c.state = 'gone'; }); }
+    }
+  }
+  G.serving = G.serving.filter(t => t.phase !== 'gone'); G.cats = G.cats.filter(c => c.state !== 'gone');
+  for (const p of particles) { p.life -= dt; p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt; if (p.rot != null) p.rot += p.vr * dt; if (p.type === 'ring') p.size += 260 * dt; }
+  particles = particles.filter(p => p.life > 0);
+  for (const p of popups) p.t += dt; popups = popups.filter(p => p.t < p.life);
+  checkEnd(dt);
+}
+
+/* ---------- drawing ---------- */
+function drawBG() {
+  const b = document.createElement('canvas'); b.width = W * vScale * dpr; b.height = H * vScale * dpr;
+  const g = b.getContext('2d'); g.scale(b.width / W, b.height / H);
+  let gr = g.createLinearGradient(0, 0, 0, 360); gr.addColorStop(0, '#ffc9de'); gr.addColorStop(1, '#ffe7d6');
+  g.fillStyle = gr; g.fillRect(0, 0, W, 360);
+  g.fillStyle = 'rgba(255,255,255,.32)'; for (let x = 0; x < W; x += 60) g.fillRect(x, 0, 30, 360);
+  for (const wx of [14, W - 84]) {
+    g.fillStyle = '#fff'; g.beginPath(); g.roundRect(wx - 4, 110, 78, 150, 34); g.fill();
+    const wg = g.createLinearGradient(0, 114, 0, 256); wg.addColorStop(0, '#9fd8ff'); wg.addColorStop(1, '#e6f6ff');
+    g.fillStyle = wg; g.beginPath(); g.roundRect(wx, 114, 70, 142, 30); g.fill();
+    g.fillStyle = '#fff'; g.fillRect(wx + 33, 114, 4, 142); g.fillRect(wx, 176, 70, 4);
+    g.fillStyle = 'rgba(255,255,255,.8)'; g.beginPath(); g.ellipse(wx + 22, 150, 16, 8, 0, 0, 7); g.ellipse(wx + 44, 156, 14, 7, 0, 0, 7); g.fill();
+  }
+  gr = g.createLinearGradient(0, 352, 0, 392); gr.addColorStop(0, '#e9a56a'); gr.addColorStop(1, '#b8723b');
+  g.fillStyle = gr; g.fillRect(0, 352, W, 36); g.fillStyle = 'rgba(255,255,255,.35)'; g.fillRect(0, 352, W, 5);
+  g.fillStyle = 'rgba(80,30,0,.25)'; g.fillRect(0, 388, W, 6);
+  gr = g.createLinearGradient(0, 392, 0, H); gr.addColorStop(0, '#ffe3c8'); gr.addColorStop(1, '#f7c99f');
+  g.fillStyle = gr; g.fillRect(0, 392, W, H - 392);
+  g.fillStyle = 'rgba(255,255,255,.28)';
+  for (let y = 392, r = 0; y < H; y += 58, r++) for (let x = (r % 2) * 58 - 58; x < W; x += 116) g.fillRect(x, y, 58, 58);
+  const v = g.createRadialGradient(W / 2, H / 2, 300, W / 2, H / 2, 700); v.addColorStop(0, 'rgba(120,40,40,0)'); v.addColorStop(1, 'rgba(120,40,40,.28)');
+  g.fillStyle = v; g.fillRect(0, 0, W, H);
+  return b;
+}
+
+function drawCatSprite(c, x, y, h, extra) {
+  const img = (c.happy ? IMG.happy : IMG.cat)[c.color]; if (!img || !img.width) return;
+  const breath = Math.sin(now * 2.3 + c.phase), w = h * CAT_ASPECT;
+  const asleep = c.state === 'queue' && !isAwake(c), hidden = c.mystery && c.state === 'queue';
+  let sx = 1 - (asleep ? .008 : .018) * breath, sy = 1 + (asleep ? .045 : .026) * breath;
+  sx *= 1 + .26 * c.sq; sy *= 1 - .26 * c.sq;
+  if (extra && extra.stretch) { sy *= 1 + extra.stretch; sx *= 1 - extra.stretch * .6; }
+  ctx.save(); ctx.translate(x, y); if (extra && extra.rot) ctx.rotate(extra.rot); ctx.scale(sx, sy);
+  if (hidden) {
+    ctx.drawImage(silhouette(c.color, '#4a3566'), -w / 2, -h, w, h);
+    ctx.font = `800 ${Math.round(h * .5)}px "Baloo 2", sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.lineWidth = 5; ctx.strokeStyle = '#2a1840'; ctx.strokeText('?', 0, -h * .45); ctx.fillStyle = '#ffe14a'; ctx.fillText('?', 0, -h * .45);
+  } else {
+    ctx.drawImage(img, -w / 2, -h, w, h);
+    if (asleep) {
+      ctx.drawImage(silhouette(c.color, 'rgba(70,86,190,.55)'), -w / 2, -h, w, h);
+      ctx.font = `800 ${Math.round(h * .4)}px "Baloo 2", sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.lineWidth = 5; ctx.strokeStyle = '#26307a'; const tx = w * .28, ty = -h * (.98 + .06 * Math.sin(now * 2 + c.phase));
+      ctx.strokeText('💤' + (c.wake - G.advanced), tx, ty); ctx.fillStyle = '#fff'; ctx.fillText('💤' + (c.wake - G.advanced), tx, ty);
+    }
+  }
+  ctx.restore();
+}
+function shadow(x, y, w, a = .22) { ctx.fillStyle = `rgba(110,50,20,${a})`; ctx.beginPath(); ctx.ellipse(x, y, w, w * .3, 0, 0, 7); ctx.fill(); }
+
+function drawTable(t, withCats) {
+  const s = t.s; if (t.a <= .01) return;
+  const n = t.cap, gap = seatGap(t), bs = (n === 4 ? 86 : 96) * s;
+  ctx.save(); ctx.globalAlpha = clamp(t.a, 0, 1); ctx.translate(t.x, t.y); ctx.scale(1 + .06 * t.sq, 1 - .06 * t.sq);
+  const cw = (n * gap + 26) * s, ch = 118 * s;
+  shadow(0, ch / 2 + 14 * s, cw * .46, .25);
+  const gr = ctx.createLinearGradient(0, -ch / 2, 0, ch / 2); gr.addColorStop(0, '#e7a468'); gr.addColorStop(1, '#b9743c');
+  ctx.fillStyle = gr; rr(-cw / 2, -ch / 2 + 8 * s, cw, ch, 26 * s); ctx.fill();
+  ctx.lineWidth = 4 * s; ctx.strokeStyle = '#8a5226'; ctx.stroke();
+  ctx.fillStyle = 'rgba(255,255,255,.28)'; rr(-cw / 2 + 12 * s, -ch / 2 + 14 * s, cw - 24 * s, 12 * s, 6 * s); ctx.fill();
+  ctx.fillStyle = COLORS[t.color].hex; ctx.strokeStyle = '#fff'; ctx.lineWidth = 3 * s;
+  rr(-34 * s, ch / 2 - 6 * s, 68 * s, 16 * s, 8 * s); ctx.fill(); ctx.stroke();
+  for (let i = 0; i < n; i++) {
+    const bx = (i - (n - 1) / 2) * gap * s, img = IMG.box[t.color];
+    if (img && img.width) { ctx.globalAlpha = clamp(t.a, 0, 1) * (t.seats[i] ? 1 : .92); ctx.drawImage(img, bx - bs / 2, -bs / 2 + 6 * s, bs, bs * img.height / img.width); ctx.globalAlpha = clamp(t.a, 0, 1); }
+  }
+  if (withCats) for (let i = 0; i < n; i++) {
+    const c = t.seats[i]; if (!c || c.state !== 'seat') continue;
+    const pp = seatPos(t, i); shadow(pp.x - t.x, pp.y - t.y + 2, 30 * s, .18);
+    drawCatSprite(c, pp.x - t.x, pp.y - t.y, pp.h, {});
+  }
+  ctx.restore();
+}
+
+function drawHUD() {
+  ctx.lineWidth = 3; ctx.strokeStyle = '#a8603a'; ctx.beginPath(); ctx.moveTo(0, 78); ctx.quadraticCurveTo(W / 2, 112, W, 78); ctx.stroke();
+  for (let i = 0; i < 12; i++) {
+    const u = (i + .5) / 12, x = u * W, y = 78 + (1 - Math.pow(2 * u - 1, 2)) * 17;
+    ctx.save(); ctx.translate(x, y + 1); ctx.rotate(Math.sin(now * 2 + i) * .06); ctx.fillStyle = COLORS[i % COLORS.length].hex;
+    ctx.beginPath(); ctx.moveTo(-14, 0); ctx.lineTo(14, 0); ctx.lineTo(0, 28); ctx.closePath(); ctx.fill(); ctx.restore();
+  }
+  ctx.font = '800 24px "Baloo 2", sans-serif'; ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#ff7aa8'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; rr(16, 18, 112, 44, 22); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.fillText('☰ ' + G.n, 72, 41);
+  const px = 148, pw = 226, py = 26, ph = 28, prog_ = G.total ? G.served / G.total : 0;
+  ctx.fillStyle = 'rgba(120,60,30,.45)'; rr(px, py, pw, ph, 14); ctx.fill();
+  if (prog_ > 0) { const gr = ctx.createLinearGradient(0, py, 0, py + ph); gr.addColorStop(0, '#ffe46b'); gr.addColorStop(1, '#ffa62b'); ctx.fillStyle = gr; rr(px + 3, py + 3, Math.max(22, (pw - 6) * prog_), ph - 6, 11); ctx.fill(); }
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; rr(px, py, pw, ph, 14); ctx.stroke();
+  ctx.font = '800 18px "Baloo 2", sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText(`🍰 ${G.served}/${G.total}`, px + pw / 2, py + ph / 2 + 1);
+  for (const [bx, label] of [[W - 82, '↻'], [W - 34, muted ? '🔇' : '🔊']]) {
+    ctx.fillStyle = '#7fb5ff'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(bx, 40, 22, 0, 7); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#fff'; ctx.font = '800 22px "Baloo 2", sans-serif'; ctx.fillText(label, bx, 41);
+  }
+}
+
+function render() {
+  if (!bgCanvas) bgCanvas = drawBG();
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(bgCanvas, 0, 0);
+  const s = vScale * dpr; ctx.setTransform(s, 0, 0, s, 0, 0);
+  if (shake > 0) ctx.translate((Math.random() - .5) * shake, (Math.random() - .5) * shake);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+  const cp = colPitch();
+  for (let ci = 0; ci < G.cfg.cols; ci++) {
+    const x = colX(ci), bottom = rowY(G.rows - 1) + 22;
+    ctx.fillStyle = 'rgba(255,255,255,.22)'; rr(x - cp / 2 + 5, FRONT_Y - 106, cp - 10, bottom - FRONT_Y + 112, 22); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.28)'; rr(x - cp / 2 + 7, FRONT_Y - 102, cp - 14, 112, 20); ctx.fill();
+  }
+  const n = G.cfg.slots, sp = slotPitch(), bw = n * sp + 24;
+  ctx.fillStyle = 'rgba(120,60,30,.18)'; rr(W / 2 - bw / 2, SLOT_Y - 52, bw, 108, 28); ctx.fill();
+  ctx.font = '700 17px "Baloo 2", sans-serif'; ctx.fillStyle = '#a9583e'; ctx.fillText('GHẾ CHỜ', W / 2, SLOT_Y - 46);
+  const full = G.wait.every(Boolean), freeCount = G.wait.filter(x => !x).length;
+  for (let i = 0; i < n; i++) {
+    const x = slotX(i), pulse = freeCount <= 1 ? .5 + .5 * Math.sin(now * 8) : 0;
+    ctx.save(); ctx.translate(x, SLOT_Y);
+    ctx.fillStyle = full || freeCount <= 1 ? `rgba(255,${Math.round(150 - pulse * 60)},${Math.round(130 - pulse * 60)},.85)` : '#f0c9a6';
+    rr(-38, -38, 76, 76, 20); ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = '#c58a5c'; ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,.35)'; rr(-30, -32, 60, 10, 5); ctx.fill(); ctx.restore();
+  }
+
+  const queue = G.cats.filter(c => c.state === 'queue').sort((a, b) => b.row - a.row || a.col - b.col);
+  const t0 = G.tables[0], hint = G.idle > 3.5 && t0;
+  for (const c of queue) {
+    const k = clamp(c.intro / .38, 0, 1); if (k <= 0) continue; const sc = easeOutBack(k);
+    shadow(c.x, c.y + 2, c.h * .33 * sc, c.row === 0 ? .26 : .16);
+    if (c.row === 0 && hint && isAwake(c) && c.color === t0.color) { const p = .5 + .5 * Math.sin(now * 6); ctx.strokeStyle = `rgba(255,255,255,${.5 + p * .5})`; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(c.x, c.y + 2, c.h * .42 + p * 5, c.h * .15 + p * 2, 0, 0, 7); ctx.stroke(); }
+    drawCatSprite(c, c.x, c.y, c.h * sc, {});
+  }
+  for (const c of G.cats) if (c.state === 'wait') { shadow(c.x, c.y + 2, 24); drawCatSprite(c, c.x, c.y, c.h, {}); }
+
+  for (const t of G.tables.slice(1).reverse()) drawTable(t, false);
+  for (const t of G.serving) drawTable(t, true);
+  if (G.tables[0]) drawTable(G.tables[0], true);
+  if (G.n === 1 && G.moves < 3 && G.tables[0]) {
+    ctx.font = '700 19px "Baloo 2", sans-serif'; ctx.fillStyle = '#a9583e'; ctx.fillText('Chạm mèo hàng đầu cùng màu bàn!', W / 2, 372 + Math.sin(now * 3) * 2);
+  }
+  for (const c of G.cats) if (c.state === 'fly') {
+    if (c.fly.t < 0) { drawCatSprite(c, c.x, c.y, c.h, {}); continue; }
+    const p = c.p || 0; shadow(c.x, lerp(c.fly.y0, destPos(c.fly.dest).y, easeInOut(p)) + 2, 26, .15);
+    drawCatSprite(c, c.x, c.y, c.h, { stretch: .2 * Math.sin(Math.PI * p), rot: c.rot });
+  }
+
+  for (const p of particles) {
+    const a = clamp(p.life / p.max * 1.6, 0, 1); ctx.globalAlpha = a;
+    if (p.type === 'heart') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(Math.sin(p.rot) * .4); heartPath(p.size); ctx.fillStyle = '#ff5d93'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); ctx.restore(); }
+    else if (p.type === 'star') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = p.color; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath();
+      for (let i = 0; i < 10; i++) { const r = i % 2 ? p.size * .45 : p.size, an = i * Math.PI / 5; ctx.lineTo(Math.cos(an) * r, Math.sin(an) * r); } ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+    else if (p.type === 'conf') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = p.color; ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2); ctx.restore(); }
+    else if (p.type === 'puff') { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(p.x, p.y, p.size * a, 0, 7); ctx.fill(); }
+    else if (p.type === 'ring') { ctx.strokeStyle = '#fff'; ctx.lineWidth = 6 * a; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, 7); ctx.stroke(); }
+    ctx.globalAlpha = 1;
+  }
+  for (const p of popups) {
+    if (p.t < 0) continue;
+    const k = p.t / p.life, sc = k < .12 ? easeOutBack(k / .12) : 1; ctx.save(); ctx.translate(p.x, p.y - Math.min(k, .5) * 50); ctx.scale(sc, sc); ctx.globalAlpha = k > .75 ? 1 - (k - .75) / .25 : 1;
+    ctx.font = `800 ${p.size}px "Baloo 2", sans-serif`; ctx.lineWidth = 8; ctx.strokeStyle = 'rgba(120,40,70,.9)'; ctx.lineJoin = 'round'; ctx.strokeText(p.text, 0, 0); ctx.fillStyle = p.color; ctx.fillText(p.text, 0, 0); ctx.restore();
+  }
+  drawHUD();
+}
+
+/* ---------- input ---------- */
+cv.addEventListener('pointerdown', e => {
+  e.preventDefault(); startBgm();
+  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * W, y = (e.clientY - r.top) / r.height * H;
+  if (x > 16 && x < 128 && y > 18 && y < 62) { play('tap'); showLevels(); return; }
+  if (Math.hypot(x - (W - 82), y - 40) < 28) { play('tap'); newLevel(G.n); return; }
+  if (Math.hypot(x - (W - 34), y - 40) < 28) { muted = !muted; if (muted) SND.bgm.pause(); else { bgmStarted = false; startBgm(); } return; }
+  if (!G || G.over) return;
+  let hit = null;
+  for (const c of G.cats) {
+    if (c.state !== 'queue') continue; const w = c.h * CAT_ASPECT, pad = 8;
+    if (x > c.x - w / 2 - pad && x < c.x + w / 2 + pad && y > c.y - c.h - pad && y < c.y + pad && (!hit || c.row < hit.row)) hit = c;
+  }
+  if (hit) tapCat(hit);
+}, { passive: false });
+
+/* ---------- boot ---------- */
+let last = performance.now();
+function frame(t) {
+  const dt = Math.min(.033, (t - last) / 1000); last = t;
+  if (G) { update(dt); render(); }
+  requestAnimationFrame(frame);
+}
+async function boot() {
+  resize();
+  const jobs = [];
+  COLORS.forEach((c, i) => {
+    jobs.push(loadImg(`${A}cats/Image_Cat_${c.key}.png`).then(im => IMG.cat[i] = im));
+    jobs.push(loadImg(`${A}cats/Image_Cat_${c.key}EndGame.png`).then(im => IMG.happy[i] = im));
+    jobs.push(loadImg(`${A}cats/Panel_Box_${c.key}.png`).then(im => IMG.box[i] = im));
+  });
+  jobs.push(Promise.race([document.fonts.load('800 24px "Baloo 2"'), new Promise(r => setTimeout(r, 1500))]).catch(() => {}));
+  await Promise.all(jobs);
+  requestAnimationFrame(frame);
+  const q = new URLSearchParams(location.search);
+  if (q.get('all')) prog.all = true;
+  const lv = parseInt(q.get('level') || '', 10);
+  if (lv) startLevel(clamp(lv, 1, 99)); else showLevels();
+}
+boot();
+// debug hooks cho playtest tự động
+window.__ccd = { get G() { return G; }, LEVELS, tapCol: ci => { const c = G.cols[ci][0]; if (c) tapCat(c); },
+  step: (dt, n = 1) => { for (let i = 0; i < n; i++) update(dt); }, goto: n => startLevel(n), render: () => render() };
+</script>
+</body>
+</html>

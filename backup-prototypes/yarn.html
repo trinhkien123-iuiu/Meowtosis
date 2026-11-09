@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuộn len nối đôi</title>
+<link rel="stylesheet" href="cozy.css">
+<style>
+  #stage { width: min(94vw, 520px); aspect-ratio: 1; background: var(--wood); border-radius: 20px; box-shadow: 0 6px 0 var(--wood-dark); padding: 10px; margin: 6px 0; }
+  svg { width: 100%; height: 100%; display: block; touch-action: none; }
+  #legend { font-size: .9rem; padding: 0 16px 24px; text-align: center; max-width: 560px; }
+</style>
+</head>
+<body>
+<div class="top"><a class="btn small" href="index.html">← Menu</a><h1>🧶 Cuộn len nối đôi</h1><button class="btn small" id="reset">Làm lại</button></div>
+<div class="info" id="info"></div>
+<div id="stage"><svg id="svg"></svg></div>
+<div class="bar"><span class="pill" id="level"></span><span class="pill" id="filled"></span><button class="btn small" id="prev">◀</button><button class="btn small" id="next">▶</button></div>
+<div id="legend">Kéo từ cuộn len 🧶 tới chú mèo cùng màu. Len không được cắt nhau và phải phủ kín mọi ô. Kéo len đè lên len khác sẽ cắt len đó.</div>
+<div class="win" id="win"><div class="card"><div class="big">😻</div><h2>Xong hết rồi!</h2><p>Mèo đã chơi len thỏa thích.</p><button class="btn green" id="winNext">Màn tiếp ▶</button></div></div>
+<script>
+const $ = (id) => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const COLORS = ['#e8627c', '#4aa3df', '#f0b429', '#58b368', '#a66cd9', '#ef8a3d', '#2fb5ad', '#c9566f'];
+// [cỡ, số sợi len] theo màn.
+const SIZES = [[4, 3], [4, 4], [5, 4], [5, 5], [6, 5], [6, 6], [7, 6], [7, 7]];
+
+function makeRandom(seed) {
+  let a = seed >>> 0;
+  return () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+
+// Đường đi phủ kín lưới (thuật toán "backbite"): bắt đầu từ đường zigzag rồi xoắn ngẫu nhiên.
+function hamiltonianPath(n, random) {
+  let path = [];
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) path.push(r * n + (r % 2 === 0 ? c : n - 1 - c));
+  const neighbours = (cell) => {
+    const r = Math.floor(cell / n), c = cell % n, out = [];
+    if (r > 0) out.push(cell - n); if (r < n - 1) out.push(cell + n); if (c > 0) out.push(cell - 1); if (c < n - 1) out.push(cell + 1);
+    return out;
+  };
+  for (let step = 0; step < 600 * n; step++) {
+    if (random() < 0.5) path.reverse();
+    const options = neighbours(path[0]);
+    const target = options[Math.floor(random() * options.length)];
+    const j = path.indexOf(target);
+    if (j <= 1) continue;
+    path = path.slice(0, j).reverse().concat(path.slice(j));
+  }
+  return path;
+}
+
+let n, count, ends, owner, paths, dragging, levelIndex = 0, done, solution;
+
+function loadLevel(index) {
+  levelIndex = Math.max(0, index);
+  [n, count] = SIZES[Math.min(levelIndex, SIZES.length - 1)];
+  const random = makeRandom(900 + levelIndex * 77);
+  const path = hamiltonianPath(n, random);
+  // Cắt đường đi thành `count` đoạn, mỗi đoạn dài ít nhất 3 ô.
+  const lengths = Array(count).fill(3);
+  for (let left = n * n - 3 * count; left > 0; left--) lengths[Math.floor(random() * count)]++;
+  ends = new Map(); // ô -> { color, role: 'yarn' | 'cat' }
+  let at = 0;
+  solution = [];
+  lengths.forEach((length, color) => {
+    solution.push(path.slice(at, at + length));
+    ends.set(path[at], { color, role: 'yarn' });
+    ends.set(path[at + length - 1], { color, role: 'cat' });
+    at += length;
+  });
+  owner = Array(n * n).fill(-1);
+  paths = Array.from({ length: count }, () => []);
+  dragging = -1;
+  done = false;
+  $('win').classList.remove('show');
+  render();
+}
+
+const isComplete = (color) => {
+  const p = paths[color];
+  if (p.length < 2) return false;
+  const last = ends.get(p[p.length - 1]);
+  return !!last && last.color === color && p[p.length - 1] !== p[0];
+};
+const filledCount = () => owner.filter((o) => o >= 0).length + [...ends.keys()].filter((cell) => owner[cell] < 0).length;
+
+function render() {
+  const svg = $('svg');
+  svg.setAttribute('viewBox', `0 0 ${n * 100} ${n * 100}`);
+  svg.innerHTML = '';
+  const add = (tag, attrs, parent = svg) => { const el = document.createElementNS(NS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); parent.appendChild(el); return el; };
+  for (let i = 0; i < n * n; i++) add('rect', { x: (i % n) * 100 + 3, y: Math.floor(i / n) * 100 + 3, width: 94, height: 94, rx: 14, fill: '#f1dfc0' });
+  const center = (cell) => [(cell % n) * 100 + 50, Math.floor(cell / n) * 100 + 50];
+  paths.forEach((p, color) => {
+    if (p.length === 0) return;
+    const points = p.map((cell) => center(cell).join(',')).join(' ');
+    add('polyline', { points, fill: 'none', stroke: COLORS[color], 'stroke-width': 36, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: isComplete(color) ? 1 : 0.8 });
+  });
+  for (const [cell, end] of ends) {
+    const [x, y] = center(cell);
+    add('circle', { cx: x, cy: y, r: 36, fill: COLORS[end.color], stroke: '#fff', 'stroke-width': 5 });
+    const done = isComplete(end.color);
+    const t = add('text', { x, y: y + 13, 'text-anchor': 'middle', 'font-size': 38 });
+    t.textContent = end.role === 'yarn' ? '🧶' : (done ? '😻' : '🐱');
+  }
+  const solved = paths.every((_, color) => isComplete(color)) && filledCount() === n * n;
+  $('level').textContent = `Màn ${levelIndex + 1}`;
+  $('filled').textContent = `Phủ ${filledCount()}/${n * n}`;
+  $('info').textContent = solved ? 'Tuyệt vời!' : `${paths.filter((_, c) => isComplete(c)).length}/${count} sợi đã nối`;
+  if (solved && !done) { done = true; setTimeout(() => $('win').classList.add('show'), 600); }
+}
+
+function cut(color, fromIndex) {
+  for (const cell of paths[color].slice(fromIndex)) owner[cell] = -1;
+  paths[color] = paths[color].slice(0, fromIndex);
+}
+
+function cellAt(event) {
+  const rect = $('svg').getBoundingClientRect();
+  const c = Math.floor((event.clientX - rect.left) / rect.width * n);
+  const r = Math.floor((event.clientY - rect.top) / rect.height * n);
+  if (c < 0 || r < 0 || c >= n || r >= n) return -1;
+  return r * n + c;
+}
+
+function begin(cell) {
+  const end = ends.get(cell);
+  if (end) {
+    cut(end.color, 0);
+    paths[end.color] = [cell];
+    owner[cell] = end.color;
+    dragging = end.color;
+  } else if (owner[cell] >= 0) {
+    const color = owner[cell];
+    cut(color, paths[color].indexOf(cell) + 1);
+    dragging = color;
+  }
+}
+
+function step(next) {
+  const color = dragging;
+  const p = paths[color];
+  const head = p[p.length - 1];
+  const distance = Math.abs((head % n) - (next % n)) + Math.abs(Math.floor(head / n) - Math.floor(next / n));
+  if (distance !== 1) return;
+  if (p.length >= 2 && next === p[p.length - 2]) { owner[head] = -1; p.pop(); return; }
+  if (isComplete(color)) return;
+  const end = ends.get(next);
+  if (end && end.color !== color) return;
+  if (owner[next] === color && !end) { cut(color, p.indexOf(next) + 1); return; }
+  if (end && next === p[0]) return;
+  if (owner[next] >= 0 && owner[next] !== color && !end) cut(owner[next], paths[owner[next]].indexOf(next));
+  p.push(next);
+  owner[next] = color;
+}
+
+const svg = $('svg');
+svg.addEventListener('pointerdown', (e) => { svg.setPointerCapture(e.pointerId); const cell = cellAt(e); if (cell >= 0) begin(cell); render(); });
+svg.addEventListener('pointermove', (e) => {
+  if (dragging < 0) return;
+  const target = cellAt(e);
+  if (target < 0) return;
+  let guard = 0;
+  while (guard++ < 12) {
+    const p = paths[dragging];
+    const head = p[p.length - 1];
+    if (head === target) break;
+    const hr = Math.floor(head / n), hc = head % n, tr = Math.floor(target / n), tc = target % n;
+    const next = hr !== tr ? head + Math.sign(tr - hr) * n : head + Math.sign(tc - hc);
+    const before = paths[dragging].length + ':' + head;
+    step(next);
+    const q = paths[dragging];
+    if (before === q.length + ':' + q[q.length - 1]) break;
+  }
+  render();
+});
+const release = () => { dragging = -1; render(); };
+svg.addEventListener('pointerup', release);
+svg.addEventListener('pointercancel', release);
+
+$('reset').onclick = () => loadLevel(levelIndex);
+$('prev').onclick = () => loadLevel(levelIndex - 1);
+$('next').onclick = () => loadLevel(levelIndex + 1);
+$('winNext').onclick = () => loadLevel(levelIndex + 1);
+loadLevel(0);
+</script>
+</body>
+</html>

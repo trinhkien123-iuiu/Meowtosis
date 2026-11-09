@@ -534,7 +534,7 @@ const LEVELS = [
   ['e.A..', '.E#..'],                                       // 2×5 khuyết · tế bào ngủ
   { rows: ['.#', 'A#', 'B#', '>.'], tut: [
     [1, 0, 'up', 'Nhìn mắt virus: nó nhìn sang phải, nên sau nước này nó sẽ lan sang phải. Vuốt mèo đỏ lên!'],
-    [2, 0, 'down', 'Thấy chưa, nó lan đúng hướng mắt nhìn! Giờ hết chỗ đẩy: bản sao xanh đè lên và diệt virus.'],
+    [2, 0, 'down', 'Thấy chưa, nó lan đúng hướng mắt nhìn! Giờ vuốt mèo xanh vào virus: bản sao đè lên và diệt nó.'],
     [3, 0, 'right', 'Còn virus là chưa thắng: diệt nốt con cuối!']] },
   { rows: ['##.v', 'A>.A', '##B#'], tip: 'Hai virus, hai hướng mắt: mỗi con lan theo hướng mắt của riêng nó.' },  // 4×3 · hai virus vuông góc
   ['#A..', '#A.B', 'C<Cv', 'A.#B'],                         // 4×4 · hai virus
@@ -764,8 +764,10 @@ function resolve(level, placed, born, nextId) {
   return { moved: placed, removed, cleared, spread, eaten, infected, poisoned, cells, born, nextId, flipped };
 }
 
-// Vuốt tế bào `from` theo `dir`. Bản sao vào ô kề; nếu ô kề có tế bào thì đẩy cả dãy tới ô trống gần nhất
+// Vuốt tế bào `from` theo `dir`. Bản sao vào ô kề; nếu ô kề có mèo thì đẩy cả dãy mèo tới ô trống gần nhất
 // theo hướng đó, không còn ô trống (gặp mép, lỗ, màng chặn hoặc mèo ngủ) thì bản sao thay thế tế bào kề.
+// Virus KHÔNG BAO GIỜ bị đẩy: vuốt vào virus (hoặc đẩy dãy mèo tới virus) là ĂN virus: bản sao (hoặc con cuối của dãy
+// bị đẩy) chiếm ô virus, virus chết, dù phía sau virus còn trống hay không.
 // Mèo ngủ say như hòn đá: không bị đẩy, không bị đè lên. Sau đó kết thúc lượt (resolve).
 // Trả null nếu không vuốt được (tế bào ngủ, virus, ra ngoài, thay thế một tế bào cùng màu hoặc một mèo ngủ).
 function swipe(level, cells, from, dir, newId = -1) {
@@ -774,13 +776,18 @@ function swipe(level, cells, from, dir, newId = -1) {
   if (!parent || parent.sleep || parent.color === 'V' || to < 0) return null;
   const chain = [];
   let k = to;
-  while (k >= 0 && cells[k] && !cells[k].sleep && chain.length < cells.length) { chain.push(k); k = step(level, k, dir); }
-  if (k >= 0 && cells[k]) k = -1;                    // dãy chạm mèo ngủ (hoặc chạy trọn một vòng qua cổng): như chạm tường, không còn chỗ đẩy
+  while (k >= 0 && cells[k] && !cells[k].sleep && cells[k].color !== 'V' && chain.length < cells.length) { chain.push(k); k = step(level, k, dir); }
+  let eats = null;                                   // virus ở cuối dãy: bị ăn (con cuối của dãy, hoặc bản sao, chiếm ô của nó)
+  if (k >= 0 && cells[k]) {
+    if (cells[k].color === 'V' && chain.length < cells.length) eats = cells[k];
+    else k = -1;                                     // dãy chạm mèo ngủ (hoặc chạy trọn một vòng qua cổng): như chạm tường, không còn chỗ đẩy
+  }
   const next = cells.slice();
   let pushed = false, replaced = null;
   if (k >= 0) {
     for (let i = chain.length - 1; i >= 0; i--) next[step(level, chain[i], dir)] = cells[chain[i]];
     pushed = chain.length > 0;
+    replaced = eats;
   } else {
     if (cells[to].color === parent.color || cells[to].sleep) return null;
     replaced = cells[to];
@@ -940,7 +947,7 @@ const MECHANICS = [
       { def: { rows: ['AB.'], oneway: [[0, 2, 'left']] }, from: 0, dir: 'right', cap: 'Ngược chiều: bị chặn nên thay thế' }] },
   { key: 'portal', icon: '🌀', title: 'Cổng dịch chuyển', fresh: true, has: lv => lv.portals.length > 0,
     points: ['Hai vòng xoáy cùng màu là một cặp cổng. Đi ra khỏi cổng này là bước vào cổng kia.',
-      'Bản sao, dãy bị đẩy, thậm chí virus đều đi qua cổng. Khử 3 thì không: chỉ tính các ô kề thật trên bàn.'],
+      'Bản sao, dãy bị đẩy và virus đang lan đều đi qua cổng. Khử 3 thì không: chỉ tính các ô kề thật trên bàn.'],
     demos: [{ def: { rows: ['A.B'], portal: [[0, 0, 'left', 0, 2]] }, from: 0, dir: 'left', cap: 'Vuốt ra cổng trái: bản sao hiện ở cổng phải, đẩy mèo xanh đi' }] },
   { key: 'dual', icon: '🎭', title: 'Mèo hai màu', fresh: true, has: lv => lv.init.some(c => c && c.alt),
     points: ['Huy hiệu ở góc cho biết màu kế tiếp và số nước còn lại trước khi đổi màu.',

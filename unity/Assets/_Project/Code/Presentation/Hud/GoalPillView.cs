@@ -17,6 +17,9 @@ namespace Meowtosis.Presentation
         [SerializeField] private Color doneColor = new Color(0.62f, 1f, 0.45f);
         [SerializeField] private float punchScale = 1.15f;
         [SerializeField] private float punchSeconds = 0.25f;
+        [Tooltip("Màu số chớp lên khi tiến độ tụt.")]
+        [SerializeField] private Color setbackColor = new Color(1f, 0.3f, 0.3f);
+        [SerializeField] private float setbackSeconds = 0.5f;
 
         private Color normalColor;
         private int shownCells = -1;
@@ -42,6 +45,12 @@ namespace Meowtosis.Presentation
                 StopAllCoroutines();
                 StartCoroutine(Punch());
             }
+            var shrank = progress.FilledCells < shownCells || progress.BoxesDone < shownBoxes;
+            if (!instantly && shrank && !grew && isActiveAndEnabled)
+            {
+                StopAllCoroutines();
+                StartCoroutine(Setback());
+            }
             shownCells = progress.FilledCells;
             shownBoxes = progress.BoxesDone;
         }
@@ -56,6 +65,20 @@ namespace Meowtosis.Presentation
                 transform.localScale = Vector3.one * Mathf.Lerp(1f, punchScale, wave);
                 yield return null;
             }
+            transform.localScale = Vector3.one;
+        }
+
+        // Tiến độ tụt (khử 3 làm trống ô): số chớp đỏ và viên gỗ rung nhẹ để người chơi thấy mình vừa lùi.
+        private IEnumerator Setback()
+        {
+            for (var time = 0f; time < setbackSeconds; time += Time.unscaledDeltaTime)
+            {
+                var progress = time / setbackSeconds;
+                cellsText.color = Color.Lerp(setbackColor, normalColor, progress);
+                transform.localScale = Vector3.one * (1f - 0.08f * Mathf.Sin(progress * Mathf.PI));
+                yield return null;
+            }
+            cellsText.color = normalColor;
             transform.localScale = Vector3.one;
         }
 

@@ -53,7 +53,8 @@ namespace Meowtosis.Gameplay
 
         public PlayerProgress Progress { get; }
 
-        public StarMeter Stars => StarMeter.For(Session.MovesMade, Session.Definition.Par);
+        // Sao chỉ tính theo số lần vuốt: nước dùng booster không bị trừ bước.
+        public StarMeter Stars => StarMeter.For(Session.SwipesMade, Session.Definition.Par);
 
         public bool CanUndo => Session.Status == SessionStatus.Playing && Session.CanUndo;
 
@@ -97,7 +98,7 @@ namespace Meowtosis.Gameplay
             }
             else if (Session.Status == SessionStatus.Won)
             {
-                stars = StarRating.For(Session.MovesMade, Session.Definition.Par);
+                stars = StarRating.For(Session.SwipesMade, Session.Definition.Par);
                 coins = Progress.RecordWin(Session.Definition.Id, stars);
             }
             store.Save(Progress);

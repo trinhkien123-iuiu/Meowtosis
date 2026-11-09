@@ -19,6 +19,7 @@ namespace Meowtosis.Presentation
         private readonly GameViews views;
         private readonly ISceneNavigator navigator;
         private readonly BoosterTargeting targeting;
+        private BoosterKind offeredBooster;
         private readonly Queue<Mechanic> mechanicCards = new Queue<Mechanic>();
         private LevelRun run;
         private int levelIndex;
@@ -46,7 +47,8 @@ namespace Meowtosis.Presentation
         }
 
         private bool CanPlay => run.Session.Status == SessionStatus.Playing && progress.Hearts > 0
-            && !isPlayingMove && !isSpotlighting && pendingAction == null && !views.Mechanic.IsOpen && !views.Cheat.IsOpen;
+            && !isPlayingMove && !isSpotlighting && pendingAction == null && !views.Mechanic.IsOpen && !views.Cheat.IsOpen
+            && !views.BoosterOffer.IsOpen;
 
         // Người chơi đang rảnh, không có bước hướng dẫn hay bảng nào mở: lúc này mới có sự kiện vui.
         private bool IsIdle => CanPlay && !targeting.IsActive && run.GuidedStep == null
@@ -151,7 +153,6 @@ namespace Meowtosis.Presentation
             else if (outcome.SprungTrap)
             {
                 views.Board.Mourn();
-                views.Sound.Play(SoundId.Lose);
                 Later(() =>
                 {
                     views.Sound.Play(SoundId.PopupOpen);
@@ -277,22 +278,42 @@ namespace Meowtosis.Presentation
             ClearHint();
             if (targeting.Kind == kind) targeting.Cancel();
             else if (progress.BoosterCount(kind) > 0) targeting.Begin(kind, run.Session.Board);
-            else BuyBooster(kind);
+            else OfferBooster(kind);
             RefreshHud(false);
         }
 
-        private void BuyBooster(BoosterKind kind)
+        private void OnStarLost(int lost) => views.Sound.Play(SoundId.StarLost);
+
+        private void OnBoosterCancelClicked()
         {
-            if (progress.TryBuyBooster(kind))
+            views.Sound.Play(SoundId.ButtonTap);
+            targeting.Cancel();
+            RefreshHud(false);
+        }
+
+        // Hết lượt: mở popup giới thiệu booster kèm nút mua gói bằng xu.
+        private void OfferBooster(BoosterKind kind)
+        {
+            targeting.Cancel();
+            offeredBooster = kind;
+            views.Sound.Play(SoundId.PopupOpen);
+            views.BoosterOffer.Show(kind, PlayerProgress.BoosterPrice, PlayerProgress.BoosterPackSize, progress.Coins);
+        }
+
+        private void OnBoosterBuyClicked()
+        {
+            if (progress.TryBuyBooster(offeredBooster))
             {
                 store.Save(progress);
                 views.Sound.Play(SoundId.Cashout);
-                views.Hud.ShowToast(GameTexts.Bought(kind));
+                views.BoosterOffer.Hide();
+                views.Hud.ShowToast(GameTexts.BoughtPack(offeredBooster, PlayerProgress.BoosterPackSize));
+                RefreshHud(false);
             }
             else
             {
                 views.Sound.Play(SoundId.AngryMeow);
-                views.Hud.ShowToast(GameTexts.NeedCoins(PlayerProgress.BoosterPrice));
+                views.BoosterOffer.ShowNotEnoughCoins();
             }
         }
 
@@ -310,7 +331,7 @@ namespace Meowtosis.Presentation
             if (isHintShowing) return;
             if (progress.BoosterCount(BoosterKind.Hint) == 0)
             {
-                BuyBooster(BoosterKind.Hint);
+                OfferBooster(BoosterKind.Hint);
                 RefreshHud(false);
                 return;
             }
@@ -519,6 +540,7 @@ namespace Meowtosis.Presentation
             hud.ShowStars(run.Stars, instantly);
             hud.ShowGoal(GoalProgress.Of(session.Board), instantly);
             hud.ShowTip(CurrentTip());
+            hud.ShowBoosterPrompt(targeting.Kind, targeting.Prompt);
             hud.ShowSpecies(SpeciesCensus.Of(session.Board));
             hud.ShowBooster(BoosterKind.Mutate, progress.BoosterCount(BoosterKind.Mutate), targeting.Kind == BoosterKind.Mutate);
             hud.ShowBooster(BoosterKind.Transplant, progress.BoosterCount(BoosterKind.Transplant), targeting.Kind == BoosterKind.Transplant);
@@ -554,7 +576,8 @@ namespace Meowtosis.Presentation
         private string CurrentTip()
         {
             if (!string.IsNullOrEmpty(trapExplanation)) return trapExplanation;
-            if (targeting.IsActive) return targeting.Prompt;
+            // Lời nhắn khi dùng booster nằm ở thanh booster dưới bàn, không bật bong bóng đè lên bàn nữa.
+            if (targeting.IsActive) return "";
             var step = run.GuidedStep;
             if (step != null && !string.IsNullOrEmpty(step.Text)) return step.Text;
             return "";
@@ -590,6 +613,9 @@ namespace Meowtosis.Presentation
                 hud.HintClicked += OnHintClicked;
                 hud.BoosterClicked += OnBoosterClicked;
                 hud.ColorChosen += OnColorChosen;
+                hud.BoosterCancelClicked += OnBoosterCancelClicked;
+                hud.StarLost += OnStarLost;
+                views.BoosterOffer.BuyClicked += OnBoosterBuyClicked;
                 views.Win.ContinueClicked += OnContinueClicked;
                 views.Win.BackClicked += OnWinBackClicked;
                 views.Lose.ReviveClicked += OnReviveClicked;
@@ -618,6 +644,9 @@ namespace Meowtosis.Presentation
                 hud.HintClicked -= OnHintClicked;
                 hud.BoosterClicked -= OnBoosterClicked;
                 hud.ColorChosen -= OnColorChosen;
+                hud.BoosterCancelClicked -= OnBoosterCancelClicked;
+                hud.StarLost -= OnStarLost;
+                views.BoosterOffer.BuyClicked -= OnBoosterBuyClicked;
                 views.Win.ContinueClicked -= OnContinueClicked;
                 views.Win.BackClicked -= OnWinBackClicked;
                 views.Lose.ReviveClicked -= OnReviveClicked;

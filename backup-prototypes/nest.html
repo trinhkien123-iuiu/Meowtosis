@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xếp tổ mèo</title>
+<link rel="stylesheet" href="cozy.css">
+<style>
+  #board { display: grid; gap: 3px; padding: 10px; background: var(--wood); border-radius: 18px; box-shadow: 0 6px 0 var(--wood-dark); margin: 6px 0; }
+  .cell { width: min(13vw, 56px); height: min(13vw, 56px); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: min(7.5vw, 30px); }
+  .cell.out { background: transparent; }
+  .cell.empty { background: #d9b98a; box-shadow: inset 0 3px 6px rgba(0,0,0,.18); cursor: pointer; }
+  .cell.filled { cursor: pointer; }
+  .cell.ghost { outline: 3px solid #fff; }
+  .cell.bad { outline: 3px solid #d9534f; }
+  #tray { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 10px 16px; width: min(560px, 100%); min-height: 90px; }
+  .piece { padding: 8px; border-radius: 14px; background: var(--cream); border: 3px solid transparent; cursor: pointer; }
+  .piece.sel { border-color: var(--wood-dark); background: #fff; }
+  .mini { display: grid; gap: 2px; }
+  .mini div { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .mini div.off { background: transparent; }
+  #legend { font-size: .9rem; padding: 0 16px 24px; text-align: center; max-width: 560px; }
+</style>
+</head>
+<body>
+<div class="top"><a class="btn small" href="index.html">← Menu</a><h1>📦 Xếp tổ mèo</h1><button class="btn small" id="reset">Làm lại</button></div>
+<div class="info" id="info"></div>
+<div id="board"></div>
+<div class="bar"><button class="btn small" id="rotate">⟳ Xoay (R)</button><span class="pill" id="level"></span><button class="btn small" id="prev">◀</button><button class="btn small" id="next">▶</button></div>
+<div id="tray"></div>
+<div id="legend">Chọn một chú mèo bên dưới, xoay nếu cần, rồi chạm vào hộp để đặt. Chạm mèo đã đặt để nhấc ra. Lấp kín hộp để thắng.</div>
+<div class="win" id="win"><div class="card"><div class="big">😴</div><h2>Tổ vừa khít!</h2><p>Cả nhà đã ngủ ngon.</p><button class="btn green" id="winNext">Màn tiếp ▶</button></div></div>
+<script>
+const $ = (id) => document.getElementById(id);
+const COLORS = ['#f4a6a0', '#a8d5ba', '#a9c8f0', '#f6d78b', '#d4b5e8', '#f2b98a', '#9fd8d4', '#e6a9c9'];
+const FACES = ['🐱', '😺', '😸', '😻', '😽', '🐈'];
+
+// Cỡ bàn, số ô khoét, cỡ mèo nhỏ nhất/lớn nhất theo từng màn.
+const SIZES = [
+  { W: 3, H: 3, cut: 0, min: 3, max: 3 }, { W: 4, H: 3, cut: 0, min: 3, max: 3 }, { W: 4, H: 4, cut: 0, min: 3, max: 4 },
+  { W: 5, H: 4, cut: 1, min: 3, max: 4 }, { W: 5, H: 5, cut: 2, min: 3, max: 4 }, { W: 6, H: 5, cut: 2, min: 3, max: 5 },
+  { W: 6, H: 6, cut: 3, min: 3, max: 5 },
+];
+
+function makeRandom(seed) {
+  let a = seed >>> 0;
+  return () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+
+const NEIGHBOURS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+const key = (r, c) => r + ',' + c;
+
+// Khoét vài ô ở rìa nhưng giữ bàn liền một khối.
+function makeRegion(size, random) {
+  const cells = new Set();
+  for (let r = 0; r < size.H; r++) for (let c = 0; c < size.W; c++) cells.add(key(r, c));
+  const connected = (set) => {
+    const first = set.values().next().value;
+    const seen = new Set([first]);
+    const stack = [first];
+    while (stack.length) {
+      const [r, c] = stack.pop().split(',').map(Number);
+      for (const [dr, dc] of NEIGHBOURS) { const k = key(r + dr, c + dc); if (set.has(k) && !seen.has(k)) { seen.add(k); stack.push(k); } }
+    }
+    return seen.size === set.size;
+  };
+  let removed = 0;
+  for (let attempt = 0; attempt < 200 && removed < size.cut; attempt++) {
+    const r = random() < 0.5 ? (random() < 0.5 ? 0 : size.H - 1) : Math.floor(random() * size.H);
+    const c = r === 0 || r === size.H - 1 ? Math.floor(random() * size.W) : (random() < 0.5 ? 0 : size.W - 1);
+    const k = key(r, c);
+    if (!cells.has(k)) continue;
+    cells.delete(k);
+    if (connected(cells)) removed++; else cells.add(k);
+  }
+  return cells;
+}
+
+// Chia bàn thành các mảnh liền nhau; mảnh lẻ một ô thì gộp vào mảnh bên cạnh.
+function partition(region, size, random) {
+  const owner = new Map();
+  const pieces = [];
+  const free = [...region];
+  while (true) {
+    const open = free.filter((k) => !owner.has(k));
+    if (!open.length) break;
+    const start = open[Math.floor(random() * open.length)];
+    const target = size.min + Math.floor(random() * (size.max - size.min + 1));
+    const piece = [start];
+    owner.set(start, pieces.length);
+    while (piece.length < target) {
+      const options = [];
+      for (const k of piece) {
+        const [r, c] = k.split(',').map(Number);
+        for (const [dr, dc] of NEIGHBOURS) { const n = key(r + dr, c + dc); if (region.has(n) && !owner.has(n)) options.push(n); }
+      }
+      if (!options.length) break;
+      const pick = options[Math.floor(random() * options.length)];
+      owner.set(pick, pieces.length);
+      piece.push(pick);
+    }
+    pieces.push(piece);
+  }
+  for (let i = pieces.length - 1; i >= 0; i--) {
+    if (pieces[i].length > 1) continue;
+    const [r, c] = pieces[i][0].split(',').map(Number);
+    let target = -1;
+    for (const [dr, dc] of NEIGHBOURS) { const o = owner.get(key(r + dr, c + dc)); if (o !== undefined && o !== i) { target = o; break; } }
+    if (target < 0) continue;
+    pieces[target].push(pieces[i][0]);
+    owner.set(pieces[i][0], target);
+    pieces[i] = [];
+  }
+  return pieces.filter((piece) => piece.length > 0);
+}
+
+function normalize(cells) {
+  const minR = Math.min(...cells.map(([r]) => r));
+  const minC = Math.min(...cells.map(([, c]) => c));
+  return cells.map(([r, c]) => [r - minR, c - minC]).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+}
+const rotateCells = (cells) => normalize(cells.map(([r, c]) => [c, -r]));
+
+// Ô làm "mỏ neo": ô gần tâm nhất, để chạm vào hộp thì tâm mèo nằm dưới ngón tay.
+function anchorOf(cells) {
+  const cr = cells.reduce((s, [r]) => s + r, 0) / cells.length;
+  const cc = cells.reduce((s, [, c]) => s + c, 0) / cells.length;
+  let best = cells[0];
+  for (const cell of cells) if (Math.hypot(cell[0] - cr, cell[1] - cc) < Math.hypot(best[0] - cr, best[1] - cc)) best = cell;
+  return best;
+}
+
+let levelIndex = 0, W, H, region, pieces, fill, selectedId, hover;
+
+function loadLevel(index) {
+  levelIndex = Math.max(0, index);
+  const size = SIZES[Math.min(levelIndex, SIZES.length - 1)];
+  const random = makeRandom(7000 + levelIndex * 131);
+  W = size.W; H = size.H;
+  region = makeRegion(size, random);
+  const parts = partition(region, size, random);
+  pieces = parts.map((part, id) => {
+    let cells = normalize(part.map((k) => k.split(',').map(Number)));
+    for (let i = Math.floor(random() * 4); i > 0; i--) cells = rotateCells(cells);
+    return { id, cells, color: COLORS[id % COLORS.length], face: FACES[id % FACES.length], placed: false };
+  });
+  for (let i = pieces.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [pieces[i], pieces[j]] = [pieces[j], pieces[i]]; }
+  fill = new Map();
+  selectedId = pieces[0].id;
+  hover = null;
+  $('win').classList.remove('show');
+  render();
+}
+
+const pieceById = (id) => pieces.find((p) => p.id === id);
+
+// Các ô bàn mà mảnh sẽ chiếm nếu đặt mỏ neo tại (R, C); null nếu không vừa.
+function footprint(piece, R, C) {
+  const [ar, ac] = anchorOf(piece.cells);
+  const spots = piece.cells.map(([r, c]) => [R + r - ar, C + c - ac]);
+  const fits = spots.every(([r, c]) => region.has(key(r, c)) && !fill.has(key(r, c)));
+  return { spots, fits };
+}
+
+function render() {
+  const board = $('board');
+  board.style.gridTemplateColumns = `repeat(${W}, auto)`;
+  board.innerHTML = '';
+  const selected = selectedId !== null ? pieceById(selectedId) : null;
+  const ghost = new Map();
+  if (hover && selected && !selected.placed) {
+    const { spots, fits } = footprint(selected, hover[0], hover[1]);
+    for (const [r, c] of spots) ghost.set(key(r, c), fits);
+  }
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+    const k = key(r, c);
+    const cell = document.createElement('div');
+    if (!region.has(k)) cell.className = 'cell out';
+    else if (fill.has(k)) {
+      const piece = pieceById(fill.get(k));
+      cell.className = 'cell filled';
+      cell.style.background = piece.color;
+      const [ar, ac] = piece.anchor;
+      if (r === ar && c === ac) cell.textContent = allPlaced() ? '😴' : piece.face;
+      cell.onclick = () => pickUp(piece.id);
+    } else {
+      cell.className = 'cell empty';
+      if (ghost.has(k)) cell.classList.add(ghost.get(k) ? 'ghost' : 'bad');
+      cell.onclick = () => place(r, c);
+      cell.onmouseenter = () => { hover = [r, c]; render(); };
+      cell.onmouseleave = () => { hover = null; render(); };
+    }
+    board.appendChild(cell);
+  }
+
+  const tray = $('tray');
+  tray.innerHTML = '';
+  for (const piece of pieces) {
+    if (piece.placed) continue;
+    const box = document.createElement('div');
+    box.className = 'piece' + (piece.id === selectedId ? ' sel' : '');
+    const rows = Math.max(...piece.cells.map(([r]) => r)) + 1;
+    const cols = Math.max(...piece.cells.map(([, c]) => c)) + 1;
+    const mini = document.createElement('div');
+    mini.className = 'mini';
+    mini.style.gridTemplateColumns = `repeat(${cols}, auto)`;
+    const [ar, ac] = anchorOf(piece.cells);
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const dot = document.createElement('div');
+      const has = piece.cells.some(([pr, pc]) => pr === r && pc === c);
+      if (has) { dot.style.background = piece.color; if (r === ar && c === ac) dot.textContent = piece.face; } else dot.className = 'off';
+      mini.appendChild(dot);
+    }
+    box.appendChild(mini);
+    box.onclick = () => { selectedId = piece.id; render(); };
+    tray.appendChild(box);
+  }
+  const left = pieces.filter((p) => !p.placed).length;
+  $('level').textContent = `Màn ${levelIndex + 1}`;
+  $('info').textContent = left ? `Còn ${left} chú mèo chưa vào tổ` : 'Tổ vừa khít, cả nhà ngủ ngon!';
+}
+
+const allPlaced = () => pieces.every((p) => p.placed);
+
+function place(R, C) {
+  const piece = selectedId !== null ? pieceById(selectedId) : null;
+  if (!piece || piece.placed) return;
+  const { spots, fits } = footprint(piece, R, C);
+  if (!fits) return;
+  const [ar, ac] = anchorOf(piece.cells);
+  for (const [r, c] of spots) fill.set(key(r, c), piece.id);
+  piece.anchor = [R, C];
+  piece.placed = true;
+  const next = pieces.find((p) => !p.placed);
+  selectedId = next ? next.id : null;
+  hover = null;
+  render();
+  if (allPlaced()) setTimeout(() => $('win').classList.add('show'), 700);
+}
+
+function pickUp(id) {
+  const piece = pieceById(id);
+  for (const [k, owner] of [...fill]) if (owner === id) fill.delete(k);
+  piece.placed = false;
+  selectedId = id;
+  render();
+}
+
+function rotateSelected() {
+  const piece = selectedId !== null ? pieceById(selectedId) : null;
+  if (!piece || piece.placed) return;
+  piece.cells = rotateCells(piece.cells);
+  render();
+}
+
+$('rotate').onclick = rotateSelected;
+document.addEventListener('keydown', (e) => { if (e.key === 'r' || e.key === 'R') rotateSelected(); });
+document.addEventListener('contextmenu', (e) => { e.preventDefault(); rotateSelected(); });
+$('reset').onclick = () => loadLevel(levelIndex);
+$('prev').onclick = () => loadLevel(levelIndex - 1);
+$('next').onclick = () => loadLevel(levelIndex + 1);
+$('winNext').onclick = () => loadLevel(levelIndex + 1);
+loadLevel(0);
+</script>
+</body>
+</html>

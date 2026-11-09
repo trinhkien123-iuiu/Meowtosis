@@ -4,8 +4,10 @@ namespace Meowtosis.Presentation
     public sealed class GameViews
     {
         public GameViews(IBoardView board, IHudView hud, IWinPopup win, ILosePopup lose, ISettingsPopup settings,
-            INoHeartsPopup noHearts, IMechanicPopup mechanic, ISoundPlayer sound, IAmbientEvents ambient, ICheatPopup cheat)
+            INoHeartsPopup noHearts, IMechanicPopup mechanic, ISoundPlayer sound, IAmbientEvents ambient, ICheatPopup cheat,
+            IBoosterOfferPopup boosterOffer)
         {
+            BoosterOffer = boosterOffer;
             Ambient = ambient;
             Board = board;
             Hud = hud;
@@ -37,5 +39,7 @@ namespace Meowtosis.Presentation
         public IAmbientEvents Ambient { get; }
 
         public ICheatPopup Cheat { get; }
+
+        public IBoosterOfferPopup BoosterOffer { get; }
     }
 }

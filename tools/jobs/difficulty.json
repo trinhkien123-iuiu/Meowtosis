@@ -1,16 +1,31 @@
 {
- "{\"rows\":[\"C..A\",\"....\",\"##.#\",\"...B\"]}": {
-  "par": 10,
+ "{\"rows\":[\"##B#\",\"AA..\"]}": {
+  "par": 2,
+  "w": 4,
+  "h": 2,
+  "slots": 5,
+  "cats": 3,
+  "fill": 2,
+  "colors": 2,
+  "mech": [],
+  "bitsWin": 1.58,
+  "bitsOpt": 2.58,
+  "need": []
+ },
+ "{\"rows\":[\"CBB.\",\".#..\",\"..AA\",\"#C.A\"]}": {
+  "par": 9,
   "w": 4,
   "h": 4,
-  "slots": 13,
-  "cats": 3,
-  "fill": 10,
+  "slots": 14,
+  "cats": 7,
+  "fill": 7,
   "colors": 3,
   "mech": [],
-  "bitsWin": 0.89,
-  "bitsOpt": 21.21,
-  "need": []
+  "bitsWin": 2.07,
+  "bitsOpt": 20,
+  "need": [
+   "replace"
+  ]
  },
  "{\"rows\":[\"#..#\",\".B.A\",\"#.A#\"],\"goal\":[\"..A.\",\"...B\",\"..A.\"]}": {
   "par": 9,
@@ -29,32 +44,88 @@
    "replace"
   ]
  },
- "{\"rows\":[\"B.DA\",\"#BCA\",\".C#.\"],\"tip\":\"Lần đầu 4 màu cùng lúc! Chỉ có 1 bé hồng: đừng để bé bị thay thế, hết màu hồng là thua.\"}": {
-  "par": 4,
-  "w": 4,
+ "{\"rows\":[\"AB~\",\"#.#\",\"#.#\"],\"tut\":[[0,1,\"down\",\"Nhân đôi mèo xanh xuống dưới\"],[0,0,\"right\",\"Mèo vào ô độc sẽ biến mất: đẩy mèo xanh vào để dọn chỗ\"],[0,1,\"down\",\"Lấp nốt ô cuối. Ô độc không cần lấp kín!\"]]}": {
+  "par": 3,
+  "w": 3,
   "h": 3,
-  "slots": 10,
-  "cats": 7,
-  "fill": 3,
-  "colors": 4,
-  "mech": [],
-  "bitsWin": 2.23,
-  "bitsOpt": 8.82,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\".B\",\".A\"]}": {
-  "par": 2,
-  "w": 2,
-  "h": 2,
   "slots": 4,
   "cats": 2,
   "fill": 2,
   "colors": 2,
+  "mech": [
+   "độc"
+  ],
+  "bitsWin": 2,
+  "bitsOpt": 5,
+  "need": [
+   "toxic"
+  ]
+ },
+ "{\"rows\":[\"##.v\",\"A>.A\",\"##B#\"],\"tip\":\"Hai virus, hai hướng mắt: mỗi con lan theo hướng mắt của riêng nó.\"}": {
+  "par": 5,
+  "w": 4,
+  "h": 3,
+  "slots": 7,
+  "cats": 3,
+  "fill": 4,
+  "colors": 2,
+  "mech": [
+   "virus"
+  ],
+  "bitsWin": 2.11,
+  "bitsOpt": 6.75,
+  "need": [
+   "replace",
+   "eaten",
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\"AE#\",\"#.#\",\"#..\"]}": {
+  "par": 4,
+  "w": 3,
+  "h": 3,
+  "slots": 5,
+  "cats": 2,
+  "fill": 3,
+  "colors": 2,
   "mech": [],
-  "bitsWin": 1.42,
-  "bitsOpt": 2,
+  "bitsWin": 3.75,
+  "bitsOpt": 5.34,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"#AAB\",\".###\",\"....\"],\"portal\":[[0,2,\"up\",2,0]]}": {
+  "par": 6,
+  "w": 4,
+  "h": 3,
+  "slots": 8,
+  "cats": 3,
+  "fill": 5,
+  "colors": 2,
+  "mech": [
+   "cổng"
+  ],
+  "bitsWin": 1.74,
+  "bitsOpt": 11.08,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"..BB\",\".#CA\",\".#A.\",\"....\"],\"dual\":[[0,3,\"D\",3,2]],\"goal\":[\"...D\",\"...D\",\"....\",\"....\"]}": {
+  "par": 9,
+  "w": 4,
+  "h": 4,
+  "slots": 14,
+  "cats": 5,
+  "fill": 9,
+  "colors": 3,
+  "mech": [
+   "hộp",
+   "hai màu"
+  ],
+  "bitsWin": 0.88,
+  "bitsOpt": 27.33,
   "need": []
  },
  "{\"rows\":[\"B.BA\",\"CB#.\",\"DD.A\",\"CA..\"]}": {
@@ -72,55 +143,133 @@
    "replace"
   ]
  },
- "{\"rows\":[\"CBB.\",\".#..\",\"..AA\",\"#C.A\"]}": {
-  "par": 9,
+ "{\"rows\":[\".B\",\".A\"]}": {
+  "par": 2,
+  "w": 2,
+  "h": 2,
+  "slots": 4,
+  "cats": 2,
+  "fill": 2,
+  "colors": 2,
+  "mech": [],
+  "bitsWin": 1.42,
+  "bitsOpt": 2,
+  "need": []
+ },
+ "{\"rows\":[\"C..A\",\"....\",\"##.#\",\"...B\"]}": {
+  "par": 10,
   "w": 4,
   "h": 4,
-  "slots": 14,
-  "cats": 7,
-  "fill": 7,
+  "slots": 13,
+  "cats": 3,
+  "fill": 10,
   "colors": 3,
   "mech": [],
-  "bitsWin": 2.07,
-  "bitsOpt": 20,
-  "need": [
-   "replace"
-  ]
+  "bitsWin": 0.89,
+  "bitsOpt": 21.21,
+  "need": []
  },
- "{\"rows\":[\"..#\",\"B.A\",\"#.C\"],\"goal\":[\"C..\",\".A.\",\"..B\"]}": {
-  "par": 9,
-  "w": 3,
-  "h": 3,
-  "slots": 7,
-  "cats": 3,
-  "fill": 4,
+ "{\"rows\":[\"ABC.\",\"C#.C\",\"AA#B\",\"A.#.\",\"C..B\"],\"goal\":[\".A..\",\"...B\",\"....\",\"....\",\".C..\"]}": {
+  "par": 7,
+  "w": 4,
+  "h": 5,
+  "slots": 17,
+  "cats": 11,
+  "fill": 6,
   "colors": 3,
   "mech": [
    "hộp"
   ],
-  "bitsWin": 5,
-  "bitsOpt": 28.65,
+  "bitsWin": 0,
+  "bitsOpt": 14.89,
   "need": [
    "replace"
   ]
  },
- "{\"rows\":[\"~..~.\",\"B..A.\"]}": {
-  "par": 11,
-  "w": 5,
-  "h": 2,
-  "slots": 8,
+ "{\"rows\":[\"CB#.\",\"C.#A\",\".BAA\",\"B##.\"],\"oneway\":[[2,2,\"right\"],[0,1,\"down\"]]}": {
+  "par": 7,
+  "w": 4,
+  "h": 4,
+  "slots": 12,
+  "cats": 8,
+  "fill": 4,
+  "colors": 3,
+  "mech": [
+   "màng"
+  ],
+  "bitsWin": 0.7,
+  "bitsOpt": 16.88,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\".#\",\"A#\",\"B#\",\">.\"],\"tut\":[[1,0,\"up\",\"Nhìn mắt virus: nó nhìn sang phải, nên sau nước này nó sẽ lan sang phải. Vuốt mèo đỏ lên!\"],[2,0,\"down\",\"Thấy chưa, nó lan đúng hướng mắt nhìn! Giờ hết chỗ đẩy: bản sao xanh đè lên và diệt virus.\"],[3,0,\"right\",\"Còn virus là chưa thắng: diệt nốt con cuối!\"]]}": {
+  "par": 3,
+  "w": 2,
+  "h": 4,
+  "slots": 5,
   "cats": 2,
-  "fill": 6,
+  "fill": 3,
   "colors": 2,
   "mech": [
-   "độc"
+   "virus"
   ],
-  "bitsWin": 3.6,
-  "bitsOpt": 19,
+  "bitsWin": 0.42,
+  "bitsOpt": 2.58,
   "need": [
    "replace",
-   "clear",
-   "toxic"
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\"AB#\",\"B#=\",\"A==\"]}": {
+  "par": 4,
+  "w": 3,
+  "h": 3,
+  "slots": 7,
+  "cats": 4,
+  "fill": 3,
+  "colors": 2,
+  "mech": [
+   "băng"
+  ],
+  "bitsWin": 2.38,
+  "bitsOpt": 7.55,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"A.#..\"],\"portal\":[[0,1,\"right\",0,3]],\"tut\":[[0,0,\"right\",\"Giữa bàn có một cái hố. Cứ vuốt mèo đỏ sang phải nhé!\"],[0,0,\"right\",\"Vòng xoáy là cổng dịch chuyển: mèo bị đẩy tới cổng sẽ chui qua và hiện ở bên kia hố!\"],[0,0,\"right\",\"Vuốt tiếp: cổng đưa mèo sang bên kia, lấp kín cả bàn!\"]]}": {
+  "par": 3,
+  "w": 5,
+  "h": 1,
+  "slots": 4,
+  "cats": 1,
+  "fill": 3,
+  "colors": 1,
+  "mech": [
+   "cổng"
+  ],
+  "bitsWin": 0,
+  "bitsOpt": 0,
+  "need": []
+ },
+ "{\"rows\":[\"ABB.\",\"A###\",\"#...\",\"....\"],\"portal\":[[0,3,\"down\",2,1]],\"dual\":[[0,2,\"D\",2,2]],\"goal\":[\"..D.\",\"....\",\"....\",\"....\"]}": {
+  "par": 9,
+  "w": 4,
+  "h": 4,
+  "slots": 12,
+  "cats": 4,
+  "fill": 8,
+  "colors": 2,
+  "mech": [
+   "hộp",
+   "cổng",
+   "hai màu"
+  ],
+  "bitsWin": 2.81,
+  "bitsOpt": 21.31,
+  "need": [
+   "replace"
   ]
  },
  "{\"rows\":[\"C.#.\",\"CBCA\",\"B.BA\",\"D#A#\",\".D..\"],\"goal\":[\"...C\",\"....\",\"....\",\"....\",\"D.A.\"]}": {
@@ -155,19 +304,142 @@
    "replace"
   ]
  },
- "{\"rows\":[\".AA#\",\"BBA.\",\"B#.A\",\"..B.\"]}": {
+ "{\"rows\":[\"#B.A\",\"A.##\"],\"goal\":[\"..B.\",\"....\"],\"tut\":[[0,1,\"right\",\"Hộp chỉ nhận mèo cùng màu: vuốt mèo xanh vào hộp xanh!\"],[1,0,\"right\",\"Kín ổ và mọi hộp có mèo đúng màu là thắng!\"]]}": {
+  "par": 2,
+  "w": 4,
+  "h": 2,
+  "slots": 5,
+  "cats": 3,
+  "fill": 2,
+  "colors": 2,
+  "mech": [
+   "hộp"
+  ],
+  "bitsWin": 0.42,
+  "bitsOpt": 2.42,
+  "need": []
+ },
+ "{\"rows\":[\"#AC.\",\"..B#\",\"..#.\",\"....\"],\"goal\":[\"...C\",\"....\",\"A..A\",\"....\"]}": {
+  "par": 11,
+  "w": 4,
+  "h": 4,
+  "slots": 13,
+  "cats": 3,
+  "fill": 10,
+  "colors": 3,
+  "mech": [
+   "hộp"
+  ],
+  "bitsWin": 3.19,
+  "bitsOpt": 19.95,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"~..~.\",\"B..A.\"]}": {
+  "par": 11,
+  "w": 5,
+  "h": 2,
+  "slots": 8,
+  "cats": 2,
+  "fill": 6,
+  "colors": 2,
+  "mech": [
+   "độc"
+  ],
+  "bitsWin": 3.6,
+  "bitsOpt": 19,
+  "need": [
+   "replace",
+   "clear",
+   "toxic"
+  ]
+ },
+ "{\"rows\":[\"ba#A#\",\"#.B.C\",\"#.A<B\",\".....\",\"#.AC^\"]}": {
+  "par": 12,
+  "w": 5,
+  "h": 5,
+  "slots": 20,
+  "cats": 9,
+  "fill": 11,
+  "colors": 3,
+  "mech": [
+   "ngủ",
+   "virus"
+  ],
+  "bitsWin": 0,
+  "bitsOpt": 31.02,
+  "need": [
+   "replace",
+   "eaten",
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\".==A\",\"#=#B\"]}": {
+  "par": 5,
+  "w": 4,
+  "h": 2,
+  "slots": 6,
+  "cats": 2,
+  "fill": 4,
+  "colors": 2,
+  "mech": [
+   "băng"
+  ],
+  "bitsWin": 4.75,
+  "bitsOpt": 6.75,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\".~..\",\"...#\",\"###C\",\"AABB\"],\"portal\":[[2,3,\"left\",0,3]]}": {
   "par": 9,
   "w": 4,
   "h": 4,
-  "slots": 14,
-  "cats": 8,
+  "slots": 11,
+  "cats": 5,
   "fill": 6,
-  "colors": 2,
+  "colors": 3,
+  "mech": [
+   "độc",
+   "cổng"
+  ],
+  "bitsWin": 4.92,
+  "bitsOpt": 20.48,
+  "need": [
+   "replace",
+   "toxic"
+  ]
+ },
+ "{\"rows\":[\"CCAAB\",\"..A.C\",\"CAB..\",\"CB#..\",\"BABC#\"]}": {
+  "par": 7,
+  "w": 5,
+  "h": 5,
+  "slots": 23,
+  "cats": 16,
+  "fill": 7,
+  "colors": 3,
   "mech": [],
   "bitsWin": 0,
-  "bitsOpt": 25.35,
+  "bitsOpt": 24.5,
+  "need": []
+ },
+ "{\"rows\":[\"#..Cv\",\".DD..\",\"^A...\",\"C.B.#\",\"A.#E#\",\".#B<#\"]}": {
+  "par": 15,
+  "w": 5,
+  "h": 6,
+  "slots": 24,
+  "cats": 9,
+  "fill": 15,
+  "colors": 5,
+  "mech": [
+   "virus"
+  ],
+  "bitsWin": 0.67,
+  "bitsOpt": 28.8,
   "need": [
-   "clear"
+   "replace",
+   "virusDie"
   ]
  },
  "{\"rows\":[\"..A\",\"...\",\"B..\"]}": {
@@ -181,6 +453,280 @@
   "mech": [],
   "bitsWin": 1.9,
   "bitsOpt": 15.81,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"DB.C\",\".CC#\",\"#B#B\",\"D.D.\"],\"goal\":[\"....\",\"B...\",\".C..\",\".D..\"]}": {
+  "par": 4,
+  "w": 4,
+  "h": 4,
+  "slots": 13,
+  "cats": 9,
+  "fill": 4,
+  "colors": 3,
+  "mech": [
+   "hộp"
+  ],
+  "bitsWin": 0,
+  "bitsOpt": 11.43,
+  "need": []
+ },
+ "{\"rows\":[\"#..\",\"AB#\",\"#.#\"],\"oneway\":[[1,1,\"up\"]]}": {
+  "par": 4,
+  "w": 3,
+  "h": 3,
+  "slots": 5,
+  "cats": 2,
+  "fill": 3,
+  "colors": 2,
+  "mech": [
+   "màng"
+  ],
+  "bitsWin": 2.58,
+  "bitsOpt": 4.58,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"..B.\",\"#..#\",\"#.cA\",\".C..\"]}": {
+  "par": 9,
+  "w": 4,
+  "h": 4,
+  "slots": 13,
+  "cats": 4,
+  "fill": 9,
+  "colors": 3,
+  "mech": [
+   "ngủ"
+  ],
+  "bitsWin": 1.09,
+  "bitsOpt": 18.76,
+  "need": []
+ },
+ "{\"rows\":[\"B==A\",\"#.=.\"]}": {
+  "par": 5,
+  "w": 4,
+  "h": 2,
+  "slots": 7,
+  "cats": 2,
+  "fill": 5,
+  "colors": 2,
+  "mech": [
+   "băng"
+  ],
+  "bitsWin": 1.89,
+  "bitsOpt": 6.64,
+  "need": []
+ },
+ "{\"rows\":[\"DC.B\",\".DB#\",\"D.D#\",\"....\",\".C.B\"]}": {
+  "par": 9,
+  "w": 4,
+  "h": 5,
+  "slots": 18,
+  "cats": 9,
+  "fill": 9,
+  "colors": 3,
+  "mech": [],
+  "bitsWin": 0.16,
+  "bitsOpt": 21.43,
+  "need": []
+ },
+ "{\"rows\":[\"#.#A\",\".B.A\",\".B#.\"],\"dual\":[[0,3,\"D\",2,2]],\"goal\":[\"...D\",\"...D\",\"....\"]}": {
+  "par": 6,
+  "w": 4,
+  "h": 3,
+  "slots": 9,
+  "cats": 4,
+  "fill": 5,
+  "colors": 2,
+  "mech": [
+   "hộp",
+   "hai màu"
+  ],
+  "bitsWin": 1.2,
+  "bitsOpt": 5.74,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\".>A#.\",\"#C.Bv\",\"....B\",\"C#A.B\"]}": {
+  "par": 12,
+  "w": 5,
+  "h": 4,
+  "slots": 17,
+  "cats": 7,
+  "fill": 10,
+  "colors": 3,
+  "mech": [
+   "virus"
+  ],
+  "bitsWin": 0.92,
+  "bitsOpt": 33.93,
+  "need": [
+   "replace",
+   "eaten",
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\".B#\",\"..#\",\"A..\"]}": {
+  "par": 8,
+  "w": 3,
+  "h": 3,
+  "slots": 7,
+  "cats": 2,
+  "fill": 5,
+  "colors": 2,
+  "mech": [],
+  "bitsWin": 1.32,
+  "bitsOpt": 13.17,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"A..\",\".B#\"],\"goal\":[\"..A\",\"...\"]}": {
+  "par": 4,
+  "w": 3,
+  "h": 2,
+  "slots": 5,
+  "cats": 2,
+  "fill": 3,
+  "colors": 2,
+  "mech": [
+   "hộp"
+  ],
+  "bitsWin": 1.06,
+  "bitsOpt": 6.64,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"#BAA\",\"..##\"],\"oneway\":[[0,1,\"down\"]],\"tut\":[[0,1,\"down\",\"Màng chỉ cho đi theo mũi tên: vuốt mèo xanh xuống, xuyên qua màng\"],[1,1,\"left\",\"Lấp nốt ô trống\"]]}": {
+  "par": 2,
+  "w": 4,
+  "h": 2,
+  "slots": 5,
+  "cats": 3,
+  "fill": 2,
+  "colors": 2,
+  "mech": [
+   "màng"
+  ],
+  "bitsWin": 1.17,
+  "bitsOpt": 3.17,
+  "need": []
+ },
+ "{\"rows\":[\".B.\",\".a#\",\"A##\"]}": {
+  "par": 4,
+  "w": 3,
+  "h": 3,
+  "slots": 6,
+  "cats": 3,
+  "fill": 3,
+  "colors": 2,
+  "mech": [
+   "ngủ"
+  ],
+  "bitsWin": 1.06,
+  "bitsOpt": 6.23,
+  "need": [
+   "replace",
+   "wakeUse"
+  ]
+ },
+ "{\"rows\":[\"B==A\",\"A#.#\"],\"tut\":[[0,3,\"left\",\"Trên băng, bản sao trượt tới khi gặp vật cản: vuốt mèo đỏ sang trái!\"],[0,0,\"right\",\"Vuốt mèo xanh sang phải, đẩy cả dãy\"],[0,2,\"down\",\"Lấp nốt ô dưới\"]]}": {
+  "par": 3,
+  "w": 4,
+  "h": 2,
+  "slots": 6,
+  "cats": 3,
+  "fill": 3,
+  "colors": 2,
+  "mech": [
+   "băng"
+  ],
+  "bitsWin": 1.15,
+  "bitsOpt": 5.32,
+  "need": []
+ },
+ "{\"rows\":[\"#A=A\",\".#=#\",\"CB==\"]}": {
+  "par": 7,
+  "w": 4,
+  "h": 3,
+  "slots": 9,
+  "cats": 4,
+  "fill": 5,
+  "colors": 3,
+  "mech": [
+   "băng"
+  ],
+  "bitsWin": 5.52,
+  "bitsOpt": 10,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"..A\",\"##B\",\"A..\"],\"dual\":[[1,2,\"D\",2,2]],\"goal\":[\"..D\",\"...\",\"...\"]}": {
+  "par": 5,
+  "w": 3,
+  "h": 3,
+  "slots": 7,
+  "cats": 3,
+  "fill": 4,
+  "colors": 2,
+  "mech": [
+   "hộp",
+   "hai màu"
+  ],
+  "bitsWin": 1.39,
+  "bitsOpt": 5.09,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"..CCB\",\">B..#\",\"##BA.\",\".C.A.\",\".#^.#\"]}": {
+  "par": 14,
+  "w": 5,
+  "h": 5,
+  "slots": 20,
+  "cats": 8,
+  "fill": 12,
+  "colors": 3,
+  "mech": [
+   "virus"
+  ],
+  "bitsWin": 0.21,
+  "bitsOpt": 35.42,
+  "need": [
+   "replace",
+   "eaten",
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\"AA.\",\"##B\"]}": {
+  "par": 1,
+  "w": 3,
+  "h": 2,
+  "slots": 4,
+  "cats": 3,
+  "fill": 1,
+  "colors": 2,
+  "mech": [],
+  "bitsWin": 1,
+  "bitsOpt": 1,
+  "need": []
+ },
+ "{\"rows\":[\"#AA#\",\"C.BB\",\"CAA.\",\".CB#\"]}": {
+  "par": 4,
+  "w": 4,
+  "h": 4,
+  "slots": 13,
+  "cats": 10,
+  "fill": 3,
+  "colors": 3,
+  "mech": [],
+  "bitsWin": 0.09,
+  "bitsOpt": 9.85,
   "need": [
    "replace"
   ]
@@ -202,7 +748,269 @@
    "replace"
   ]
  },
- "{\"rows\":[\"#..\",\"AB#\",\"#.#\"],\"oneway\":[[1,1,\"up\"]]}": {
+ "{\"rows\":[\"...\",\".A.\",\"#E#\"],\"oneway\":[[1,0,\"right\"],[0,2,\"down\"]],\"tip\":\"Mèo tím đến chơi! Như mọi màu khác, phải giữ lại ít nhất 1 con.\"}": {
+  "par": 9,
+  "w": 3,
+  "h": 3,
+  "slots": 7,
+  "cats": 2,
+  "fill": 5,
+  "colors": 2,
+  "mech": [
+   "màng"
+  ],
+  "bitsWin": 1.57,
+  "bitsOpt": 13.55,
+  "need": [
+   "replace",
+   "clear"
+  ]
+ },
+ "{\"rows\":[\"e.A..\",\".E#..\"]}": {
+  "par": 9,
+  "w": 5,
+  "h": 2,
+  "slots": 9,
+  "cats": 3,
+  "fill": 6,
+  "colors": 2,
+  "mech": [
+   "ngủ"
+  ],
+  "bitsWin": 4.1,
+  "bitsOpt": 14.65,
+  "need": [
+   "replace",
+   "wakeUse"
+  ]
+ },
+ "{\"rows\":[\"ABA\",\"=#B\",\"==#\"]}": {
+  "par": 4,
+  "w": 3,
+  "h": 3,
+  "slots": 7,
+  "cats": 4,
+  "fill": 3,
+  "colors": 2,
+  "mech": [
+   "băng"
+  ],
+  "bitsWin": 2.38,
+  "bitsOpt": 7.55,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"..B#\",\"A..A\",\"#>B<\",\"..A#\"]}": {
+  "par": 10,
+  "w": 4,
+  "h": 4,
+  "slots": 13,
+  "cats": 5,
+  "fill": 8,
+  "colors": 2,
+  "mech": [
+   "virus"
+  ],
+  "bitsWin": 0.14,
+  "bitsOpt": 18.41,
+  "need": [
+   "replace",
+   "eaten",
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\".C..\",\"C#.#\",\"A...\",\"BAB#\"],\"dual\":[[0,1,\"E\",2,1],[3,0,\"E\",2,1]],\"goal\":[\"....\",\"E...\",\".E..\",\"....\"]}": {
+  "par": 8,
+  "w": 4,
+  "h": 4,
+  "slots": 13,
+  "cats": 6,
+  "fill": 7,
+  "colors": 3,
+  "mech": [
+   "hộp",
+   "hai màu"
+  ],
+  "bitsWin": 0.97,
+  "bitsOpt": 23.68,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"B.DA\",\"#BCA\",\".C#.\"],\"tip\":\"Lần đầu 4 màu cùng lúc! Chỉ có 1 bé hồng: đừng để bé bị thay thế, hết màu hồng là thua.\"}": {
+  "par": 4,
+  "w": 4,
+  "h": 3,
+  "slots": 10,
+  "cats": 7,
+  "fill": 3,
+  "colors": 4,
+  "mech": [],
+  "bitsWin": 2.23,
+  "bitsOpt": 8.82,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\".#B\",\"...\",\".#A\"]}": {
+  "par": 8,
+  "w": 3,
+  "h": 3,
+  "slots": 7,
+  "cats": 2,
+  "fill": 5,
+  "colors": 2,
+  "mech": [],
+  "bitsWin": 1.58,
+  "bitsOpt": 12.4,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"D...\",\"#.B#\"],\"goal\":[\"...B\",\"..D.\"],\"tip\":\"Mèo hồng đến chơi! Hộp hồng cần mèo hồng, và màu nào cũng phải giữ lại ít nhất 1 con.\"}": {
+  "par": 5,
+  "w": 4,
+  "h": 2,
+  "slots": 6,
+  "cats": 2,
+  "fill": 4,
+  "colors": 2,
+  "mech": [
+   "hộp"
+  ],
+  "bitsWin": 0.42,
+  "bitsOpt": 6.58,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"..#\",\"B.A\",\"#.C\"],\"goal\":[\"C..\",\".A.\",\"..B\"]}": {
+  "par": 9,
+  "w": 3,
+  "h": 3,
+  "slots": 7,
+  "cats": 3,
+  "fill": 4,
+  "colors": 3,
+  "mech": [
+   "hộp"
+  ],
+  "bitsWin": 5,
+  "bitsOpt": 28.65,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"B##\",\"A.#\",\"#a.\"],\"tut\":[[1,0,\"right\",\"Mèo ngủ không vuốt được. Đặt mèo đỏ sát bên để đánh thức nó!\"],[2,1,\"right\",\"Mèo đã thức: giờ vuốt được rồi!\"]]}": {
+  "par": 2,
+  "w": 3,
+  "h": 3,
+  "slots": 5,
+  "cats": 3,
+  "fill": 2,
+  "colors": 2,
+  "mech": [
+   "ngủ"
+  ],
+  "bitsWin": 2.17,
+  "bitsOpt": 3.17,
+  "need": [
+   "wakeUse"
+  ]
+ },
+ "{\"rows\":[\"Bv..\",\".D.#\",\"..D.\",\"^#C.\",\"CB#.\"]}": {
+  "par": 12,
+  "w": 4,
+  "h": 5,
+  "slots": 17,
+  "cats": 6,
+  "fill": 11,
+  "colors": 3,
+  "mech": [
+   "virus"
+  ],
+  "bitsWin": 0.12,
+  "bitsOpt": 31.43,
+  "need": [
+   "replace",
+   "eaten",
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\"C==.\",\"B#=.\",\"#AA=\"]}": {
+  "par": 7,
+  "w": 4,
+  "h": 3,
+  "slots": 10,
+  "cats": 4,
+  "fill": 6,
+  "colors": 3,
+  "mech": [
+   "băng"
+  ],
+  "bitsWin": 2.6,
+  "bitsOpt": 13.85,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"A..\",\"B.#\"],\"dual\":[[1,0,\"C\",2,2]],\"goal\":[\"C..\",\"...\"],\"tut\":[[1,0,\"right\",\"Hộp cần mèo vàng mà bàn chưa có con nào! Mèo hai màu sẽ đổi sang vàng: vuốt nó sang phải.\"],[0,0,\"right\",\"Chấm nhỏ báo còn 1 nước nữa là mèo xanh thành vàng. Vuốt mèo đỏ sang phải!\"],[1,0,\"up\",\"Giờ nó đang vàng: vuốt lên để bản sao vàng đè vào hộp!\"],[0,1,\"right\",\"Hộp đã có mèo vàng! Lấp nốt ô cuối nhé.\"]]}": {
+  "par": 4,
+  "w": 3,
+  "h": 2,
+  "slots": 5,
+  "cats": 2,
+  "fill": 3,
+  "colors": 2,
+  "mech": [
+   "hộp",
+   "hai màu"
+  ],
+  "bitsWin": 4.03,
+  "bitsOpt": 6.61,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"B##.\",\".<AC\",\"B...\",\"A#.^\",\"C..D\"]}": {
+  "par": 10,
+  "w": 4,
+  "h": 5,
+  "slots": 17,
+  "cats": 7,
+  "fill": 10,
+  "colors": 4,
+  "mech": [
+   "virus"
+  ],
+  "bitsWin": 0.57,
+  "bitsOpt": 21.55,
+  "need": [
+   "replace",
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\".d..\",\".Cv#\",\"AB.<\",\".C.A\",\".#..\"]}": {
+  "par": 12,
+  "w": 4,
+  "h": 5,
+  "slots": 18,
+  "cats": 6,
+  "fill": 12,
+  "colors": 4,
+  "mech": [
+   "ngủ",
+   "virus"
+  ],
+  "bitsWin": 2.04,
+  "bitsOpt": 36.06,
+  "need": [
+   "replace",
+   "virusDie"
+  ]
+ },
+ "{\"rows\":[\"#A#\",\"...\",\"#B#\"]}": {
   "par": 4,
   "w": 3,
   "h": 3,
@@ -210,11 +1018,9 @@
   "cats": 2,
   "fill": 3,
   "colors": 2,
-  "mech": [
-   "màng"
-  ],
-  "bitsWin": 2.58,
-  "bitsOpt": 4.58,
+  "mech": [],
+  "bitsWin": 1.32,
+  "bitsOpt": 3.91,
   "need": [
    "replace"
   ]
@@ -251,497 +1057,42 @@
    "replace"
   ]
  },
- "{\"rows\":[\"...\",\".A.\",\"#E#\"],\"oneway\":[[1,0,\"right\"],[0,2,\"down\"]],\"tip\":\"Mèo tím đến chơi! Như mọi màu khác, phải giữ lại ít nhất 1 con.\"}": {
-  "par": 9,
-  "w": 3,
-  "h": 3,
-  "slots": 7,
-  "cats": 2,
-  "fill": 5,
-  "colors": 2,
-  "mech": [
-   "màng"
-  ],
-  "bitsWin": 1.57,
-  "bitsOpt": 13.55,
-  "need": [
-   "replace",
-   "clear"
-  ]
- },
- "{\"rows\":[\"#A#\",\"...\",\"#B#\"]}": {
-  "par": 4,
-  "w": 3,
-  "h": 3,
-  "slots": 5,
-  "cats": 2,
-  "fill": 3,
-  "colors": 2,
-  "mech": [],
-  "bitsWin": 1.32,
-  "bitsOpt": 3.91,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"BAB#A\",\"#BA..\",\"A#.#A\",\".ABB#\",\"..#B.\"]}": {
-  "par": 11,
-  "w": 5,
-  "h": 5,
-  "slots": 19,
-  "cats": 12,
-  "fill": 7,
-  "colors": 2,
-  "mech": [],
-  "bitsWin": 0,
-  "bitsOpt": 26.38,
-  "need": [
-   "replace",
-   "clear"
-  ]
- },
- "{\"rows\":[\"DB.C\",\".CC#\",\"#B#B\",\"D.D.\"],\"goal\":[\"....\",\"B...\",\".C..\",\".D..\"]}": {
-  "par": 4,
-  "w": 4,
-  "h": 4,
-  "slots": 13,
-  "cats": 9,
-  "fill": 4,
-  "colors": 3,
-  "mech": [
-   "hộp"
-  ],
-  "bitsWin": 0,
-  "bitsOpt": 11.43,
-  "need": []
- },
- "{\"rows\":[\"#ABA\",\".#..\",\"DCCB\",\"D.#E\"],\"tip\":\"Giờ đủ 5 màu cùng lúc! Bé tím chỉ có 1, giữ bé thật kỹ!\"}": {
-  "par": 5,
-  "w": 4,
-  "h": 4,
-  "slots": 13,
-  "cats": 9,
-  "fill": 4,
-  "colors": 5,
-  "mech": [],
-  "bitsWin": 1.86,
-  "bitsOpt": 8.76,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"B..\",\"A..\"]}": {
-  "par": 5,
-  "w": 3,
-  "h": 2,
-  "slots": 6,
-  "cats": 2,
-  "fill": 4,
-  "colors": 2,
-  "mech": [],
-  "bitsWin": 2.32,
-  "bitsOpt": 5.28,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"ABC.\",\"C#.C\",\"AA#B\",\"A.#.\",\"C..B\"],\"goal\":[\".A..\",\"...B\",\"....\",\"....\",\".C..\"]}": {
-  "par": 7,
-  "w": 4,
-  "h": 5,
-  "slots": 17,
-  "cats": 11,
-  "fill": 6,
-  "colors": 3,
-  "mech": [
-   "hộp"
-  ],
-  "bitsWin": 0,
-  "bitsOpt": 14.89,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"D...\",\"#.B#\"],\"goal\":[\"...B\",\"..D.\"],\"tip\":\"Mèo hồng đến chơi! Hộp hồng cần mèo hồng, và màu nào cũng phải giữ lại ít nhất 1 con.\"}": {
-  "par": 5,
-  "w": 4,
-  "h": 2,
-  "slots": 6,
-  "cats": 2,
-  "fill": 4,
-  "colors": 2,
-  "mech": [
-   "hộp"
-  ],
-  "bitsWin": 0.42,
-  "bitsOpt": 6.58,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\".#B\",\"...\",\".#A\"]}": {
+ "{\"rows\":[\"#...\",\"BA~.\",\".#B.\",\"A#~#\"]}": {
   "par": 8,
-  "w": 3,
-  "h": 3,
-  "slots": 7,
-  "cats": 2,
-  "fill": 5,
-  "colors": 2,
-  "mech": [],
-  "bitsWin": 1.58,
-  "bitsOpt": 12.4,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"A..\",\".B#\"],\"goal\":[\"..A\",\"...\"]}": {
-  "par": 4,
-  "w": 3,
-  "h": 2,
-  "slots": 5,
-  "cats": 2,
-  "fill": 3,
-  "colors": 2,
-  "mech": [
-   "hộp"
-  ],
-  "bitsWin": 1.06,
-  "bitsOpt": 6.64,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"AB.C.\",\"C.C#.\",\"B.#.#\",\"#.CBB\",\"CAA.A\"],\"goal\":[\".....\",\".A...\",\"...B.\",\".B.A.\",\".....\"]}": {
-  "par": 9,
-  "w": 5,
-  "h": 5,
-  "slots": 21,
-  "cats": 13,
-  "fill": 8,
-  "colors": 3,
-  "mech": [
-   "hộp"
-  ],
-  "bitsWin": 0,
-  "bitsOpt": 26.11,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"e.A..\",\".E#..\"]}": {
-  "par": 9,
-  "w": 5,
-  "h": 2,
-  "slots": 9,
-  "cats": 3,
-  "fill": 6,
-  "colors": 2,
-  "mech": [
-   "ngủ"
-  ],
-  "bitsWin": 4.1,
-  "bitsOpt": 14.65,
-  "need": [
-   "replace",
-   "wakeUse"
-  ]
- },
- "{\"rows\":[\".B.\",\".a#\",\"A##\"]}": {
-  "par": 4,
-  "w": 3,
-  "h": 3,
-  "slots": 6,
-  "cats": 3,
-  "fill": 3,
-  "colors": 2,
-  "mech": [
-   "ngủ"
-  ],
-  "bitsWin": 1.06,
-  "bitsOpt": 6.23,
-  "need": [
-   "replace",
-   "wakeUse"
-  ]
- },
- "{\"rows\":[\".B#\",\"..#\",\"A..\"]}": {
-  "par": 8,
-  "w": 3,
-  "h": 3,
-  "slots": 7,
-  "cats": 2,
-  "fill": 5,
-  "colors": 2,
-  "mech": [],
-  "bitsWin": 1.32,
-  "bitsOpt": 13.17,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"B##\",\"A.#\",\"#a.\"],\"tut\":[[1,0,\"right\",\"Mèo ngủ không vuốt được. Đặt mèo đỏ sát bên để đánh thức nó!\"],[2,1,\"right\",\"Mèo đã thức: giờ vuốt được rồi!\"]]}": {
-  "par": 2,
-  "w": 3,
-  "h": 3,
-  "slots": 5,
-  "cats": 3,
-  "fill": 2,
-  "colors": 2,
-  "mech": [
-   "ngủ"
-  ],
-  "bitsWin": 2.17,
-  "bitsOpt": 3.17,
-  "need": [
-   "wakeUse"
-  ]
- },
- "{\"rows\":[\"B==A\",\"#.=.\"]}": {
-  "par": 5,
-  "w": 4,
-  "h": 2,
-  "slots": 7,
-  "cats": 2,
-  "fill": 5,
-  "colors": 2,
-  "mech": [
-   "băng"
-  ],
-  "bitsWin": 1.89,
-  "bitsOpt": 6.64,
-  "need": []
- },
- "{\"rows\":[\"..B#\",\"A..A\",\"#>B<\",\"..A#\"]}": {
-  "par": 10,
   "w": 4,
   "h": 4,
-  "slots": 13,
-  "cats": 5,
-  "fill": 8,
-  "colors": 2,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 0.14,
-  "bitsOpt": 21.69,
-  "need": [
-   "replace",
-   "eaten",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"..BB#\",\"..A##\",\"BA#.#\",\"DC#AD\",\"#.CEE\"]}": {
-  "par": 7,
-  "w": 5,
-  "h": 5,
-  "slots": 18,
-  "cats": 12,
-  "fill": 6,
-  "colors": 5,
-  "mech": [],
-  "bitsWin": 0.4,
-  "bitsOpt": 14.6,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"#BAA\",\"..##\"],\"oneway\":[[0,1,\"down\"]],\"tut\":[[0,1,\"down\",\"Màng chỉ cho đi theo mũi tên: vuốt mèo xanh xuống, xuyên qua màng\"],[1,1,\"left\",\"Lấp nốt ô trống\"]]}": {
-  "par": 2,
-  "w": 4,
-  "h": 2,
-  "slots": 5,
-  "cats": 3,
-  "fill": 2,
-  "colors": 2,
-  "mech": [
-   "màng"
-  ],
-  "bitsWin": 1.17,
-  "bitsOpt": 3.17,
-  "need": []
- },
- "{\"rows\":[\"##.v\",\"A>.A\",\"##B#\"],\"tip\":\"Hai virus, hai hướng mắt: mỗi con lan theo hướng mắt của riêng nó.\"}": {
-  "par": 5,
-  "w": 4,
-  "h": 3,
-  "slots": 7,
-  "cats": 3,
-  "fill": 4,
-  "colors": 2,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 2.74,
-  "bitsOpt": 7.49,
-  "need": [
-   "replace",
-   "eaten",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"C==.\",\"B#=.\",\"#AA=\"]}": {
-  "par": 7,
-  "w": 4,
-  "h": 3,
   "slots": 10,
   "cats": 4,
   "fill": 6,
-  "colors": 3,
-  "mech": [
-   "băng"
-  ],
-  "bitsWin": 2.6,
-  "bitsOpt": 13.85,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"CCAAB\",\"..A.C\",\"CAB..\",\"CB#..\",\"BABC#\"]}": {
-  "par": 7,
-  "w": 5,
-  "h": 5,
-  "slots": 23,
-  "cats": 16,
-  "fill": 7,
-  "colors": 3,
-  "mech": [],
-  "bitsWin": 0,
-  "bitsOpt": 24.5,
-  "need": []
- },
- "{\"rows\":[\"AA.\",\"##B\"]}": {
-  "par": 1,
-  "w": 3,
-  "h": 2,
-  "slots": 4,
-  "cats": 3,
-  "fill": 1,
-  "colors": 2,
-  "mech": [],
-  "bitsWin": 1,
-  "bitsOpt": 1,
-  "need": []
- },
- "{\"rows\":[\"AB~\",\"#.#\",\"#.#\"],\"tut\":[[0,1,\"down\",\"Nhân đôi mèo xanh xuống dưới\"],[0,0,\"right\",\"Mèo vào ô độc sẽ biến mất: đẩy mèo xanh vào để dọn chỗ\"],[0,1,\"down\",\"Lấp nốt ô cuối. Ô độc không cần lấp kín!\"]]}": {
-  "par": 3,
-  "w": 3,
-  "h": 3,
-  "slots": 4,
-  "cats": 2,
-  "fill": 2,
   "colors": 2,
   "mech": [
    "độc"
   ],
-  "bitsWin": 2,
-  "bitsOpt": 5,
+  "bitsWin": 3.47,
+  "bitsOpt": 15.35,
   "need": [
+   "replace",
    "toxic"
   ]
  },
- "{\"rows\":[\"B<.\",\".AA\",\"B#^\"]}": {
+ "{\"rows\":[\"#A..\",\"#A.B\",\"C<Cv\",\"A.#B\"]}": {
   "par": 7,
-  "w": 3,
-  "h": 3,
-  "slots": 8,
-  "cats": 4,
-  "fill": 4,
-  "colors": 2,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 3.91,
-  "bitsOpt": 13.62,
-  "need": [
-   "replace",
-   "eaten",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"BB#=\",\"C##=\",\"A=AC\",\"A==#\"]}": {
-  "par": 7,
-  "w": 4,
-  "h": 4,
-  "slots": 12,
-  "cats": 7,
-  "fill": 5,
-  "colors": 3,
-  "mech": [
-   "băng"
-  ],
-  "bitsWin": 0,
-  "bitsOpt": 13.75,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"B##.\",\".<AC\",\"B...\",\"A#.^\",\"C..D\"]}": {
-  "par": 11,
-  "w": 4,
-  "h": 5,
-  "slots": 17,
-  "cats": 7,
-  "fill": 10,
-  "colors": 4,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 0.85,
-  "bitsOpt": 35.64,
-  "need": [
-   "replace",
-   "eaten",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"#AA#\",\"C.BB\",\"CAA.\",\".CB#\"]}": {
-  "par": 4,
   "w": 4,
   "h": 4,
   "slots": 13,
-  "cats": 10,
-  "fill": 3,
-  "colors": 3,
-  "mech": [],
-  "bitsWin": 0.09,
-  "bitsOpt": 9.85,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"...#\",\"AB~A\",\".#..\"],\"oneway\":[[1,0,\"right\"]]}": {
-  "par": 8,
-  "w": 4,
-  "h": 3,
-  "slots": 9,
-  "cats": 3,
+  "cats": 7,
   "fill": 6,
-  "colors": 2,
+  "colors": 3,
   "mech": [
-   "màng",
-   "độc"
+   "virus"
   ],
-  "bitsWin": 2.08,
-  "bitsOpt": 11.87,
+  "bitsWin": 0.77,
+  "bitsOpt": 12.74,
   "need": [
    "replace",
-   "toxic"
+   "eaten",
+   "virusDie"
   ]
- },
- "{\"rows\":[\"B==A\",\"A#.#\"],\"tut\":[[0,3,\"left\",\"Trên băng, bản sao trượt tới khi gặp vật cản: vuốt mèo đỏ sang trái!\"],[0,0,\"right\",\"Vuốt mèo xanh sang phải, đẩy cả dãy\"],[0,2,\"down\",\"Lấp nốt ô dưới\"]]}": {
-  "par": 3,
-  "w": 4,
-  "h": 2,
-  "slots": 6,
-  "cats": 3,
-  "fill": 3,
-  "colors": 2,
-  "mech": [
-   "băng"
-  ],
-  "bitsWin": 1.15,
-  "bitsOpt": 5.32,
-  "need": []
  },
  "{\"rows\":[\".B#A\",\".~C.\",\"...#\"]}": {
   "par": 8,
@@ -761,87 +1112,19 @@
    "toxic"
   ]
  },
- "{\"rows\":[\".d..\",\".Cv#\",\"AB.<\",\".C.A\",\".#..\"]}": {
-  "par": 12,
-  "w": 4,
-  "h": 5,
-  "slots": 18,
-  "cats": 6,
-  "fill": 12,
-  "colors": 4,
-  "mech": [
-   "ngủ",
-   "virus"
-  ],
-  "bitsWin": 2.14,
-  "bitsOpt": 38.16,
-  "need": [
-   "replace",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"##B#\",\"AA..\"]}": {
-  "par": 2,
-  "w": 4,
-  "h": 2,
-  "slots": 5,
-  "cats": 3,
-  "fill": 2,
-  "colors": 2,
-  "mech": [],
-  "bitsWin": 1.58,
-  "bitsOpt": 2.58,
-  "need": []
- },
- "{\"rows\":[\"#...\",\"BA~.\",\".#B.\",\"A#~#\"]}": {
+ "{\"rows\":[\"BA#..\",\"A#...\",\"B#..#\"],\"portal\":[[0,1,\"up\",2,2]]}": {
   "par": 8,
-  "w": 4,
-  "h": 4,
-  "slots": 10,
-  "cats": 4,
-  "fill": 6,
-  "colors": 2,
-  "mech": [
-   "độc"
-  ],
-  "bitsWin": 3.47,
-  "bitsOpt": 15.35,
-  "need": [
-   "replace",
-   "toxic"
-  ]
- },
- "{\"rows\":[\"ba#A#\",\"#.B.C\",\"#.A<B\",\".....\",\"#.AC^\"]}": {
-  "par": 12,
   "w": 5,
-  "h": 5,
-  "slots": 20,
-  "cats": 9,
-  "fill": 11,
-  "colors": 3,
-  "mech": [
-   "ngủ",
-   "virus"
-  ],
-  "bitsWin": 0,
-  "bitsOpt": 34.3,
-  "need": [
-   "replace",
-   "eaten",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"AE#\",\"#.#\",\"#..\"]}": {
-  "par": 4,
-  "w": 3,
   "h": 3,
-  "slots": 5,
-  "cats": 2,
-  "fill": 3,
+  "slots": 11,
+  "cats": 4,
+  "fill": 7,
   "colors": 2,
-  "mech": [],
-  "bitsWin": 3.75,
-  "bitsOpt": 5.34,
+  "mech": [
+   "cổng"
+  ],
+  "bitsWin": 1.32,
+  "bitsOpt": 18.37,
   "need": [
    "replace"
   ]
@@ -865,66 +1148,6 @@
    "toxic"
   ]
  },
- "{\"rows\":[\"#B.A\",\"A.##\"],\"goal\":[\"..B.\",\"....\"],\"tut\":[[0,1,\"right\",\"Hộp chỉ nhận mèo cùng màu: vuốt mèo xanh vào hộp xanh!\"],[1,0,\"right\",\"Kín ổ và mọi hộp có mèo đúng màu là thắng!\"]]}": {
-  "par": 2,
-  "w": 4,
-  "h": 2,
-  "slots": 5,
-  "cats": 3,
-  "fill": 2,
-  "colors": 2,
-  "mech": [
-   "hộp"
-  ],
-  "bitsWin": 0.42,
-  "bitsOpt": 2.42,
-  "need": []
- },
- "{\"rows\":[\"..B.\",\"#..#\",\"#.cA\",\".C..\"]}": {
-  "par": 9,
-  "w": 4,
-  "h": 4,
-  "slots": 13,
-  "cats": 4,
-  "fill": 9,
-  "colors": 3,
-  "mech": [
-   "ngủ"
-  ],
-  "bitsWin": 1.09,
-  "bitsOpt": 18.76,
-  "need": []
- },
- "{\"rows\":[\".==A\",\"#=#B\"]}": {
-  "par": 5,
-  "w": 4,
-  "h": 2,
-  "slots": 6,
-  "cats": 2,
-  "fill": 4,
-  "colors": 2,
-  "mech": [
-   "băng"
-  ],
-  "bitsWin": 4.75,
-  "bitsOpt": 6.75,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"DC.B\",\".DB#\",\"D.D#\",\"....\",\".C.B\"]}": {
-  "par": 9,
-  "w": 4,
-  "h": 5,
-  "slots": 18,
-  "cats": 9,
-  "fill": 9,
-  "colors": 3,
-  "mech": [],
-  "bitsWin": 0.16,
-  "bitsOpt": 21.43,
-  "need": []
- },
  "{\"rows\":[\".....\",\"CA.<.\",\"###AB\",\"..D>.\",\"CD#.B\"]}": {
   "par": 13,
   "w": 5,
@@ -936,149 +1159,43 @@
   "mech": [
    "virus"
   ],
-  "bitsWin": 0.17,
-  "bitsOpt": 36.59,
+  "bitsWin": 0.31,
+  "bitsOpt": 30.32,
   "need": [
    "replace",
    "virusDie"
   ]
  },
- "{\"rows\":[\"CB#.\",\"C.#A\",\".BAA\",\"B##.\"],\"oneway\":[[2,2,\"right\"],[0,1,\"down\"]]}": {
-  "par": 7,
-  "w": 4,
-  "h": 4,
-  "slots": 12,
-  "cats": 8,
-  "fill": 4,
-  "colors": 3,
-  "mech": [
-   "màng"
-  ],
-  "bitsWin": 0.7,
-  "bitsOpt": 16.88,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"#A..\",\"#A.B\",\"C<Cv\",\"A.#B\"]}": {
-  "par": 7,
-  "w": 4,
-  "h": 4,
-  "slots": 13,
-  "cats": 7,
-  "fill": 6,
-  "colors": 3,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 1.52,
-  "bitsOpt": 12.5,
-  "need": [
-   "replace",
-   "eaten",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"#A=A\",\".#=#\",\"CB==\"]}": {
-  "par": 7,
-  "w": 4,
-  "h": 3,
-  "slots": 9,
-  "cats": 4,
-  "fill": 5,
-  "colors": 3,
-  "mech": [
-   "băng"
-  ],
-  "bitsWin": 5.52,
-  "bitsOpt": 10,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\".>A#.\",\"#C.Bv\",\"....B\",\"C#A.B\"]}": {
-  "par": 12,
-  "w": 5,
-  "h": 4,
-  "slots": 17,
-  "cats": 7,
-  "fill": 10,
-  "colors": 3,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 0.49,
-  "bitsOpt": 41.17,
-  "need": [
-   "replace",
-   "eaten",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"#AC.\",\"..B#\",\"..#.\",\"....\"],\"goal\":[\"...C\",\"....\",\"A..A\",\"....\"]}": {
-  "par": 11,
-  "w": 4,
-  "h": 4,
-  "slots": 13,
-  "cats": 3,
-  "fill": 10,
-  "colors": 3,
-  "mech": [
-   "hộp"
-  ],
-  "bitsWin": 3.19,
-  "bitsOpt": 19.95,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\".#\",\"A#\",\"B#\",\">.\"],\"tut\":[[1,0,\"up\",\"Nhìn mắt virus: nó nhìn sang phải, nên sau nước này nó sẽ lan sang phải. Vuốt mèo đỏ lên!\"],[2,0,\"down\",\"Thấy chưa, nó lan đúng hướng mắt nhìn! Giờ hết chỗ đẩy: bản sao xanh đè lên và diệt virus.\"],[3,0,\"right\",\"Còn virus là chưa thắng: diệt nốt con cuối!\"]]}": {
-  "par": 3,
-  "w": 2,
-  "h": 4,
-  "slots": 5,
-  "cats": 2,
-  "fill": 3,
-  "colors": 2,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 0.83,
-  "bitsOpt": 3.58,
-  "need": [
-   "replace",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"AB#\",\"B#=\",\"A==\"]}": {
-  "par": 4,
+ "{\"rows\":[\"B..\",\"A..\"]}": {
+  "par": 5,
   "w": 3,
-  "h": 3,
-  "slots": 7,
-  "cats": 4,
-  "fill": 3,
+  "h": 2,
+  "slots": 6,
+  "cats": 2,
+  "fill": 4,
   "colors": 2,
-  "mech": [
-   "băng"
-  ],
-  "bitsWin": 2.38,
-  "bitsOpt": 7.55,
+  "mech": [],
+  "bitsWin": 2.32,
+  "bitsOpt": 5.28,
   "need": [
    "replace"
   ]
  },
- "{\"rows\":[\".#EAA\",\".A.#.\",\"E##AE\",\"E.ACC\",\"..EC.\"]}": {
-  "par": 8,
+ "{\"rows\":[\"BAB#A\",\"#BA..\",\"A#.#A\",\".ABB#\",\"..#B.\"]}": {
+  "par": 11,
   "w": 5,
   "h": 5,
-  "slots": 21,
-  "cats": 13,
-  "fill": 8,
-  "colors": 3,
+  "slots": 19,
+  "cats": 12,
+  "fill": 7,
+  "colors": 2,
   "mech": [],
   "bitsWin": 0,
-  "bitsOpt": 22.33,
-  "need": []
+  "bitsOpt": 26.97,
+  "need": [
+   "replace",
+   "clear"
+  ]
  },
  "{\"rows\":[\".#.B\",\"...A\",\"...#\"],\"goal\":[\"....\",\"..B.\",\"..A.\"]}": {
   "par": 9,
@@ -1093,92 +1210,6 @@
   ],
   "bitsWin": 1.85,
   "bitsOpt": 22.79,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"#.b#.\",\"bb.A.\",\".AB#.\"],\"card\":\"ChainWake\",\"tip\":\"Ba bé ngủ đều là mèo xanh. Một bé thức dậy sẽ đánh thức luôn bé nằm sát bên!\"}": {
-  "par": 10,
-  "w": 5,
-  "h": 3,
-  "slots": 12,
-  "cats": 6,
-  "fill": 6,
-  "colors": 2,
-  "mech": [
-   "ngủ"
-  ],
-  "bitsWin": 0.75,
-  "bitsOpt": 27.18,
-  "need": [
-   "replace",
-   "chainWake",
-   "wakeUse"
-  ]
- },
- "{\"rows\":[\"ABA\",\"=#B\",\"==#\"]}": {
-  "par": 4,
-  "w": 3,
-  "h": 3,
-  "slots": 7,
-  "cats": 4,
-  "fill": 3,
-  "colors": 2,
-  "mech": [
-   "băng"
-  ],
-  "bitsWin": 2.38,
-  "bitsOpt": 7.55,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"ECE#C\",\"..E#D\",\"D#.EC\",\"...#D\",\"#C#DC\"],\"goal\":[\".....\",\"E....\",\"..E..\",\"..E..\",\".....\"]}": {
-  "par": 7,
-  "w": 5,
-  "h": 5,
-  "slots": 19,
-  "cats": 13,
-  "fill": 6,
-  "colors": 3,
-  "mech": [
-   "hộp"
-  ],
-  "bitsWin": 0,
-  "bitsOpt": 16.34,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"#..Cv\",\".DD..\",\"^A...\",\"C.B.#\",\"A.#E#\",\".#B<#\"]}": {
-  "par": 15,
-  "w": 5,
-  "h": 6,
-  "slots": 24,
-  "cats": 9,
-  "fill": 15,
-  "colors": 5,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 0.92,
-  "bitsOpt": 34.22,
-  "need": [
-   "replace",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\".B.\",\"#A#\"]}": {
-  "par": 3,
-  "w": 3,
-  "h": 2,
-  "slots": 4,
-  "cats": 2,
-  "fill": 2,
-  "colors": 2,
-  "mech": [],
-  "bitsWin": 3.17,
-  "bitsOpt": 3.17,
   "need": [
    "replace"
   ]
@@ -1201,19 +1232,166 @@
    "toxic"
   ]
  },
- "{\"rows\":[\"Bv..\",\".D.#\",\"..D.\",\"^#C.\",\"CB#.\"]}": {
-  "par": 12,
-  "w": 4,
-  "h": 5,
-  "slots": 17,
+ "{\"rows\":[\"#.b#.\",\"bb.A.\",\".AB#.\"],\"card\":\"ChainWake\",\"tip\":\"Ba bé ngủ đều là mèo xanh. Một bé thức dậy sẽ đánh thức luôn bé nằm sát bên!\"}": {
+  "par": 10,
+  "w": 5,
+  "h": 3,
+  "slots": 12,
   "cats": 6,
-  "fill": 11,
+  "fill": 6,
+  "colors": 2,
+  "mech": [
+   "ngủ"
+  ],
+  "bitsWin": 0.75,
+  "bitsOpt": 27.18,
+  "need": [
+   "replace",
+   "chainWake",
+   "wakeUse"
+  ]
+ },
+ "{\"rows\":[\"BB#=\",\"C##=\",\"A=AC\",\"A==#\"]}": {
+  "par": 7,
+  "w": 4,
+  "h": 4,
+  "slots": 12,
+  "cats": 7,
+  "fill": 5,
   "colors": 3,
+  "mech": [
+   "băng"
+  ],
+  "bitsWin": 0,
+  "bitsOpt": 13.75,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"....\",\"##.#\",\"#C##\",\"AABB\"],\"portal\":[[3,0,\"left\",1,2]]}": {
+  "par": 8,
+  "w": 4,
+  "h": 4,
+  "slots": 10,
+  "cats": 5,
+  "fill": 5,
+  "colors": 3,
+  "mech": [
+   "cổng"
+  ],
+  "bitsWin": 5.02,
+  "bitsOpt": 16.52,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\".#EAA\",\".A.#.\",\"E##AE\",\"E.ACC\",\"..EC.\"]}": {
+  "par": 8,
+  "w": 5,
+  "h": 5,
+  "slots": 21,
+  "cats": 13,
+  "fill": 8,
+  "colors": 3,
+  "mech": [],
+  "bitsWin": 0,
+  "bitsOpt": 22.33,
+  "need": []
+ },
+ "{\"rows\":[\"..BB#\",\"..A##\",\"BA#.#\",\"DC#AD\",\"#.CEE\"]}": {
+  "par": 7,
+  "w": 5,
+  "h": 5,
+  "slots": 18,
+  "cats": 12,
+  "fill": 6,
+  "colors": 5,
+  "mech": [],
+  "bitsWin": 0.4,
+  "bitsOpt": 14.6,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\".B.\",\"#A#\"]}": {
+  "par": 3,
+  "w": 3,
+  "h": 2,
+  "slots": 4,
+  "cats": 2,
+  "fill": 2,
+  "colors": 2,
+  "mech": [],
+  "bitsWin": 3.17,
+  "bitsOpt": 3.17,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\".AA#\",\"BBA.\",\"B#.A\",\"..B.\"]}": {
+  "par": 9,
+  "w": 4,
+  "h": 4,
+  "slots": 14,
+  "cats": 8,
+  "fill": 6,
+  "colors": 2,
+  "mech": [],
+  "bitsWin": 0,
+  "bitsOpt": 25.35,
+  "need": [
+   "clear"
+  ]
+ },
+ "{\"rows\":[\"AB.C.\",\"C.C#.\",\"B.#.#\",\"#.CBB\",\"CAA.A\"],\"goal\":[\".....\",\".A...\",\"...B.\",\".B.A.\",\".....\"]}": {
+  "par": 9,
+  "w": 5,
+  "h": 5,
+  "slots": 21,
+  "cats": 13,
+  "fill": 8,
+  "colors": 3,
+  "mech": [
+   "hộp"
+  ],
+  "bitsWin": 0,
+  "bitsOpt": 26.11,
+  "need": [
+   "replace"
+  ]
+ },
+ "{\"rows\":[\"...#\",\"AB~A\",\".#..\"],\"oneway\":[[1,0,\"right\"]]}": {
+  "par": 8,
+  "w": 4,
+  "h": 3,
+  "slots": 9,
+  "cats": 3,
+  "fill": 6,
+  "colors": 2,
+  "mech": [
+   "màng",
+   "độc"
+  ],
+  "bitsWin": 2.08,
+  "bitsOpt": 11.87,
+  "need": [
+   "replace",
+   "toxic"
+  ]
+ },
+ "{\"rows\":[\"B<.\",\".AA\",\"B#^\"]}": {
+  "par": 7,
+  "w": 3,
+  "h": 3,
+  "slots": 8,
+  "cats": 4,
+  "fill": 4,
+  "colors": 2,
   "mech": [
    "virus"
   ],
-  "bitsWin": 0,
-  "bitsOpt": 35.36,
+  "bitsWin": 3.91,
+  "bitsOpt": 13.62,
   "need": [
    "replace",
    "eaten",
@@ -1235,163 +1413,6 @@
    "replace"
   ]
  },
- "{\"rows\":[\"..CCB\",\">B..#\",\"##BA.\",\".C.A.\",\".#^.#\"]}": {
-  "par": 14,
-  "w": 5,
-  "h": 5,
-  "slots": 20,
-  "cats": 8,
-  "fill": 12,
-  "colors": 3,
-  "mech": [
-   "virus"
-  ],
-  "bitsWin": 0.19,
-  "bitsOpt": 39.77,
-  "need": [
-   "replace",
-   "eaten",
-   "virusDie"
-  ]
- },
- "{\"rows\":[\"A.#..\"],\"portal\":[[0,1,\"right\",0,3]],\"tut\":[[0,0,\"right\",\"Giữa bàn có một cái hố. Cứ vuốt mèo đỏ sang phải nhé!\"],[0,0,\"right\",\"Vòng xoáy là cổng dịch chuyển: mèo bị đẩy tới cổng sẽ chui qua và hiện ở bên kia hố!\"],[0,0,\"right\",\"Vuốt tiếp: cổng đưa mèo sang bên kia, lấp kín cả bàn!\"]]}": {
-  "par": 3,
-  "w": 5,
-  "h": 1,
-  "slots": 4,
-  "cats": 1,
-  "fill": 3,
-  "colors": 1,
-  "mech": [],
-  "bitsWin": 0,
-  "bitsOpt": 0,
-  "need": []
- },
- "{\"rows\":[\"....\",\"##.#\",\"#C##\",\"AABB\"],\"portal\":[[3,0,\"left\",1,2]]}": {
-  "par": 8,
-  "w": 4,
-  "h": 4,
-  "slots": 10,
-  "cats": 5,
-  "fill": 5,
-  "colors": 3,
-  "mech": [
-   "cổng"
-  ],
-  "bitsWin": 5.02,
-  "bitsOpt": 16.52,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"A..\",\"B.#\"],\"dual\":[[1,0,\"C\",2,2]],\"goal\":[\"C..\",\"...\"],\"tut\":[[1,0,\"right\",\"Hộp cần mèo vàng mà bàn chưa có con nào! Mèo hai màu sẽ đổi sang vàng: vuốt nó sang phải.\"],[0,0,\"right\",\"Chấm nhỏ báo còn 1 nước nữa là mèo xanh thành vàng. Vuốt mèo đỏ sang phải!\"],[1,0,\"up\",\"Giờ nó đang vàng: vuốt lên để bản sao vàng đè vào hộp!\"],[0,1,\"right\",\"Hộp đã có mèo vàng! Lấp nốt ô cuối nhé.\"]]}": {
-  "par": 4,
-  "w": 3,
-  "h": 2,
-  "slots": 5,
-  "cats": 2,
-  "fill": 3,
-  "colors": 2,
-  "mech": [
-   "hộp",
-   "hai màu"
-  ],
-  "bitsWin": 4.03,
-  "bitsOpt": 6.61,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\".~..\",\"...#\",\"###C\",\"AABB\"],\"portal\":[[2,3,\"left\",0,3]]}": {
-  "par": 9,
-  "w": 4,
-  "h": 4,
-  "slots": 11,
-  "cats": 5,
-  "fill": 6,
-  "colors": 3,
-  "mech": [
-   "độc",
-   "cổng"
-  ],
-  "bitsWin": 4.92,
-  "bitsOpt": 20.48,
-  "need": [
-   "replace",
-   "toxic"
-  ]
- },
- "{\"rows\":[\"..A\",\"##B\",\"A..\"],\"dual\":[[1,2,\"D\",2,2]],\"goal\":[\"..D\",\"...\",\"...\"]}": {
-  "par": 5,
-  "w": 3,
-  "h": 3,
-  "slots": 7,
-  "cats": 3,
-  "fill": 4,
-  "colors": 2,
-  "mech": [
-   "hộp",
-   "hai màu"
-  ],
-  "bitsWin": 1.39,
-  "bitsOpt": 5.09,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"BA#..\",\"A#...\",\"B#..#\"],\"portal\":[[0,1,\"up\",2,2]]}": {
-  "par": 8,
-  "w": 5,
-  "h": 3,
-  "slots": 11,
-  "cats": 4,
-  "fill": 7,
-  "colors": 2,
-  "mech": [
-   "cổng"
-  ],
-  "bitsWin": 1.32,
-  "bitsOpt": 18.37,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"#AAB\",\".###\",\"....\"],\"portal\":[[0,2,\"up\",2,0]]}": {
-  "par": 6,
-  "w": 4,
-  "h": 3,
-  "slots": 8,
-  "cats": 3,
-  "fill": 5,
-  "colors": 2,
-  "mech": [
-   "cổng"
-  ],
-  "bitsWin": 1.74,
-  "bitsOpt": 11.08,
-  "need": [
-   "replace"
-  ]
- },
- "{\"rows\":[\"ABB.\",\"A###\",\"#...\",\"....\"],\"portal\":[[0,3,\"down\",2,1]],\"dual\":[[0,2,\"D\",2,2]],\"goal\":[\"..D.\",\"....\",\"....\",\"....\"]}": {
-  "par": 9,
-  "w": 4,
-  "h": 4,
-  "slots": 12,
-  "cats": 4,
-  "fill": 8,
-  "colors": 2,
-  "mech": [
-   "hộp",
-   "cổng",
-   "hai màu"
-  ],
-  "bitsWin": 2.81,
-  "bitsOpt": 21.31,
-  "need": [
-   "replace"
-  ]
- },
  "{\"rows\":[\"..#A#\",\".#CBC\",\"..#AB\",\"#.##B\"],\"portal\":[[0,3,\"left\",1,0]]}": {
   "par": 8,
   "w": 5,
@@ -1409,54 +1430,34 @@
    "replace"
   ]
  },
- "{\"rows\":[\"#.#A\",\".B.A\",\".B#.\"],\"dual\":[[0,3,\"D\",2,2]],\"goal\":[\"...D\",\"...D\",\"....\"]}": {
-  "par": 6,
-  "w": 4,
-  "h": 3,
-  "slots": 9,
-  "cats": 4,
-  "fill": 5,
-  "colors": 2,
+ "{\"rows\":[\"ECE#C\",\"..E#D\",\"D#.EC\",\"...#D\",\"#C#DC\"],\"goal\":[\".....\",\"E....\",\"..E..\",\"..E..\",\".....\"]}": {
+  "par": 7,
+  "w": 5,
+  "h": 5,
+  "slots": 19,
+  "cats": 13,
+  "fill": 6,
+  "colors": 3,
   "mech": [
-   "hộp",
-   "hai màu"
+   "hộp"
   ],
-  "bitsWin": 1.69,
-  "bitsOpt": 5.74,
+  "bitsWin": 0,
+  "bitsOpt": 16.34,
   "need": [
    "replace"
   ]
  },
- "{\"rows\":[\"..BB\",\".#CA\",\".#A.\",\"....\"],\"dual\":[[0,3,\"D\",3,2]],\"goal\":[\"...D\",\"...D\",\"....\",\"....\"]}": {
-  "par": 9,
-  "w": 4,
-  "h": 4,
-  "slots": 14,
-  "cats": 5,
-  "fill": 9,
-  "colors": 3,
-  "mech": [
-   "hộp",
-   "hai màu"
-  ],
-  "bitsWin": 0.88,
-  "bitsOpt": 27.33,
-  "need": []
- },
- "{\"rows\":[\".C..\",\"C#.#\",\"A...\",\"BAB#\"],\"dual\":[[0,1,\"E\",2,1],[3,0,\"E\",2,1]],\"goal\":[\"....\",\"E...\",\".E..\",\"....\"]}": {
-  "par": 8,
+ "{\"rows\":[\"#ABA\",\".#..\",\"DCCB\",\"D.#E\"],\"tip\":\"Giờ đủ 5 màu cùng lúc! Bé tím chỉ có 1, giữ bé thật kỹ!\"}": {
+  "par": 5,
   "w": 4,
   "h": 4,
   "slots": 13,
-  "cats": 6,
-  "fill": 7,
-  "colors": 3,
-  "mech": [
-   "hộp",
-   "hai màu"
-  ],
-  "bitsWin": 0.97,
-  "bitsOpt": 23.1,
+  "cats": 9,
+  "fill": 4,
+  "colors": 5,
+  "mech": [],
+  "bitsWin": 1.86,
+  "bitsOpt": 8.76,
   "need": [
    "replace"
   ]

@@ -41,6 +41,15 @@ namespace Meowtosis.Presentation
 
         void ShowSpecies(IReadOnlyList<SpeciesCount> counts);
 
+        // Thanh "đang dùng booster" dưới bàn (icon, tên, lời nhắn, nút huỷ), thay cho hàng booster; None thì ẩn.
+        void ShowBoosterPrompt(BoosterKind kind, string prompt);
+
+        // Bấm nút huỷ trên thanh booster.
+        event Action BoosterCancelClicked;
+
+        // Thanh sao vừa mất sao (số sao mất); presenter phát tiếng.
+        event Action<int> StarLost;
+
         void ShowBooster(BoosterKind kind, int count, bool selected);
 
         void SetHintEnabled(bool enabled);
@@ -49,6 +58,6 @@ namespace Meowtosis.Presentation
         void ShowToast(string text);
 
         // Bảng chọn màu cho Hoán đổi; danh sách rỗng thì ẩn.
-        void ShowColorChoices(IReadOnlyList<Species> colors);
+        void ShowColorChoices(IReadOnlyList<Species> colors, UnityEngine.Vector2 screenPoint);
     }
 }

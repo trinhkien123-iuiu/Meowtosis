@@ -69,7 +69,9 @@ Con được vuốt **nhân đôi**: bản sao đi vào ô kề theo hướng vu
 | Ô kề | Kết quả | Mã |
 |---|---|---|
 | Trống | Bản sao vào ô đó | S1: `A.` → `AA` |
-| Có tế bào, phía sau dãy còn ô trống | **Đẩy** cả dãy liền nhau đi 1 ô tới ô trống đầu tiên, bản sao vào ô kề. Dãy gồm mèo, virus; **mèo ngủ không bị đẩy** | S2: `AB.` → `AAB` |
+| Có mèo, phía sau dãy còn ô trống | **Đẩy** cả dãy mèo liền nhau đi 1 ô tới ô trống đầu tiên, bản sao vào ô kề. **Mèo ngủ không bị đẩy; virus cũng không bao giờ bị đẩy** (xem hai dòng dưới) | S2: `AB.` → `AAB` |
+| Ô kề là **virus** | **Ăn virus:** bản sao chiếm ô virus, virus chết, dù phía sau virus còn trống hay không | V10: `A>.` → `AA.` |
+| Có mèo, dãy mèo kết thúc bằng **virus** | Dãy dồn tới virus: **con cuối của dãy chiếm ô virus, virus chết**, bản sao vào ô kề | V12: `AB>.` → `AAB.` |
 | Trống, là ô **băng** | Bản sao **trượt** tiếp theo hướng vuốt qua các ô băng trống, dừng khi gặp vật cản (mép, lỗ, màng chặn, quân khác) hoặc ra khỏi băng | I1: `A===.` → `A...A` |
 | Có tế bào, phía sau không còn ô trống (gặp mép, lỗ, màng chặn hoặc **mèo ngủ**) | **Thay thế:** bản sao chiếm ô kề, con cũ ở đó chết | S3: `AB / B.` → `AA / B.` |
 
@@ -78,7 +80,7 @@ Con được vuốt **nhân đôi**: bản sao đi vào ô kề theo hướng vu
 - Vuốt ngược chiều màng một chiều (M1).
 - Thay thế một con cùng màu với con đang vuốt (S4: `AA`, vuốt (0,0) sang phải).
 - Đè lên hoặc đẩy một con mèo ngủ (N4).
-- Vuốt mèo ngủ (N1) hoặc virus (V10).
+- Vuốt mèo ngủ (N1) hoặc vuốt chính virus (V10).
 
 Mỗi nước sinh **đúng một** tế bào mới. Vì vậy một level cần **ít nhất** bằng ngần ấy nước: số ô trống, cộng số ô đang có virus phải dọn rồi lấp lại. Bộ giải A* dựa vào điều này.
 
@@ -169,12 +171,12 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
   - Virus vừa sinh trong lượt này chỉ bắt đầu lan từ lượt sau.
 - **Hệ quả: tốc độ lây.** Một dãy virus nối đuôi thẳng hàng thì chỉ **con đầu dãy** lan, nên mỗi lượt dãy dài thêm 1 (V1). Có 2 nguồn virus thì mỗi lượt thêm 2 (V2). Virus chạm mép thì đứng yên, hết lây (V3).
 - **Cách diệt:**
-  - **Thay thế:** vuốt một con mèo vào virus khi phía sau virus không còn chỗ đẩy; bản sao chiếm chỗ, virus chết.
-  - **Ô độc:** đẩy virus vào ô độc, hoặc để virus lan vào ô độc (V6; chỉ con lan vào chết, con gốc vẫn còn).
+  - **Ăn:** vuốt một con mèo vào virus kề bên (hoặc đẩy một dãy mèo tới virus): bản sao hoặc con cuối của dãy chiếm ô virus và virus chết, **luôn luôn**, không phụ thuộc vào việc sau lưng virus có trống hay không (V10, V12).
+  - **Ô độc:** để virus lan vào ô độc (V6; chỉ con lan vào chết, con gốc vẫn còn).
   - Đột biến không dùng được trên virus (B1). Virus không bị khử 3 (V11).
 - **Diệt từ đuôi lên đầu.** Diệt con đầu dãy thì con ngay sau ăn lại ô đó trong cùng lượt (V4). Diệt con cuối dãy trước, rồi lần lên, thì sạch (V5).
 - **Nguy hiểm:** virus ăn con mèo cuối cùng của một màu là thua (V8). Virus nằm trên ô không tính là đã lấp (V11): còn virus thì chưa thắng.
-- **Virus bị đẩy** theo dãy như mọi tế bào khác (V10).
+- **Virus không bao giờ bị đẩy** (đổi luật 2026-11-09): trước đây virus bị đẩy theo dãy nên khi định ăn virus mà phía sau còn trống thì người chơi vô tình đẩy nó đi, rất khó hiểu. Giờ virus chỉ có hai kết cục: bị ăn hoặc đứng yên rồi lan. Virus nằm giữa hai dãy mèo là điểm dừng của dãy đang đẩy (V13).
 
 | Mã | Bàn đầu | Nước | Kết quả |
 |---|---|---|---|
@@ -183,6 +185,9 @@ Mỗi cơ chế theo cùng một mẫu: ký hiệu · xuất hiện lần đầu
 | V4 | `AB / >>` | (0,1) xuống | Bản sao xanh thay con đầu dãy (1,1), con (1,0) ăn lại ngay → vẫn `AB / >>` |
 | V5 | `AB / >>` | (0,0) xuống, rồi (0,1) xuống | Diệt con đuôi, rồi con đầu → `AB / AB`: thắng |
 | V6 | `A.. / >~.` | (0,0) phải | Virus lan vào ô độc và chết; con gốc (1,0) còn nguyên |
+| V10 | `A>. / ...` | (0,0) phải | Vuốt vào virus là ăn: `AA. / ...`, không đẩy virus sang ô trống |
+| V12 | `AB>.` | (0,0) phải | Dãy `B` dồn tới virus, `B` chiếm ô virus: `AAB.` |
+| V13 | `ABB>C.` | (0,0) phải | Dãy chỉ đẩy tới virus gần nhất; `C` phía sau virus đứng yên: `AABBC.` |
 
 ### 5.7 Băng trơn
 

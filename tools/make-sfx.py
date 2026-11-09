@@ -93,6 +93,25 @@ if __name__ == '__main__':
     # Mèo hai màu đổi màu: hai nốt "tính tính" đi lên rồi lướt, như tắc kè đổi sắc.
     save('ColorSwitch', [tone(660, 680, 0.1, 'triangle', 0.11), tone(880, 900, 0.1, 'triangle', 0.11, 0.07),
                          tone(1320, 1980, 0.18, 'sine', 0.09, 0.14), hiss(0.2, 6000, volume=0.03, delay=0.1)])
+    # Booster Hoán đổi: tụ phép (vút lên lấp lánh, 0–0,45 giây) rồi "bùm" đổi màu ở 0,45 giây kèm chuỗi chuông đi lên.
+    save('BoosterMutate', [tone(300, 1500, 0.45, 'sine', 0.07), tone(450, 2250, 0.45, 'triangle', 0.04), hiss(0.45, 5200, 1.0, 0.04),
+                           tone(180, 70, 0.22, 'sine', 0.16, 0.45), hiss(0.18, 900, 0.8, 0.1, 0.45)]
+                          + [tone(f, f * 1.01, 0.22, 'triangle', 0.09, 0.47 + index * 0.055) for index, f in enumerate([1047, 1319, 1568, 2093])]
+                          + [hiss(0.4, 7800, volume=0.035, delay=0.5)])
+    # Booster Nhân bản: "vút" bản sao bay (0–0,5 giây) rồi "bóc" mọc ra ở 0,5 giây và tiếng chuông kép.
+    save('BoosterClone', [hiss(0.5, 1400, 1.4, 0.07), tone(380, 900, 0.5, 'sine', 0.05),
+                          tone(520, 1100, 0.08, 'sine', 0.14, 0.5), tone(1319, 1330, 0.18, 'triangle', 0.08, 0.55),
+                          tone(1760, 1775, 0.24, 'triangle', 0.07, 0.62), hiss(0.25, 7000, volume=0.03, delay=0.55)])
+    # Mất một sao: tiếng "rắc" vỡ kính (nhiễu cao ngắn) rồi hai nốt buồn đi xuống, kèm tiếng lách tách mảnh rơi.
+    save('StarLost', [hiss(0.07, 5200, 2.5, 0.16), tone(1568, 1500, 0.05, 'square', 0.05),
+                      tone(523, 392, 0.2, 'triangle', 0.12, 0.06), tone(392, 262, 0.28, 'triangle', 0.11, 0.2),
+                      hiss(0.05, 3600, 2.5, 0.07, 0.26), hiss(0.05, 4200, 2.5, 0.06, 0.34), hiss(0.04, 3000, 2.5, 0.05, 0.42)])
+    # Khử 3 (nước dọn chỗ, trung tính): ba tiếng "bụp" nhỏ hạ dần (ba con mèo tan đi) rồi một tiếng "phụt" khói, không có giai điệu đi lên
+    # để không nghe như phần thưởng.
+    save('ClearPoof', [tone(560, 260, 0.09, 'sine', 0.15), hiss(0.05, 1900, 0.8, 0.06),
+                       tone(480, 220, 0.09, 'sine', 0.14, 0.075), hiss(0.05, 1700, 0.8, 0.05, 0.075),
+                       tone(400, 190, 0.1, 'sine', 0.13, 0.15), hiss(0.06, 1500, 0.8, 0.05, 0.15),
+                       hiss(0.2, 650, 0.7, 0.07, 0.2)])
     # Bấm level chưa mở: hai nhịp trầm đi xuống kèm tiếng lách cách của ổ khoá, báo chưa được nhưng không gắt.
     save('LevelLocked', [tone(233, 165, 0.1, 'triangle', 0.14), hiss(0.03, 3400, 2.0, 0.07),
                          tone(175, 117, 0.13, 'triangle', 0.13, 0.1), hiss(0.03, 2800, 2.0, 0.06, 0.1)])
