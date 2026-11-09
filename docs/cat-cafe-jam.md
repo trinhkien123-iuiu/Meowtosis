@@ -61,3 +61,10 @@ cân độ khó bằng số nước giải ngắn nhất.
 ## Cập nhật: hàng đợi dễ đọc hơn (2026-11-09)
 - Bỏ bóng dưới chân mèo (bóng của mèo trước đè lên mèo sau). Vẫn giữ bóng của bàn.
 - Mèo càng xếp sau càng **nhỏ** (`rowScale`: -7.5% mỗi hàng, tối thiểu 62%) và **tối** (`rowDim`: phủ tím đậm 23% tới 42%), chuyển mượt khi hàng tiến lên. Chỉ mèo hàng đầu sáng đủ, nên nhìn là biết đây là hàng đang tiến dần.
+
+## Cập nhật: luật thua mới (2026-11-09)
+- **Ghế chờ đầy là thua ngay**, kể cả khi còn mèo hàng đầu lên được bàn đang mở (yêu cầu của người làm game). Kiểm tra lúc mèo đáp xuống ghế chờ cuối (`onLand` -> `loseNow('full')`). Nếu lúc đáp bàn cùng màu vừa mở thì mèo vẫn nhảy lên bàn, chưa tính thua.
+- Còn 1 ghế trống: các ghế nhấp nháy đỏ và hiện "Chỉ còn 1 ghế chờ!".
+- Vẫn giữ thua khi hết nước đi (toàn mèo ngủ ở hàng đầu), lời nhắn khác nhau theo lý do.
+- Để độ khó không đổi, `slots` trong `LEVELS` giờ là số mèo được chờ an toàn và hàm `L()` tự cộng 1 ghế cuối (nên màn 5 ghế an toàn hiển thị 6 ghế). Solver tính đúng luật mới (`wcount + 1 >= slots` thì bỏ nhánh).
+- Kiểm tra: bot theo lời giải thắng cả 22 màn; ép gửi mèo khác màu vào ghế chờ ở màn 5 thì thua với lý do `full`. Màn 16, 20, 21 sinh được lời giải khó nên tự cộng thêm 1 đến 2 ghế (dự phòng của `newLevel`).

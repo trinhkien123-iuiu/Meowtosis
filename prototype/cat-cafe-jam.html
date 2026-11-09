@@ -88,7 +88,8 @@ const CAT_ASPECT = 565 / 681;
 /* ---------- danh sách màn (dữ liệu) ----------
    L(màu, cột, tổng mèo≈, ghế chờ, kích cỡ bàn[], mèo ngủ [số con, dậy tối đa sau n bàn], % mèo bí ẩn, mechanic mới) */
 const L = (colors, cols, cats, slots, sizes, sleep, mystery, intro) =>
-  ({ colors, cols, cats, slots, sizes, sleep: sleep || null, mystery: mystery || 0, intro: intro || null });
+  // `slots` = số mèo được ngồi chờ an toàn; ghế chờ đầy là thua ngay nên cần thêm 1 ghế "tử thần" ở cuối.
+  ({ colors, cols, cats, slots: slots + 1, sizes, sleep: sleep || null, mystery: mystery || 0, intro: intro || null });
 const LEVELS = [
   L(3, 3, 9, 5, [3]), L(4, 4, 12, 5, [3]), L(4, 4, 18, 5, [3]), L(5, 4, 21, 5, [3]), L(5, 5, 24, 5, [3]),
   L(4, 4, 16, 5, [2, 3], 0, 0, 'size'), L(5, 5, 24, 5, [2, 3]), L(5, 5, 28, 4, [2, 3, 4]), L(6, 5, 30, 4, [2, 3, 4]),
@@ -187,7 +188,7 @@ function solve(cols, tables, slots) {
             if (s === tb.cap) { t++; s = 0; } else break;
           }
         }
-      } else { if (wcount >= slots) continue; w[color]++; wcount++; wsum++; }
+      } else { if (wcount + 1 >= slots) continue; w[color]++; wcount++; wsum++; } // ghế chờ đầy là thua ngay, nên không được lấp ghế cuối
       const np = ptr.slice(); np[c]++; path.push(c);
       if (dfs(np, w, t, s, wcount, wsum)) return true;
       path.pop();
@@ -312,8 +313,13 @@ function onLand(c) {
     // bàn cùng màu đã mở trong lúc mèo còn đang bay tới ghế chờ -> nhảy thẳng lên bàn
     const open = G.tables[0];
     if (open && open.color === c.color && open.reserved < open.cap) { reserveSeat(c, open, .12); return; }
-    if (G.wait.every(Boolean)) { popup('Ghế chờ đầy!', W / 2, SLOT_Y - 56, '#ffb64d', 28); shake = Math.max(shake, 5); }
+    if (G.wait.every(Boolean)) { loseNow('full'); return; }   // đầy ghế chờ là thua ngay, kể cả khi còn mèo lên được bàn
+    if (G.wait.filter(x => !x).length === 1) { popup('Chỉ còn 1 ghế chờ!', W / 2, SLOT_Y - 56, '#ffb64d', 28); shake = Math.max(shake, 5); }
   }
+}
+function loseNow(why) {
+  if (G.over) return;
+  G.over = true; G.loseWhy = why; shake = 14; play('lose'); popup('Hết ghế chờ!', W / 2, SLOT_Y - 56, '#ff6a6a', 40); setTimeout(showLose, 800);
 }
 
 function celebrate(t) {
@@ -340,7 +346,7 @@ function checkEnd(dt) {
   if (G.served === G.total && !G.serving.length) { G.over = true; win(); setTimeout(showWin, 450); return; }
   if (!G.tables[0] || G.cats.some(c => c.state === 'fly') || canMove()) { G.loseTimer = -1; return; }
   G.loseTimer = G.loseTimer < 0 ? 0 : G.loseTimer + dt;
-  if (G.loseTimer > .5) { G.over = true; shake = 14; play('lose'); setTimeout(showLose, 700); }
+  if (G.loseTimer > .5) { G.over = true; G.loseWhy = 'stuck'; shake = 14; play('lose'); setTimeout(showLose, 700); }
 }
 function win() { play('win'); for (let i = 0; i < 90; i++) confetti(W / 2 + (Math.random() - .5) * 200, 260, true); }
 
@@ -350,7 +356,7 @@ function showWin() {
   modal('shikacat/ui/Image_Win_Front.png', 'Tuyệt vời!', '★'.repeat(st) + '☆'.repeat(3 - st) + `  ·  ${G.waitsUsed} lần ngồi ghế chờ`, 'Màn tiếp ▶', () => newLevel(G.n + 1));
 }
 function showLose() {
-  const stuck = frontCats().some(c => !isAwake(c)) ? 'Mèo ngủ chưa dậy, ghế chờ đã đầy…' : 'Mèo đói đang chờ quá lâu…';
+  const stuck = G.loseWhy === 'full' ? 'Ghế chờ đã đầy, mèo đói chờ không nổi…' : frontCats().some(c => !isAwake(c)) ? 'Chỉ còn mèo đang ngủ, không còn nước đi…' : 'Không còn nước đi hợp lệ…';
   modal('shikacat/ui/Image_Lose_Front.png', 'Hết ghế rồi!', stuck, 'Thử lại ↻', () => newLevel(G.n));
 }
 function modal(img, title, sub, btn, fn) {
