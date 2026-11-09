@@ -14,7 +14,7 @@ rule Tốt lắm! Mèo nhân đôi vào ô trống.
 tutorial 0 0 right Vuốt mèo xanh sang phải
 rule Còn ô trống thì cả dãy bị đẩy đi.
 tutorial 0 2 left Vuốt mèo đỏ sang trái
-rule Hết chỗ để đẩy: bản sao thay thế mèo bên cạnh.
+rule Hết ô trống: bản sao thay thế mèo bên cạnh.
 tutorial 0 2 down Vuốt mèo đỏ xuống dưới
 rule 3 mèo cùng màu thẳng hàng sẽ bị loại!
 rule Luật: Mỗi màu, cần có ít nhất 1 cá thể mèo trên bảng!

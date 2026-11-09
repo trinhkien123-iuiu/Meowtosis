@@ -168,3 +168,20 @@ Giao diện: đèn nảy lên và nháy tia sáng mỗi lần đổi, cửa hầ
 - **Luật mới:** hầm chỉ để chạy xuyên, **không nối đoàn**. Mỗi đầu hầm là một đoạn ray riêng, toa chỉ móc với toa sát bên cạnh trên bàn. Thêm phép thử, bỏ ví dụ "đoàn nối qua hầm" khỏi thẻ cơ chế và lời dẫn.
 - **Tính lại các màn có hầm hoặc đèn:** `node backup-prototypes/tools/recheck-rail.js --write` (giải lại, kiểm tra hầm và đèn vẫn bắt buộc, cập nhật số nước tối ưu và giới hạn chuyến). Màn 17 từ 2 lên 3 nước. Màn 20 không còn thắng được nên đã sinh lại bằng `RAIL_ONLY=28 node backup-prototypes/tools/gen-rail.js` (tối ưu 5 nước). Sau đó kiểm tra: không còn đoàn nào gồm các ô không liền kề trong mọi lời giải.
 - **Kiểm tra giao diện:** so khớp DOM với trạng thái sau mỗi nước (hiện đủ toa, đúng ô, không mờ, hình mèo tải được) khi chơi theo lời giải tối ưu (161 nước, 29 màn) và chơi ngẫu nhiên kèm Hoàn tác (màn 4 đến 29, 142 nước), cộng Hoàn tác sau khi đoàn rời bến, Cần cẩu, Quay đầu: không có lỗi. Thử cả cửa sổ 360x640 và 1280x560: bàn không bị cắt.
+
+## Tàu mèo: làm lại hình và giao diện (2026-11-09)
+
+Chỉ đổi lớp hiển thị, luật (`rail-core.js`), màn (`rail-levels.js`) và phép thử không đổi (21 phép thử vẫn qua).
+
+- **Cảnh nền:** bỏ nền xanh phẳng, thay bằng bầu trời, nắng, mây trôi và ba lớp đồi (SVG/CSS trong `#scene`).
+- **Sân chơi:** khung gỗ có đinh vít bốn góc, nền cỏ có hạt, ô cỏ liền nhau (bỏ khe lưới). Ô không có ray được rải cây tròn, thông, bụi quả, hoa, đá, nấm, cỏ theo số ô (`decoSvg` trong `rail-game.js`, nên mỗi lần dựng đều giống nhau; cây đung đưa nhẹ).
+- **Đường ray:** nền đá dăm có sỏi, tà vẹt có sáng tối, thanh ray có bóng và vệt sáng.
+- **Toa tàu:** thêm vệt bóng, viền mái, bánh có chiều sâu; toa hàng sáng màu hơn.
+- **Thanh trên:** biển gỗ cho tên màn, nút tròn kem có biểu tượng SVG (thay emoji), vé chuyến, huy hiệu mèo mỗi màu có viền đúng màu toa.
+- **Lời dẫn:** mèo hướng dẫn đứng cạnh bong bóng thoại (nhún nhẹ).
+- **Kệ booster:** kệ gỗ, bốn nút màu (vàng, xanh dương, cam, xanh lá) kèm biểu tượng SVG và số lượng.
+- **Popup:** thẻ kem viền gỗ, ruy băng đỏ, sao SVG, nút có bóng; bảng chọn màn cuộn được.
+- **Bố cục:** bàn chơi nằm trên một phần ba khoảng trống còn lại, để thấy đồi bên dưới.
+- **Kiểm tra:** chụp màn 1 (onboarding), màn 15 (đèn, đủ booster), bảng chọn màn và popup thắng; chơi màn 1 thật tới khi thắng. Không có lỗi script.
+- **Bài học:** cửa sổ trình duyệt ẩn thì timer chạy chậm, đợi lâu hơn rồi mới đọc trạng thái.
+- **Sửa lỗi mất hình mèo trên toa (2026-11-09):** nguyên nhân là hình mặt vui `Image_Cat_*EndGame.png` đổi vào lúc đoàn xuất bến nhưng chưa tải sẵn, và `renderCars` gán lại `img.src` cùng địa chỉ sau mỗi nước nên trình duyệt tải lại, hình trống một nhịp. Sửa trong `rail-game.js`: tải sẵn 8 hình mèo (4 màu x thường/EndGame) khi mở trang, và chỉ gán `src` khi địa chỉ thật sự khác. Kiểm tra: cả 8 hình ở trạng thái đã sẵn sàng ngay sau khi mở trang. Chưa quay được cảnh xuất bến vì cửa sổ ẩn làm timer chậm.

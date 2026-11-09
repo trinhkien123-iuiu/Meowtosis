@@ -19,7 +19,7 @@ namespace Meowtosis.Presentation
         void Hide();
     }
 
-    // Popup cài đặt: ba nút tròn bật/tắt âm thanh, bật/tắt nhạc và về Home, dùng cùng bộ hình (Bounce) với trang Setting ở Home.
+    // Popup cài đặt: bốn nút tròn bật/tắt âm thanh, bật/tắt nhạc, bật/tắt rung lắc (giảm chuyển động) và về Home, dùng cùng bộ hình (Bounce) với trang Setting ở Home.
     // Chơi lại màn có nút riêng trên thanh trên; các nút để test nằm ở bảng cheat (CheatPopup).
     public sealed class SettingsPopup : PopupView, ISettingsPopup
     {
@@ -35,6 +35,12 @@ namespace Meowtosis.Presentation
         [SerializeField] private Sprite musicOffSprite;
         [SerializeField] private Sprite toggleOnSprite;
         [SerializeField] private Sprite toggleOffSprite;
+        [Tooltip("Nút giảm chuyển động (rung bàn, dừng hình): lưu ở MotionSettings, tự xử lý không qua presenter.")]
+        [SerializeField] private Button motionButton;
+        [SerializeField] private Image motionBackground;
+        [SerializeField] private Image motionIcon;
+        [SerializeField] private Sprite motionOnSprite;
+        [SerializeField] private Sprite motionOffSprite;
         [SerializeField] private Button homeButton;
         [SerializeField] private Button closeButton;
 
@@ -50,13 +56,27 @@ namespace Meowtosis.Presentation
             soundBackground.sprite = soundOn ? toggleOnSprite : toggleOffSprite;
             musicIcon.sprite = musicOn ? musicOnSprite : musicOffSprite;
             musicBackground.sprite = musicOn ? toggleOnSprite : toggleOffSprite;
+            ShowMotion();
             if (!IsOpen) Open();
+        }
+
+        // Sáng khi còn chuyển động mạnh (rung, dừng hình); tắt (gạch chéo) khi đã bật chế độ giảm chuyển động.
+        private void ShowMotion()
+        {
+            var on = !MotionSettings.Reduced;
+            motionIcon.sprite = on ? motionOnSprite : motionOffSprite;
+            motionBackground.sprite = on ? toggleOnSprite : toggleOffSprite;
         }
 
         private void Awake()
         {
             soundButton.onClick.AddListener(() => SoundToggled?.Invoke());
             musicButton.onClick.AddListener(() => MusicToggled?.Invoke());
+            motionButton.onClick.AddListener(() =>
+            {
+                MotionSettings.Reduced = !MotionSettings.Reduced;
+                ShowMotion();
+            });
             closeButton.onClick.AddListener(Hide);
             homeButton.onClick.AddListener(() => HomeClicked?.Invoke());
         }

@@ -11,6 +11,9 @@
     { cat: 'Yellow', c: '#f5bb2c', c2: '#ffe68a', d: '#c4870c' },
     { cat: 'Green', c: '#4fbf5e', c2: '#acefa6', d: '#2f8a3e' },
   ];
+  // Tải sẵn mọi hình mèo (thường và mặt vui lúc rời bến) và giữ tham chiếu, để đổi hình không bị chớp trống.
+  const PRELOAD = [];
+  SKINS.forEach((s) => ['', 'EndGame'].forEach((suffix) => { const im = new Image(); im.src = `${CATS}Image_Cat_${s.cat}${suffix}.png`; PRELOAD.push(im); }));
   const BLOCKS = {
     rail: { name: 'Đường ray', tiles: [['-'], ['-']], text: 'Chạm toa: toa chạy theo mũi tên tới khi gặp toa khác hoặc cản cuối ray. 3 toa cùng màu nối đuôi trên một ray thì móc lại và rời bến.' },
     cross: { name: 'Giao lộ', tiles: [['+']], text: 'Giao lộ: toa đi thẳng qua, không rẽ. Đây là chỗ duy nhất để toa sang được tuyến khác.' },
@@ -116,10 +119,13 @@
   // ── Vẽ đường ray (SVG 100x100 mỗi ô)
   function straightSvg(horizontal) {
     let s = '';
-    for (const p of [12, 32, 52, 72]) s += horizontal ? `<rect x="${p}" y="20" width="10" height="60" rx="2" fill="#7a5233"/>` : `<rect x="20" y="${p}" width="60" height="10" rx="2" fill="#7a5233"/>`;
+    for (const p of [12, 32, 52, 72]) {
+      s += horizontal ? `<rect x="${p}" y="20" width="10" height="60" rx="2.5" fill="#8a5a34"/><rect x="${p}" y="20" width="4" height="60" rx="2" fill="#b27a48"/><rect x="${p + 8}" y="20" width="2" height="60" fill="rgba(0,0,0,.25)"/>`
+        : `<rect x="20" y="${p}" width="60" height="10" rx="2.5" fill="#8a5a34"/><rect x="20" y="${p}" width="60" height="4" rx="2" fill="#b27a48"/><rect x="20" y="${p + 8}" width="60" height="2" fill="rgba(0,0,0,.25)"/>`;
+    }
     for (const q of [33, 61]) {
-      s += horizontal ? `<rect x="-1" y="${q}" width="102" height="7" fill="#69727d"/><rect x="-1" y="${q + 1}" width="102" height="3" fill="#e6ecf1"/>`
-        : `<rect x="${q}" y="-1" width="7" height="102" fill="#69727d"/><rect x="${q + 1}" y="-1" width="3" height="102" fill="#e6ecf1"/>`;
+      s += horizontal ? `<rect x="-1" y="${q + 2}" width="102" height="7" fill="rgba(0,0,0,.2)"/><rect x="-1" y="${q}" width="102" height="7" fill="#59626d"/><rect x="-1" y="${q + 1}" width="102" height="3.5" fill="#eef3f7"/><rect x="-1" y="${q + 1}" width="102" height="1" fill="#fff"/>`
+        : `<rect x="${q + 2}" y="-1" width="7" height="102" fill="rgba(0,0,0,.2)"/><rect x="${q}" y="-1" width="7" height="102" fill="#59626d"/><rect x="${q + 1}" y="-1" width="3.5" height="102" fill="#eef3f7"/><rect x="${q + 1}" y="-1" width="1" height="102" fill="#fff"/>`;
     }
     return s;
   }
@@ -170,7 +176,11 @@
     return `<g class="barrier" transform="rotate(${axis === 'H' ? 0 : 90} 50 50)">${g}</g>`;
   }
   function railSvg(b, cell, sw, bumpers = true) {
-    let s = '<rect x="3" y="3" width="94" height="94" rx="14" fill="#d8c59c"/><rect x="3" y="3" width="94" height="94" rx="14" fill="none" stroke="#b8a173" stroke-width="2.5"/>';
+    // Nền đá dăm: bóng đổ, lớp đá, viền sáng và vài viên sỏi (cố định theo ô để không nhấp nháy).
+    let s = '<rect x="3" y="7" width="94" height="94" rx="14" fill="rgba(30,60,20,.22)"/><rect x="3" y="3" width="94" height="94" rx="14" fill="#d9c8a0"/>'
+      + '<rect x="3" y="3" width="94" height="94" rx="14" fill="none" stroke="#a89466" stroke-width="3"/><rect x="6" y="6" width="88" height="10" rx="5" fill="rgba(255,255,255,.28)"/>'
+      + '<g fill="#bfae86"><circle cx="14" cy="16" r="2.2"/><circle cx="30" cy="88" r="2"/><circle cx="84" cy="14" r="2.4"/><circle cx="88" cy="80" r="2"/><circle cx="12" cy="70" r="2"/><circle cx="62" cy="10" r="1.8"/><circle cx="50" cy="90" r="2.2"/><circle cx="92" cy="46" r="1.8"/></g>'
+      + '<g fill="#efe3c3"><circle cx="22" cy="10" r="1.6"/><circle cx="76" cy="90" r="1.6"/><circle cx="9" cy="42" r="1.4"/><circle cx="40" cy="12" r="1.4"/></g>';
     const active = Rail.pairs(b, cell, sw).map((p) => p.join(''));
     for (const pair of Rail.allPairs(b, cell)) {
       const on = active.includes(pair.join('')) || b.kind[cell] === 'G';
@@ -191,10 +201,42 @@
     return `<svg viewBox="0 0 100 100">${s}</svg>`;
   }
 
+  // ── Cảnh cỏ: cây, bụi, hoa, đá, nấm trên các ô không có ray (chọn theo số ô nên luôn giống nhau mỗi lần dựng)
+  function decoSvg(cell) {
+    const a = (cell * 9301 + 49297) % 233280 / 233280;
+    const b = (cell * 7919 + 13) % 1000 / 1000;
+    const x = 28 + b * 44;
+    const shadow = (cx, cy, rx) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${rx * 0.32}" fill="rgba(20,70,20,.28)"/>`;
+    let g;
+    if (a < 0.16) { // cây tròn
+      g = shadow(x, 84, 24) + `<rect x="${x - 4}" y="62" width="8" height="22" rx="3" fill="#8a5a34"/><rect x="${x - 4}" y="62" width="3" height="22" rx="2" fill="#b27a48"/>`
+        + `<g class="sway"><circle cx="${x}" cy="44" r="26" fill="#2f9a3e"/><circle cx="${x - 9}" cy="38" r="16" fill="#46b650"/><circle cx="${x + 11}" cy="50" r="13" fill="#2a8a38"/><circle cx="${x - 12}" cy="34" r="5" fill="#8be07a" opacity=".7"/></g>`;
+    } else if (a < 0.30) { // thông
+      g = shadow(x, 86, 20) + `<rect x="${x - 3.5}" y="70" width="7" height="16" rx="2" fill="#8a5a34"/><g class="sway"><path d="M${x} 6 L${x + 20} 40 H${x - 20} Z" fill="#2a8a4a"/><path d="M${x} 24 L${x + 25} 62 H${x - 25} Z" fill="#33a058"/><path d="M${x} 42 L${x + 29} 78 H${x - 29} Z" fill="#3cb065"/><path d="M${x} 6 L${x - 7} 20 L${x - 14} 40 H${x - 20} Z" fill="rgba(255,255,255,.2)"/></g>`;
+    } else if (a < 0.44) { // bụi cây
+      g = shadow(50, 80, 28) + `<g class="sway"><circle cx="${x - 12}" cy="68" r="15" fill="#3aa84a"/><circle cx="${x + 10}" cy="66" r="17" fill="#2f9a3e"/><circle cx="${x}" cy="58" r="14" fill="#4cc15a"/><circle cx="${x - 5}" cy="54" r="4" fill="#9be88a" opacity=".7"/></g>`
+        + (b > 0.5 ? `<circle cx="${x + 12}" cy="62" r="3" fill="#ff6b7a"/><circle cx="${x - 10}" cy="70" r="3" fill="#ff6b7a"/>` : '');
+    } else if (a < 0.60) { // hoa
+      const cols = ['#ff7aa8', '#ffd34a', '#ffffff', '#b58cff'];
+      g = '';
+      for (let k = 0; k < 4; k++) {
+        const fx = 24 + ((b * 100 + k * 23) % 52), fy = 40 + ((a * 100 + k * 31) % 44), col = cols[(k + Math.floor(b * 4)) % 4];
+        g += `<rect x="${fx - 0.8}" y="${fy}" width="1.6" height="9" fill="#2f8a3a"/><circle cx="${fx - 3.5}" cy="${fy}" r="3.2" fill="${col}"/><circle cx="${fx + 3.5}" cy="${fy}" r="3.2" fill="${col}"/><circle cx="${fx}" cy="${fy - 3.5}" r="3.2" fill="${col}"/><circle cx="${fx}" cy="${fy + 3.5}" r="3.2" fill="${col}"/><circle cx="${fx}" cy="${fy}" r="2.4" fill="#ffb200"/>`;
+      }
+    } else if (a < 0.68) { // đá
+      g = shadow(x, 78, 22) + `<path d="M${x - 20} 76 Q${x - 22} 54 ${x - 4} 50 Q${x + 18} 48 ${x + 22} 76 Z" fill="#a7b0ba"/><path d="M${x - 14} 70 Q${x - 14} 58 ${x - 3} 55 Q${x + 4} 54 ${x + 4} 60 Q${x - 6} 62 ${x - 8} 72 Z" fill="rgba(255,255,255,.35)"/>`;
+    } else if (a < 0.74) { // nấm
+      g = shadow(x, 80, 15) + `<rect x="${x - 5}" y="62" width="10" height="17" rx="4" fill="#fff1d6"/><path d="M${x - 18} 64 Q${x - 18} 42 ${x} 42 Q${x + 18} 42 ${x + 18} 64 Z" fill="#ff5d5d"/><circle cx="${x - 7}" cy="54" r="3" fill="#fff"/><circle cx="${x + 6}" cy="50" r="2.6" fill="#fff"/><circle cx="${x + 9}" cy="59" r="2" fill="#fff"/>`;
+    } else { // cỏ
+      g = `<g fill="none" stroke="#3f9a3a" stroke-width="3" stroke-linecap="round"><path d="M${x - 8} 74 Q${x - 10} 62 ${x - 15} 58"/><path d="M${x - 2} 74 Q${x - 2} 60 ${x} 54"/><path d="M${x + 5} 74 Q${x + 8} 62 ${x + 14} 58"/></g>`;
+    }
+    return `<svg viewBox="0 0 100 100" style="left:0;top:0;width:100%;height:100%">${g}</svg>`;
+  }
+
   // ── Dựng bàn
   function cellSize() {
     const width = Math.min(window.innerWidth, 480) - 48;
-    const height = window.innerHeight - 360;
+    const height = window.innerHeight - 400;
     return Math.max(30, Math.min(88, Math.floor(Math.min(width / board.W, height / board.H))));
   }
 
@@ -204,15 +246,13 @@
     root.innerHTML = '';
     root.style.width = board.W * cs + 'px';
     root.style.height = board.H * cs + 'px';
+    $('stage').style.setProperty('--stage-w', board.W * cs + 20 + 'px');
     for (let cell = 0; cell < board.W * board.H; cell++) {
       const p = xy(cell);
       const g = document.createElement('div');
       g.className = 'ground g' + ((Math.floor(cell / board.W) + cell % board.W) % 2);
-      Object.assign(g.style, { left: p.x + 1 + 'px', top: p.y + 1 + 'px', width: cs - 2 + 'px', height: cs - 2 + 'px' });
-      if (!Rail.isRail(board, cell)) {
-        const seed = (cell * 9301 + 49297) % 233280 / 233280;
-        g.innerHTML = `<div class="tuft" style="left:${20 + seed * 40}%;top:${30 + seed * 30}%"></div>` + (seed > 0.55 ? `<div class="flower" style="left:${60 - seed * 30}%;top:${62 - seed * 20}%"></div>` : '');
-      }
+      Object.assign(g.style, { left: p.x + 'px', top: p.y + 'px', width: cs + 'px', height: cs + 'px' });
+      if (!Rail.isRail(board, cell)) g.innerHTML = `<div class="deco">${decoSvg(cell)}</div>`;
       root.appendChild(g);
       if (Rail.isRail(board, cell)) {
         const r = document.createElement('div');
@@ -276,7 +316,8 @@
       setRot(i, unwrap(rot[i] || 0, ANGLE[state.dir[i]]));
       el.classList.toggle('stuck', !Rail.slide(board, state, i, occupied));
       const img = el.querySelector('.cat');
-      if (img) img.src = `${CATS}Image_Cat_${SKINS[board.cars[i].color].cat}.png`;
+      const want = `${CATS}Image_Cat_${SKINS[board.cars[i].color].cat}.png`;
+      if (img && img.getAttribute('src') !== want) img.src = want;   // gán lại cùng địa chỉ làm trình duyệt tải lại và chớp trống
     });
   }
 
@@ -306,6 +347,7 @@
       const left = state.pos.filter((cell, i) => cell >= 0 && board.cars[i].color === color && !board.cars[i].cargo).length;
       const chip = document.createElement('div');
       chip.className = 'chip' + (left === 0 ? ' done' : '');
+      chip.style.setProperty('--c', SKINS[color].c);
       chip.innerHTML = `<img src="${CATS}Image_Cat_${SKINS[color].cat}.png" alt="">${left === 0 ? '✓' : left}`;
       chips.appendChild(chip);
     });
@@ -316,7 +358,9 @@
     }
     $('bCrane').classList.toggle('active', mode === 'crane-pick' || mode === 'crane-drop');
     $('bReverse').classList.toggle('active', mode === 'reverse');
-    $('soundBtn').textContent = save.sound ? '🔊' : '🔇';
+    $('soundBtn').innerHTML = save.sound
+      ? '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11" fill="none" stroke-width="2.4" stroke-linecap="round"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke-width="2.4" stroke-linecap="round"/></svg>';
     $('waitBtn').style.display = board.gates.length ? '' : 'none';
   }
 
@@ -921,7 +965,7 @@
     setTimeout(() => {
       sfx.file('SC_SFX_UI_Win_01.ogg', 0.7);
       rain();
-      $('stars').innerHTML = [0, 1, 2].map((k) => `<span class="${k < stars ? 'on' : 'off'}" style="animation-delay:${0.25 + k * 0.25}s">⭐</span>`).join('');
+      $('stars').innerHTML = [0, 1, 2].map((k) => `<span class="${k < stars ? 'on' : 'off'}" style="animation-delay:${0.25 + k * 0.25}s"><svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 17.4 6.1 20.7l1.3-6.6L2.5 9.5l6.6-.8z" fill="#ffcf3d" stroke="#e09a12" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 8.5l2.3-.4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".8"/></svg></span>`).join('');
       [0, 1, 2].forEach((k) => { if (k < stars) setTimeout(() => sfx.tone(700 + k * 200, 0.2, { type: 'triangle', vol: 0.12 }), 250 + k * 250); });
       $('winCoins').textContent = '+' + coins;
       $('winText').textContent = `${used} chuyến · ít nhất ${level.par}`;

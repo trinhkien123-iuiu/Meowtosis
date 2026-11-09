@@ -57,3 +57,7 @@ popup chữ nảy, rung màn hình khi combo/ghế chờ đầy, bàn spring tr�
 ## Việc tiếp theo (nếu làm tiếp)
 Meta trang trí quán (mở đồ nội thất mỗi màn), booster (xáo hàng, thêm ghế chờ), mèo bị khóa/ngủ, art riêng cho bàn/bánh,
 cân độ khó bằng số nước giải ngắn nhất.
+
+## Cập nhật: hàng đợi dễ đọc hơn (2026-11-09)
+- Bỏ bóng dưới chân mèo (bóng của mèo trước đè lên mèo sau). Vẫn giữ bóng của bàn.
+- Mèo càng xếp sau càng **nhỏ** (`rowScale`: -7.5% mỗi hàng, tối thiểu 62%) và **tối** (`rowDim`: phủ tím đậm 23% tới 42%), chuyển mượt khi hàng tiến lên. Chỉ mèo hàng đầu sáng đủ, nên nhìn là biết đây là hàng đang tiến dần.

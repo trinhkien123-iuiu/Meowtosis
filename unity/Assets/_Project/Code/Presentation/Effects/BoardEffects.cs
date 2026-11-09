@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Meowtosis.Domain;
 using UnityEngine;
 
@@ -97,17 +99,52 @@ namespace Meowtosis.Presentation
         public void FloatText(Vector3 position, string text) =>
             Instantiate(floatingTextPrefab, position, Quaternion.identity, transform).Show(text, targetCamera);
 
+        // Hạt dùng xong thì cất vào kho theo từng prefab và dùng lại, không tạo rồi huỷ liên tục (đỡ rác bộ nhớ trên máy yếu).
+        private readonly Dictionary<ParticleSystem, Stack<ParticleSystem>> pool = new Dictionary<ParticleSystem, Stack<ParticleSystem>>();
+
         private void Spawn(ParticleSystem prefab, Vector3 position, Color? color, Quaternion? rotation = null)
         {
-            var effect = Instantiate(prefab, position, rotation ?? Quaternion.identity, transform);
+            var effect = Take(prefab);
+            effect.transform.SetPositionAndRotation(position, rotation ?? Quaternion.identity);
             if (color.HasValue)
             {
                 var main = effect.main;
                 main.startColor = color.Value;
             }
+            effect.gameObject.SetActive(true);
             effect.Play();
-            Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+            StartCoroutine(Release(prefab, effect, effect.main.duration + effect.main.startLifetime.constantMax));
         }
+
+        private ParticleSystem Take(ParticleSystem prefab)
+        {
+            if (pool.TryGetValue(prefab, out var free))
+            {
+                while (free.Count > 0)
+                {
+                    var reused = free.Pop();
+                    if (reused != null) return reused;
+                }
+            }
+            return Instantiate(prefab, transform);
+        }
+
+        private IEnumerator Release(ParticleSystem prefab, ParticleSystem effect, float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            if (effect == null) yield break;
+            effect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            effect.gameObject.SetActive(false);
+            if (!pool.TryGetValue(prefab, out var free))
+            {
+                free = new Stack<ParticleSystem>();
+                pool[prefab] = free;
+            }
+            if (free.Count < MaxPooledPerEffect) free.Push(effect);
+            else Destroy(effect.gameObject);
+        }
+
+        private const int MaxPooledPerEffect = 12;
 
         private void SpawnAcrossScreen(ParticleSystem prefab, float side)
         {

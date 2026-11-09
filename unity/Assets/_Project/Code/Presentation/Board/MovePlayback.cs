@@ -49,6 +49,7 @@ namespace Meowtosis.Presentation
             var slideSeconds = PlacePiece(move);
             if (slideSeconds > 0f) yield return new WaitForSeconds(slideSeconds);
             var removedAlready = false;
+            var clearChain = 0;   // số đợt khử 3 an toàn liên tiếp trong nước này
             foreach (var stage in move.Stages)
             {
                 var poisoned = EventsOf(stage, TurnEventKind.Poisoned);
@@ -74,6 +75,7 @@ namespace Meowtosis.Presentation
                     }
                     RemovePoisoned(poisoned);
                     RemoveCleared(cleared, stage.Board);
+                    if (cleared.Count > 0 && stage.Board.Contains(cleared[0].Piece.Species) && ++clearChain >= 2) ChainImpact(clearChain, cleared);
                     removedAlready = true;
                     yield return new WaitForSeconds(RemovingSeconds);
                     board.ShowPieces(stage.Board, null);
@@ -128,6 +130,24 @@ namespace Meowtosis.Presentation
             return slideSeconds;
         }
 
+        // Đẩy từ 2 con trở lên (bàn bé nên chuỗi 3 đã hiếm): lúc con đầu dãy đập vào con kế (ChainDelay) bàn khựng lại một nhịp và rung, dãy càng dài càng mạnh.
+        private IEnumerator PushImpact(int pushes)
+        {
+            yield return new WaitForSeconds(ChainDelay);
+            board.HitStop(Mathf.Min(0.03f + 0.015f * pushes, 0.08f));
+            board.Shake(Mathf.Min(0.15f + 0.12f * (pushes - 1), 0.6f));
+        }
+
+        // Khử 3 liên tiếp (đợt thứ `chain` trong cùng một nước): khựng hình, rung mạnh dần và báo số dây chuyền.
+        private void ChainImpact(int chain, List<TurnEvent> cleared)
+        {
+            board.HitStop(Mathf.Min(0.04f + 0.015f * chain, 0.1f));
+            board.Shake(Mathf.Min(0.35f + 0.2f * (chain - 1), 1f));
+            var position = board.CellPosition(cleared[cleared.Count / 2].Cell) + Vector3.up * 0.9f;
+            effects.Sparkle(position);
+            effects.FloatText(position, $"DÂY CHUYỀN x{chain}!");
+        }
+
         private void PlaySwipe(MoveResult move, Piece parent, Direction direction)
         {
             var vector = (Vector2)BoardLayout.Offset(direction);
@@ -140,6 +160,7 @@ namespace Meowtosis.Presentation
             }
 
             sounds.Play(SoundId.Push);
+            if (move.Pushes.Count >= 2) board.StartCoroutine(PushImpact(move.Pushes.Count));
             parentView?.PlayMotion(motions.Shove, vector);
             // Con mẹ chồm tới; cả dãy bị đẩy dồn lại rồi nảy về, con càng xa càng nảy sau. Các đợt đẩy xếp từ xa về gần.
             for (var index = 0; index < move.Pushes.Count; index++)

@@ -1373,23 +1373,23 @@ solution 0 4 down
 solution 2 1 right
 solution 2 2 up
 
-level meow-127
+level meow-152
 block 9
 par 12
 row .d..
 row .Cv#
 row AB.<
-row .C.A
+row .CDA
 row .#..
+solution 1 1 left
+solution 2 0 up
 solution 3 3 up
 solution 3 1 left
-solution 2 0 down
 solution 1 1 right
 solution 2 3 left
+solution 2 2 up
+solution 0 2 right
+solution 0 0 down
 solution 3 1 right
 solution 3 2 down
 solution 4 2 right
-solution 2 2 up
-solution 1 2 left
-solution 1 0 up
-solution 0 2 right

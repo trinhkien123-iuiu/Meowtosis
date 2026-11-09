@@ -28,6 +28,13 @@ namespace Meowtosis.Presentation
         [SerializeField] private float swellScale = 1.5f;
         [SerializeField] private float shakeSeconds = 0.2f;
         [SerializeField] private float shardSeconds = 0.75f;
+        [Tooltip("Thời gian ngôi sao bật lên khi lấy lại được.")]
+        [SerializeField] private float regainSeconds = 0.4f;
+        [Tooltip("Hình quầng sáng và tia toả ra khi lấy lại sao (Art/UI/StarHalo).")]
+        [SerializeField] private Sprite haloSprite;
+        [Tooltip("Cỡ quầng sáng lúc to nhất, tính theo bề rộng ngôi sao.")]
+        [SerializeField] private float haloScale = 3.2f;
+        [SerializeField] private float haloSeconds = 0.7f;
         [SerializeField] private float shardSpeed = 520f;
         [SerializeField] private float shardGravity = 1500f;
         [Tooltip("Thanh rung ngang bao nhiêu pixel canvas khi mất sao.")]
@@ -42,9 +49,13 @@ namespace Meowtosis.Presentation
         private RectTransform barRoot;
         private Vector2 barHome;
         private Coroutine barRoutine;
+        private Image[] halos;
 
         // Báo số sao vừa mất (để phát tiếng).
         public event Action<int> StarLost;
+
+        // Báo số sao vừa lấy lại được (chơi lại màn: thanh sao đầy lại).
+        public event Action<int> StarGained;
 
         public void Show(StarMeter meter, bool instantly)
         {
@@ -56,6 +67,12 @@ namespace Meowtosis.Presentation
                 // Ngôi sao đang vỡ giữ nguyên hình sáng tới lúc vỡ, hoạt cảnh tự đổi sang sao tắt.
                 var breaking = lost && index >= meter.Stars && index < shownStars;
                 if (!breaking) stars[index].sprite = index < meter.Stars ? litStar : emptyStar;
+            }
+            var gained = shownStars >= 0 && meter.Stars > shownStars;   // cả khi chơi lại màn: sao đầy lại từng ngôi một
+            if (gained)
+            {
+                for (var index = shownStars; index < meter.Stars; index++) StartCoroutine(Regain(index, (index - shownStars) * 0.1f));
+                StarGained?.Invoke(meter.Stars - shownStars);
             }
             if (lost)
             {
@@ -71,6 +88,7 @@ namespace Meowtosis.Presentation
         {
             fillImage = fill.GetComponent<Image>();
             if (fillImage != null) fillColor = fillImage.color;
+            halos = new Image[stars.Length];
             barRoot = (RectTransform)transform;
             barHome = barRoot.anchoredPosition;
             foreach (var shard in shards) shard.gameObject.SetActive(false);
@@ -87,6 +105,7 @@ namespace Meowtosis.Presentation
 
         private void PlayBar()
         {
+            if (MotionSettings.Reduced) return;
             if (barRoutine != null) StopCoroutine(barRoutine);
             barRoutine = StartCoroutine(ShakeBar());
         }
@@ -105,6 +124,60 @@ namespace Meowtosis.Presentation
             barRoot.anchoredPosition = barHome;
             if (fillImage != null) fillImage.color = fillColor;
             barRoutine = null;
+        }
+
+        // Lấy lại sao: ngôi sao nhỏ xíu bật lên rồi lắng về đúng cỡ, cùng lúc quầng sáng vàng cùng các tia toả ra từ nó, xoay chậm,
+        // to dần và tan. Không có mảnh vỡ (đó là cảnh mất sao).
+        private IEnumerator Regain(int index, float delay)
+        {
+            var star = stars[index].rectTransform;
+            var home = star.localScale;
+            star.localScale = Vector3.zero;
+            if (delay > 0f) yield return new WaitForSeconds(delay);
+            var halo = HaloOf(index);
+            StartCoroutine(RadiateHalo(halo, star));
+            for (var time = 0f; time < regainSeconds; time += Time.deltaTime)
+            {
+                var t = time / regainSeconds;
+                var bounce = t < 0.55f ? Mathf.Lerp(0f, 1.35f, t / 0.55f) : Mathf.Lerp(1.35f, 1f, (t - 0.55f) / 0.45f);
+                star.localScale = home * bounce;
+                yield return null;
+            }
+            star.localScale = home;
+        }
+
+        private IEnumerator RadiateHalo(Image halo, RectTransform star)
+        {
+            halo.rectTransform.position = star.position;
+            halo.gameObject.SetActive(true);
+            var size = star.rect.width * haloScale;
+            for (var time = 0f; time < haloSeconds; time += Time.deltaTime)
+            {
+                var t = time / haloSeconds;
+                var grow = 1f - (1f - t) * (1f - t);   // nở nhanh rồi chậm dần
+                halo.rectTransform.sizeDelta = Vector2.one * size * Mathf.Lerp(0.35f, 1f, grow);
+                halo.rectTransform.localRotation = Quaternion.Euler(0f, 0f, -35f * t);
+                var alpha = t < 0.15f ? t / 0.15f : 1f - (t - 0.15f) / 0.85f;
+                halo.color = new Color(1f, 1f, 1f, alpha);
+                yield return null;
+            }
+            halo.gameObject.SetActive(false);
+        }
+
+        // Quầng sáng của ngôi sao `index`, dựng lần đầu cần tới, nằm ngay sau ngôi sao trong thanh.
+        private Image HaloOf(int index)
+        {
+            if (halos[index] != null) return halos[index];
+            var go = new GameObject("StarHalo", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(stars[index].transform.parent, false);
+            go.transform.SetSiblingIndex(stars[index].transform.GetSiblingIndex());
+            var image = go.GetComponent<Image>();
+            image.sprite = haloSprite;
+            image.raycastTarget = false;
+            image.preserveAspect = true;
+            halos[index] = image;
+            go.SetActive(false);
+            return image;
         }
 
         // Ngôi sao phồng lên, rung, rồi vỡ: đổi sang sao tắt và bắn các mảnh vàng ra.
@@ -132,7 +205,7 @@ namespace Meowtosis.Presentation
         }
 
         // Mảnh vỡ bay ra theo các hướng đều quanh ngôi sao, rơi xuống vì trọng lực, nhỏ dần và mờ đi.
-        private IEnumerator FlyShards(Vector3 origin, int starIndex)
+        private IEnumerator FlyShards(Vector3 origin, int starIndex, float strength = 1f)
         {
             var count = shards.Length;
             var velocities = new Vector2[count];
@@ -142,7 +215,7 @@ namespace Meowtosis.Presentation
             for (var index = 0; index < count; index++)
             {
                 var angle = (index / (float)count + UnityEngine.Random.Range(-0.04f, 0.04f)) * Mathf.PI * 2f;
-                velocities[index] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle) + 0.5f) * shardSpeed * UnityEngine.Random.Range(0.6f, 1f);
+                velocities[index] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle) + 0.5f) * shardSpeed * strength * UnityEngine.Random.Range(0.6f, 1f);
                 spins[index] = UnityEngine.Random.Range(-540f, 540f);
                 var shard = shards[index];
                 shard.color = shardColor;

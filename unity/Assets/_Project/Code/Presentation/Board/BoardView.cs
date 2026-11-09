@@ -156,10 +156,15 @@ namespace Meowtosis.Presentation
 
         public void Celebrate(Action finished)
         {
-            foreach (var view in pieceViews.Values.Where(view => view.Piece.IsCat))
+            // Nước lấp ô cuối: bàn khựng một nhịp rồi các chú mèo nhảy lên lần lượt như một làn sóng, mỗi con tung hạt sáng.
+            HitStop(0.09f);
+            var wave = 0;
+            foreach (var view in pieceViews.Values.Where(view => view.Piece.IsCat).OrderBy(view => view.transform.localPosition.x + view.transform.localPosition.y))
             {
                 view.Show(view.Piece, art, true);
-                view.PlayMotion(motions.Hop);
+                var delay = wave++ * 0.06f;
+                view.PlayMotion(motions.Hop, default, delay);
+                StartCoroutine(SparkleLater(view, delay));
             }
             sounds.Play(SoundId.Win);
             foreach (var gate in gates.Values) gate.Close();
@@ -187,6 +192,12 @@ namespace Meowtosis.Presentation
                 }
             }
             return columns;
+        }
+
+        private IEnumerator SparkleLater(PieceView view, float delay)
+        {
+            yield return new WaitForSeconds(delay + 0.1f);
+            if (view != null) effects.Sparkle(view.transform.position);
         }
 
         private float lastMournTime = -100f;
@@ -392,17 +403,49 @@ namespace Meowtosis.Presentation
             return view;
         }
 
-        // `strength` 1 là rung đầy đủ (thua, nổ); khử 3 an toàn chỉ rung nhẹ.
-        internal void Shake(float strength = 1f) => StartCoroutine(RunShake(strength));
+        // `strength` 1 là rung đầy đủ (thua, nổ); khử 3 an toàn chỉ rung nhẹ. Chế độ giảm chuyển động thì không rung.
+        internal void Shake(float strength = 1f)
+        {
+            if (!MotionSettings.Reduced) StartCoroutine(RunShake(strength));
+        }
+
+        private float slowScale = 1f;
+        private float slowUntil;
+        private float hitStopUntil;
+        private Coroutine timeRoutine;
 
         // Làm chậm thời gian trong `seconds` giây thật (không bị chính nó kéo dài), để người chơi kịp nhìn thấy vì sao thua.
-        internal void SlowMotion(float timeScale, float seconds) => StartCoroutine(RunSlowMotion(timeScale, seconds));
-
-        private IEnumerator RunSlowMotion(float timeScale, float seconds)
+        internal void SlowMotion(float timeScale, float seconds)
         {
-            Time.timeScale = timeScale;
-            yield return new WaitForSecondsRealtime(seconds);
+            if (MotionSettings.Reduced) return;
+            slowScale = timeScale;
+            slowUntil = Time.unscaledTime + seconds;
+            EnsureTimeRoutine();
+        }
+
+        // Đứng hình thoáng chốc ở khoảnh khắc va chạm mạnh (chuỗi dài, thắng): thời gian gần như dừng trong `seconds` giây thật.
+        internal void HitStop(float seconds)
+        {
+            if (MotionSettings.Reduced) return;
+            hitStopUntil = Mathf.Max(hitStopUntil, Time.unscaledTime + seconds);
+            EnsureTimeRoutine();
+        }
+
+        private void EnsureTimeRoutine()
+        {
+            if (timeRoutine == null) timeRoutine = StartCoroutine(RunTimeScale());
+        }
+
+        // Một nơi duy nhất đặt Time.timeScale để dừng hình và làm chậm không giẫm lên nhau: dừng hình thắng làm chậm, làm chậm thắng 1.
+        private IEnumerator RunTimeScale()
+        {
+            while (Time.unscaledTime < Mathf.Max(slowUntil, hitStopUntil))
+            {
+                Time.timeScale = Time.unscaledTime < hitStopUntil ? 0.03f : slowScale;
+                yield return null;
+            }
             Time.timeScale = 1f;
+            timeRoutine = null;
         }
 
         // Mèo đang thức, chưa làm gì, để chọn làm động tác lúc rảnh.
@@ -470,6 +513,7 @@ namespace Meowtosis.Presentation
         private void OnDisable()
         {
             Time.timeScale = 1f;
+            timeRoutine = null;
             swipeInput.Swiped -= OnSwiped;
             swipeInput.Tapped -= OnTapped;
             swipeInput.Dragged -= OnDragged;

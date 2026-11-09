@@ -284,6 +284,8 @@ namespace Meowtosis.Presentation
 
         private void OnStarLost(int lost) => views.Sound.Play(SoundId.StarLost);
 
+        private void OnStarGained(int gained) => views.Sound.Play(SoundId.Coin);
+
         private void OnBoosterCancelClicked()
         {
             views.Sound.Play(SoundId.ButtonTap);
@@ -615,6 +617,7 @@ namespace Meowtosis.Presentation
                 hud.ColorChosen += OnColorChosen;
                 hud.BoosterCancelClicked += OnBoosterCancelClicked;
                 hud.StarLost += OnStarLost;
+                hud.StarGained += OnStarGained;
                 views.BoosterOffer.BuyClicked += OnBoosterBuyClicked;
                 views.Win.ContinueClicked += OnContinueClicked;
                 views.Win.BackClicked += OnWinBackClicked;
@@ -646,6 +649,7 @@ namespace Meowtosis.Presentation
                 hud.ColorChosen -= OnColorChosen;
                 hud.BoosterCancelClicked -= OnBoosterCancelClicked;
                 hud.StarLost -= OnStarLost;
+                hud.StarGained -= OnStarGained;
                 views.BoosterOffer.BuyClicked -= OnBoosterBuyClicked;
                 views.Win.ContinueClicked -= OnContinueClicked;
                 views.Win.BackClicked -= OnWinBackClicked;

@@ -13,8 +13,6 @@ namespace Meowtosis.Presentation
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text label;
         [SerializeField] private Button button;
-        [Tooltip("Chữ Z bay lên khi mọi con màu này đang ngủ (chỉ hàng đếm dưới bàn có).")]
-        [SerializeField] private ChipSleepEffect sleepEffect;
 
         private Species species;
 
@@ -29,15 +27,12 @@ namespace Meowtosis.Presentation
             label.text = text;
         }
 
-        // `allAsleep`: mọi con màu này đang ngủ, chip mờ đi và thêm chữ z để người chơi biết màu này không cần lo.
-        public void ShowCount(Species shownSpecies, Sprite sprite, int count, bool allAsleep = false)
+        public void ShowCount(Species shownSpecies, Sprite sprite, int count)
         {
             species = shownSpecies;
             icon.sprite = sprite;
-            icon.color = allAsleep ? new Color(1f, 1f, 1f, 0.5f) : Color.white;
+            icon.color = Color.white;
             label.text = count.ToString();
-            label.alpha = allAsleep ? 0.6f : 1f;
-            if (sleepEffect != null) sleepEffect.SetAsleep(allAsleep);
         }
 
         private void Awake()

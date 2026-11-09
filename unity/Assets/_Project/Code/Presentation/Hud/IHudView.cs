@@ -50,6 +50,8 @@ namespace Meowtosis.Presentation
         // Thanh sao vừa mất sao (số sao mất); presenter phát tiếng.
         event Action<int> StarLost;
 
+        event Action<int> StarGained;
+
         void ShowBooster(BoosterKind kind, int count, bool selected);
 
         void SetHintEnabled(bool enabled);

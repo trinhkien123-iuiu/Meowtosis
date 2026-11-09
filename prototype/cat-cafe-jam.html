@@ -221,7 +221,8 @@ const colPitch = () => Math.min(100, 480 / G.cfg.cols);
 const colX = ci => W / 2 + (ci - (G.cfg.cols - 1) / 2) * colPitch();
 const rowPitch = () => Math.min(82, (925 - FRONT_Y) / Math.max(1, G.rows - 1));
 const rowY = ri => FRONT_Y + ri * rowPitch();
-const rowScale = ri => Math.max(.76, 1 - .035 * ri);
+const rowScale = ri => Math.max(.62, 1 - .075 * ri);        // mèo xếp sau nhỏ dần
+const rowDim = ri => ri === 0 ? 0 : Math.min(.42, .16 + .07 * ri); // và tối dần, để thấy chúng đang xếp hàng tiến lên
 const baseCatH = () => Math.min(94, colPitch() * 1.12);
 const slotPitch = () => Math.min(98, 500 / G.cfg.slots);
 const slotX = i => W / 2 + (i - (G.cfg.slots - 1) / 2) * slotPitch();
@@ -406,6 +407,7 @@ function update(dt) {
     if (c.state === 'queue') {
       const tx = colX(c.col), ty = rowY(c.row), th = baseCatH() * rowScale(c.row), k = 1 - Math.exp(-dt * 13);
       c.x += (tx - c.x) * k; c.y += (ty - c.y) * k; c.h += (th - c.h) * k;
+      c.dim = (c.dim || 0) + (rowDim(c.row) - (c.dim || 0)) * k;
     } else if (c.state === 'fly') {
       const f = c.fly; f.t += dt;
       if (f.t < 0) { c.sq = 1.2; c.sqV = 0; continue; } // anticipation squash
@@ -483,6 +485,8 @@ function drawCatSprite(c, x, y, h, extra) {
     ctx.lineWidth = 5; ctx.strokeStyle = '#2a1840'; ctx.strokeText('?', 0, -h * .45); ctx.fillStyle = '#ffe14a'; ctx.fillText('?', 0, -h * .45);
   } else {
     ctx.drawImage(img, -w / 2, -h, w, h);
+    const dim = c.state === 'queue' ? Math.round((c.dim || 0) * 20) / 20 : 0;
+    if (dim > 0) ctx.drawImage(silhouette(c.color, `rgba(40,16,80,${dim})`), -w / 2, -h, w, h);
     if (asleep) {
       ctx.drawImage(silhouette(c.color, 'rgba(70,86,190,.55)'), -w / 2, -h, w, h);
       ctx.font = `800 ${Math.round(h * .4)}px "Baloo 2", sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -512,7 +516,7 @@ function drawTable(t, withCats) {
   }
   if (withCats) for (let i = 0; i < n; i++) {
     const c = t.seats[i]; if (!c || c.state !== 'seat') continue;
-    const pp = seatPos(t, i); shadow(pp.x - t.x, pp.y - t.y + 2, 30 * s, .18);
+    const pp = seatPos(t, i);
     drawCatSprite(c, pp.x - t.x, pp.y - t.y, pp.h, {});
   }
   ctx.restore();
@@ -568,11 +572,10 @@ function render() {
   const t0 = G.tables[0], hint = G.idle > 3.5 && t0;
   for (const c of queue) {
     const k = clamp(c.intro / .38, 0, 1); if (k <= 0) continue; const sc = easeOutBack(k);
-    shadow(c.x, c.y + 2, c.h * .33 * sc, c.row === 0 ? .26 : .16);
     if (c.row === 0 && hint && isAwake(c) && c.color === t0.color) { const p = .5 + .5 * Math.sin(now * 6); ctx.strokeStyle = `rgba(255,255,255,${.5 + p * .5})`; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(c.x, c.y + 2, c.h * .42 + p * 5, c.h * .15 + p * 2, 0, 0, 7); ctx.stroke(); }
     drawCatSprite(c, c.x, c.y, c.h * sc, {});
   }
-  for (const c of G.cats) if (c.state === 'wait') { shadow(c.x, c.y + 2, 24); drawCatSprite(c, c.x, c.y, c.h, {}); }
+  for (const c of G.cats) if (c.state === 'wait') { drawCatSprite(c, c.x, c.y, c.h, {}); }
 
   for (const t of G.tables.slice(1).reverse()) drawTable(t, false);
   for (const t of G.serving) drawTable(t, true);
@@ -582,7 +585,7 @@ function render() {
   }
   for (const c of G.cats) if (c.state === 'fly') {
     if (c.fly.t < 0) { drawCatSprite(c, c.x, c.y, c.h, {}); continue; }
-    const p = c.p || 0; shadow(c.x, lerp(c.fly.y0, destPos(c.fly.dest).y, easeInOut(p)) + 2, 26, .15);
+    const p = c.p || 0;
     drawCatSprite(c, c.x, c.y, c.h, { stretch: .2 * Math.sin(Math.PI * p), rot: c.rot });
   }
 

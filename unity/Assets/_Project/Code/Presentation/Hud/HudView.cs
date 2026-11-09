@@ -79,6 +79,8 @@ namespace Meowtosis.Presentation
 
         public event Action<int> StarLost;
 
+        public event Action<int> StarGained;
+
         public event Action HintClicked;
 
         public event Action<BoosterKind> BoosterClicked;
@@ -131,7 +133,7 @@ namespace Meowtosis.Presentation
             for (var index = 0; index < counts.Count; index++)
             {
                 var species = counts[index].Species;
-                speciesChips[index].ShowCount(species, art.CatSprite(species, false), counts[index].Count, counts[index].AllAsleep);
+                speciesChips[index].ShowCount(species, art.CatSprite(species, false), counts[index].Count);
             }
         }
 
@@ -215,6 +217,7 @@ namespace Meowtosis.Presentation
             toastPanel.SetActive(false);
             colorBubble.Chosen += color => ColorChosen?.Invoke(color);
             starMeter.StarLost += lost => StarLost?.Invoke(lost);
+            starMeter.StarGained += gained => StarGained?.Invoke(gained);
             colorBubble.Hide();
             if (boosterPanelClose != null) boosterPanelClose.onClick.AddListener(() => BoosterCancelClicked?.Invoke());
             if (boosterPanel != null) boosterPanel.SetActive(false);
