@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: Clear
   m_EditorClassIdentifier: 
   mechanic: 3
-  title: "KH\u1EEC 3"
-  description: "3 m\xE8o c\xF9ng m\xE0u th\u1EB3ng h\xE0ng s\u1EBD bi\u1EBFn m\u1EA5t.
-    Kh\u1EED h\u1EBFt m\u1ED9t m\xE0u c\u0169ng l\xE0 thua!"
+  title: "3 CON TH\u00cc BI\u1ebeN M\u1ea4T"
+  description: "3 m\u00e8o c\u00f9ng m\u00e0u n\u1eb1m th\u1eb3ng h\u00e0ng s\u1ebd bi\u1ebfn m\u1ea5t, \u0111\u1ec3 l\u1ea1i \u00f4 tr\u1ed1ng. C\u00f2n m\u00e8o m\u00e0u \u0111\u00f3 \u1edf ch\u1ed7 kh\u00e1c th\u00ec kh\u00f4ng sao, m\u1ea5t h\u1ebft m\u1ed9t m\u00e0u l\u00e0 thua!"
   demoRows:
-  - AA.B
+  - AA.
+  - B.A
   demoGoal: []
   demoMembranes: []
-  demoHasGerms: 0
-  demoMove: 0 1 right
+  demoPortals: []
+  demoColorSwitches: []
+  demoMove: 1 2 up
+  demoMoves:
+  - 1 2 up
+  - 1 0 up

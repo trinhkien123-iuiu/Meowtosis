@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Meowtosis.Domain;
 using Meowtosis.Gameplay;
 using UnityEngine;
 
 namespace Meowtosis.Presentation
 {
-    // Nội dung một thẻ "Cơ chế mới" (Data/Mechanics): tên, lời giải thích và một bàn nhỏ minh hoạ với một nước vuốt.
+    // Nội dung một thẻ "Luật mới" (Data/Mechanics): tên, lời giải thích và một bàn nhỏ minh hoạ chạy lặp một chuỗi nước vuốt.
     // Sửa chữ hoặc đổi minh hoạ ngay trong Inspector.
     [CreateAssetMenu(fileName = "MechanicCard", menuName = "Meowtosis/Mechanic Card")]
     public sealed class MechanicCard : ScriptableObject
@@ -24,8 +26,10 @@ namespace Meowtosis.Presentation
         [SerializeField] private string[] demoPortals = Array.Empty<string>();
         [Tooltip("Mỗi dòng \"hàng cột màu-kia chu-kỳ lượt-còn-lại\", ví dụ \"0 2 A 1 1\" (màu: A đỏ, B xanh, C vàng, D hồng, E tím).")]
         [SerializeField] private string[] demoColorSwitches = Array.Empty<string>();
-        [Tooltip("Nước vuốt \"hàng cột hướng\", ví dụ \"0 0 right\".")]
+        [Tooltip("Nước vuốt \"hàng cột hướng\", ví dụ \"0 0 right\". Bỏ qua nếu có danh sách nhiều nước bên dưới.")]
         [SerializeField] private string demoMove = "0 0 right";
+        [Tooltip("Chuỗi nước minh hoạ, đi lần lượt rồi lặp lại từ đầu (mỗi dòng \"hàng cột hướng\").")]
+        [SerializeField] private string[] demoMoves = Array.Empty<string>();
 
         public Mechanic Mechanic => mechanic;
 
@@ -33,7 +37,8 @@ namespace Meowtosis.Presentation
 
         public string Description => description;
 
-        public Move DemoMove => Move.Parse(demoMove);
+        public IReadOnlyList<Move> DemoMoves =>
+            demoMoves.Length > 0 ? demoMoves.Select(Move.Parse).ToList() : new List<Move> { Move.Parse(demoMove) };
 
         public LevelDefinition CreateDemoLevel()
         {

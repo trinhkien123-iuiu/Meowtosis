@@ -35,7 +35,7 @@ namespace Meowtosis.Presentation
             titleText.text = card.Title;
             descriptionText.text = card.Description;
             Open();
-            demo.Play(card.CreateDemoLevel(), card.DemoMove);
+            demo.Play(card.CreateDemoLevel(), card.DemoMoves);
         }
 
         private void Awake() => continueButton.onClick.AddListener(() => ContinueClicked?.Invoke());

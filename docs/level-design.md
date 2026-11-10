@@ -538,3 +538,70 @@ Mỗi level chơi 200 ván cho mỗi kiểu (`tools/study-clear.js`). Cơ chế 
 - **Đã làm:** sửa `swipe` trong prototype (nguồn luật) và `SwipeRule` trong Unity, ví dụ V10, V12, V13 ở cả `tools/test-doc-examples.js` (63 ví dụ) và `MechanicsExampleTests.cs`, lời dẫn level 42 và thẻ cơ chế Virus, hoạt ảnh nổ ở đúng ô virus (`MovePlayback`).
 - **Ảnh hưởng tới 13 level virus:** cả 88 level vẫn giải được; `node tools/mechanic-use.js` vẫn 0 level trang trí. Đo lại độ khó (`node tools/difficulty.js --all`): chỉ một level đổi số nước tối ưu (11 xuống 10, ô `B##. / .<AC / B... / A#.^ / C..D`, không còn cần cảnh virus ăn mèo) và các level virus nhìn chung dễ hơn chút. **Chưa chạy `order.js --write`**, nên thứ tự level giữ nguyên; lệnh `node tools/order.js` đang gợi ý đổi chỗ 7 level nhỏ, phần lớn là nhiễu của phép đo (hàm đo lấy mẫu ngẫu nhiên).
 - **Xuất lại:** `npm run export` (danh mục Unity có lời giải mới). `npm test` và `dotnet test` đều qua (388 test C#).
+
+### Dạy luật theo từng giai đoạn trong 15 level đầu (2026-11-09)
+
+**Vì sao:** màn hướng dẫn kiểu Meowdoku (2026-11-07) dồn cả bốn luật vào một bàn trước level 1, mỗi luật dạy xong lại bắt bấm "Đã hiểu": quá nhiều luật một lúc và người chơi lướt qua nút mà không đọc. Chủ dự án muốn dạy **từng luật một** bằng chính các level, mỗi luật mở đầu bằng một thẻ "Luật mới" có minh họa chạy lặp (kiểu popup "New Feature!" của Catdom, video `D:\GitHub\asset_meowtosis\onboarding cách mới.mp4`: bàn nhỏ, bàn tay chỉ thao tác, tên luật, một câu giải thích, nút "Tiếp tục"), sau đó người chơi tự chơi để hiểu.
+
+**Kịch bản** (4 giai đoạn, thẻ ở level mở đầu mỗi giai đoạn; level 16 trở đi là các level cũ, từ dễ tới khó):
+
+| Giai đoạn | Level | Thẻ | Luật | Ràng buộc thiết kế (đo bằng `tools/onboarding-design.js`) |
+|---|---|---|---|---|
+| 1 | 1–5 | `Divide` "Lấp kín là thắng" | vuốt là nhân đôi, kín là thắng | mọi đoạn thẳng của khung dài tối đa 2 ô và mỗi vùng chỉ một màu: **mọi nước** đều là lấp ô trống, không thể khử, đẩy, đè hay thua (đã duyệt hết không gian trạng thái) |
+| 2 | 6–9 | `Clear` "3 con thì biến mất" | 3 cùng màu thẳng hàng biến mất; mất hết một màu là thua | thắng được chỉ bằng lấp ô; level 6 và 9 **bắt buộc** khử 3 an toàn, level 7 có bẫy khử 3 con cuối, level 8 phải xếp xen kẽ màu |
+| 3 | 10–12 | `Push` "Đẩy cả dãy" | ô kề có mèo mà phía sau trống thì cả dãy bị đẩy | không lấp ô nào mà thắng được: **đẩy bắt buộc**; đè không giúp đi tắt |
+| 4 | 13–15 | `Replace` "Hết chỗ thì đè" | phía sau hết chỗ thì bản sao đè con khác màu | **đè bắt buộc** (không đè thì không thắng được) |
+
+**15 level và ý đồ từng màn:**
+
+| # | Bàn | Số nước | Ý đồ |
+|---|---|---|---|
+| 1 | `A.` | 1 | Một nước là thắng: vuốt là nhân đôi, kín là thắng |
+| 2 | `B. / ..` | 3 | Bản sao cũng vuốt được, đi được mọi hướng |
+| 3 | `C.## / #..# / ##..` | 5 | Bậc thang: phải rẽ hướng liên tục |
+| 4 | `A.## / ..## / ##.. / ##.B` | 6 | Hai vùng, hai màu: vùng nào cũng phải kín |
+| 5 | `A.##. / ..#.. / ##B.# / #..#. / ###.C` | 11 | Ba vùng ba màu, dòng sông bậc thang ở giữa: bàn lớn đầu tiên, vẫn không thể sai |
+| 6 | `BAB / A.A` | 4 | Ô giữa chỉ mèo đỏ lấp được: 3 đỏ biến mất (vẫn còn 1 con), rồi lấp lại hàng dưới. Thấy khử 3 xảy ra một cách an toàn |
+| 7 | `AA. / #.B` | 2 | Bẫy: kéo dài hàng đỏ là mất cả 3 con đỏ cuối cùng (thua). 2 trong 5 nước đầu là thua |
+| 8 | `A.B / ... / B.A` | 5 | Lấp 3×3 với hai màu ở 4 góc: phải xen kẽ để không hàng, cột nào 3 con cùng màu |
+| 9 | `#AA / ..A / .BB` | 6 | Tổng kết: chủ động khử 3 đỏ (vẫn còn 2) để có chỗ, tránh khử hết |
+| 10 | `ABB.` | 1 | 3 trong 4 nước đầu là thua (xanh tự kéo dài, đè mất màu); chỉ đỏ đẩy cả dãy là kín |
+| 11 | `BAA. / ##..` | 3 | Đẩy trước rồi lấp hàng dưới |
+| 12 | `BA.. / ..#.` | 5 | Phải xếp một mèo xanh dưới chân trước rồi mới đẩy để chen xanh vào hàng trên |
+| 13 | `B.B / A.A` | 3 | Cùng khung với level 6 (gợi nhớ): xanh đè một con đỏ để hai hàng xen kẽ màu |
+| 14 | `.#.B / ..A#` | 5 | Đè giữa chừng để đổi màu một ô, tránh 3 đỏ thẳng hàng; không nước đầu nào thua |
+| 15 | `B... / A#..` | 6 | Tổng kết: mèo đỏ kẹt ở góc, đè lên xanh để thoát ra rồi đẩy cả dãy; dùng đủ lấp, đè, đẩy |
+
+**Cách tìm:** `tools/onboarding-design.js` duyệt hết không gian trạng thái của một bàn nhỏ, xếp loại từng nước (lấp, đẩy, đè; sau nước đó có khử 3 hay thua) và tính số nước ít nhất khi chỉ được dùng một số loại nước (`chỉ-lấp`, `lấp+khử`, `lấp+đẩy`, `không-đè`), tỷ lệ trạng thái bị kẹt (còn sống mà hết đường thắng) và số nước đầu tốt/thua. Giai đoạn 1 dựng tay theo quy tắc đoạn thẳng ≤ 2. Giai đoạn 2–4 tìm bằng cách **duyệt hết** các bàn 2×3, 3×2, 2×4, 4×2 (mỗi ô `#`, `.`, `A`, `B`, bỏ trùng khi xoay, lật, đổi màu) lọc theo ràng buộc giai đoạn, rồi chọn bằng tay theo ý đồ, độ rõ ràng và sự nối tiếp giữa các màn.
+
+**Phát hiện khi đo:** trong 815 bàn nhỏ mà khử 3 là bắt buộc khi chỉ lấp ô, **không bàn nào** có lời giải chỉ lấp ngắn bằng lời giải dùng cả đẩy, đè: khử 3 làm mất 3 ô phải lấp lại, còn đẩy, đè thì không. Vì vậy level 6 và 9 khai `par` và `solution` theo lời giải chỉ lấp (4 và 6 nước); người chơi lỡ dùng đè, đẩy thì thắng nhanh hơn và vẫn đủ 3 sao. Gợi ý (Mèo mách) đi theo lời giải đã lưu nên không chỉ nước đè ở giai đoạn này. Test C# `SolverFindsPar` cho phép par của khối 1 lớn hơn số nước ít nhất.
+
+**Sắp lại danh sách:** 5 level cơ bản cũ (`AA./##B`, `.B/.A`, `##B#/AA..`, dấu cộng, chữ T `.B./#A#`) bị bỏ vì trùng bài với khối mới; 11 level còn lại của khối cũ thành khối 2 "Phòng nuôi cấy: ôn bốn luật trên bàn lớn dần" (level 16–26). Tổng 98 level, 10 khối. Mọi level vẫn giải được, `npm test` và 420 test C# qua.
+
+**Unity:** thẻ "Luật mới" dùng lại `MechanicPopup` (tiêu đề đổi từ "CƠ CHẾ MỚI" thành "LUẬT MỚI!"), hiện ở level khai `card` là một trong bốn luật cơ bản và chỉ lần đầu gặp; minh họa chạy cả chuỗi nước (`MechanicCard.demoMoves`) và dừng một nhịp ở bàn ngay sau khi đặt bản sao để thấy 3 con biến mất. Màn hướng dẫn trước level 1 (`OnboardingPresenter`) đã tắt, nút cheat "Hướng dẫn" nay xoá dấu đã xem bốn thẻ rồi mở level 1. Đã thử trong Play: thẻ ở level 1 và level 6 hiện đúng, minh họa chạy, "Tiếp tục" đóng thẻ.
+
+**Chưa làm:** chưa chơi trọn 15 level bằng tay trong Unity; thua ở các level dạy luật vẫn mất tim như mọi level; code màn hướng dẫn cũ (`OnboardingPresenter`, `OnboardingView`, `Levels/Onboarding.txt`) còn trong dự án, chưa xoá hẳn.
+
+**Sửa cùng ngày: bỏ thẻ "Luật mới", dùng lại bóng chat.** Chủ dự án thấy thẻ popup nhiều chữ quá. Bốn level mở đầu mỗi luật (1, 6, 10, 13) nay dùng hướng dẫn trong level như trước (`tut`): bàn tay chỉ đúng một nước, phần không liên quan tối đi, bóng chat gỗ phía trên bàn chỉ một câu ngắn: "Vuốt mèo để nhân đôi. Lấp kín là thắng!", "3 mèo cùng màu liên tiếp nhau sẽ triệt tiêu nhau" rồi (bước 2, sau khi 3 đỏ biến mất) "Lấp tiếp nhé, đừng để trống ô nào", "Phía sau còn chỗ trống: cả dãy bị đẩy đi!", "Hết chỗ đẩy thì bản sao đè lên mèo khác màu!". Sau nước đó người chơi tự chơi tiếp. `card` vẫn khai để bản đồ gắn nhãn "mới"; `MechanicPopup` không hiện cho bốn luật này nữa. Đã thử trong Play ở level 1 và 6.
+
+**Thêm bài "không để tuyệt chủng" ở level 7 (2026-11-09).** Chưa có lúc nào dạy rõ luật "mất hết một màu là thua". Level 7 (`AA. / #.B`) dùng cơ chế bẫy dạy luật có sẵn (`trap`): lần đầu vào màn, bàn tay chỉ nước bẫy, bóng chat "Thử nối dài hàng mèo đỏ xem!"; 3 mèo đỏ cuối cùng biến mất, hiện "OHH NOO! HẾT SẠCH MÈO ĐỎ!" (không mất tim), rồi bàn chơi lại từ đầu với bóng chat "Hết mèo đỏ là thua! Thử cách khác nhé" và bàn tay chỉ nước đúng (đỏ xuống dưới). Đi xong nước đó, mèo đỏ còn lại được soi sáng kèm "Mỗi màu phải còn ít nhất 1 con mèo!", rồi "Lấp kín mà không để mất màu nào nhé", người chơi tự đi nước cuối. Đã thử trong Play: đủ ba cảnh, tim vẫn 3.
+
+**Hoạt hoạ cho hướng dẫn (2026-11-10).** Bóng chat nay có nhịp và có hình, kèm một nhân vật dẫn chuyện:
+- **Mèo cam dẫn chuyện** (`NarratorCat`, Spine `IP_ingame` như avatar thanh trên) đứng dưới đuôi bóng chat. Câu giảng luật: dáng suy nghĩ (`ip_thinking`); vừa thua ở bước bẫy: lo lắng (`ip_worried_start` rồi `ip_worried_loop`); làm xong các bước hướng dẫn: reo mừng (`ip_cheer`) với câu "Giỏi lắm! Giờ tự làm tiếp nhé" trong 3 giây (thay cho toast cũ).
+- **Bóng chat** (`TipBubbleView`) nảy ra khi hiện, nảy nhẹ khi đổi câu, thu lại khi tắt; nội dung hiện dần từng ký tự, mỗi hình dừng thêm một nhịp.
+- **Hình minh hoạ trong lời thoại** để người lười đọc vẫn hiểu: dòng trên là phương trình bằng hình, dòng dưới là chữ. Viết `:ten:` trong dữ liệu level, `|` là xuống dòng (`Pictograms`); hình lấy từ `Art/UI/Pictograms.png` (tạo bằng `tools/make-pictograms.py`: đầu mèo đỏ, xanh, vàng, khói, mũi tên, ô trống, dấu tích, dấu X) và TMP Sprite Asset `Art/UI/Pictograms.asset`. Bản web đổi các hình này thành emoji.
+
+| Level | Dòng hình | Dòng chữ |
+|---|---|---|
+| 1 | đỏ → đỏ đỏ | Vuốt để nhân đôi. Lấp kín là thắng! |
+| 6 (bước 1) | đỏ đỏ đỏ → khói | 3 mèo cùng màu liên tiếp nhau sẽ triệt tiêu nhau |
+| 6 (bước 2) | ô trống → tích | Lấp tiếp nhé, đừng để trống ô nào |
+| 7 (bẫy) | đỏ đỏ → đỏ đỏ đỏ | Thử nối dài hàng mèo đỏ xem! |
+| 7 (sau khi thua) | đỏ → X | Hết mèo của một màu là thua! Thử cách khác xem nhé |
+| 7 (soi mèo đỏ còn lại) | đỏ tích | Mỗi màu phải còn ít nhất 1 con mèo! |
+| 10 | đỏ → xanh xanh → ô trống | Phía sau còn chỗ trống: cả dãy bị đẩy đi! |
+| 13 | xanh → đỏ → xanh | Hết chỗ đẩy thì bản sao đè lên mèo khác màu! |
+
+Đã thử trong Play ở level 1 và 6: mèo dẫn chuyện đổi dáng theo câu, hình và chữ hiện dần, câu khen hiện sau bước cuối. Lần đầu dùng hình, TMP vẽ sai khung đầu (ô vuông xanh); `TipBubbleView.Prewarm` vẽ trước tất cả hình một lần để tránh.
+
+**Khung cửa sổ cho mèo dẫn chuyện (2026-11-10).** Mèo dẫn chuyện nay ngồi trong một ô cửa sổ tròn (`TipBubble/NarratorWindow`, 270×270, cùng kiểu ô avatar ở thanh trên): lòng đỏ nâu, vành gỗ, đuôi bóng chat chỉ vào cửa sổ. Mèo được **tách làm hai lớp** bằng separator slot của Spine (`SkeletonGraphic.enableSeparatorSlots`, cắt ở **cả bốn slot tay** `handL1`, `handR1`, `hand_like1`, `hand_think1`): `Part[0]` (tai, thân, đầu, mặt) nằm trong mặt nạ tròn `NarratorMask` đặt dưới vành nên phần thân bị vành che; `Part[1..4]` (tay, râu) vẽ đè lên vành. Lúc đầu chỉ cắt ở `handL1`, nhưng Spine bỏ qua slot không có hình: ở dáng suy nghĩ tay trái đổi sang `hand_think1` nên không cắt nữa, cả con mèo rơi về lớp sau và tay bị vành che. Đã kiểm tra tự động 7 động tác, mỗi động tác 3 thời điểm: lúc nào tay cũng ở lớp trên, nên hai tay gác ngang mép cửa sổ. Avatar mèo động ở thanh trên (`TopBar/AvatarCat`, mặt nạ `AvatarCatMask` 150 ở lỗ tròn của thanh) làm cùng cách, sửa lỗi thân mèo lòi ra cùng lớp với tay. Ảnh mặt nạ chung `Art/UI/CircleMask.png`. Ảnh tạo bằng `tools/make-narrator-window.py` (`Art/UI/NarratorWindowBack/Frame.png`). `NarratorCat` gắn trên cửa sổ nên cả khung bật lên và ẩn cùng mèo. Dấu X trong hình minh hoạ được phóng to (`tools/make-pictograms.py` nay phóng ảnh nhỏ lên vừa ô). Đã thử trong Play ở level 1 và level 7 (mèo lo lắng sau bẫy).

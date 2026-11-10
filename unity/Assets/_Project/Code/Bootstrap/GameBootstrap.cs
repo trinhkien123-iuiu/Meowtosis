@@ -6,7 +6,8 @@ using UnityEngine;
 namespace Meowtosis.Bootstrap
 {
     // Điểm khởi đầu của scene Game: nơi duy nhất tạo bộ luật, đọc danh sách level, nạp tiến độ
-    // và nối presenter với các view trong scene. Người chơi chưa qua hướng dẫn đầu game thì chạy hướng dẫn trước.
+    // và nối presenter với các view trong scene. Luật chơi được dạy ngay trong 15 level đầu (thẻ "Luật mới" ở level 1, 6, 10, 13),
+    // màn hướng dẫn riêng trước level 1 (OnboardingPresenter) đã tắt; chỉ chạy khi bật `alwaysShowOnboarding` để so sánh.
     public sealed class GameBootstrap : MonoBehaviour
     {
         [SerializeField] private TextAsset levelCatalog;
@@ -26,7 +27,7 @@ namespace Meowtosis.Bootstrap
         [SerializeField] private BoosterOfferPopup boosterOfferPopup;
         [Tooltip("Để test: lớn hơn 0 thì luôn mở level này thay vì level chơi gần nhất.")]
         [SerializeField, Min(0)] private int openLevelNumber;
-        [Tooltip("Để test: luôn chạy hướng dẫn đầu game, kể cả khi tiến độ đã ghi là xong.")]
+        [Tooltip("Để so sánh: chạy màn hướng dẫn cũ trước level 1 (đã thay bằng 15 level dạy luật).")]
         [SerializeField] private bool alwaysShowOnboarding;
 
         private GameRules rules;
@@ -40,7 +41,7 @@ namespace Meowtosis.Bootstrap
             rules = GameRules.CreateStandard();
             store = new PlayerPrefsProgressStore();
             progress = store.Load();
-            if (onboardingScript != null && (alwaysShowOnboarding || !progress.HasFinishedOnboarding)) StartOnboarding();
+            if (onboardingScript != null && alwaysShowOnboarding) StartOnboarding();
             else StartGame();
         }
 

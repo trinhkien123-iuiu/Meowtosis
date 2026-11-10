@@ -47,8 +47,10 @@ LEVELS.forEach((raw, n) => {
       c = res.cells;
       if (ctx.isLost(lv, c)) { fail(`${name} bước ${k2 + 1}: dẫn tới thua`); return; }
     }
-    if (def.tut.length >= path.length && !(ctx.isWon(lv, c) && def.tut.length === path.length) && !def.trap)
-      fail(`${name}: hướng dẫn dài ${def.tut.length} nước nhưng tối ưu là ${path.length}`);
+    // Level khai par riêng (khối Học luật: par theo lời giải chỉ dùng luật đã dạy) thì so với par đó.
+    const best = def.par !== undefined ? def.par : path.length;
+    if (def.tut.length >= best && !(ctx.isWon(lv, c) && def.tut.length === best) && !def.trap)
+      fail(`${name}: hướng dẫn dài ${def.tut.length} nước nhưng tối ưu là ${best}`);
   }
   const use = mechanicUse.check(ctx, def);
   for (const [mechanic, verdict] of Object.entries(use)) {

@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace Meowtosis.Presentation
 {
-    // Minh hoạ chạy lặp trong thẻ cơ chế: bàn trước khi vuốt, bàn tay lướt theo nước vuốt, rồi bàn sau khi vuốt.
-    // Bàn "sau" do chính luật chơi tính ra nên luôn khớp với game.
+    // Minh hoạ chạy lặp trong thẻ luật: bàn ban đầu, rồi từng nước một: bàn tay lướt theo nước vuốt, bản sao hiện ra
+    // (bàn ngay sau khi đặt), và nếu lượt đó có khử 3 thì một nhịp sau mới tới bàn đã khử. Hết chuỗi thì nghỉ rồi lặp lại.
+    // Mọi bàn đều do chính luật chơi tính ra nên luôn khớp với game.
     public sealed class MechanicDemoView : MonoBehaviour
     {
         [SerializeField] private BoardArt art;
@@ -21,21 +22,32 @@ namespace Meowtosis.Presentation
         [SerializeField] private float beforeSeconds = 0.9f;
         [SerializeField] private float swipeSeconds = 0.55f;
         [SerializeField] private float afterSeconds = 1.3f;
+        [Tooltip("Nghỉ giữa hai nước trong chuỗi.")]
+        [SerializeField] private float betweenSeconds = 0.55f;
+        [Tooltip("Thời gian thấy bàn ngay sau khi đặt bản sao, trước khi 3 con biến mất.")]
+        [SerializeField] private float beforeClearSeconds = 0.45f;
 
         private readonly List<DemoCell> cells = new List<DemoCell>();
         private readonly List<RectTransform> membranes = new List<RectTransform>();
         private readonly List<DemoPortalGate> portals = new List<DemoPortalGate>();
         private float cellSize;
 
-        public void Play(LevelDefinition definition, Move move)
+        public void Play(LevelDefinition definition, IReadOnlyList<Move> moves)
         {
             StopAllCoroutines();
             var level = new Level(definition);
-            var before = level.CreateStartBoard();
+            var start = level.CreateStartBoard();
             var swipes = new SwipeRule(TurnResolver.CreateStandard());
-            var after = swipes.TrySwipe(before, move, out var result) ? result.After : before;
+            var steps = new List<MoveResult>();
+            var board = start;
+            foreach (var move in moves)
+            {
+                if (!swipes.TrySwipe(board, move, out var result)) break;
+                steps.Add(result);
+                board = result.After;
+            }
             Build(level);
-            StartCoroutine(Loop(level, before, after, move));
+            StartCoroutine(Loop(level, start, moves, steps));
         }
 
         private void Build(Level level)
@@ -91,24 +103,35 @@ namespace Meowtosis.Presentation
             portals.Add(gate);
         }
 
-        private IEnumerator Loop(Level level, Board before, Board after, Move move)
+        private IEnumerator Loop(Level level, Board start, IReadOnlyList<Move> moves, IReadOnlyList<MoveResult> steps)
         {
-            var from = CellPosition(level, level.IndexOf(move.Row, move.Column));
-            var to = from + (Vector2)(BoardLayout.Offset(move.Direction) * cellSize);
             while (true)
             {
-                ShowBoard(level, before);
-                hand.gameObject.SetActive(true);
-                hand.anchoredPosition = from;
-                yield return new WaitForSecondsRealtime(beforeSeconds);
-
-                for (var time = 0f; time < swipeSeconds; time += Time.unscaledDeltaTime)
-                {
-                    hand.anchoredPosition = Vector2.Lerp(from, to, Mathf.SmoothStep(0f, 1f, time / swipeSeconds));
-                    yield return null;
-                }
+                ShowBoard(level, start);
                 hand.gameObject.SetActive(false);
-                ShowBoard(level, after);
+                yield return new WaitForSecondsRealtime(beforeSeconds * 0.5f);
+                for (var index = 0; index < steps.Count; index++)
+                {
+                    var move = moves[index];
+                    var from = CellPosition(level, level.IndexOf(move.Row, move.Column));
+                    var to = from + (Vector2)(BoardLayout.Offset(move.Direction) * cellSize);
+                    hand.gameObject.SetActive(true);
+                    hand.anchoredPosition = from;
+                    yield return new WaitForSecondsRealtime(index == 0 ? beforeSeconds * 0.5f : betweenSeconds);
+                    for (var time = 0f; time < swipeSeconds; time += Time.unscaledDeltaTime)
+                    {
+                        hand.anchoredPosition = Vector2.Lerp(from, to, Mathf.SmoothStep(0f, 1f, time / swipeSeconds));
+                        yield return null;
+                    }
+                    hand.gameObject.SetActive(false);
+                    var step = steps[index];
+                    ShowBoard(level, step.Placed);
+                    if (step.Stages.Count > 0)
+                    {
+                        yield return new WaitForSecondsRealtime(beforeClearSeconds);
+                        ShowBoard(level, step.After);
+                    }
+                }
                 yield return new WaitForSecondsRealtime(afterSeconds);
             }
         }

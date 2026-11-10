@@ -33,7 +33,8 @@ namespace Meowtosis.Presentation
         void ShowGoal(GoalProgress progress, bool instantly);
 
         // Bong bóng lời thoại: mẹo, hướng dẫn, gợi ý; chuỗi rỗng thì ẩn.
-        void ShowTip(string text);
+        // Lời hướng dẫn trong bong bóng (rỗng thì ẩn); :ten: trong chữ là hình minh hoạ (Pictograms).
+        void ShowTip(string text, NarratorMood mood = NarratorMood.Explain);
 
         // Bố trí của level có bước hướng dẫn (như màn hướng dẫn đầu game): ẩn thanh trên và thanh sao,
         // đưa bong bóng lời thoại lên sát đỉnh để không đè lên bàn chơi.

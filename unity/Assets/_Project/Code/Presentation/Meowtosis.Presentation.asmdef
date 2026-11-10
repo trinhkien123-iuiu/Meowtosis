@@ -5,7 +5,9 @@
         "Meowtosis.Domain",
         "Meowtosis.Gameplay",
         "UnityEngine.UI",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "spine-unity",
+        "spine-csharp"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

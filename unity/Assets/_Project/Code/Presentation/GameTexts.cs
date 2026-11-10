@@ -85,7 +85,11 @@ namespace Meowtosis.Presentation
         public const string Revived = "Hồi sinh: đã quay lại trước nước thua và trả lại tim";
         public const string FollowTheHand = "Làm theo ngón tay trước nhé";
         public const string SwipeLikeTheHand = "Vuốt theo hướng ngón tay chỉ nhé";
-        public const string TutorialDone = "Giỏi lắm! Giờ tự làm tiếp nhé";
+        public const string TutorialDone = ":check: Giỏi lắm! Giờ tự làm tiếp nhé";
+        // Bẫy dạy luật "không để mất hết một màu" (level 7). :ten: là hình minh hoạ (Pictograms).
+        public const string TrapLost = ":red: :arrow: :cross:|Hết mèo của một màu là thua! Thử cách khác xem nhé";
+        public const string TrapKeepOne = ":red: :check:|Mỗi màu phải còn ít nhất 1 con mèo!";
+        public const string TrapFillSafely = "Lấp kín mà không để mất màu nào nhé";
         public const string TrapSeen = "Thấy chưa? Hết sạch một màu là thua!";
         public const string NothingChanges = "Không có gì thay đổi";
         public const string Understood = "Đã hiểu!";

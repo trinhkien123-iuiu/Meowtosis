@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Replace
   m_EditorClassIdentifier: 
   mechanic: 2
-  title: "THAY TH\u1EBE"
-  description: "H\u1EBFt ch\u1ED7 \u0111\u1EA9y th\xEC b\u1EA3n sao thay th\u1EBF
-    con m\xE8o b\xEAn c\u1EA1nh. M\xE0u n\xE0o m\u1EA5t h\u1EBFt m\xE8o l\xE0 thua
-    v\xE0 m\u1EA5t 1 tim!"
+  title: "H\u1ebeT CH\u1ed6 TH\u00cc \u0110\u00c8"
+  description: "Ph\u00eda sau kh\u00f4ng c\u00f2n \u00f4 tr\u1ed1ng th\u00ec b\u1ea3n sao \u0111\u00e8 l\u00ean con m\u00e8o kh\u00e1c m\u00e0u ngay c\u1ea1nh, con \u0111\u00f3 bi\u1ebfn m\u1ea5t. M\u00e8o c\u00f9ng m\u00e0u th\u00ec kh\u00f4ng \u0111\u00e8 \u0111\u01b0\u1ee3c."
   demoRows:
   - ABB
   demoGoal: []
   demoMembranes: []
-  demoHasGerms: 0
+  demoPortals: []
+  demoColorSwitches: []
   demoMove: 0 0 right
+  demoMoves:
+  - 0 0 right

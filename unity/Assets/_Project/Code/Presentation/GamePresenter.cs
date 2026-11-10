@@ -30,6 +30,7 @@ namespace Meowtosis.Presentation
         private float pendingDelay;
         private float secondsSinceClockUpdate;
         private string trapExplanation;
+        private string praiseTip;   // lời khen tạm thời khi vừa xong hướng dẫn trong level
         private int cheatLevelIndex;
 
         public GamePresenter(IReadOnlyList<LevelDefinition> levels, GameRules rules, PlayerProgress progress,
@@ -90,6 +91,7 @@ namespace Meowtosis.Presentation
             if (levels[levelIndex].Trap != null && progress.BestStarsFor(levels[levelIndex].Id) == 0)
                 run.EnableTrap();
             trapExplanation = null;
+            praiseTip = null;
             isSpotlighting = false;
             pendingAction = null;
             isPlayingMove = false;
@@ -107,6 +109,7 @@ namespace Meowtosis.Presentation
         }
 
         // Đánh dấu cơ chế đã gặp trong progress để lưu dữ liệu, không hiện popup làm gián đoạn người chơi.
+        // Bốn luật cơ bản được dạy ngay trên bàn ở level 1, 6, 10, 13: bàn tay chỉ nước và bóng chat ngắn (tutorial của level).
         private void QueueNewMechanics()
         {
             foreach (var mechanic in MechanicDetector.In(run.Session.Definition))
@@ -181,24 +184,31 @@ namespace Meowtosis.Presentation
 
                     isSpotlighting = true;
                     views.Board.Spotlight(survivorCell >= 0 ? survivorCell : run.Session.Level.IndexOf(1, 1));
-                    trapExplanation = "Đảm bảo mỗi màu >= 1 mèo";
+                    trapExplanation = GameTexts.TrapKeepOne;
                     RefreshHud(true);
                     Later(() =>
                     {
                         views.Board.ClearSpotlight();
-                        trapExplanation = "Hãy thử lấp đầy bảng mà không làm mất mèo nhé";
+                        trapExplanation = GameTexts.TrapFillSafely;
                         isSpotlighting = false;
                         RefreshHud(true);
                         Later(() =>
                         {
                             trapExplanation = null;
                             RefreshHud(true);
-                        }, 2.5f);
-                    }, 2.5f);
+                        }, 4f);
+                    }, 4.5f);   // đủ lâu cho bóng chat hiện hết hình, chữ và người chơi kịp đọc
                 }
                 else
                 {
-                    views.Hud.ShowToast(GameTexts.TutorialDone);
+                    // Mèo dẫn chuyện reo lên khen, rồi bong bóng tắt để người chơi tự chơi tiếp.
+                    praiseTip = GameTexts.TutorialDone;
+                    RefreshHud(true);
+                    Later(() =>
+                    {
+                        praiseTip = null;
+                        RefreshHud(true);
+                    }, 3f);
                 }
             }
             RefreshHud(false);
@@ -210,7 +220,7 @@ namespace Meowtosis.Presentation
             views.Lose.Hide();
             run.FinishTrap();
             views.Board.Show(run.Session.Board);
-            trapExplanation = "Nhưng nếu bạn làm như này thì sao?";
+            trapExplanation = GameTexts.TrapLost;
             RefreshHud(true);
         }
 
@@ -231,7 +241,7 @@ namespace Meowtosis.Presentation
                 }
             }
 
-            if (!string.IsNullOrEmpty(trapExplanation) && trapExplanation != "Nhưng nếu bạn làm như này thì sao?")
+            if (!string.IsNullOrEmpty(trapExplanation) && trapExplanation != GameTexts.TrapLost)
             {
                 trapExplanation = null;
                 RefreshHud(true);
@@ -240,7 +250,7 @@ namespace Meowtosis.Presentation
             var command = new SwipeCommand(rules.Swipes, cell, direction);
             if (command.TryApply(run.Session.Board, out _))
             {
-                if (trapExplanation == "Nhưng nếu bạn làm như này thì sao?")
+                if (trapExplanation == GameTexts.TrapLost)
                 {
                     trapExplanation = null;
                 }
@@ -367,6 +377,7 @@ namespace Meowtosis.Presentation
         private void OnRestartClicked()
         {
             trapExplanation = null;
+            praiseTip = null;
             isSpotlighting = false;
             views.Board.ClearSpotlight();
             views.Lose.Hide();
@@ -507,11 +518,11 @@ namespace Meowtosis.Presentation
         }
 
         // Chơi lại màn hướng dẫn đầu game: xoá dấu đã xong rồi mở lại màn chơi (GameBootstrap chạy hướng dẫn trước).
+        // Bản thử: mở level 1 để xem lại chuỗi dạy luật từ đầu.
         private void OnCheatOnboarding()
         {
-            progress.HasFinishedOnboarding = false;
-            store.Save(progress);
-            navigator.OpenGame();
+            views.Cheat.Hide();
+            OpenLevel(0);
         }
 
         private void ShowSettings() => views.Settings.Show(progress.SoundOn, progress.MusicOn);
@@ -541,7 +552,7 @@ namespace Meowtosis.Presentation
             ShowHearts();
             hud.ShowStars(run.Stars, instantly);
             hud.ShowGoal(GoalProgress.Of(session.Board), instantly);
-            hud.ShowTip(CurrentTip());
+            hud.ShowTip(CurrentTip(), CurrentMood());
             hud.ShowBoosterPrompt(targeting.Kind, targeting.Prompt);
             hud.ShowSpecies(SpeciesCensus.Of(session.Board));
             hud.ShowBooster(BoosterKind.Mutate, progress.BoosterCount(BoosterKind.Mutate), targeting.Kind == BoosterKind.Mutate);
@@ -577,12 +588,21 @@ namespace Meowtosis.Presentation
         // Bỏ bong bóng chữ giải thích cơ chế dài dòng; chỉ nhắc bước khi đang chọn mục tiêu cho booster.
         private string CurrentTip()
         {
+            if (!string.IsNullOrEmpty(praiseTip)) return praiseTip;
             if (!string.IsNullOrEmpty(trapExplanation)) return trapExplanation;
             // Lời nhắn khi dùng booster nằm ở thanh booster dưới bàn, không bật bong bóng đè lên bàn nữa.
             if (targeting.IsActive) return "";
             var step = run.GuidedStep;
             if (step != null && !string.IsNullOrEmpty(step.Text)) return step.Text;
             return "";
+        }
+
+        // Tâm trạng mèo dẫn chuyện theo câu đang nói: khen khi vừa làm xong hướng dẫn, lo lắng ngay sau khi thua bẫy.
+        private NarratorMood CurrentMood()
+        {
+            if (!string.IsNullOrEmpty(praiseTip)) return NarratorMood.Praise;
+            if (trapExplanation == GameTexts.TrapLost) return NarratorMood.Warn;
+            return NarratorMood.Explain;
         }
 
         private void Later(Action action, float delay)

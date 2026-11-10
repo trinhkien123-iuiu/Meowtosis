@@ -28,6 +28,10 @@ namespace Meowtosis.Presentation
         [SerializeField] private GoalPillView goalPill;
         [SerializeField] private GameObject tipBubble;
         [SerializeField] private TMP_Text tipText;
+        [Tooltip("Nhịp xuất hiện của bong bóng (nảy, hiện dần từng chữ). Bỏ trống thì bật tắt bong bóng như cũ.")]
+        [SerializeField] private TipBubbleView tipBubbleView;
+        [Tooltip("Mèo cam dẫn chuyện cạnh bong bóng.")]
+        [SerializeField] private NarratorCat narrator;
         [SerializeField] private GameObject toastPanel;
         [SerializeField] private TMP_Text toastText;
         [SerializeField] private float toastSeconds = 2.4f;
@@ -104,11 +108,20 @@ namespace Meowtosis.Presentation
 
         public void ShowGoal(GoalProgress progress, bool instantly) => goalPill.Show(progress, instantly);
 
-        public void ShowTip(string text)
+        public void ShowTip(string text, NarratorMood mood = NarratorMood.Explain)
         {
             // Cỡ chữ, tự co, màu, viền chỉnh trên TipText trong scene Game.
-            if (tipText != null) tipText.text = text;
-            if (tipBubble != null) tipBubble.SetActive(!string.IsNullOrEmpty(text));
+            var hasText = !string.IsNullOrEmpty(text);
+            var rich = Pictograms.FormatWithBigPictures(text);
+            if (tipBubbleView != null) tipBubbleView.Show(rich);
+            else
+            {
+                if (tipText != null) tipText.text = rich;
+                if (tipBubble != null) tipBubble.SetActive(hasText);
+            }
+            if (narrator == null) return;
+            if (hasText) narrator.Say(text, mood);
+            else narrator.Hide();
         }
 
         public void SetGuidedLayout(bool guided)

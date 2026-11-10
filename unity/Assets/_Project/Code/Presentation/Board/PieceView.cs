@@ -37,9 +37,13 @@ namespace Meowtosis.Presentation
         [SerializeField] private float breathFlat = 0.035f;
         [Tooltip("Mặt chớp mắt, ngáp, buồn hiện và tắt mượt trong chừng này giây.")]
         [SerializeField] private float faceFadeSeconds = 0.07f;
-        [Tooltip("Nghiêng tối đa khi kéo hết cỡ: lệch bao nhiêu ô và nghiêng bao nhiêu độ.")]
-        [SerializeField] private float leanDistance = 0.14f;
-        [SerializeField] private float leanDegrees = 10f;
+        [Tooltip("Khi kéo: mèo nhích về hướng kéo chừng này (tính theo ô). Nhỏ để mèo vẫn gọn trong ô của nó.")]
+        [SerializeField] private float leanDistance = 0.03f;
+        [Tooltip("Khi kéo: mèo vươn dài thêm theo hướng kéo (tỉ lệ) và co bớt chiều kia, vẫn trong ô.")]
+        [SerializeField] private float leanStretch = 0.06f;
+        [SerializeField] private float leanSquash = 0.04f;
+        [Tooltip("Khi kéo ngang: nghiêng tối đa chừng này độ.")]
+        [SerializeField] private float leanDegrees = 6f;
         [SerializeField] private float leanSpeed = 18f;
         [SerializeField] private Color eatenColor = new Color(0.72f, 0.42f, 1f);
 
@@ -115,6 +119,12 @@ namespace Meowtosis.Presentation
         // Nghiêng người theo ngón tay đang kéo: `amount` từ 0 tới 1, (0, 0) là đứng thẳng.
         public void Lean(Vector2 amount) => leanTarget = amount;
 
+        // Báo trước lúc người chơi đang kéo: con này sẽ bị bản sao đè mất (mờ đi, co lại, run nhẹ).
+        public void ShowDoomed(bool doomed) => isDoomed = doomed;
+
+        private bool isDoomed;
+        private float doomed;
+
         // Diễn một chuyển động; `direction` là hướng của nước đi (bỏ trống với chuyển động không theo hướng).
         public void PlayMotion(PieceMotion newMotion, Vector2 direction = default, float delay = 0f)
         {
@@ -147,7 +157,7 @@ namespace Meowtosis.Presentation
             if (showsHappyImage) Show(Piece, art, false);
             hasMood = true;
             faceTimeLeft = 0f;
-            SetFace(FaceKind.Sad);
+            // SetFace(FaceKind.Sad);
             sweatDrop.SetActive(true);
         }
 
@@ -242,8 +252,8 @@ namespace Meowtosis.Presentation
             scaleX *= (1f + breathWide * breath) * (flipTimeLeft > 0f ? -1f : 1f);
             scaleY *= 1f - breathFlat * breath;
             lean = Vector2.Lerp(lean, leanTarget, 1f - Mathf.Exp(-leanSpeed * Time.deltaTime));
-            scaleX *= 1f + Mathf.Abs(lean.x) * 0.22f - Mathf.Abs(lean.y) * 0.12f;
-            scaleY *= 1f + Mathf.Abs(lean.y) * 0.22f - Mathf.Abs(lean.x) * 0.12f;
+            scaleX *= 1f + Mathf.Abs(lean.x) * leanStretch - Mathf.Abs(lean.y) * leanSquash;
+            scaleY *= 1f + Mathf.Abs(lean.y) * leanStretch - Mathf.Abs(lean.x) * leanSquash;
             position += lean * leanDistance;
             if (hasMood)
             {
@@ -254,6 +264,15 @@ namespace Meowtosis.Presentation
             visual.localPosition = position;
             visual.localRotation = Quaternion.Euler(0f, 0f, rotation);
             visual.localScale = new Vector3(scaleX, scaleY, 1f);
+
+            doomed = Mathf.MoveTowards(doomed, isDoomed ? 1f : 0f, Time.deltaTime * 6f);
+            if (doomed > 0f)
+            {
+                var shrink = 1f - 0.1f * doomed;
+                visual.localScale = new Vector3(scaleX * shrink, scaleY * shrink, 1f);
+                visual.localRotation = Quaternion.Euler(0f, 0f, rotation + Mathf.Sin(Time.time * 30f) * 4f * doomed);
+                alpha *= 1f - 0.45f * doomed;
+            }
 
             var color = Color.Lerp(Color.white, eatenColor, tint);
             color.a = alpha;

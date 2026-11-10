@@ -55,7 +55,12 @@ namespace Meowtosis.Tests
             if (definition.Trap != null) return; // Level có bẫy dùng par sư phạm theo kịch bản hướng dẫn
             var result = Rules.Solver.Solve(new Level(definition).CreateStartBoard());
             Assert.That(result.Status, Is.EqualTo(SolveStatus.Solved));
-            Assert.That(result.Moves.Count, Is.EqualTo(definition.Par));
+            // Khối 1 (Học luật) đặt par theo lời giải chỉ dùng các luật đã dạy: ở level dạy khử 3, đè và đẩy (chưa được dạy)
+            // đi tắt được nên bộ giải có thể tìm ra ít nước hơn. Các khối khác par đúng bằng số nước ít nhất.
+            if (definition.Block == 1)
+                Assert.That(result.Moves.Count, Is.LessThanOrEqualTo(definition.Par));
+            else
+                Assert.That(result.Moves.Count, Is.EqualTo(definition.Par));
         }
 
         // Mọi bước hướng dẫn phải đi được và không làm thua. Hướng dẫn trọn cả level thì thắng đúng par nước.

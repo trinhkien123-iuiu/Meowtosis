@@ -25,8 +25,8 @@ namespace Meowtosis.Gameplay
         TwoColor = 15,
     }
 
-    // Level nào có cơ chế gì, theo nội dung level. Bốn cơ chế cơ bản (nhân đôi, đẩy, thay thế, khử 3) không tính ở đây:
-    // màn hướng dẫn đầu game đã dạy chúng trước level 1 (Onboarding.TaughtMechanics).
+    // Level nào có cơ chế gì, theo nội dung level. Bốn luật cơ bản (nhân đôi lấp kín, khử 3, đẩy, thay thế) không dò ra từ
+    // bàn: chúng được dạy lần lượt ở 15 level đầu, level mở đầu mỗi luật khai thẻ của luật đó (card) để bản đồ gắn nhãn "mới".
     public static class MechanicDetector
     {
         // Như In(Level), thêm thẻ riêng mà level khai trong danh sách level.

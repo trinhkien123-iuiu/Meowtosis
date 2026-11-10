@@ -70,6 +70,13 @@ namespace Meowtosis.Presentation
         private Transform pieceRoot;
         private Transform hintArrow;
         private PieceView leaningView;
+        // Các con đang được báo trước lúc kéo: bị đẩy (nghiêng theo) hoặc bị đè (mờ đi).
+        private readonly List<PieceView> previewedViews = new List<PieceView>();
+        // Nước đang kéo đã tính báo trước rồi: cùng ô, cùng hướng, cùng bàn thì khỏi tính lại mỗi khung hình (TrySwipe tốn
+        // cấp phát vì dựng cả bàn mới và chạy hết các bước của lượt).
+        private int previewedCell = Level.NoCell;
+        private Direction previewedDirection;
+        private Board previewedBoard;
         private PieceView highlightedPiece;
         private BoardLayout layout;
         private Level level;
@@ -523,13 +530,15 @@ namespace Meowtosis.Presentation
 
         private void OnSwiped(Vector2 worldPoint, Direction direction)
         {
+            ClearPreviewedViews();
             if (TryGetCell(worldPoint, out var cell)) CellSwiped?.Invoke(cell, direction);
         }
 
         private readonly GameRules rules = GameRules.CreateStandard();
         private readonly HashSet<int> endangeredPieceIds = new HashSet<int>();
 
-        // Đang kéo: quân dưới ngón tay nghiêng theo hướng kéo (theo trục kéo nhiều hơn), chưa tính nước đi.
+        // Đang kéo: quân dưới ngón tay nghiêng nhẹ theo hướng kéo, vẫn gọn trong ô; kéo đủ xa thì báo trước kết quả
+        // (dãy bị đẩy nghiêng theo, con sắp bị đè mờ đi) và cảnh báo nếu nước đó làm mất hết một màu.
         private void OnDragged(Vector2 worldPoint, Vector2 drag)
         {
             var piece = TryGetCell(worldPoint, out var cell) && currentBoard != null ? currentBoard[cell] : null;
@@ -549,8 +558,13 @@ namespace Meowtosis.Presentation
                     ? (drag.x > 0f ? Direction.Right : Direction.Left)
                     : (drag.y > 0f ? Direction.Up : Direction.Down);
 
-                if (rules.Swipes.TrySwipe(currentBoard, cell, dir, out var previewMove))
+                if (cell == previewedCell && dir == previewedDirection && ReferenceEquals(currentBoard, previewedBoard)) return;
+                if (piece.Value.CanSwipe && rules.Swipes.TrySwipe(currentBoard, cell, dir, out var previewMove))
                 {
+                    ShowDragPreview(previewMove, dir);
+                    previewedCell = cell;
+                    previewedDirection = dir;
+                    previewedBoard = currentBoard;
                     var loss = LossReport.Of(previewMove);
                     if (loss != null)
                     {
@@ -558,7 +572,9 @@ namespace Meowtosis.Presentation
                         return;
                     }
                 }
+                else ClearPreviewedViews();
             }
+            else ClearPreviewedViews();
             ClearEndangeredWarning();
         }
 
@@ -599,8 +615,49 @@ namespace Meowtosis.Presentation
             endangeredPieceIds.Clear();
         }
 
+        // Báo trước kết quả nước đang kéo: đẩy thì cả dãy bị đẩy nghiêng theo hướng; đè thì con sắp bị đè mờ đi và run.
+        private void ShowDragPreview(MoveResult preview, Direction direction)
+        {
+            ClearPreviewedViews();
+            if (preview.Replaced is Piece replaced)
+            {
+                var victim = PieceViewOf(replaced.Id);
+                if (victim != null)
+                {
+                    victim.ShowDoomed(true);
+                    previewedViews.Add(victim);
+                }
+                return;
+            }
+            if (preview.Pushes.Count > 0)
+            {
+                var axis = (Vector2)BoardLayout.Offset(direction);
+                foreach (var shift in preview.Pushes)
+                {
+                    var pushed = preview.Before[shift.From] is Piece moved ? PieceViewOf(moved.Id) : null;
+                    if (pushed == null) continue;
+                    pushed.Lean(axis * 0.7f);
+                    previewedViews.Add(pushed);
+                }
+            }
+        }
+
+        private void ClearPreviewedViews()
+        {
+            previewedCell = Level.NoCell;
+            previewedBoard = null;
+            foreach (var view in previewedViews)
+            {
+                if (view == null) continue;
+                view.ShowDoomed(false);
+                if (view != leaningView) view.Lean(Vector2.zero);
+            }
+            previewedViews.Clear();
+        }
+
         private void OnDragEnded()
         {
+            ClearPreviewedViews();
             if (leaningView != null) leaningView.Lean(Vector2.zero);
             leaningView = null;
             ClearEndangeredWarning();

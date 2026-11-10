@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Push
   m_EditorClassIdentifier: 
   mechanic: 1
-  title: "\u0110\u1EA8Y"
-  description: "\xD4 b\xEAn c\u1EA1nh \u0111\xE3 c\xF3 m\xE8o th\xEC c\u1EA3 d\xE3y
-    b\u1ECB \u0111\u1EA9y t\u1EDBi \xF4 tr\u1ED1ng g\u1EA7n nh\u1EA5t theo h\u01B0\u1EDBng
-    vu\u1ED1t."
+  title: "\u0110\u1ea8Y C\u1ea2 D\u00c3Y"
+  description: "Vu\u1ed1t v\u00e0o \u00f4 \u0111\u00e3 c\u00f3 m\u00e8o: n\u1ebfu ph\u00eda sau c\u00f2n \u00f4 tr\u1ed1ng, c\u1ea3 d\u00e3y b\u1ecb \u0111\u1ea9y l\u00f9i m\u1ed9t \u00f4 \u0111\u1ec3 b\u1ea3n sao chen v\u00e0o."
   demoRows:
-  - AB.
+  - ABB.
+  - ....
   demoGoal: []
   demoMembranes: []
-  demoHasGerms: 0
+  demoPortals: []
+  demoColorSwitches: []
   demoMove: 0 0 right
+  demoMoves:
+  - 0 0 right
