@@ -39,6 +39,9 @@ namespace Meowtosis.Domain
         // Một câu mẹo hiện đầu màn; rỗng nếu không có.
         public string Tip { get; set; } = "";
 
+        // Bảng màu riêng của level (thứ tự tương ứng với A, B, C, D, E...); nếu có thì thay thế các màu mặc định.
+        public List<Species> Palette { get; } = new List<Species>();
+
         // Một lời giải ngắn nhất, dài đúng Par nước.
         public List<Move> Solution { get; } = new List<Move>();
     }

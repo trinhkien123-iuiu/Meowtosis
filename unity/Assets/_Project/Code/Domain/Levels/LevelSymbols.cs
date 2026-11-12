@@ -20,6 +20,13 @@ namespace Meowtosis.Domain
                 case 'C': species = Species.Yellow; return true;
                 case 'D': species = Species.Pink; return true;
                 case 'E': species = Species.Purple; return true;
+                case 'F': species = Species.Green; return true;
+                case 'G': species = Species.Lime; return true;
+                case 'H': species = Species.Orange; return true;
+                case 'I': species = Species.Teal; return true;
+                case 'J': species = Species.BabyBlue; return true;
+                case 'K': species = Species.ElectricBlue; return true;
+                case 'L': species = Species.WarmPink; return true;
                 default: species = default; return false;
             }
         }
@@ -31,6 +38,13 @@ namespace Meowtosis.Domain
             Species.Yellow => 'C',
             Species.Pink => 'D',
             Species.Purple => 'E',
+            Species.Green => 'F',
+            Species.Lime => 'G',
+            Species.Orange => 'H',
+            Species.Teal => 'I',
+            Species.BabyBlue => 'J',
+            Species.ElectricBlue => 'K',
+            Species.WarmPink => 'L',
             _ => 'V',
         };
 

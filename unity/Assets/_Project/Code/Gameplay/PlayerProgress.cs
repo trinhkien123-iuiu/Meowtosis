@@ -66,15 +66,25 @@ namespace Meowtosis.Gameplay
         public static PlayerProgress Restore(int hearts, DateTime? nextHeartAt, int coins, IDictionary<BoosterKind, int> boosters,
             IDictionary<string, int> bestStars, IEnumerable<string> seenMechanics)
         {
-            var counts = BoosterKinds.ToDictionary(kind => kind, kind => boosters.TryGetValue(kind, out var count) ? count : StartingBoosters);
+            var counts = BoosterKinds.ToDictionary(kind => kind, kind => boosters.TryGetValue(kind, out var count) ? Math.Max(0, count) : StartingBoosters);
             return new PlayerProgress(Math.Max(0, Math.Min(MaximumHearts, hearts)), nextHeartAt, Math.Max(0, coins), counts,
-                new Dictionary<string, int>(bestStars), new HashSet<string>(seenMechanics));
+                bestStars.ToDictionary(entry => entry.Key, entry => Math.Max(0, Math.Min(3, entry.Value))), new HashSet<string>(seenMechanics));
         }
 
         // Hồi tim theo thời gian thực: mỗi HeartRecoveryTime thêm một tim cho tới khi đầy. Trả true nếu có thay đổi.
         public bool RecoverHearts(DateTime now)
         {
             var changed = false;
+            if (Hearts == MaximumHearts && NextHeartAt.HasValue)
+            {
+                NextHeartAt = null;
+                return true;
+            }
+            if (Hearts < MaximumHearts && !NextHeartAt.HasValue)
+            {
+                NextHeartAt = now + HeartRecoveryTime;
+                return true;
+            }
             while (Hearts < MaximumHearts && NextHeartAt.HasValue && now >= NextHeartAt.Value)
             {
                 Hearts++;

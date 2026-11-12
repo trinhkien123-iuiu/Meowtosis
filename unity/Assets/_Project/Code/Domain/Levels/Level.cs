@@ -34,6 +34,14 @@ namespace Meowtosis.Domain
             isIce = new bool[CellCount];
             targets = new Species?[CellCount];
             startPieces = new Piece?[CellCount];
+            var palette = definition.Palette.Count > 0 ? definition.Palette : null;
+            Species MapSpecies(Species original)
+            {
+                if (palette == null || palette.Count == 0) return original;
+                var index = (int)original;
+                return index >= 0 && index < palette.Count ? palette[index] : original;
+            }
+
             for (var cell = 0; cell < CellCount; cell++)
             {
                 var symbol = definition.Rows[RowOf(cell)][ColumnOf(cell)];
@@ -42,11 +50,17 @@ namespace Meowtosis.Domain
                 isIce[cell] = symbol == LevelSymbols.Ice;
                 if (LevelSymbols.TryReadPiece(symbol, firstFreePieceId, out var piece))
                 {
+                    if (piece.IsCat)
+                    {
+                        piece = new Piece(piece.Id, MapSpecies(piece.Species), piece.IsAsleep, piece.Facing,
+                            piece.OtherColor.HasValue ? MapSpecies(piece.OtherColor.Value) : (Species?)null,
+                            piece.Period, piece.TurnsLeft);
+                    }
                     startPieces[cell] = piece;
                     firstFreePieceId++;
                 }
                 if (definition.Goal.Count > 0 && LevelSymbols.TryReadSpecies(definition.Goal[RowOf(cell)][ColumnOf(cell)], out var target))
-                    targets[cell] = target;
+                    targets[cell] = MapSpecies(target);
             }
 
             Membranes = definition.Membranes.ToList();
@@ -58,7 +72,9 @@ namespace Meowtosis.Domain
                 .Select(piece => piece.Value.Species)
                 .Distinct()
                 .ToList();
-            ColorSwitches = definition.ColorSwitches.ToList();
+            ColorSwitches = definition.ColorSwitches
+                .Select(cs => new ColorSwitch(cs.Row, cs.Column, MapSpecies(cs.OtherColor), cs.Period, cs.TurnsLeft))
+                .ToList();
             foreach (var colorSwitch in ColorSwitches) ApplyColorSwitch(colorSwitch);
             CellsToFill = Enumerable.Range(0, CellCount).Count(cell => isSlot[cell] && !isToxic[cell]);
             HasTargets = targets.Any(target => target.HasValue);

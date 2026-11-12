@@ -55,7 +55,14 @@ namespace Meowtosis.Presentation
             return art != null ? art.Color : Color.white;
         }
 
-        private CatArt Find(Species species) => Array.Find(cats, art => art.Species == species);
+        private CatArt Find(Species species)
+        {
+            foreach (var art in cats)
+            {
+                if (art.Species == species) return art;
+            }
+            return null;
+        }
 
         [Serializable]
         public sealed class CatArt

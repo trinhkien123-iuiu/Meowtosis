@@ -60,6 +60,8 @@ MonoBehaviour:
   - {fileID: 60466349050340504}
   - {fileID: 9023807690708332076}
   - {fileID: 5385974935179433262}
+  winMusic: {fileID: 8300000, guid: 1961562accf34dd6af6558084a3bda84, type: 3}
+  winMusicVolume: 0.45
 --- !u!1 &583366655328129289
 GameObject:
   m_ObjectHideFlags: 0

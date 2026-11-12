@@ -4,6 +4,7 @@
     "references": [
         "Meowtosis.Domain",
         "Meowtosis.Gameplay",
+        "Meowtosis.Presentation",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

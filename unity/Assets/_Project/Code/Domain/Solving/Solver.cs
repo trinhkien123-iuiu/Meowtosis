@@ -31,7 +31,6 @@ namespace Meowtosis.Domain
             var nodes = new Dictionary<string, SearchNode> { [startKey] = new SearchNode(start, 0, null, default) };
             var buckets = new List<Stack<string>>();   // buckets[f]: các thế cờ có số nước đã đi cộng ước lượng bằng f
             AddToBucket(buckets, Estimate(start), startKey);
-            var expanded = 0;
             var limitReached = false;
 
             for (var total = Estimate(start); total < buckets.Count; total++)
@@ -44,7 +43,7 @@ namespace Meowtosis.Domain
                     if (node.IsExpanded || node.Cost + Estimate(node.Board) != total) continue;   // đã xét, hoặc đã tới được bằng đường ngắn hơn
                     node.IsExpanded = true;
 
-                    if (++expanded % 128 == 0 && timeLimit.HasValue && clock.Elapsed > timeLimit.Value) return SolveResult.LimitReached;
+                    if (timeLimit.HasValue && clock.Elapsed >= timeLimit.Value) return SolveResult.LimitReached;
                     if (GameOutcome.IsComplete(node.Board)) return SolveResult.Solved(PathTo(nodes, key));
 
                     foreach (var (cell, direction) in SwipeRule.Candidates(node.Board))

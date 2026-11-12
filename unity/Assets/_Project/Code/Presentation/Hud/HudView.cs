@@ -41,6 +41,8 @@ namespace Meowtosis.Presentation
         [SerializeField] private GameObject[] hiddenWhileGuided;
         [Tooltip("Độ cao của bong bóng lời thoại (neo trên) khi level có hướng dẫn; bình thường thì giữ vị trí đặt trong scene.")]
         [SerializeField] private float guidedTipY = -250f;
+        [Tooltip("Extra upward offset for the narrator and speech bubble in the level 32 sleeping-cat tutorial.")]
+        [SerializeField, Min(0f)] private float sleepingTutorialTipLift = 100f;
 
         [Header("Mèo")]
         [SerializeField] private BoardArt art;
@@ -74,6 +76,7 @@ namespace Meowtosis.Presentation
         private float toastTimeLeft;
         private float normalTipY;
         private bool hasNormalTipY;
+        private int shownLevelNumber;
 
         public event Action SettingsClicked;
 
@@ -96,7 +99,11 @@ namespace Meowtosis.Presentation
         private int badgeTaps;
         private float lastBadgeTap = -10f;
 
-        public void ShowLevel(int levelNumber) => levelText.text = GameTexts.LevelShort(levelNumber);
+        public void ShowLevel(int levelNumber)
+        {
+            shownLevelNumber = levelNumber;
+            levelText.text = GameTexts.LevelShort(levelNumber);
+        }
 
         public void ShowHearts(int hearts, string timer)
         {
@@ -137,7 +144,8 @@ namespace Meowtosis.Presentation
                 normalTipY = bubble.anchoredPosition.y;
                 hasNormalTipY = true;
             }
-            bubble.anchoredPosition = new Vector2(bubble.anchoredPosition.x, guided ? guidedTipY : normalTipY);
+            var tutorialLift = shownLevelNumber == 32 ? sleepingTutorialTipLift : 0f;
+            bubble.anchoredPosition = new Vector2(bubble.anchoredPosition.x, guided ? guidedTipY + tutorialLift : normalTipY);
         }
 
         public void ShowSpecies(IReadOnlyList<SpeciesCount> counts)

@@ -4,19 +4,18 @@ using UnityEngine;
 
 namespace Meowtosis.Presentation
 {
-    // Bong bóng lời hướng dẫn phía trên bàn (TipBubble): nảy ra khi xuất hiện, nảy nhẹ khi đổi câu,
-    // hình minh hoạ và chữ hiện dần từng ký tự như đang nói; tắt thì thu nhỏ rồi ẩn. Chạy theo thời gian thật.
+    // Bong bóng lời hướng dẫn phía trên bàn (TipBubble):
+    // - Xuất hiện lần đầu: cả bong bóng và mèo cùng nảy ra.
+    // - Đổi câu khi các câu liền nhau: con mèo giữ nguyên vị trí và kích thước, chữ cũ thu nhỏ, nghỉ một nhịp, rồi nảy chữ mới ra kèm rung nhẹ khung chat.
+    // - Ẩn: thu nhỏ rồi tắt. Chạy theo thời gian thật (unscaledDeltaTime).
     public sealed class TipBubbleView : MonoBehaviour
     {
         [SerializeField] private RectTransform body;
         [SerializeField] private TMP_Text text;
-        [SerializeField] private float popSeconds = 0.28f;
-        [SerializeField] private float bumpSeconds = 0.2f;
-        [SerializeField] private float hideSeconds = 0.14f;
-        [Tooltip("Số ký tự hiện thêm mỗi giây.")]
-        [SerializeField] private float charactersPerSecond = 40f;
-        [Tooltip("Mỗi hình minh hoạ giữ thêm chừng này giây cho mắt kịp nhìn.")]
-        [SerializeField] private float pictureHoldSeconds = 0.14f;
+        [SerializeField] private float popSeconds = 0.24f;
+        [SerializeField] private float shrinkSeconds = 0.1f;
+        [SerializeField] private float restSeconds = 0.22f;
+        [SerializeField] private float hideSeconds = 0.12f;
 
         private string shown = "";
         private Coroutine routine;
@@ -33,9 +32,7 @@ namespace Meowtosis.Presentation
             shown = richText;
             gameObject.SetActive(true);
             Prewarm();
-            text.maxVisibleCharacters = 0;
-            text.text = richText;
-            Restart(Appear(wasVisible));
+            Restart(Appear(richText, wasVisible));
         }
 
         public void Hide()
@@ -53,7 +50,6 @@ namespace Meowtosis.Presentation
         {
             if (warmed) return;
             warmed = true;
-            text.maxVisibleCharacters = 0;
             text.text = Pictograms.Format(":" + string.Join("::", Pictograms.Names) + ":");
             text.ForceMeshUpdate();
         }
@@ -64,29 +60,65 @@ namespace Meowtosis.Presentation
             routine = StartCoroutine(next);
         }
 
-        private IEnumerator Appear(bool wasVisible)
+        private IEnumerator Appear(string richText, bool wasVisible)
         {
-            text.maxVisibleCharacters = 0;
-            text.ForceMeshUpdate();
-            var total = text.textInfo.characterCount;
-            var seconds = wasVisible ? bumpSeconds : popSeconds;
-            for (var time = 0f; time < seconds; time += Time.unscaledDeltaTime)
+            if (wasVisible)
             {
-                var t = time / seconds;
-                var scale = wasVisible
-                    ? 1f + 0.06f * Mathf.Sin(t * Mathf.PI)
-                    : t < 0.65f ? Mathf.Lerp(0.4f, 1.08f, t / 0.65f) : Mathf.Lerp(1.08f, 1f, (t - 0.65f) / 0.35f);
-                body.localScale = Vector3.one * scale;
-                yield return null;
+                // Khi đổi câu liền nhau: giữ nguyên vị trí và kích thước con mèo, chỉ thu nhỏ phần chữ
+                var textTransform = text.rectTransform;
+                for (var time = 0f; time < shrinkSeconds; time += Time.unscaledDeltaTime)
+                {
+                    var t = time / shrinkSeconds;
+                    textTransform.localScale = Vector3.one * (1f - t);
+                    yield return null;
+                }
+                textTransform.localScale = Vector3.zero;
+
+                // Nghỉ một nhịp ngắn cho người chơi kịp nhận thấy câu cũ kết thúc
+                if (restSeconds > 0f)
+                    yield return new WaitForSecondsRealtime(restSeconds);
+
+                // Đổi nội dung chữ mới
+                text.text = richText;
+                text.maxVisibleCharacters = int.MaxValue;
+                text.ForceMeshUpdate();
+
+                // Nảy chữ mới bật ra kèm độ rung nhẹ của khung chat (mèo vẫn ở yên)
+                for (var time = 0f; time < popSeconds; time += Time.unscaledDeltaTime)
+                {
+                    var t = time / popSeconds;
+                    var textScale = t < 0.65f
+                        ? Mathf.Lerp(0.2f, 1.12f, t / 0.65f)
+                        : Mathf.Lerp(1.12f, 1f, (t - 0.65f) / 0.35f);
+                    textTransform.localScale = Vector3.one * textScale;
+
+                    var bump = 1f + 0.04f * Mathf.Sin(t * Mathf.PI);
+                    body.localScale = Vector3.one * bump;
+                    yield return null;
+                }
+                textTransform.localScale = Vector3.one;
+                body.localScale = Vector3.one;
             }
-            body.localScale = Vector3.one;
-            for (var visible = 1; visible <= total; visible++)
+            else
             {
-                text.maxVisibleCharacters = visible;
-                var isPicture = text.textInfo.characterInfo[visible - 1].elementType == TMP_TextElementType.Sprite;
-                yield return new WaitForSecondsRealtime(1f / charactersPerSecond + (isPicture ? pictureHoldSeconds : 0f));
+                // Xuất hiện lần đầu: cả khung chat và mèo cùng nảy ra
+                text.text = richText;
+                text.maxVisibleCharacters = int.MaxValue;
+                text.rectTransform.localScale = Vector3.one;
+                text.ForceMeshUpdate();
+
+                for (var time = 0f; time < popSeconds; time += Time.unscaledDeltaTime)
+                {
+                    var t = time / popSeconds;
+                    var scale = t < 0.65f
+                        ? Mathf.Lerp(0.35f, 1.08f, t / 0.65f)
+                        : Mathf.Lerp(1.08f, 1f, (t - 0.65f) / 0.35f);
+                    body.localScale = Vector3.one * scale;
+                    yield return null;
+                }
+                body.localScale = Vector3.one;
             }
-            text.maxVisibleCharacters = 99999;
+
             routine = null;
         }
 
@@ -99,12 +131,14 @@ namespace Meowtosis.Presentation
                 yield return null;
             }
             gameObject.SetActive(false);
+            routine = null;
         }
 
         private void OnDisable()
         {
             body.localScale = Vector3.one;
-            text.maxVisibleCharacters = 99999;
+            text.rectTransform.localScale = Vector3.one;
+            text.maxVisibleCharacters = int.MaxValue;
             routine = null;
         }
     }

@@ -1,0 +1,5 @@
+WellDone.png
+size:856,176
+filter:Linear,Linear
+welldone
+bounds:2,2,852,172

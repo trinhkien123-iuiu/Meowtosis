@@ -43,6 +43,7 @@ namespace Meowtosis.Bootstrap
             progress = store.Load();
             if (onboardingScript != null && alwaysShowOnboarding) StartOnboarding();
             else StartGame();
+            if (winPopup != null) StartCoroutine(winPopup.PrewarmAssets());
         }
 
         private void StartOnboarding()

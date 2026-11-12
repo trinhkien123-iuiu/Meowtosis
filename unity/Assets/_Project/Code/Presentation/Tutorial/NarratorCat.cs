@@ -14,7 +14,7 @@ namespace Meowtosis.Presentation
         [SerializeField] private string warnStartAnimation = "ip_worried_start";
         [SerializeField] private string warnLoopAnimation = "ip_worried_loop";
         [SerializeField] private string praiseAnimation = "ip_cheer";
-        [SerializeField] private float popSeconds = 0.3f;
+        [SerializeField] private float popSeconds = 0.2f;
 
         private string line;
         private Vector3 home = Vector3.zero;

@@ -11,9 +11,12 @@ namespace Meowtosis.Presentation
     public sealed class BoardCollapse : MonoBehaviour
     {
         [Tooltip("Chờ mèo nhảy mừng bao lâu rồi mới bắt đầu rơi.")]
-        [SerializeField] private float startDelay = 0.55f;
+        [SerializeField] private float startDelay = 0.35f;
         [Tooltip("Khối sau bắt đầu rơi sau khối trước bao lâu (nhỏ hơn thời gian rơi thì các khối rơi chồng lên nhau).")]
         [SerializeField] private float stagger = 0.06f;
+        [SerializeField, Min(0f)] private float maxStaggerSpan = 0.45f;
+        [SerializeField] private WinPopup winPopup;
+        private const float BackgroundTransitionSeconds = 0.26f;
         [SerializeField] private float tileFallSeconds = 0.7f;
         [Tooltip("Mèo rơi chậm hơn khối của nó bao lâu.")]
         [SerializeField] private float catDelay = 0.1f;
@@ -52,8 +55,11 @@ namespace Meowtosis.Presentation
         {
             yield return new WaitForSeconds(startDelay);
             var running = 0;
+            var gap = Mathf.Min(Mathf.Max(0f, stagger), maxStaggerSpan / Mathf.Max(1, columns.Count - 1));
+            var latestFallEnd = Time.time;
             for (var index = 0; index < columns.Count; index++)
             {
+                latestFallEnd = Mathf.Max(latestFallEnd, Time.time + tileFallSeconds);
                 var spin = UnityEngine.Random.Range(-maxSpinDegrees, maxSpinDegrees);
                 running++;
                 var tileCenter = columns[index].Tile != null ? columns[index].Tile.localPosition : Vector3.zero;
@@ -65,13 +71,29 @@ namespace Meowtosis.Presentation
                 }
                 foreach (var piece in columns[index].Pieces)
                 {
+                    latestFallEnd = Mathf.Max(latestFallEnd, Time.time + catDelay + catFallSeconds);
                     running++;
                     StartCoroutine(Fall(piece, catFallSeconds, catDelay, catCurve, -spin * 1.5f, catJump, null, () => running--));
                 }
-                yield return new WaitForSeconds(stagger);
+                // No extra stagger after the final column.
+                if (index + 1 < columns.Count) yield return new WaitForSeconds(gap);
+            }
+            if (winPopup != null)
+            {
+                // Cover the last part of the fall instead of cutting to an opaque screen.
+                // Completion still waits for all board animations below.
+                var leadIn = Mathf.Max(0f, latestFallEnd - Time.time - BackgroundTransitionSeconds);
+                if (leadIn > 0f) yield return new WaitForSeconds(leadIn);
+                yield return winPopup.CoverBoard(BackgroundTransitionSeconds);
             }
             while (running > 0) yield return null;
             finished?.Invoke();
+        }
+
+        public void ResetTransition()
+        {
+            StopAllCoroutines();
+            if (winPopup != null) winPopup.ClearBackgroundTransition();
         }
 
         // `jump`: độ cao lúc đường cong xuống thấp nhất (giá trị âm nhỏ nhất của đường cong ứng với nhảy cao `jump`).

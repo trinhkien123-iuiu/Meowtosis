@@ -56,6 +56,9 @@ namespace Meowtosis.Presentation
         [SerializeField] private AnimationCurve shakeY = PieceMotion.Keys(0f, 0f, 0.2f, 0.022f, 0.4f, -0.033f, 0.6f, 0.022f, 0.8f, -0.011f, 1f, 0f);
 
         private readonly Dictionary<int, PieceView> pieceViews = new Dictionary<int, PieceView>();
+        private readonly List<PieceView> restingCats = new List<PieceView>();
+        private readonly HashSet<int> shownPieceIds = new HashSet<int>();
+        private readonly List<int> removedPieceIds = new List<int>();
         private readonly List<Transform> highlights = new List<Transform>();
         private readonly List<GameObject> tutorialParts = new List<GameObject>();
         private readonly List<GameObject> focusParts = new List<GameObject>();
@@ -93,8 +96,11 @@ namespace Meowtosis.Presentation
 
         public void Build(Level newLevel)
         {
+            OnDragEnded();
+            ResetTimeScale();
             if (boardRoot != null) Destroy(boardRoot.gameObject);
             StopAllCoroutines();
+            if (collapse != null) collapse.ResetTransition();
             pieceViews.Clear();
             highlights.Clear();
             tutorialParts.Clear();
@@ -104,6 +110,7 @@ namespace Meowtosis.Presentation
             gates.Clear();
             pieceCells.Clear();
             highlightedPiece = null;
+            currentBoard = null;
             level = newLevel;
             layout = new BoardLayout(level);
             boardRoot = CreateGroup(transform, "Board");
@@ -121,7 +128,15 @@ namespace Meowtosis.Presentation
             hintArrow.gameObject.SetActive(false);
             ClearSpotlight();
             HideTutorial();
-            cameraFraming.Frame(layout.Bounds);
+            if (level?.Id == "meow-033")
+            {
+                // Riêng Level 22: thu nhỏ nhẹ (92%) và dịch lùi xuống một chút để không bị khung mèo che
+                cameraFraming.Frame(layout.Bounds, 0.92f, 0.08f);
+            }
+            else
+            {
+                cameraFraming.Frame(layout.Bounds);
+            }
         }
 
         public void Show(Board board)
@@ -276,8 +291,6 @@ namespace Meowtosis.Presentation
                 var ghost = ghostObj.AddComponent<GhostPiecePreview>();
                 ghost.Init(layout.CellCenter(cell), layout.CellCenter(landing), sprite, width, lift, 15);
                 tutorialParts.Add(ghostObj);
-
-                effects.Sparkle(boardRoot.TransformPoint(layout.CellCenter(landing)));
             }
         }
 
@@ -448,18 +461,33 @@ namespace Meowtosis.Presentation
         {
             while (Time.unscaledTime < Mathf.Max(slowUntil, hitStopUntil))
             {
-                Time.timeScale = Time.unscaledTime < hitStopUntil ? 0.03f : slowScale;
+                Time.timeScale = Time.unscaledTime < hitStopUntil ? 0.03f
+                    : Time.unscaledTime < slowUntil ? slowScale : 1f;
                 yield return null;
             }
             Time.timeScale = 1f;
             timeRoutine = null;
         }
 
+        private void ResetTimeScale()
+        {
+            if (timeRoutine != null) StopCoroutine(timeRoutine);
+            timeRoutine = null;
+            slowScale = 1f;
+            slowUntil = 0f;
+            hitStopUntil = 0f;
+            Time.timeScale = 1f;
+        }
+
         // Mèo đang thức, chưa làm gì, để chọn làm động tác lúc rảnh.
         internal PieceView RandomRestingCat()
         {
-            var cats = pieceViews.Values.Where(view => view.IsResting && view.Piece.IsCat && !view.Piece.IsAsleep).ToList();
-            return cats.Count == 0 ? null : cats[UnityEngine.Random.Range(0, cats.Count)];
+            restingCats.Clear();
+            foreach (var view in pieceViews.Values)
+            {
+                if (view.IsResting && view.Piece.IsCat && !view.Piece.IsAsleep) restingCats.Add(view);
+            }
+            return restingCats.Count == 0 ? null : restingCats[UnityEngine.Random.Range(0, restingCats.Count)];
         }
 
         // Giữ một PieceView cho mỗi id quân: quân cũ trượt tới ô mới, quân mới mọc lên, quân mất thì xoá.
@@ -468,12 +496,12 @@ namespace Meowtosis.Presentation
         {
             currentBoard = board;
             var newPieceId = move?.Placed[move.PlacedCell]?.Id;
-            var shownIds = new HashSet<int>();
+            shownPieceIds.Clear();
             var portalUsed = false;
             for (var cell = 0; cell < board.CellCount; cell++)
             {
                 if (!(board[cell] is Piece piece)) continue;
-                shownIds.Add(piece.Id);
+                shownPieceIds.Add(piece.Id);
                 var position = layout.CellCenter(cell);
                 if (!pieceViews.TryGetValue(piece.Id, out var view))
                 {
@@ -500,7 +528,12 @@ namespace Meowtosis.Presentation
             }
             if (portalUsed) sounds.Play(SoundId.Portal);
 
-            foreach (var id in pieceViews.Keys.Where(id => !shownIds.Contains(id)).ToList())
+            removedPieceIds.Clear();
+            foreach (var id in pieceViews.Keys)
+            {
+                if (!shownPieceIds.Contains(id)) removedPieceIds.Add(id);
+            }
+            foreach (var id in removedPieceIds)
             {
                 Destroy(pieceViews[id].gameObject);
                 pieceViews.Remove(id);
@@ -519,8 +552,7 @@ namespace Meowtosis.Presentation
 
         private void OnDisable()
         {
-            Time.timeScale = 1f;
-            timeRoutine = null;
+            ResetTimeScale();
             swipeInput.Swiped -= OnSwiped;
             swipeInput.Tapped -= OnTapped;
             swipeInput.Dragged -= OnDragged;
@@ -572,7 +604,14 @@ namespace Meowtosis.Presentation
                         return;
                     }
                 }
-                else ClearPreviewedViews();
+                else
+                {
+                    ClearPreviewedViews();
+                    // Invalid swipes need caching too: holding still must not rerun the rules every frame.
+                    previewedCell = cell;
+                    previewedDirection = dir;
+                    previewedBoard = currentBoard;
+                }
             }
             else ClearPreviewedViews();
             ClearEndangeredWarning();
@@ -671,7 +710,7 @@ namespace Meowtosis.Presentation
         private bool TryGetCell(Vector2 worldPoint, out int cell)
         {
             cell = Level.NoCell;
-            return layout != null && layout.TryGetCell(transform.InverseTransformPoint(worldPoint), out cell);
+            return layout != null && boardRoot != null && layout.TryGetCell(boardRoot.InverseTransformPoint(worldPoint), out cell);
         }
 
         private IEnumerator RunShake(float strength)

@@ -49,6 +49,25 @@ namespace Meowtosis.Presentation
             else Tapped?.Invoke(pressPoint);
         }
 
+        private void OnDisable() => CancelPress();
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus) CancelPress();
+        }
+
+        private void OnApplicationPause(bool paused)
+        {
+            if (paused) CancelPress();
+        }
+
+        private void CancelPress()
+        {
+            if (!isPressed) return;
+            isPressed = false;
+            DragEnded?.Invoke();
+        }
+
         private Vector2 PointerWorldPosition() => targetCamera.ScreenToWorldPoint(Input.mousePosition);
 
         private static Direction DirectionOf(Vector2 drag)

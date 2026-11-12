@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Meowtosis.Domain;
 using Meowtosis.Gameplay;
+using UnityEngine;
 
 namespace Meowtosis.Presentation
 {
@@ -26,12 +29,19 @@ namespace Meowtosis.Presentation
         private bool isPlayingMove;
         private bool isSpotlighting;
         private bool isHintShowing;
+        private Task<Hint> hintSearch;
+        private Board hintSearchBoard;
+        private bool hintSearchIsIdle;
         private Action pendingAction;
         private float pendingDelay;
+        private bool pendingBlocksInput;
         private float secondsSinceClockUpdate;
         private string trapExplanation;
         private string praiseTip;   // lời khen tạm thời khi vừa xong hướng dẫn trong level
         private int cheatLevelIndex;
+        private const float IdleHelpThresholdSeconds = 4f;
+        private float idleHelpSeconds;
+        private bool isIdleHandShowing;
 
         public GamePresenter(IReadOnlyList<LevelDefinition> levels, GameRules rules, PlayerProgress progress,
             IProgressStore store, IClock clock, GameViews views, ISceneNavigator navigator)
@@ -48,14 +58,19 @@ namespace Meowtosis.Presentation
         }
 
         private bool CanPlay => run.Session.Status == SessionStatus.Playing && progress.Hearts > 0
-            && !isPlayingMove && !isSpotlighting && pendingAction == null && !views.Mechanic.IsOpen && !views.Cheat.IsOpen
-            && !views.BoosterOffer.IsOpen;
+            && !isPlayingMove && !isSpotlighting && !(pendingAction != null && pendingBlocksInput)
+            && !views.Mechanic.IsOpen && !views.Cheat.IsOpen
+            && !views.BoosterOffer.IsOpen && !views.Settings.IsOpen && !views.NoHearts.IsOpen;
 
         // Người chơi đang rảnh, không có bước hướng dẫn hay bảng nào mở: lúc này mới có sự kiện vui.
         private bool IsIdle => CanPlay && !targeting.IsActive && run.GuidedStep == null
             && !views.Settings.IsOpen && !views.NoHearts.IsOpen;
 
-        public void Dispose() => Subscribe(false);
+        public void Dispose()
+        {
+            CancelHintSearch();
+            Subscribe(false);
+        }
 
         public void Start(int levelNumberOverride)
         {
@@ -68,6 +83,7 @@ namespace Meowtosis.Presentation
         // Gọi mỗi khung hình: chạy việc hẹn giờ, mỗi giây cập nhật tim và đồng hồ hồi tim.
         public void Tick(float deltaTime)
         {
+            CompleteHintSearch();
             if (pendingAction != null && (pendingDelay -= deltaTime) <= 0f)
             {
                 var action = pendingAction;
@@ -75,6 +91,41 @@ namespace Meowtosis.Presentation
                 action();
             }
             views.Ambient.Tick(deltaTime, IsIdle, run.Session.Board);
+
+            // Người chơi click/chạm vào màn hình thì thu lại ngay bong bóng khen/cảnh báo (để chơi luôn, không phải đợi lâu)
+            if ((!string.IsNullOrEmpty(praiseTip) || !string.IsNullOrEmpty(trapExplanation))
+                && (Input.GetMouseButtonDown(0) || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+            {
+                praiseTip = null;
+                trapExplanation = null;
+                CancelFeedbackDelay();
+                RefreshHud(true);
+            }
+
+            // Các màn onboarding (13 màn đầu, levelIndex < 13) và Level 14 (levelIndex == 13):
+            // nếu người chơi đứng yên lâu không thao tác thì xuất hiện bàn tay hướng dẫn
+            var isHandTutorialEligible = levelIndex < 14;
+            if (CanPlay && !targeting.IsActive && run.GuidedStep == null && isHandTutorialEligible)
+            {
+                if (!isIdleHandShowing)
+                {
+                    idleHelpSeconds += deltaTime;
+                    if (idleHelpSeconds >= IdleHelpThresholdSeconds)
+                    {
+                        ShowIdleHelp();
+                    }
+                }
+            }
+            else
+            {
+                if (isIdleHandShowing)
+                {
+                    views.Board.HideTutorial();
+                    isIdleHandShowing = false;
+                }
+                idleHelpSeconds = 0f;
+            }
+
             if ((secondsSinceClockUpdate += deltaTime) < 1f) return;
             secondsSinceClockUpdate = 0f;
             if (progress.RecoverHearts(clock.UtcNow)) store.Save(progress);
@@ -82,8 +133,16 @@ namespace Meowtosis.Presentation
             if (views.NoHearts.IsOpen && progress.Hearts > 0) views.NoHearts.Hide();
         }
 
+        private void ShowIdleHelp()
+        {
+            // A failed search must wait before retrying, rather than blocking every frame.
+            idleHelpSeconds = 0f;
+            if (hintSearch == null) BeginHintSearch(true, TimeSpan.FromMilliseconds(50));
+        }
+
         private void OpenLevel(int index)
         {
+            CancelHintSearch();
             levelIndex = Math.Max(0, Math.Min(index, levels.Count - 1));
             progress.LastLevelIndex = levelIndex;
             store.Save(progress);
@@ -96,6 +155,8 @@ namespace Meowtosis.Presentation
             pendingAction = null;
             isPlayingMove = false;
             isHintShowing = false;
+            idleHelpSeconds = 0f;
+            isIdleHandShowing = false;
             views.Win.Hide();
             views.Lose.Hide();
             views.Board.ClearSpotlight();
@@ -131,15 +192,23 @@ namespace Meowtosis.Presentation
             if (progress.Hearts == 0) ShowNoHearts();
         }
 
-        private void Play(IGameCommand command)
+        private bool Play(IGameCommand command)
         {
-            if (!run.TryPlay(command, out var outcome)) return;
+            if (!run.TryPlay(command, out var outcome)) return false;
+            CancelFeedbackDelay();
             targeting.Cancel();
+            if (isIdleHandShowing)
+            {
+                views.Board.HideTutorial();
+                isIdleHandShowing = false;
+            }
+            idleHelpSeconds = 0f;
             views.Board.HideTutorial();
             ClearHint();
             isPlayingMove = true;
             RefreshHud(false);
             views.Board.Play(outcome.Move, () => OnMoveFinished(outcome), outcome.SprungTrap);
+            return true;
         }
 
         private void OnMoveFinished(PlayOutcome outcome)
@@ -160,7 +229,7 @@ namespace Meowtosis.Presentation
                 {
                     views.Sound.Play(SoundId.PopupOpen);
                     views.Lose.Show(GameTexts.Lost(LossReport.Of(outcome.Move)), 0, false, showButtons: false);
-                    Later(RestartAfterTrap, 1.8f);
+                    Later(RestartAfterTrap, 1.8f, blocksInput: true);
                 });
             }
             else if (outcome.LostHeart)
@@ -201,14 +270,23 @@ namespace Meowtosis.Presentation
                 }
                 else
                 {
-                    // Mèo dẫn chuyện reo lên khen, rồi bong bóng tắt để người chơi tự chơi tiếp.
-                    praiseTip = GameTexts.TutorialDone;
-                    RefreshHud(true);
-                    Later(() =>
+                    if (levelIndex == 10 || levelIndex == 13 || levelIndex == 19)
                     {
+                        // Level 11, 14, 20 chỉ hiện boxchat đầu tiên, không hiện lời khen hay câu nào khác tiếp theo
                         praiseTip = null;
                         RefreshHud(true);
-                    }, 3f);
+                    }
+                    else
+                    {
+                        // Mèo dẫn chuyện reo lên khen, rồi bong bóng tắt để người chơi tự chơi tiếp.
+                        praiseTip = GameTexts.TutorialDone;
+                        RefreshHud(true);
+                        Later(() =>
+                        {
+                            praiseTip = null;
+                            RefreshHud(true);
+                        }, 3f);
+                    }
                 }
             }
             RefreshHud(false);
@@ -227,6 +305,17 @@ namespace Meowtosis.Presentation
         private void OnCellSwiped(int cell, Direction direction)
         {
             if (isSpotlighting) return;
+            if (!string.IsNullOrEmpty(praiseTip))
+            {
+                praiseTip = null;
+                RefreshHud(true);
+            }
+            if (isIdleHandShowing)
+            {
+                views.Board.HideTutorial();
+                isIdleHandShowing = false;
+            }
+            idleHelpSeconds = 0f;
             if (!CanPlay || targeting.IsActive || !run.Session.Board[cell].HasValue) return;
 
             // Khóa các nước đi khác trong giai đoạn hướng dẫn/onboarding, chỉ cho đi đúng nước được chỉ dẫn
@@ -241,23 +330,143 @@ namespace Meowtosis.Presentation
                 }
             }
 
+            // Level 5 (meow-158): nếu người chơi cố tình vuốt mèo đỏ 1 hay 2 sang phải (sẽ triệt tiêu hết màu đỏ) thì chặn lại,
+            // cảnh báo "Làm vậy sẽ triệt tiêu hết mèo đỏ" và lúc này mới hiện bàn tay hướng dẫn vuốt xuống.
+            if (run.Session.Definition.Id == "meow-158" && direction == Direction.Right
+                && (cell == run.Session.Level.IndexOf(0, 0) || cell == run.Session.Level.IndexOf(0, 1)))
+            {
+                views.Board.Refuse(cell);
+                trapExplanation = GameTexts.TrapWarnTrietTieu;
+                RefreshHud(true);
+                views.Sound.Play(SoundId.AngryMeow);
+                isIdleHandShowing = true;
+                views.Board.ShowTutorial(run.Session.Level.IndexOf(0, 1), Direction.Down);
+                Later(() =>
+                {
+                    if (trapExplanation == GameTexts.TrapWarnTrietTieu)
+                    {
+                        trapExplanation = null;
+                        RefreshHud(true);
+                    }
+                }, 3.5f);
+                return;
+            }
+
+            // Level 12 (meow-165): nếu người chơi vuốt mèo xanh (0, 2) xuống đè lên mèo vàng duy nhất ở (1, 2) sẽ thua,
+            // thì chặn lại, cảnh báo "Làm vậy sẽ triệt tiêu hết mèo vàng" và hướng dẫn vuốt mèo vàng sang trái.
+            // Khi người chơi đã vuốt mèo vàng sang (đã nhân đôi, trên bàn có từ 2 mèo vàng trở lên) thì cho phép đi bình thường.
+            if (run.Session.Definition.Id == "meow-165" && direction == Direction.Down
+                && cell == run.Session.Level.IndexOf(0, 2)
+                && run.Session.Board[run.Session.Level.IndexOf(1, 2)] is Piece targetPiece
+                && targetPiece.IsCat && targetPiece.Species == Species.Yellow)
+            {
+                var yellowCount = 0;
+                for (var i = 0; i < run.Session.Board.CellCount; i++)
+                {
+                    if (run.Session.Board[i] is Piece p && p.IsCat && p.Species == Species.Yellow)
+                        yellowCount++;
+                }
+
+                if (yellowCount <= 1)
+                {
+                    views.Board.Refuse(cell);
+                    trapExplanation = GameTexts.TrapWarnTrietTieuVang;
+                    RefreshHud(true);
+                    views.Sound.Play(SoundId.AngryMeow);
+                    isIdleHandShowing = true;
+                    views.Board.ShowTutorial(run.Session.Level.IndexOf(1, 2), Direction.Left);
+                    Later(() =>
+                    {
+                        if (trapExplanation == GameTexts.TrapWarnTrietTieuVang)
+                        {
+                            trapExplanation = null;
+                            RefreshHud(true);
+                        }
+                    }, 3.5f);
+                    return;
+                }
+            }
+
+            // Level 12 (meow-165): nếu người chơi vuốt mèo vàng lên (0, 2) rồi định vuốt sang phải đè lên mèo xanh duy nhất ở (0, 3) sẽ thua,
+            // thì chặn lại và cảnh báo "Làm vậy sẽ triệt tiêu hết mèo xanh".
+            if (run.Session.Definition.Id == "meow-165" && direction == Direction.Right
+                && cell == run.Session.Level.IndexOf(0, 2)
+                && run.Session.Board[run.Session.Level.IndexOf(0, 3)] is Piece targetPieceBlue
+                && targetPieceBlue.IsCat && targetPieceBlue.Species == Species.Blue)
+            {
+                var blueCount = 0;
+                for (var i = 0; i < run.Session.Board.CellCount; i++)
+                {
+                    if (run.Session.Board[i] is Piece p && p.IsCat && p.Species == Species.Blue)
+                        blueCount++;
+                }
+
+                if (blueCount <= 1)
+                {
+                    views.Board.Refuse(cell);
+                    trapExplanation = GameTexts.TrapWarnTrietTieuXanh;
+                    RefreshHud(true);
+                    views.Sound.Play(SoundId.AngryMeow);
+                    if (run.Session.Board[run.Session.Level.IndexOf(1, 1)] == null)
+                    {
+                        isIdleHandShowing = true;
+                        views.Board.ShowTutorial(run.Session.Level.IndexOf(1, 2), Direction.Left);
+                    }
+                    Later(() =>
+                    {
+                        if (trapExplanation == GameTexts.TrapWarnTrietTieuXanh)
+                        {
+                            trapExplanation = null;
+                            RefreshHud(true);
+                        }
+                    }, 3.5f);
+                    return;
+                }
+            }
+
             if (!string.IsNullOrEmpty(trapExplanation) && trapExplanation != GameTexts.TrapLost)
             {
                 trapExplanation = null;
+                pendingAction = null;
                 RefreshHud(true);
             }
 
             var command = new SwipeCommand(rules.Swipes, cell, direction);
-            if (command.TryApply(run.Session.Board, out _))
+            if (!command.TryApply(run.Session.Board, out var preview))
             {
-                if (trapExplanation == GameTexts.TrapLost)
-                {
-                    trapExplanation = null;
-                }
-                Play(command);
+                views.Board.Refuse(cell);
+                views.Hud.ShowToast(GameTexts.NothingChanges);
+                return;
             }
-            else
+
+            // Ở các màn onboarding/hướng dẫn (Block 1 hoặc các level có tutorial):
+            // Chặn tất cả các nước đi làm mất hết 1 màu mèo (do triệt 3 hoặc bị đè mất con cuối cùng).
+            var isOnboarding = run.Session.Definition.Block == 1 || run.Session.Definition.Tutorial.Count > 0;
+            if (isOnboarding && GameOutcome.IsLost(preview.After))
             {
+                views.Board.Refuse(cell);
+                views.Sound.Play(SoundId.AngryMeow);
+                var extinct = GameOutcome.ExtinctColors(preview.After);
+                var extinctColor = extinct.Count > 0 ? extinct[0] : Species.Red;
+                var colorName = GameTexts.ColorName(extinctColor);
+                trapExplanation = $"Làm vậy sẽ làm mất hết mèo {colorName}!";
+                RefreshHud(true);
+                Later(() =>
+                {
+                    if (trapExplanation == $"Làm vậy sẽ làm mất hết mèo {colorName}!")
+                    {
+                        trapExplanation = null;
+                        RefreshHud(true);
+                    }
+                }, 3.5f);
+                return;
+            }
+
+            var previousExplanation = trapExplanation;
+            if (trapExplanation == GameTexts.TrapLost) trapExplanation = null;
+            if (!Play(command))
+            {
+                trapExplanation = previousExplanation;
                 views.Board.Refuse(cell);
                 views.Hud.ShowToast(GameTexts.NothingChanges);
             }
@@ -265,6 +474,17 @@ namespace Meowtosis.Presentation
 
         private void OnCellTapped(int cell)
         {
+            if (!string.IsNullOrEmpty(praiseTip))
+            {
+                praiseTip = null;
+                RefreshHud(true);
+            }
+            if (isIdleHandShowing)
+            {
+                views.Board.HideTutorial();
+                isIdleHandShowing = false;
+            }
+            idleHelpSeconds = 0f;
             if (!CanPlay || run.GuidedStep != null) return;
             if (!targeting.IsActive)
             {
@@ -337,7 +557,7 @@ namespace Meowtosis.Presentation
 
         private void OnHintClicked()
         {
-            if (!CanPlay || run.GuidedStep != null) return;
+            if (!CanPlay || run.GuidedStep != null || hintSearch != null && !hintSearchIsIdle) return;
             targeting.Cancel();
             // Mũi tên còn đang hiện thì đã trả lượt cho gợi ý này rồi, bấm lại không trừ thêm.
             if (isHintShowing) return;
@@ -348,7 +568,51 @@ namespace Meowtosis.Presentation
                 return;
             }
 
-            var hint = rules.Hints.Suggest(run.Session, HintAdvisor.DefaultTimeLimit);
+            CancelHintSearch();
+            BeginHintSearch(false, HintAdvisor.DefaultTimeLimit);
+        }
+
+        private void BeginHintSearch(bool idle, TimeSpan timeLimit)
+        {
+            // Only immutable game data goes to the worker. Views and progress stay on the main thread.
+            var board = run.Session.Board;
+            var definition = run.Session.Definition;
+            var history = run.Session.PreviousBoards.ToArray();
+            var advisor = new HintAdvisor(rules.Swipes, rules.Solver);
+            hintSearchBoard = board;
+            hintSearchIsIdle = idle;
+            if (!idle) views.Hud.ShowToast("Đang tìm nước đi...");
+#if UNITY_WEBGL && !UNITY_EDITOR
+            hintSearch = Task.FromResult(advisor.Suggest(board, definition, history, timeLimit));
+#else
+            hintSearch = Task.Run(() => advisor.Suggest(board, definition, history, timeLimit));
+#endif
+        }
+
+        private void CompleteHintSearch()
+        {
+            if (hintSearch == null || !hintSearch.IsCompleted) return;
+            var search = hintSearch;
+            var searchedBoard = hintSearchBoard;
+            var idle = hintSearchIsIdle;
+            hintSearch = null;
+            hintSearchBoard = null;
+            if (search.IsFaulted)
+            {
+                Debug.LogException(search.Exception);
+                return;
+            }
+            if (search.IsCanceled || !ReferenceEquals(searchedBoard, run.Session.Board) || !CanPlay) return;
+            var hint = search.Result;
+            if (idle)
+            {
+                if (hint.Kind == HintKind.Move && IsIdle && !isHintShowing && !isIdleHandShowing)
+                {
+                    isIdleHandShowing = true;
+                    views.Board.ShowTutorial(run.Session.Level.IndexOf(hint.Move.Row, hint.Move.Column), hint.Move.Direction);
+                }
+                return;
+            }
             if (hint.Kind == HintKind.Move)
             {
                 // Chỉ tính lượt khi thật sự có nước để chỉ.
@@ -361,6 +625,15 @@ namespace Meowtosis.Presentation
             else views.Sound.Play(SoundId.AngryMeow);
             views.Hud.ShowToast(GameTexts.Hint(hint));
             RefreshHud(false);
+        }
+
+        private void CancelHintSearch()
+        {
+            var abandoned = hintSearch;
+            hintSearch = null;
+            hintSearchBoard = null;
+            // Observe failures even if this scene is destroyed before the bounded search finishes.
+            abandoned?.ContinueWith(completed => { _ = completed.Exception; }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
         private void OnReviveClicked()
@@ -376,6 +649,13 @@ namespace Meowtosis.Presentation
 
         private void OnRestartClicked()
         {
+            // Do not let an old playback callback modify a freshly restarted run.
+            if (isPlayingMove || run.Session.Status == SessionStatus.Won) return;
+            CancelHintSearch();
+            pendingAction = null;
+            pendingDelay = 0f;
+            idleHelpSeconds = 0f;
+            isIdleHandShowing = false;
             trapExplanation = null;
             praiseTip = null;
             isSpotlighting = false;
@@ -548,11 +828,12 @@ namespace Meowtosis.Presentation
             var hud = views.Hud;
             var session = run.Session;
             hud.ShowLevel(levelIndex + 1);
-            hud.SetGuidedLayout(session.Definition.Tutorial.Count > 0);
+            var isGuided = session.Definition.Tutorial.Count > 0 || !string.IsNullOrEmpty(trapExplanation);
+            hud.SetGuidedLayout(isGuided);
             ShowHearts();
             hud.ShowStars(run.Stars, instantly);
             hud.ShowGoal(GoalProgress.Of(session.Board), instantly);
-            hud.ShowTip(CurrentTip(), CurrentMood());
+            if (!isPlayingMove) hud.ShowTip(CurrentTip(), CurrentMood());
             hud.ShowBoosterPrompt(targeting.Kind, targeting.Prompt);
             hud.ShowSpecies(SpeciesCensus.Of(session.Board));
             hud.ShowBooster(BoosterKind.Mutate, progress.BoosterCount(BoosterKind.Mutate), targeting.Kind == BoosterKind.Mutate);
@@ -574,7 +855,7 @@ namespace Meowtosis.Presentation
             var step = run.GuidedStep;
             if (step == null || !CanPlay)
             {
-                views.Board.HideTutorial();
+                if (!isIdleHandShowing) views.Board.HideTutorial();
                 // Giữ vùng sáng trong lúc nước hướng dẫn đang diễn, để thấy rõ kết quả của cơ chế
                 if (!isPlayingMove) views.Board.ClearFocus();
                 return;
@@ -597,21 +878,29 @@ namespace Meowtosis.Presentation
             return "";
         }
 
-        // Tâm trạng mèo dẫn chuyện theo câu đang nói: khen khi vừa làm xong hướng dẫn, lo lắng ngay sau khi thua bẫy.
+        // Tâm trạng mèo dẫn chuyện theo câu đang nói: khen khi vừa làm xong hướng dẫn, lo lắng ngay sau khi thua bẫy hoặc cảnh báo triệt tiêu.
         private NarratorMood CurrentMood()
         {
             if (!string.IsNullOrEmpty(praiseTip)) return NarratorMood.Praise;
-            if (trapExplanation == GameTexts.TrapLost) return NarratorMood.Warn;
+            if (trapExplanation == GameTexts.TrapLost || trapExplanation?.StartsWith("Làm vậy sẽ triệt tiêu hết mèo") == true) return NarratorMood.Warn;
             return NarratorMood.Explain;
         }
 
-        private void Later(Action action, float delay)
+        private void CancelFeedbackDelay()
+        {
+            if (pendingBlocksInput) return;
+            pendingAction = null;
+            pendingDelay = 0f;
+        }
+
+        private void Later(Action action, float delay, bool blocksInput = false)
         {
             pendingAction = action;
             pendingDelay = delay;
+            pendingBlocksInput = blocksInput || isSpotlighting;
         }
 
-        private void Later(Action action) => Later(action, ResultPopupDelay);
+        private void Later(Action action) => Later(action, ResultPopupDelay, blocksInput: true);
 
         private void Subscribe(bool subscribe)
         {

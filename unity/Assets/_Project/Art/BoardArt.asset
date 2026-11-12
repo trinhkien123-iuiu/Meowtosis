@@ -60,3 +60,59 @@ MonoBehaviour:
     sadFace: {fileID: 21300000, guid: 98ea3db4a2bf3084584dd27856d4aeee, type: 3}
     yawnFace: {fileID: 21300000, guid: 7fa99754cebeb794a9d4647708f30bc9, type: 3}
     color: {r: 0.561, g: 0.455, b: 1, a: 1}
+  - species: 5
+    cat: {fileID: 21300000, guid: 080df3cf2a9c3b848bec3c449476ddda, type: 3}
+    happyCat: {fileID: 21300000, guid: fc389b69445e91041947dbf2b99a74c8, type: 3}
+    box: {fileID: 21300000, guid: 15089c015e83cf848991f4e65fa119bd, type: 3}
+    blinkFace: {fileID: 0}
+    sadFace: {fileID: 0}
+    yawnFace: {fileID: 0}
+    color: {r: 0.29, g: 0.78, b: 0.35, a: 1}
+  - species: 6
+    cat: {fileID: 21300000, guid: 00f2ce0efab23ec459e7fafffead3cc3, type: 3}
+    happyCat: {fileID: 21300000, guid: 1dad0e2881ea969499d796f869db33c4, type: 3}
+    box: {fileID: 21300000, guid: 256bfea9b45dc634fbf35c64e0c5c4dc, type: 3}
+    blinkFace: {fileID: 0}
+    sadFace: {fileID: 0}
+    yawnFace: {fileID: 0}
+    color: {r: 0.74, g: 0.88, b: 0.22, a: 1}
+  - species: 7
+    cat: {fileID: 21300000, guid: 2a64bcc4c2a8f594ba421c9ed540cd35, type: 3}
+    happyCat: {fileID: 21300000, guid: 86451bc275bb4234c983049e3c8709bc, type: 3}
+    box: {fileID: 21300000, guid: 39a5894d78fdb2e4dbf5126ebde510de, type: 3}
+    blinkFace: {fileID: 0}
+    sadFace: {fileID: 0}
+    yawnFace: {fileID: 0}
+    color: {r: 1, g: 0.58, b: 0.18, a: 1}
+  - species: 8
+    cat: {fileID: 21300000, guid: cb30f8d103f3f314685353c7628adf32, type: 3}
+    happyCat: {fileID: 21300000, guid: b38e734d9f9bd524492e94ac51607517, type: 3}
+    box: {fileID: 21300000, guid: c273b39bedbeb4641945000869f6f2d2, type: 3}
+    blinkFace: {fileID: 0}
+    sadFace: {fileID: 0}
+    yawnFace: {fileID: 0}
+    color: {r: 0.22, g: 0.82, b: 0.72, a: 1}
+  - species: 9
+    cat: {fileID: 21300000, guid: cad027405f511d0488fcc4e83d7c2d80, type: 3}
+    happyCat: {fileID: 21300000, guid: d1f46f32b14cfa340b402868a2d08c7a, type: 3}
+    box: {fileID: 21300000, guid: 671dc56159466da4fa851c69b8f18fed, type: 3}
+    blinkFace: {fileID: 0}
+    sadFace: {fileID: 0}
+    yawnFace: {fileID: 0}
+    color: {r: 0.52, g: 0.78, b: 0.98, a: 1}
+  - species: 10
+    cat: {fileID: 21300000, guid: 52b5b467509ffc2489f4282611fff892, type: 3}
+    happyCat: {fileID: 21300000, guid: 8d1405384dbad734e928dc27f8eac902, type: 3}
+    box: {fileID: 21300000, guid: 853ba861bcce2a64bb54ab1aa2ff6c66, type: 3}
+    blinkFace: {fileID: 0}
+    sadFace: {fileID: 0}
+    yawnFace: {fileID: 0}
+    color: {r: 0.16, g: 0.42, b: 0.98, a: 1}
+  - species: 11
+    cat: {fileID: 21300000, guid: c0ee9229221a40644993420bfb6ceb1c, type: 3}
+    happyCat: {fileID: 21300000, guid: 7660d9d44c00ac946964c81ad4b69a1a, type: 3}
+    box: {fileID: 21300000, guid: 54d01f5c1a03f0a4ca76d1c159ec1f14, type: 3}
+    blinkFace: {fileID: 0}
+    sadFace: {fileID: 0}
+    yawnFace: {fileID: 0}
+    color: {r: 0.98, g: 0.42, b: 0.58, a: 1}

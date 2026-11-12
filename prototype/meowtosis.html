@@ -478,16 +478,14 @@
 // Mỗi level một hình thân riêng (không trùng kể cả khi xoay/lật). Mọi level đều phải lấp kín, nên không dùng
 // các khung không bao giờ lấp kín được như vòng khuyên và chữ C (tối đa 6 tế bào).
 const LEVELS = [
-  // ── Khối 1 · Học luật: 15 level, mỗi giai đoạn dạy đúng một luật (level 1–15). Thiết kế và số đo: docs/level-design.md
-  //   Giai đoạn 1 (level 1–5) · lấp kín là thắng: mọi đoạn thẳng của khung dài tối đa 2 ô và mỗi vùng chỉ một màu,
+  // ── Khối 1 · Học luật: 13 level, mỗi giai đoạn dạy đúng một luật (level 1–13). Thiết kế và số đo: docs/level-design.md
+  //   Giai đoạn 1 (level 1–3) · lấp kín là thắng: mọi đoạn thẳng của khung dài tối đa 2 ô và mỗi vùng chỉ một màu,
   //   nên mọi nước đều là lấp ô trống: không thể vô tình khử, đẩy, đè hay thua.
   { rows: ['A.'], card: 'Divide', tut: [
     [0, 0, 'right', ':red: :arrow: :red::red:|Vuốt để nhân đôi. Lấp kín là thắng!']] },  // 1 nước: vuốt là nhân đôi, kín là thắng
   ['B.', '..'],                                             // vuông 2×2 · bản sao cũng vuốt được, đi mọi hướng
   ['C.##', '#..#', '##..'],                                 // bậc thang · phải rẽ hướng liên tục
-  ['A.##', '..##', '##..', '##.B'],                         // hai vùng, hai màu · vùng nào cũng phải kín
-  ['A.##.', '..#..', '##B.#', '#..#.', '###.C'],            // ba vùng ba màu · dòng sông bậc thang ở giữa
-  //   Giai đoạn 2 (level 6–9) · 3 con cùng màu thẳng hàng thì biến mất; mất hết một màu là thua.
+  //   Giai đoạn 2 (level 4–7) · 3 con cùng màu thẳng hàng thì biến mất; mất hết một màu là thua.
   //   Lời giải ngắn nhất kiểu "chỉ lấp" là lời giải chuẩn (par, solution); đè, đẩy có thể đi tắt nhưng chưa được dạy.
   { rows: ['BAB', 'A.A'], card: 'Clear', par: 4,            // ô giữa chỉ mèo đỏ lấp được: 3 đỏ biến mất (còn 1 con), lấp lại hàng dưới
     solution: [[0, 1, 'down'], [0, 0, 'down'], [0, 1, 'down'], [0, 2, 'down']],
@@ -509,19 +507,14 @@ const LEVELS = [
     [0, 0, 'down', ':blue: :arrow: :red: :arrow: :blue:|Hết chỗ đẩy thì bản sao đè lên mèo khác màu!']] },  // xanh đè một đỏ để hai hàng xen kẽ màu
   ['.#.B', '..A#'],                                         // đè giữa chừng để đổi màu một ô, tránh 3 đỏ thẳng hàng
   ['B...', 'A#..'],                                         // tổng kết: mèo đỏ kẹt góc, đè lên xanh để thoát ra, rồi đẩy cả dãy
-  // ── Khối 2 · Phòng nuôi cấy: ôn bốn luật trên bàn lớn dần (level 16–26)
+  // ── Khối 2 · Phòng nuôi cấy: ôn bốn luật trên bàn lớn dần (level 16–21)
   ['B..', 'A..'],                                           // chữ nhật 2×3
   ['A#.', 'B..'],                                           // chữ U
   ['.#B', '...', '.#A'],                                    // chữ H
   ['.B#', '..#', 'A..'],
   ['..A', '...', 'B..'],                                    // vuông 3×3
   ['#AA#', 'C.BB', 'CAA.', '.CB#'],                         // 4×4 khuyết góc · mở rộng
-  ['C..A', '....', '##.#', '...B'],                         // 4×4 thắt eo
-  ['CBB.', '.#..', '..AA', '#C.A'],                         // 4×4 hai lỗ · bất ngờ: phải thay thế mèo của mình
-  ['BC..', '.#..', '.A..'],                                 // 3×4 khuyết một ô
-  ['.AA#', 'BBA.', 'B#.A', '..B.'],                         // 4×4 · bất ngờ: tự khử 3 mèo để có chỗ
-  ['BAB#A', '#BA..', 'A#.#A', '.ABB#', '..#B.'],            // 5×5 lỗ chỗ · trùm chương: khử 3 + thay thế
-  // ── Khối 3 · Vào vị trí: Hộp mục tiêu (level 27–38)
+  // ── Khối 3 · Vào vị trí: Hộp mục tiêu (level 22–33)
   { rows: ['#B.A', 'A.##'], goal: ['..B.', '....'], tut: [
     [0, 1, 'right', 'Hộp chỉ nhận mèo cùng màu: vuốt mèo xanh vào hộp xanh!'],
     [1, 0, 'right', 'Kín ổ và mọi hộp có mèo đúng màu là thắng!']] },  // dạy hộp: mèo đỏ vào hộp là sai
@@ -623,6 +616,11 @@ const LEVELS = [
   ['..BB#', '..A##', 'BA#.#', 'DC#AD', '#.CEE'],            // 5×5 · 5 màu
   ['#..Cv', '.DD..', '^A...', 'C.B.#', 'A.#E#', '.#B<#'],   // 5×6 · trùm cuối: ba virus
   ['.d..', '.Cv#', 'AB.<', '.CDA', '.#..'],                 // 4×5 · ngủ (phải đánh thức bé hồng) + hai virus
+  ['C..A', '....', '##.#', '...B'],                         // 4×4 thắt eo
+  ['CBB.', '.#..', '..AA', '#C.A'],                         // 4×4 hai lỗ · bất ngờ: phải thay thế mèo của mình
+  ['BC..', '.#..', '.A..'],                                 // 3×4 khuyết một ô
+  ['.AA#', 'BBA.', 'B#.A', '..B.'],                         // 4×4 · bất ngờ: tự khử 3 mèo để có chỗ
+  ['BAB#A', '#BA..', 'A#.#A', '.ABB#', '..#B.'],            // 5×5 lỗ chỗ · trùm chương: khử 3 + thay thế
 ];
 
 const DIRS = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
@@ -1025,16 +1023,16 @@ const persist = () => store.set(save);
 // Các khối level theo cơ chế, theo chỉ số level (từ 0); khối cuối kéo tới level cuối cùng. Bản đồ không hiện khối
 // (một đường liền); khối dùng để sắp level từ dễ đến khó trong từng khối (tools/order.js) và xuất dữ liệu cho Unity.
 const CHAPTERS = [
-  { name: 'Học luật', icon: '🐾', note: 'Lấp kín, khử 3, đẩy, đè: mỗi lần một luật', from: 0, to: 14 },
-  { name: 'Phòng nuôi cấy', icon: '🧪', note: 'Ôn bốn luật trên bàn lớn dần', from: 15, to: 25 },
-  { name: 'Vào vị trí', icon: '🎯', note: 'Hộp mục tiêu', from: 26, to: 37 },
-  { name: 'Màng và độc', icon: '🚪', note: 'Màng một chiều, ô độc', from: 38, to: 46 },
-  { name: 'Ngủ và virus', icon: '🦠', note: 'Mèo ngủ, virus', from: 47, to: 57 },
-  { name: 'Băng trơn', icon: '🧊', note: 'Băng trơn, ôn các cơ chế đã học', from: 58, to: 70 },
-  { name: 'Cổng dịch chuyển', icon: '🌀', note: 'Cổng là đường duy nhất sang vùng trống', from: 71, to: 76 },
-  { name: 'Mèo hai màu', icon: '🎭', note: 'Màu hiếm chỉ mèo hai màu mới có', from: 77, to: 82 },
-  { name: 'Đại gia đình', icon: '🏠', note: 'Bàn lớn, đông mèo, mọi cơ chế', from: 83, to: 89 },
-  { name: 'Đủ sắc màu', icon: '🌈', note: '4 rồi 5 màu cùng lúc', from: 90, to: LEVELS.length - 1 },
+  { name: 'Học luật', icon: '🐾', note: 'Lấp kín, khử 3, đẩy, đè: mỗi lần một luật', from: 0, to: 12 },
+  { name: 'Phòng nuôi cấy', icon: '🧪', note: 'Ôn bốn luật trên bàn lớn dần', from: 13, to: 18 },
+  { name: 'Vào vị trí', icon: '🎯', note: 'Hộp mục tiêu', from: 19, to: 30 },
+  { name: 'Màng và độc', icon: '🚪', note: 'Màng một chiều, ô độc', from: 31, to: 39 },
+  { name: 'Ngủ và virus', icon: '🦠', note: 'Mèo ngủ, virus', from: 40, to: 50 },
+  { name: 'Băng trơn', icon: '🧊', note: 'Băng trơn, ôn các cơ chế đã học', from: 51, to: 63 },
+  { name: 'Cổng dịch chuyển', icon: '🌀', note: 'Cổng là đường duy nhất sang vùng trống', from: 64, to: 69 },
+  { name: 'Mèo hai màu', icon: '🎭', note: 'Màu hiếm chỉ mèo hai màu mới có', from: 70, to: 75 },
+  { name: 'Đại gia đình', icon: '🏠', note: 'Bàn lớn, đông mèo, mọi cơ chế', from: 76, to: 82 },
+  { name: 'Đủ sắc màu', icon: '🌈', note: '4 rồi 5 màu cùng lúc', from: 83, to: LEVELS.length - 1 },
 ];
 
 // Kết quả lưu theo nội dung level (khung, mèo, hộp, màng), không theo số thứ tự, để chèn thêm level không làm lệch sao.

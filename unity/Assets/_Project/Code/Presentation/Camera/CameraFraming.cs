@@ -20,11 +20,15 @@ namespace Meowtosis.Presentation
         private Bounds framedBounds;
         private bool hasBoard;
         private float framedAspect;
+        private float customScale = 1f;
+        private float customTopShift = 0f;
 
-        public void Frame(Bounds board)
+        public void Frame(Bounds board, float scaleMultiplier = 1f, float extraTopShift = 0f)
         {
             framedBounds = board;
             hasBoard = true;
+            customScale = scaleMultiplier > 0f ? scaleMultiplier : 1f;
+            customTopShift = extraTopShift;
             Apply();
         }
 
@@ -47,11 +51,11 @@ namespace Meowtosis.Presentation
             var usableHeight = 1f - topReserved - bottomReserved;
             var halfHeightForRows = (framedBounds.size.y + 2f * margin) / 2f / usableHeight;
             var halfHeightForColumns = (framedBounds.size.x + 2f * margin) / 2f / targetCamera.aspect;
-            var halfHeight = Mathf.Max(halfHeightForRows, halfHeightForColumns);
+            var halfHeight = Mathf.Max(halfHeightForRows, halfHeightForColumns) / customScale;
             targetCamera.orthographicSize = halfHeight;
 
             // Dời camera lên để bàn nằm giữa phần màn hình còn lại sau khi chừa chỗ cho HUD.
-            var center = framedBounds.center + Vector3.up * ((topReserved - bottomReserved) * halfHeight);
+            var center = framedBounds.center + Vector3.up * ((topReserved - bottomReserved + customTopShift) * halfHeight);
             transform.position = new Vector3(center.x, center.y, transform.position.z);
             FitBackground(halfHeight);
             FitPattern(halfHeight);

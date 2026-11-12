@@ -234,7 +234,6 @@ Transform:
   - {fileID: 3652380262016453926}
   - {fileID: 3555634382518433843}
   - {fileID: 742602003227043170}
-  - {fileID: 7914099441507603022}
   m_Father: {fileID: 5060837750614640725}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2576368983969063731
@@ -304,6 +303,7 @@ Transform:
   - {fileID: 8927375717838786914}
   - {fileID: 6786015936534394787}
   - {fileID: 259516629665045230}
+  - {fileID: 7914099441507603022}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6746385881152540081
@@ -496,7 +496,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 12
+  m_SortingOrder: 25
   m_Sprite: {fileID: 21300000, guid: 7a4fbec49cfae9844a5f27207041a3a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -664,7 +664,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 13
+  m_SortingOrder: 26
   m_Sprite: {fileID: 21300000, guid: 7a4fbec49cfae9844a5f27207041a3a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -748,7 +748,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 13
+  m_SortingOrder: 26
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -941,7 +941,7 @@ Transform:
   m_Children:
   - {fileID: 2313815166217786105}
   - {fileID: 4328516057257082028}
-  m_Father: {fileID: 6786015936534394787}
+  m_Father: {fileID: 5060837750614640725}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6177088060298978952
 MonoBehaviour:
@@ -970,6 +970,8 @@ MonoBehaviour:
   pipSize: 0.13
   pipSpacing: 0.17
   pipGap: 0.06
+  bubbleSortingOrder: 25
+  contentSortingOrder: 26
 --- !u!1 &7226914345051774685
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,7 +1128,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 13
+  m_SortingOrder: 26
   m_Sprite: {fileID: 21300000, guid: 7a4fbec49cfae9844a5f27207041a3a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1210,7 +1212,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 13
+  m_SortingOrder: 26
   m_Sprite: {fileID: 21300000, guid: 7a4fbec49cfae9844a5f27207041a3a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

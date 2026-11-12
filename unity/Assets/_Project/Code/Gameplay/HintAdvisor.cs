@@ -39,7 +39,7 @@ namespace Meowtosis.Gameplay
 
         private readonly SwipeRule swipeRule;
         private readonly Solver solver;
-        private string knownLevelId;
+        private LevelDefinition knownDefinition;
         private Dictionary<string, int> knownPositions;
 
         public HintAdvisor(SwipeRule swipeRule, Solver solver)
@@ -49,17 +49,21 @@ namespace Meowtosis.Gameplay
         }
 
         public Hint Suggest(GameSession session, TimeSpan timeLimit)
+            => Suggest(session.Board, session.Definition, session.PreviousBoards, timeLimit);
+
+        // Callers running in the background must pass a captured board and copied history.
+        public Hint Suggest(Board current, LevelDefinition definition, IEnumerable<Board> previousBoards, TimeSpan timeLimit)
         {
-            var positions = KnownPositions(session);
-            var solution = session.Definition.Solution;
-            if (positions.TryGetValue(session.Board.ToKey(), out var step) && step < solution.Count)
+            var positions = KnownPositions(definition, current.Level);
+            var solution = definition.Solution;
+            if (positions.TryGetValue(current.ToKey(), out var step) && step < solution.Count)
                 return new Hint(HintKind.Move, solution[step], solution.Count - step);
 
-            var solved = solver.Solve(session.Board, Solver.DefaultMaxStates, timeLimit);
+            var solved = solver.Solve(current, Solver.DefaultMaxStates, timeLimit);
             if (solved.IsSolved && solved.Moves.Count > 0) return new Hint(HintKind.Move, solved.Moves[0], solved.Moves.Count);
 
             var stepsBack = 0;
-            foreach (var board in session.PreviousBoards)
+            foreach (var board in previousBoards)
             {
                 stepsBack++;
                 if (positions.ContainsKey(board.ToKey())) return new Hint(HintKind.Undo, undoSteps: stepsBack);
@@ -68,14 +72,14 @@ namespace Meowtosis.Gameplay
         }
 
         // Khoá của mọi thế cờ trên lời giải đã lưu, kèm số nước đã đi tới đó. Tính một lần cho mỗi level.
-        private Dictionary<string, int> KnownPositions(GameSession session)
+        private Dictionary<string, int> KnownPositions(LevelDefinition definition, Level level)
         {
-            if (knownLevelId == session.Definition.Id) return knownPositions;
-            knownLevelId = session.Definition.Id;
+            if (ReferenceEquals(knownDefinition, definition)) return knownPositions;
+            knownDefinition = definition;
             knownPositions = new Dictionary<string, int>();
-            var board = session.Level.CreateStartBoard();
+            var board = level.CreateStartBoard();
             knownPositions[board.ToKey()] = 0;
-            var solution = session.Definition.Solution;
+            var solution = definition.Solution;
             for (var step = 0; step < solution.Count; step++)
             {
                 if (!swipeRule.TrySwipe(board, solution[step], out var result)) break;

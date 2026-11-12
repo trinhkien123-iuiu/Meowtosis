@@ -6,6 +6,30 @@ namespace Meowtosis.Tests
 {
     public class GameSessionTests
     {
+        [Test]
+        public void SolverHonorsAnExpiredTimeBudget()
+        {
+            var board = TestLevel.FromRows("A.", "..").Start();
+            var result = Rules.Solver.Solve(board, Solver.DefaultMaxStates, System.TimeSpan.Zero);
+            Assert.That(result.Status, Is.EqualTo(SolveStatus.LimitReached));
+        }
+
+        [Test]
+        public void SwipePreviewIsReusedOnlyForTheSameBoard()
+        {
+            var definition = new LevelDefinition { Id = "preview-cache", Par = 2 };
+            definition.Rows.Add("A..");
+            definition.Rows.Add("...");
+            var session = new GameSession(definition);
+            var command = new SwipeCommand(Rules.Swipes, 0, Direction.Right);
+            Assert.That(command.TryApply(session.Board, out var preview), Is.True);
+            Assert.That(session.TryPlay(command, out var committed), Is.True);
+            Assert.That(committed, Is.SameAs(preview));
+            Assert.That(command.TryApply(session.Board, out var next), Is.True);
+            Assert.That(next, Is.Not.SameAs(preview));
+            Assert.That(next.Before, Is.SameAs(session.Board));
+        }
+
         private static GameSession Session(params string[] rows)
         {
             var definition = new LevelDefinition { Id = "test", Par = 1 };

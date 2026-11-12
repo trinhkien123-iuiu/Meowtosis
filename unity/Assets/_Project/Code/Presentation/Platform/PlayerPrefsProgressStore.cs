@@ -17,7 +17,7 @@ namespace Meowtosis.Presentation
             if (json.Length == 0) return PlayerProgress.CreateNew();
             try
             {
-                return JsonUtility.FromJson<SavedProgress>(json).ToProgress();
+                return JsonUtility.FromJson<SavedProgress>(json)?.ToProgress() ?? PlayerProgress.CreateNew();
             }
             catch (ArgumentException)
             {
@@ -80,12 +80,17 @@ namespace Meowtosis.Presentation
                     [BoosterKind.Hint] = hint,
                 };
                 var stars = new Dictionary<string, int>();
-                for (var index = 0; index < Math.Min(starLevels.Count, starCounts.Count); index++) stars[starLevels[index]] = starCounts[index];
-                var nextHeartAt = nextHeartAtTicks > 0 ? new DateTime(nextHeartAtTicks, DateTimeKind.Utc) : (DateTime?)null;
-                var progress = PlayerProgress.Restore(hearts, nextHeartAt, coins, boosters, stars, seenMechanics);
+                var count = Math.Min(starLevels?.Count ?? 0, starCounts?.Count ?? 0);
+                for (var index = 0; index < count; index++)
+                {
+                    if (!string.IsNullOrEmpty(starLevels[index])) stars[starLevels[index]] = starCounts[index];
+                }
+                var nextHeartAt = nextHeartAtTicks > 0 && nextHeartAtTicks <= DateTime.MaxValue.Ticks
+                    ? new DateTime(nextHeartAtTicks, DateTimeKind.Utc) : (DateTime?)null;
+                var progress = PlayerProgress.Restore(hearts, nextHeartAt, coins, boosters, stars, seenMechanics ?? new List<string>());
                 progress.SoundOn = soundOn;
                 progress.MusicOn = musicOn;
-                progress.LastLevelIndex = lastLevelIndex;
+                progress.LastLevelIndex = Math.Max(0, lastLevelIndex);
                 progress.HasFinishedOnboarding = finishedOnboarding;
                 progress.AvatarId = avatarId ?? "";
                 return progress;

@@ -182,6 +182,48 @@ namespace Meowtosis.Tests
         }
 
         [Test]
+        public void RestoringCorruptResourceCountsClampsThemToValidRanges()
+        {
+            var progress = PlayerProgress.Restore(-5, null, -10,
+                new System.Collections.Generic.Dictionary<BoosterKind, int> { [BoosterKind.Hint] = -3 },
+                new System.Collections.Generic.Dictionary<string, int> { ["negative"] = -1, ["too-many"] = 9 },
+                Array.Empty<string>());
+            Assert.That(progress.Hearts, Is.Zero);
+            Assert.That(progress.Coins, Is.Zero);
+            Assert.That(progress.BoosterCount(BoosterKind.Hint), Is.Zero);
+            Assert.That(progress.TrySpendBooster(BoosterKind.Hint), Is.False);
+            Assert.That(progress.BestStarsFor("negative"), Is.Zero);
+            Assert.That(progress.BestStarsFor("too-many"), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void MissingRecoveryTimerIsRepairedAndThenRecoversNormally()
+        {
+            var progress = PlayerProgress.Restore(1, null, 0,
+                new System.Collections.Generic.Dictionary<BoosterKind, int>(),
+                new System.Collections.Generic.Dictionary<string, int>(), Array.Empty<string>());
+            var now = clock.UtcNow;
+            Assert.That(progress.RecoverHearts(now), Is.True);
+            Assert.That(progress.Hearts, Is.EqualTo(1));
+            Assert.That(progress.NextHeartAt, Is.EqualTo(now + PlayerProgress.HeartRecoveryTime));
+            Assert.That(progress.RecoverHearts(now), Is.False);
+            Assert.That(progress.RecoverHearts(now + PlayerProgress.HeartRecoveryTime + PlayerProgress.HeartRecoveryTime), Is.True);
+            Assert.That(progress.Hearts, Is.EqualTo(PlayerProgress.MaximumHearts));
+            Assert.That(progress.NextHeartAt, Is.Null);
+        }
+
+        [Test]
+        public void FullHeartsDiscardAStaleRecoveryTimer()
+        {
+            var progress = PlayerProgress.Restore(PlayerProgress.MaximumHearts, clock.UtcNow, 0,
+                new System.Collections.Generic.Dictionary<BoosterKind, int>(),
+                new System.Collections.Generic.Dictionary<string, int>(), Array.Empty<string>());
+            Assert.That(progress.RecoverHearts(clock.UtcNow), Is.True);
+            Assert.That(progress.NextHeartAt, Is.Null);
+            Assert.That(progress.RecoverHearts(clock.UtcNow), Is.False);
+        }
+
+        [Test]
         public void TrapLosesWithoutCostingAHeartThenRestartsForRealPlay()
         {
             var run = TrapRun(PlayerProgress.CreateNew());

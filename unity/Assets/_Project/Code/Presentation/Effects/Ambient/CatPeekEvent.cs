@@ -9,7 +9,12 @@ namespace Meowtosis.Presentation
     // Đầu mèo vẽ sau khối gỗ (thứ tự vẽ thấp hơn), nên phần thân luôn bị chính khối đó che.
     public sealed class CatPeekEvent : AmbientEvent
     {
-        private static readonly Species[] CatColors = { Species.Red, Species.Blue, Species.Yellow, Species.Pink, Species.Purple };
+        private static readonly Species[] CatColors =
+        {
+            Species.Red, Species.Blue, Species.Yellow, Species.Pink, Species.Purple,
+            Species.Green, Species.Lime, Species.Orange, Species.Teal,
+            Species.BabyBlue, Species.ElectricBlue, Species.WarmPink,
+        };
 
         [SerializeField] private Camera targetCamera;
         [SerializeField] private BoardView boardView;

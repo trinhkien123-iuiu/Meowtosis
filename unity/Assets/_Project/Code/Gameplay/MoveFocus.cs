@@ -6,6 +6,7 @@ namespace Meowtosis.Gameplay
     // Các ô một nước đi chạm tới, để hướng dẫn làm tối phần còn lại của bàn: ô mèo được vuốt, đường bản sao đi qua
     // (cả đoạn trượt trên băng), và mọi ô đổi khác trong lượt (dãy bị đẩy, quân bị thay, bộ 3 bị khử, ô độc, virus lan).
     // Mỗi virus trên bàn cũng được chừa sáng cùng ô nó đang nhìn tới, để hướng dẫn chỉ được vào ánh mắt virus.
+    // Mèo hai màu cũng được chừa sáng để người chơi thấy rõ bong bóng suy nghĩ và đếm lùi đổi màu.
     public static class MoveFocus
     {
         public static IReadOnlyList<int> CellsOf(MoveResult move, Level level)
@@ -27,7 +28,20 @@ namespace Meowtosis.Gameplay
                 if (changed) cells.Add(cell);
             }
             AddVirusGaze(move, level, cells);
+            AddTwoColorCats(move, cells);
             return cells;
+        }
+
+        // Mèo hai màu: luôn chừa sáng để người chơi thấy bong bóng suy nghĩ và đếm lùi đổi màu
+        private static void AddTwoColorCats(MoveResult move, List<int> cells)
+        {
+            for (var cell = 0; cell < move.Before.CellCount; cell++)
+            {
+                if (move.Before[cell]?.IsTwoColor == true || move.After[cell]?.IsTwoColor == true)
+                {
+                    if (!cells.Contains(cell)) cells.Add(cell);
+                }
+            }
         }
 
         // Virus và ô ngay trước mắt nó (ô nó sẽ lan tới ở lượt này), nếu còn trong bàn.

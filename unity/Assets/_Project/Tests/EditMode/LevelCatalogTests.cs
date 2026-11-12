@@ -55,9 +55,9 @@ namespace Meowtosis.Tests
             if (definition.Trap != null) return; // Level có bẫy dùng par sư phạm theo kịch bản hướng dẫn
             var result = Rules.Solver.Solve(new Level(definition).CreateStartBoard());
             Assert.That(result.Status, Is.EqualTo(SolveStatus.Solved));
-            // Khối 1 (Học luật) đặt par theo lời giải chỉ dùng các luật đã dạy: ở level dạy khử 3, đè và đẩy (chưa được dạy)
-            // đi tắt được nên bộ giải có thể tìm ra ít nước hơn. Các khối khác par đúng bằng số nước ít nhất.
-            if (definition.Block == 1)
+            // Khối 1 (Học luật) và các level có hướng dẫn đặt par theo lời giải kịch bản sư phạm.
+            // Các level khác par đúng bằng số nước ít nhất.
+            if (definition.Block == 1 || definition.Tutorial.Count > 0)
                 Assert.That(result.Moves.Count, Is.LessThanOrEqualTo(definition.Par));
             else
                 Assert.That(result.Moves.Count, Is.EqualTo(definition.Par));
@@ -102,6 +102,30 @@ namespace Meowtosis.Tests
                 Assert.That(GameOutcome.IsLost(result.After), Is.True, definition.Id);
                 Assert.That(result.Stages.SelectMany(stage => stage.Events).Any(turnEvent => turnEvent.Kind == TurnEventKind.Cleared), Is.True, definition.Id);
             }
+        }
+
+        [Test]
+        public void PaletteMapsColorsCorrectly()
+        {
+            var def = new LevelDefinition { Id = "test-palette", Par = 1 };
+            def.Palette.Add(Species.Green);
+            def.Palette.Add(Species.Orange);
+            def.Rows.Add("AB.");
+            def.Goal.Add("..B");
+            var level = new Level(def);
+            CollectionAssert.Contains(level.StartingColors, Species.Green);
+            CollectionAssert.Contains(level.StartingColors, Species.Orange);
+            CollectionAssert.DoesNotContain(level.StartingColors, Species.Red);
+            CollectionAssert.DoesNotContain(level.StartingColors, Species.Blue);
+            Assert.That(level.TargetAt(2), Is.EqualTo(Species.Orange));
+        }
+
+        [Test]
+        public void ParserReadsPaletteDirective()
+        {
+            var text = "level test\nblock 1\npar 1\npalette Green Orange\nrow AB\n";
+            var defs = LevelCatalogParser.Parse(text);
+            Assert.That(defs[0].Palette, Is.EquivalentTo(new[] { Species.Green, Species.Orange }));
         }
     }
 }

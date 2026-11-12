@@ -1,3 +1,4 @@
+using System.Collections;
 using Meowtosis.Domain;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,10 +15,17 @@ namespace Meowtosis.Presentation
         [SerializeField] private GameSounds sounds;
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource[] effectSources;
+        [SerializeField] private AudioClip winMusic;
+        [SerializeField, Range(0f, 1f)] private float winMusicVolume = 0.24f;
 
         private int nextSource;
         private int lastMeow = -1;
         private bool soundOn = true;
+        private bool musicOn;
+        private bool winMusicActive;
+        private bool winMusicFinished;
+        private Coroutine winMusicRoutine;
+        private float gameplayMusicTime;
 
         public void Play(SoundId sound)
         {
@@ -53,14 +61,57 @@ namespace Meowtosis.Presentation
 
         public void SetMusicOn(bool on)
         {
-            if (on && !musicSource.isPlaying)
+            musicOn = on;
+            ApplyMusic();
+        }
+
+        public void SetWinMusic(bool active)
+        {
+            if (winMusicActive == active) return;
+            if (active && musicSource != null && sounds != null && musicSource.clip == sounds.Music)
+                gameplayMusicTime = musicSource.time;
+            winMusicActive = active;
+            winMusicFinished = false;
+            ApplyMusic();
+        }
+
+        private void ApplyMusic()
+        {
+            if (winMusicRoutine != null)
             {
-                musicSource.clip = sounds.Music;
-                musicSource.volume = sounds.MusicVolume;
-                musicSource.loop = true;
+                StopCoroutine(winMusicRoutine);
+                winMusicRoutine = null;
+            }
+            if (musicSource == null || sounds == null) return;
+            if (!musicOn)
+            {
+                musicSource.Stop();
+                return;
+            }
+            var useWinMusic = winMusicActive && !winMusicFinished && winMusic != null;
+            var clip = useWinMusic ? winMusic : sounds.Music;
+            musicSource.volume = useWinMusic ? winMusicVolume : sounds.MusicVolume;
+            musicSource.loop = !useWinMusic;
+            if (musicSource.clip != clip || !musicSource.isPlaying)
+            {
+                musicSource.clip = clip;
+                if (!useWinMusic && clip != null)
+                    musicSource.time = Mathf.Clamp(gameplayMusicTime, 0f, Mathf.Max(0f, clip.length - 0.01f));
                 musicSource.Play();
             }
-            else if (!on) musicSource.Stop();
+            if (useWinMusic) winMusicRoutine = StartCoroutine(ResumeMusicAfterWin());
+        }
+
+        private IEnumerator ResumeMusicAfterWin()
+        {
+            yield return null;
+            while (musicSource != null &&
+                (winMusic.loadState == AudioDataLoadState.Loading || musicSource.isPlaying))
+                yield return null;
+            winMusicRoutine = null;
+            if (!musicOn || !winMusicActive || musicSource == null || musicSource.clip != winMusic) yield break;
+            winMusicFinished = true;
+            ApplyMusic();
         }
 
         // Mọi nút trong scene kêu "tách" khi bấm, kể cả nút trong popup đang tắt.

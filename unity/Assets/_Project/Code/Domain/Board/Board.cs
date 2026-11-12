@@ -7,6 +7,7 @@ namespace Meowtosis.Domain
     public sealed class Board
     {
         private readonly Piece?[] pieces;
+        private string cachedKey;
 
         // Nhận luôn mảng truyền vào: bên gọi không được sửa mảng đó nữa.
         internal Board(Level level, Piece?[] pieces, int nextPieceId)
@@ -48,6 +49,7 @@ namespace Meowtosis.Domain
         // Hai bàn cùng khoá thì chơi y hệt nhau, nên bộ giải dùng khoá này để bỏ qua thế cờ đã gặp.
         public string ToKey()
         {
+            if (cachedKey != null) return cachedKey;
             var symbols = new char[pieces.Length];
             for (var cell = 0; cell < pieces.Length; cell++) symbols[cell] = LevelSymbols.SymbolOf(pieces[cell]);
             var key = new string(symbols);
@@ -57,7 +59,8 @@ namespace Meowtosis.Domain
                 if (pieces[cell] is Piece piece && piece.IsTwoColor)
                     key += $"|{cell}{LevelSymbols.LetterOf(piece.OtherColor.Value)}{piece.TurnsLeft}";
             }
-            return key;
+            cachedKey = key;
+            return cachedKey;
         }
 
         public IReadOnlyList<string> ToRows()

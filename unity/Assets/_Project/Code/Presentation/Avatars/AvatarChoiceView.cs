@@ -14,6 +14,7 @@ namespace Meowtosis.Presentation
         [SerializeField] private GameObject selectedMark;
 
         private string avatarId;
+        private Sprite portrait;
 
         public event Action<string> Clicked;
 
@@ -21,11 +22,14 @@ namespace Meowtosis.Presentation
         {
             avatarId = id;
             picture.sprite = sprite;
+            portrait = sprite;
             title.text = text;
             SetSelected(selected);
         }
 
         public void SetSelected(bool selected) => selectedMark.SetActive(selected);
+
+        public void SetFrame(Sprite frame, Sprite mask) => AvatarPortraitFrame.Show(picture, portrait, frame, mask);
 
         public string AvatarId => avatarId;
 

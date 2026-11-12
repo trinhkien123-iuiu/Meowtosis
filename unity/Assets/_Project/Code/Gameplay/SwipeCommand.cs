@@ -8,6 +8,9 @@ namespace Meowtosis.Gameplay
         private readonly SwipeRule swipeRule;
         private readonly int cell;
         private readonly Direction direction;
+        private Board cachedBoard;
+        private MoveResult cachedResult;
+        private bool cachedSuccess;
 
         public SwipeCommand(SwipeRule swipeRule, int cell, Direction direction)
         {
@@ -18,7 +21,17 @@ namespace Meowtosis.Gameplay
 
         public BoosterKind Booster => BoosterKind.None;
 
-        public bool TryApply(Board board, out MoveResult result) => swipeRule.TrySwipe(board, cell, direction, out result);
+        public bool TryApply(Board board, out MoveResult result)
+        {
+            // Preview and commit often ask for the same move. Boards are immutable.
+            if (!ReferenceEquals(board, cachedBoard))
+            {
+                cachedSuccess = swipeRule.TrySwipe(board, cell, direction, out cachedResult);
+                cachedBoard = board;
+            }
+            result = cachedResult;
+            return cachedSuccess;
+        }
     }
 
     // Booster Hoán đổi: đổi con ở `cell` sang màu `color`.

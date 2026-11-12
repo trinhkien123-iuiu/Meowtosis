@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: AvatarCatalog
   m_EditorClassIdentifier: 
   defaultPicture: {fileID: 21300000, guid: 6ff5c6b167886dc43bdd9afbbe2390a8, type: 3}
+  frame: {fileID: 21300000, guid: 44dc95128795411d8c33da69a0a3bdaa, type: 3}
+  portraitMask: {fileID: 21300000, guid: fa19b7856e624124a284444e6dc2a479, type: 3}
   options:
   - id: Classic-Orange
     title: "C\u1ED5 \u0111i\u1EC3n"

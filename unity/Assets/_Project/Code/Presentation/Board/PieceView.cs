@@ -76,6 +76,15 @@ namespace Meowtosis.Presentation
 
         public bool IsResting => motion == null && faceTimeLeft <= 0f && flipTimeLeft <= 0f;
 
+        private void Awake()
+        {
+            // TwoToneCat luôn gắn trực tiếp vào Piece (gốc), không nằm trong Visual để không bị lật/xoay theo thân mèo
+            if (twoToneCat != null && twoToneCat.transform.parent != transform)
+            {
+                twoToneCat.transform.SetParent(transform, false);
+            }
+        }
+
         public void Place(Vector3 position)
         {
             transform.localPosition = position;
@@ -278,7 +287,7 @@ namespace Meowtosis.Presentation
             color.a = alpha;
             body.color = color;
             faceAlpha = Mathf.MoveTowards(faceAlpha, faceTargetAlpha, Time.deltaTime / Mathf.Max(faceFadeSeconds, 0.0001f));
-            face.enabled = faceAlpha > 0.001f;
+            face.enabled = faceAlpha > 0.001f && face.sprite != null;
             face.color = new Color(1f, 1f, 1f, alpha * faceAlpha);
             shadow.color = new Color(1f, 1f, 1f, alpha);
         }

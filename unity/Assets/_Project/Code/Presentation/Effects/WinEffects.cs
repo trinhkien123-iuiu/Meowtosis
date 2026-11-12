@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Spine.Unity;
 using UnityEngine.UI;
 
 namespace Meowtosis.Presentation
@@ -14,6 +15,8 @@ namespace Meowtosis.Presentation
         [SerializeField] private Image sparklePrefab;
         [SerializeField] private Image confettiPrefab;
         [SerializeField] private Image coinPrefab;
+        [SerializeField] private SkeletonDataAsset spinningCoin;
+        [SerializeField] private Material spinningCoinMaterial;
 
         [Header("Toé sáng")]
         [SerializeField, Min(0)] private int sparklesPerBurst = 12;
@@ -76,6 +79,11 @@ namespace Meowtosis.Presentation
             foreach (Transform child in layer) Destroy(child.gameObject);
         }
 
+        public void PrewarmAssets()
+        {
+            if (spinningCoin != null) spinningCoin.GetSkeletonData(true);
+        }
+
         public void Sparkle(RectTransform around)
         {
             var center = LocalPoint(around);
@@ -85,6 +93,21 @@ namespace Meowtosis.Presentation
                 var direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
                 StartCoroutine(UiSparkle.Fly(sparklePrefab, layer, center, direction * (sparkleSpeed * UnityEngine.Random.Range(0.6f, 1.1f)), sparkleSeconds));
             }
+        }
+
+        public Image CreateStarGlint(RectTransform star)
+        {
+            var glint = Instantiate(sparklePrefab, star);
+            glint.gameObject.name = "StarGlint";
+            glint.sprite = sparkSprite;
+            glint.raycastTarget = false;
+            glint.color = new Color(1f, 0.97f, 0.8f, 0f);
+            var rect = glint.rectTransform;
+            rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(star.rect.width * 0.22f, star.rect.height * 0.25f);
+            rect.sizeDelta = Vector2.one * (star.rect.width * 0.22f);
+            rect.localScale = Vector3.zero;
+            return glint;
         }
 
         public void Confetti()
@@ -251,23 +274,49 @@ namespace Meowtosis.Presentation
 
         private IEnumerator FlyCoin(Vector2 from, Vector2 to, int index, float delay, Action arrived)
         {
-            yield return new WaitForSecondsRealtime(delay);
-            var coin = Instantiate(coinPrefab, layer);
-            var rect = coin.rectTransform;
-            var start = from + UnityEngine.Random.insideUnitCircle * coinStartSpread;
-            var bend = (start + to) * 0.5f + new Vector2(UnityEngine.Random.Range(-coinSway, coinSway), UnityEngine.Random.Range(coinLift.x, coinLift.y));
-            for (var time = 0f; time < coinSeconds; time += Time.unscaledDeltaTime)
+            // All coins emerge immediately; stagger only their departure to the counter.
+            RectTransform rect;
+            var animated = spinningCoin != null && spinningCoinMaterial != null;
+            if (animated)
             {
-                var progress = time / coinSeconds;
-                var eased = progress * progress * (3f - 2f * progress);
-                var fromBend = Vector2.Lerp(start, bend, eased);
-                var toTarget = Vector2.Lerp(bend, to, eased);
-                rect.anchoredPosition = Vector2.Lerp(fromBend, toTarget, eased);
-                rect.localScale = Vector3.one * Mathf.Lerp(coinStartScale, coinEndScale, eased);
-                rect.localRotation = Quaternion.Euler(0f, 0f, Mathf.Sin(progress * 6f + index) * coinWobbleDegrees);
+                var coin = SkeletonGraphic.NewSkeletonGraphicGameObject(spinningCoin, layer, spinningCoinMaterial);
+                coin.raycastTarget = false;
+                coin.UnscaledTime = true;
+                rect = coin.rectTransform;
+                rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
+                var entry = coin.AnimationState.SetAnimation(0, "rotation", true);
+                entry.TrackTime = index * 0.047f;
+            }
+            else rect = Instantiate(coinPrefab, layer).rectTransform;
+            // Original animation is 225 pixels across; match the existing coin prefab.
+            var baseScale = animated ? coinPrefab.rectTransform.rect.width / 225f : 1f;
+            var scatter = from + UnityEngine.Random.insideUnitCircle * coinStartSpread;
+            var tilt = UnityEngine.Random.Range(-coinWobbleDegrees, coinWobbleDegrees);
+            const float burstSeconds = 0.18f;
+            for (var time = 0f; time < burstSeconds + delay; time += Time.unscaledDeltaTime)
+            {
+                var progress = Mathf.Clamp01(time / burstSeconds);
+                rect.anchoredPosition = Vector2.Lerp(from, scatter, 1f - Mathf.Pow(1f - progress, 3f));
+                rect.localScale = Vector3.one * (baseScale * coinStartScale * Mathf.Lerp(0.4f, 1f, progress));
+                rect.localRotation = Quaternion.Euler(0f, 0f, tilt);
                 yield return null;
             }
-            Destroy(coin.gameObject);
+            var bend = (scatter + to) * 0.5f + new Vector2(UnityEngine.Random.Range(-coinSway, coinSway), UnityEngine.Random.Range(coinLift.x, coinLift.y));
+            var seconds = Mathf.Max(0.01f, coinSeconds);
+            for (var time = 0f; time < seconds; time += Time.unscaledDeltaTime)
+            {
+                var progress = time / seconds;
+                var eased = progress * progress;
+                var fromBend = Vector2.Lerp(scatter, bend, eased);
+                var toTarget = Vector2.Lerp(bend, to, eased);
+                rect.anchoredPosition = Vector2.Lerp(fromBend, toTarget, eased);
+                var scale = baseScale * Mathf.Lerp(coinStartScale, coinEndScale, eased);
+                rect.localScale = animated ? Vector3.one * scale : new Vector3(scale * Mathf.Cos((time + index * 0.047f) * 18f), scale, scale);
+                rect.localRotation = Quaternion.Euler(0f, 0f, tilt * (1f - progress));
+                yield return null;
+            }
+            rect.anchoredPosition = to;
+            Destroy(rect.gameObject);
             arrived();
         }
     }

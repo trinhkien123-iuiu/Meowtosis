@@ -86,6 +86,9 @@ namespace Meowtosis.Presentation
         public const string FollowTheHand = "Làm theo ngón tay trước nhé";
         public const string SwipeLikeTheHand = "Vuốt theo hướng ngón tay chỉ nhé";
         public const string TutorialDone = ":check: Giỏi lắm! Giờ tự làm tiếp nhé";
+        public const string TrapWarnTrietTieu = "Làm vậy sẽ triệt tiêu hết mèo đỏ";
+        public const string TrapWarnTrietTieuVang = "Làm vậy sẽ triệt tiêu hết mèo vàng";
+        public const string TrapWarnTrietTieuXanh = "Làm vậy sẽ triệt tiêu hết mèo xanh";
         // Bẫy dạy luật "không để mất hết một màu" (level 7). :ten: là hình minh hoạ (Pictograms).
         public const string TrapLost = ":red: :arrow: :cross:|Hết mèo của một màu là thua! Thử cách khác xem nhé";
         public const string TrapKeepOne = ":red: :check:|Mỗi màu phải còn ít nhất 1 con mèo!";
@@ -123,6 +126,13 @@ namespace Meowtosis.Presentation
             Species.Yellow => "vàng",
             Species.Pink => "hồng",
             Species.Purple => "tím",
+            Species.Green => "xanh lá",
+            Species.Lime => "xanh chanh",
+            Species.Orange => "cam",
+            Species.Teal => "xanh ngọc",
+            Species.BabyBlue => "xanh da trời",
+            Species.ElectricBlue => "xanh điện",
+            Species.WarmPink => "hồng phấn",
             _ => "virus",
         };
     }

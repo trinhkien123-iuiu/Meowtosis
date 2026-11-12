@@ -29,6 +29,12 @@ namespace Meowtosis.Presentation
         [SerializeField] private float pipSpacing = 0.17f;
         [SerializeField] private float pipGap = 0.06f;
 
+        [Header("Thứ tự hiển thị (Sorting Order)")]
+        [Tooltip("Thứ tự vẽ của bong bóng (phải cao hơn lớp tối FocusShade = 14 để không bị che).")]
+        [SerializeField] private int bubbleSortingOrder = 25;
+        [Tooltip("Thứ tự vẽ của mèo trong bong bóng và các chấm đếm lượt.")]
+        [SerializeField] private int contentSortingOrder = 26;
+
         private Species? shownSpecies;
         private int turnsLeft;
         private float pop = 1f;
@@ -45,9 +51,23 @@ namespace Meowtosis.Presentation
                 return;
             }
 
+            // Đảm bảo bong bóng và các chấm luôn nổi trên lớp tối hướng dẫn FocusShade (order 14)
+            var bOrder = bubbleSortingOrder > 0 ? bubbleSortingOrder : 25;
+            var cOrder = contentSortingOrder > 0 ? contentSortingOrder : 26;
+            if (bubble != null) bubble.sortingOrder = bOrder;
+            if (head != null) head.sortingOrder = cOrder;
+            if (pips != null)
+            {
+                foreach (var pip in pips)
+                {
+                    if (pip != null) pip.sortingOrder = cOrder;
+                }
+            }
+
             var other = piece.OtherColor.Value;
             bubble.color = Color.Lerp(art.ColorOf(other), Color.white, 0.82f);
             transform.localScale = Vector3.one;
+            transform.localRotation = Quaternion.identity;
             SpriteSizing.SetSprite(head, art.CatSprite(other, false), bubbleSize * headWidth);
             transform.localPosition = new Vector3(bubbleOffset.x, bubbleOffset.y + catLift * 0.5f, -0.02f);
             bubble.transform.localScale = Vector3.one * bubbleSize;
@@ -62,6 +82,7 @@ namespace Meowtosis.Presentation
                 pips[index].gameObject.SetActive(index < turnsLeft);
                 pips[index].color = pipColor;
                 pips[index].transform.localScale = Vector3.one * pipSize;
+                pips[index].transform.localRotation = Quaternion.identity;
                 var offset = (index - (Mathf.Min(turnsLeft, pips.Length) - 1) * 0.5f) * pipSpacing;
                 pips[index].transform.localPosition = new Vector3(bubbleOffset.x + offset, rowY, 0f);
             }
@@ -73,6 +94,7 @@ namespace Meowtosis.Presentation
 
         private void Update()
         {
+            transform.localRotation = Quaternion.identity;
             var scale = 1f;
             if (pop < 1f)
             {

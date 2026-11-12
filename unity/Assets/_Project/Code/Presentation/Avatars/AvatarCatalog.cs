@@ -28,9 +28,15 @@ namespace Meowtosis.Presentation
 
         [Tooltip("Hình đại diện cho ô Mặc định trong bảng chọn.")]
         [SerializeField] private Sprite defaultPicture;
+        [SerializeField] private Sprite frame;
+        [SerializeField] private Sprite portraitMask;
         [SerializeField] private List<AvatarOption> options = new List<AvatarOption>();
 
         public Sprite DefaultPicture => defaultPicture;
+
+        public Sprite Frame => frame;
+
+        public Sprite PortraitMask => portraitMask;
 
         public IReadOnlyList<AvatarOption> Options => options;
 

@@ -25,7 +25,14 @@ namespace Meowtosis.Presentation
 
         public float VoicePitch(int speciesIndex) => speciesIndex < voicePitches.Length ? voicePitches[speciesIndex] : 1f;
 
-        public SoundEntry Find(SoundId id) => Array.Find(sounds, entry => entry.Id == id);
+        public SoundEntry Find(SoundId id)
+        {
+            foreach (var entry in sounds)
+            {
+                if (entry.Id == id) return entry;
+            }
+            return null;
+        }
 
         [Serializable]
         public sealed class SoundEntry

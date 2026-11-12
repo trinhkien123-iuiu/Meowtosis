@@ -94,6 +94,9 @@ namespace Meowtosis.Domain
                 case "tip":
                     level.Tip = value;
                     break;
+                case "palette":
+                    level.Palette.AddRange(ParsePalette(value));
+                    break;
                 case "solution":
                     level.Solution.Add(Move.Parse(value));
                     break;
@@ -126,6 +129,24 @@ namespace Meowtosis.Domain
             if (parts.Length < 3) throw new FormatException($"Cần 'hàng cột hướng lời-thoại' nhưng gặp '{value}'");
             var move = Move.Parse($"{parts[0]} {parts[1]} {parts[2]}");
             return new TutorialStep(move, parts.Length > 3 ? parts[3] : "");
+        }
+
+        public static List<Species> ParsePalette(string value)
+        {
+            var result = new List<Species>();
+            var tokens = value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var token in tokens)
+            {
+                if (Enum.TryParse<Species>(token, true, out var species))
+                {
+                    result.Add(species);
+                }
+                else if (token.Length == 1 && LevelSymbols.TryReadSpecies(token[0], out var byLetter))
+                {
+                    result.Add(byLetter);
+                }
+            }
+            return result;
         }
     }
 }

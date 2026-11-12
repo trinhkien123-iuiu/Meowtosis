@@ -45,6 +45,7 @@ namespace Meowtosis.Presentation
         {
             var choice = Instantiate(choicePrefab, grid);
             choice.Show(id, sprite, title, false);
+            choice.SetFrame(catalog.Frame, catalog.PortraitMask);
             choice.Clicked += Pick;
             choices.Add(choice);
         }
@@ -53,7 +54,7 @@ namespace Meowtosis.Presentation
         {
             pickedId = id;
             foreach (var choice in choices) choice.SetSelected(choice.AvatarId == id);
-            preview.sprite = catalog.PictureOf(id) ?? catalog.DefaultPicture;
+            AvatarPortraitFrame.Show(preview, catalog.PictureOf(id) ?? catalog.DefaultPicture, catalog.Frame, catalog.PortraitMask);
         }
 
         private void Save()

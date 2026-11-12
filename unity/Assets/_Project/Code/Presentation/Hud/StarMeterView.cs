@@ -60,24 +60,32 @@ namespace Meowtosis.Presentation
         public void Show(StarMeter meter, bool instantly)
         {
             targetFill = meter.Fill;
-            if (instantly) shownFill = targetFill;
-            var lost = !instantly && shownStars >= 0 && meter.Stars < shownStars;
+            if (instantly || !isActiveAndEnabled) shownFill = targetFill;
+            var lost = !instantly && isActiveAndEnabled && shownStars >= 0 && meter.Stars < shownStars;
             for (var index = 0; index < stars.Length; index++)
             {
                 // Ngôi sao đang vỡ giữ nguyên hình sáng tới lúc vỡ, hoạt cảnh tự đổi sang sao tắt.
                 var breaking = lost && index >= meter.Stars && index < shownStars;
                 if (!breaking) stars[index].sprite = index < meter.Stars ? litStar : emptyStar;
             }
-            var gained = shownStars >= 0 && meter.Stars > shownStars;   // cả khi chơi lại màn: sao đầy lại từng ngôi một
+            var gained = !instantly && isActiveAndEnabled && shownStars >= 0 && meter.Stars > shownStars;   // cả khi chơi lại màn: sao đầy lại từng ngôi một
             if (gained)
             {
                 for (var index = shownStars; index < meter.Stars; index++) StartCoroutine(Regain(index, (index - shownStars) * 0.1f));
+                StarGained?.Invoke(meter.Stars - shownStars);
+            }
+            else if (shownStars >= 0 && meter.Stars > shownStars)
+            {
                 StarGained?.Invoke(meter.Stars - shownStars);
             }
             if (lost)
             {
                 for (var index = meter.Stars; index < shownStars; index++) StartCoroutine(Shatter(index, (index - meter.Stars) * 0.12f));
                 PlayBar();
+                StarLost?.Invoke(shownStars - meter.Stars);
+            }
+            else if (shownStars >= 0 && meter.Stars < shownStars)
+            {
                 StarLost?.Invoke(shownStars - meter.Stars);
             }
             shownStars = meter.Stars;
@@ -105,9 +113,31 @@ namespace Meowtosis.Presentation
 
         private void PlayBar()
         {
-            if (MotionSettings.Reduced) return;
+            if (MotionSettings.Reduced || !isActiveAndEnabled) return;
             if (barRoutine != null) StopCoroutine(barRoutine);
             barRoutine = StartCoroutine(ShakeBar());
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
+            barRoutine = null;
+            if (barRoot != null) barRoot.anchoredPosition = barHome;
+            if (fillImage != null) fillImage.color = fillColor;
+            if (shards != null)
+            {
+                foreach (var shard in shards)
+                {
+                    if (shard != null) shard.gameObject.SetActive(false);
+                }
+            }
+            if (halos != null)
+            {
+                foreach (var halo in halos)
+                {
+                    if (halo != null) halo.gameObject.SetActive(false);
+                }
+            }
         }
 
         // Thanh rung ngang tắt dần và nháy đỏ rồi về màu cũ.
@@ -134,6 +164,7 @@ namespace Meowtosis.Presentation
             var home = star.localScale;
             star.localScale = Vector3.zero;
             if (delay > 0f) yield return new WaitForSeconds(delay);
+            if (!isActiveAndEnabled) yield break;
             var halo = HaloOf(index);
             StartCoroutine(RadiateHalo(halo, star));
             for (var time = 0f; time < regainSeconds; time += Time.deltaTime)
@@ -184,6 +215,7 @@ namespace Meowtosis.Presentation
         private IEnumerator Shatter(int index, float delay)
         {
             if (delay > 0f) yield return new WaitForSeconds(delay);
+            if (!isActiveAndEnabled) yield break;
             var star = stars[index].rectTransform;
             var home = star.localScale;
             for (var time = 0f; time < swellSeconds; time += Time.deltaTime)
@@ -192,6 +224,7 @@ namespace Meowtosis.Presentation
                 yield return null;
             }
             stars[index].sprite = emptyStar;
+            if (!isActiveAndEnabled) yield break;
             StartCoroutine(FlyShards(star.position, index));
             for (var time = 0f; time < shakeSeconds; time += Time.deltaTime)
             {
