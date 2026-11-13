@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4efe2">
+<title>Trượt Khối Bắc Cầu</title>
+<style>
+:root { color-scheme:light; --ink:#24362d; --muted:#55645a; --paper:#f4efe2; --line:#d5ccb7; --green:#274e3c }
+* { box-sizing:border-box }
+[hidden] { display:none!important }
+body { margin:0; color:var(--ink); background:var(--paper); font:16px/1.5 system-ui,sans-serif }
+main { max-width:1000px; margin:auto; padding:clamp(14px,4vw,40px) }
+h1 { font-family:system-ui,sans-serif; margin:0 0 8px; line-height:1.12; font-size:clamp(32px,6vw,54px) }
+h2 { font-size:20px; line-height:1.25; margin:0 0 8px }
+p { margin:0 }
+.muted { color:var(--muted) }
+nav,.actions,.stats { display:flex; flex-wrap:wrap; gap:8px }
+nav { margin:22px 0 14px }
+button { border:1px solid #bfb69e; border-radius:9px; color:var(--ink); background:#fffaf0; font:inherit; font-weight:650; padding:8px 13px; min-height:44px; cursor:pointer }
+button:hover:not(:disabled) { background:#ece5d4 }
+button:disabled { opacity:.5; cursor:default }
+button:focus-visible,canvas:focus-visible { outline:3px solid #9a5a29; outline-offset:3px }
+button[aria-current],.primary { background:var(--green); border-color:var(--green); color:white }
+button[aria-current]:hover,.primary:hover:not(:disabled) { background:#346049 }
+.layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,270px); align-items:start; gap:14px }
+.board,.guide { background:#fff9ec; border:1px solid var(--line); border-radius:16px; min-width:0 }
+.board-head,.board-foot,.guide { padding:14px 16px }
+.board-head h2 { margin-bottom:6px }
+.stats { gap:5px 14px; font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums }
+canvas { display:block; width:100%; touch-action:none; user-select:none; background:#ded4b8; cursor:grab }
+canvas:active { cursor:grabbing }
+#status { min-height:3em; margin-bottom:10px }
+#status[data-type="stuck"] { color:#973c28 }
+#status[data-type="won"] { color:#226541; font-weight:650 }
+.legend { display:grid; gap:9px; margin-top:14px; padding-top:13px; border-top:1px solid var(--line); font-size:14px }
+.legend span { display:inline-grid; place-items:center; width:24px; height:22px; border-radius:4px; margin-right:6px; font-weight:800 }
+.gate-symbol { color:white; background:#397457 }
+.gap-symbol { color:white; background:#347b84 }
+.bridge-symbol { color:#423014; background:#dfb574 }
+.keyboard { font-size:13px; margin-top:13px }
+@media(max-width:670px) { .layout { grid-template-columns:1fr } .board-head,.board-foot,.guide { padding:12px } nav { margin-top:16px } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Trượt Khối Bắc Cầu</h1>
+  <p class="muted">Kéo khối vào cổng cùng màu. Cổng có đường nét đứt sẽ biến khối vừa nhận thành cầu.</p>
+  <nav id="levels" aria-label="Chọn màn"></nav>
+  <div class="layout">
+    <section class="board" aria-label="Bàn chơi">
+      <header class="board-head">
+        <h2 id="level-name"></h2>
+        <div class="stats"><span id="delivered"></span><span id="bridges"></span><span id="moves"></span></div>
+      </header>
+      <canvas id="board" tabindex="0" aria-label="Bàn chơi. Kéo khối theo hàng hoặc cột. Dùng Tab để tới bàn, sau đó dùng phím số chọn khối và phím mũi tên để di chuyển."></canvas>
+      <div class="board-foot">
+        <p id="status" aria-live="polite"></p>
+        <div class="actions">
+          <button id="undo" type="button">↶ Hoàn tác</button>
+          <button id="reset" type="button">Chơi lại</button>
+          <button id="hint" type="button">Gợi ý</button>
+          <button id="next" type="button" class="primary" hidden>Màn tiếp →</button>
+        </div>
+      </div>
+    </section>
+    <aside class="guide">
+      <h2 id="guide-title"></h2>
+      <p id="guide-text"></p>
+      <div class="legend" aria-label="Chú giải">
+        <div><span class="gate-symbol">⌑</span>Cổng nhận khối cùng ký hiệu</div>
+        <div><span class="gap-symbol">≈</span>Khe nước chặn đường</div>
+        <div><span class="bridge-symbol">═</span>Cầu cho mọi khối đi qua</div>
+      </div>
+      <p class="keyboard muted">Chuột hoặc cảm ứng: kéo khối theo hàng hoặc cột. Bàn phím: chọn khối bằng phím 1–3, rồi dùng mũi tên.</p>
+    </aside>
+  </div>
+</main>
+<script>
+'use strict';
+
+(function startPrototype() {
+  const levels = [
+    {
+      title:'Về đúng cổng', guide:'Kéo khối đỏ sang phải',
+      text:'Đưa khối đỏ tới cổng có hình tròn. Bạn có thể kéo qua nhiều ô trong một lượt.',
+      map:['R.....r'], links:{}
+    },
+    {
+      title:'Cây cầu đầu tiên', guide:'Dọn khối xanh để mở đường',
+      text:'Đường nét đứt nối cổng xanh với khe nước. Đưa khối xanh vào cổng, rồi kéo khối đỏ qua cây cầu vừa bắc.',
+      map:['G.....g','#######','R.~...r'], links:{'6,0':[2,2,'A']}
+    },
+    {
+      title:'Hai cổng, hai lối', guide:'Bạn sẽ bắc cầu ở đâu?',
+      text:'Hai cổng xanh dẫn tới hai khe khác nhau. Cả hai đường đều tới đích, nhưng bạn chỉ có một khối để bắc cầu.',
+      map:['g..G..g','#######','...~...','R..#..r','...~...'], links:{'0,0':[3,4,'A'],'6,0':[3,2,'B']}
+    },
+    {
+      title:'Nhánh cụt', guide:'Thử cổng A, rồi hoàn tác',
+      text:'Cổng A bắc cầu xuống nhánh dưới, nơi đường kết thúc sớm. Kéo khối xanh về A để thấy hậu quả, rồi hoàn tác và tìm lối tới cổng đỏ.',
+      map:['g..G..g','#######','...~...','R..#..r','...~###'], links:{'0,0':[3,4,'A'],'6,0':[3,2,'B']}
+    },
+    {
+      title:'Bắc cầu nối tiếp', guide:'Cầu nào mở đường cho cầu sau?',
+      text:'Khối tím có hai cổng. Cổng trái dẫn tới nhánh cụt. Muốn tới cổng phải, khối tím cần cây cầu từ cổng xanh trước.',
+      map:['G.....g','#######','bB.~..b','#######','R.~..##','..##..r','..~.###'],
+      links:{'6,0':[3,2,'A'],'0,2':[2,6,'B'],'6,2':[2,4,'C']}
+    }
+  ];
+  const colors = {
+    R:{top:'#ed876c',side:'#a54031',ink:'#57241e',gate:'#9e4436',label:'đỏ',symbol:'●'},
+    G:{top:'#8bd2a0',side:'#3d7750',ink:'#1e4e34',gate:'#386b50',label:'xanh',symbol:'◆'},
+    B:{top:'#bba8ee',side:'#65529d',ink:'#402967',gate:'#695491',label:'tím',symbol:'▲'}
+  };
+  const directions = [[1,0],[-1,0],[0,1],[0,-1]];
+  const directionLabel = (x,y) => x ? (x>0?'sang phải':'sang trái') : (y>0?'xuống':'lên');
+  const key = (x,y) => x+','+y;
+
+  function readLevel(level) {
+    const gates = new Map(), blocks = [], gaps = [];
+    level.map.forEach((row,y)=>[...row].forEach((tile,x)=>{
+      if (colors[tile]) blocks.push({id:blocks.length+1,color:tile,x,y});
+      if ('rgb'.includes(tile)) gates.set(key(x,y),{x,y,color:tile.toUpperCase(),link:level.links[key(x,y)]});
+      if (tile==='~') gaps.push([x,y]);
+    }));
+    return {...level,gates,gaps,width:level.map[0].length,height:level.map.length,start:{blocks,bridges:[]}};
+  }
+
+  // The drag preview, keyboard moves and hint search share the same movement rules.
+  function travel(level,state,id,dx,dy,distance) {
+    const block = state.blocks.find(p=>p.id===id);
+    if (!block) return null;
+    let x=block.x,y=block.y,gate=null,reason='';
+    for (let step=0;step<distance;step++) {
+      const nx=x+dx,ny=y+dy,tile=level.map[ny]?.[nx],cell=key(nx,ny);
+      const entrance=level.gates.get(cell);
+      if (!tile||tile==='#') { reason='Hết đường theo hướng này.'; break; }
+      if (state.blocks.some(p=>p.id!==id&&p.x===nx&&p.y===ny)) { reason='Có khối khác chắn đường.'; break; }
+      if (tile==='~'&&!state.bridges.includes(cell)) { reason='Khe nước này cần một cây cầu.'; break; }
+      if (entrance&&entrance.color!==block.color) { reason='Cổng này nhận khối khác màu.'; break; }
+      x=nx;y=ny;
+      if (entrance) { gate=entrance; break; }
+    }
+    if (x===block.x&&y===block.y) return {reason};
+    const blocks=gate ? state.blocks.filter(p=>p.id!==id) : state.blocks.map(p=>p.id===id?{...p,x,y}:p);
+    let bridges=state.bridges;
+    if (gate?.link) {
+      const socket=key(gate.link[0],gate.link[1]);
+      if (!bridges.includes(socket)) bridges=[...bridges,socket];
+    }
+    return {next:{blocks,bridges},x,y,gate};
+  }
+
+  function solve(level,state) {
+    const queue=[{state,first:null}],seen=new Set();
+    const fingerprint=s=>s.blocks.map(p=>p.id+':'+key(p.x,p.y)).join(';')+'|'+s.bridges.slice().sort().join(';');
+    seen.add(fingerprint(state));
+    for (let i=0;i<queue.length;i++) {
+      const current=queue[i];
+      if (!current.state.blocks.length) return {solvable:true,move:current.first};
+      for (const p of current.state.blocks) for (const [dx,dy] of directions) {
+        for (let steps=1;steps<=Math.max(level.width,level.height);steps++) {
+          const move=travel(level,current.state,p.id,dx,dy,steps);
+          if (!move?.next) break;
+          const fingerprintNext=fingerprint(move.next);
+          if (!seen.has(fingerprintNext)) {
+            seen.add(fingerprintNext);
+            queue.push({state:move.next,first:current.first||{id:p.id,dx,dy,steps,move}});
+          }
+          if (move.gate) break;
+        }
+      }
+    }
+    return {solvable:false,move:null};
+  }
+
+  const boards=levels.map(readLevel);
+  const $=id=>document.getElementById(id);
+  const canvas=$('board'),ctx=canvas.getContext('2d');
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tabs=boards.map((_,i)=>{
+    const button=document.createElement('button');
+    button.type='button';button.textContent='Màn '+(i+1);
+    button.addEventListener('click',()=>load(i));
+    $('levels').append(button);
+    return button;
+  });
+  let index,level,state,history,selected,drag,preview,advice,motion,frame;
+  let unit=0,left=0,top=0;
+  const cellCenter=(x,y)=>[left+(x+.5)*unit,top+(y+.5)*unit];
+  function status(text,type='') {
+    $('status').textContent=text;
+    $('status').dataset.type=type;
+  }
+  function load(i) {
+    cancelAnimationFrame(frame);
+    index=i;level=boards[i];state=level.start;history=[];selected=null;
+    drag=preview=advice=motion=null;
+    canvas.style.aspectRatio=(level.width+.7)+' / '+(Math.max(level.height,2.25)+.7);
+    $('level-name').textContent=level.title;
+    $('guide-title').textContent=level.guide;
+    $('guide-text').textContent=level.text;
+    tabs.forEach((b,n)=>n===i?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'));
+    status(i===3?'Kéo khối xanh về cổng A bên trái để thử đường sai.':'Kéo một khối về cổng cùng ký hiệu.');
+    update();
+  }
+  function update() {
+    $('delivered').textContent='Đã giao '+(level.start.blocks.length-state.blocks.length)+'/'+level.start.blocks.length;
+    $('bridges').textContent='Cầu '+state.bridges.length;
+    $('moves').textContent='Lượt kéo '+history.length;
+    $('undo').disabled=!history.length||!!motion;
+    $('hint').disabled=!state.blocks.length||!!motion;
+    $('next').hidden=!!state.blocks.length||!!motion||index===boards.length-1;
+    draw();
+  }
+  function settle(move) {
+    motion=null;
+    if (!state.blocks.length) {
+      status('Xong màn! Tất cả khối đã về đúng cổng.','won');
+    } else if (!solve(level,state).solvable) {
+      const label=move.gate?.link?.[2];
+      status(label?'Cổng '+label+' đã bắc cầu sang nhánh cụt. Hoàn tác để thử cổng còn lại.':'Các khối còn lại không có đường tới cổng. Hãy hoàn tác và đổi thứ tự.','stuck');
+    } else if (move.gate?.link) {
+      status('Cầu '+move.gate.link[2]+' đã mở. Kéo khối khác qua khe vừa lấp.');
+    } else if (move.gate) status('Khối đã vào đúng cổng.');
+    else status('Đã trượt khối. Tìm đường về cổng cùng ký hiệu.');
+    update();
+  }
+  function commit(id,move,dragged=false) {
+    if (motion||!move) return;
+    if (!move.next) { if (move.reason) status(move.reason); draw(); return; }
+    const block=state.blocks.find(p=>p.id===id);
+    history.push(state);
+    state=move.next;advice=null;
+    if (reduced||dragged&&!move.gate) { settle(move); return; }
+    motion={block:dragged?{...block,x:move.x,y:move.y}:block,move,t:0,dragged};
+    const start=performance.now(),duration=move.gate?.link?520:190;
+    function tick(now) {
+      motion.t=Math.min(1,(now-start)/duration);
+      if (motion.t===1) settle(move);
+      else { draw();frame=requestAnimationFrame(tick); }
+    }
+    update();
+    frame=requestAnimationFrame(tick);
+  }
+
+  function draw() {
+    const w=canvas.clientWidth,h=canvas.clientHeight;
+    if (!w||!h) return;
+    const ratio=Math.min(2,devicePixelRatio||1);
+    const pw=Math.round(w*ratio),ph=Math.round(h*ratio);
+    if (canvas.width!==pw||canvas.height!==ph) { canvas.width=pw;canvas.height=ph; }
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+    ctx.clearRect(0,0,w,h);
+    unit=Math.min(w/(level.width+.7),h/(level.height+.7));
+    left=(w-unit*level.width)/2;top=(h-unit*level.height)/2;
+    const font=(s,weight=750)=>{ ctx.font=weight+' '+Math.max(10,unit*s)+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle'; };
+    const text=(str,x,y,color)=>{ctx.fillStyle=color;ctx.fillText(str,x,y);};
+    const rect=(x,y,a,b,r,fill,stroke)=>{
+      ctx.beginPath();ctx.roundRect(x,y,a,b,r);ctx.fillStyle=fill;ctx.fill();
+      if (stroke) {ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke();}
+    };
+    const line=(points,color,width)=>{
+      ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));
+      ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+    };
+    const water=(x,y)=>{
+      rect(x-unit*.46,y-unit*.46,unit*.92,unit*.92,unit*.1,'#5d9296','#4b7f80');
+      font(.38);text('≈',x,y,'#deefec');
+    };
+    const bridge=(x,y,scale=1)=>{
+      ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+      rect(-unit*.45,-unit*.42,unit*.9,unit*.84,unit*.09,'#d8ab69','#926a39');
+      for (const k of [-.22,0,.22]) line([[-unit*.4,unit*k],[unit*.4,unit*k]],'#a97d46',1);
+      ctx.restore();
+    };
+    for (let y=0;y<level.height;y++) for (let x=0;x<level.width;x++) {
+      const tile=level.map[y][x],[cx,cy]=cellCenter(x,y);
+      if (tile==='#') continue;
+      if (tile==='~') {
+        water(cx,cy);
+        const building=motion?.move.gate?.link;
+        const inFlight=building&&building[0]===x&&building[1]===y;
+        if (state.bridges.includes(key(x,y))&&!inFlight) bridge(cx,cy);
+      } else rect(cx-unit*.48,cy-unit*.48,unit*.96,unit*.96,unit*.095,(x+y)%2?'#efe3c6':'#f5eacd','#dac7a1');
+    }
+    for (const gate of level.gates.values()) {
+      if (!gate.link) continue;
+      const [gx,gy]=cellCenter(gate.x,gate.y),[bx,by]=cellCenter(gate.link[0],gate.link[1]);
+      const built=state.bridges.includes(key(gate.link[0],gate.link[1]));
+      const bend=gy+Math.min(unit*.66,(by-gy)*.34);
+      ctx.setLineDash([unit*.08,unit*.075]);
+      line([[gx,gy],[gx,bend],[bx,bend],[bx,by]],built?'#5b754c':'#8e5f2d',Math.max(1.4,unit*.035));
+      ctx.setLineDash([]);
+    }
+    for (const gate of level.gates.values()) {
+      const [cx,cy]=cellCenter(gate.x,gate.y),palette=colors[gate.color];
+      rect(cx-unit*.42,cy-unit*.42,unit*.84,unit*.84,unit*.12,palette.gate,palette.ink);
+      rect(cx-unit*.31,cy-unit*.31,unit*.62,unit*.62,unit*.08,palette.ink);
+      font(.38);text(palette.symbol,cx,cy,'#fff7e4');
+    }
+    function label(x,y,value) {
+      const radius=unit*.133;
+      rect(x-radius,y-radius,radius*2,radius*2,radius*.6,'#fff7df','#7d653e');
+      font(.18);text(value,x,y,'#47371f');
+    }
+    for (const gate of level.gates.values()) {
+      if (!gate.link) continue;
+      const [gx,gy]=cellCenter(gate.x,gate.y),[bx,by]=cellCenter(gate.link[0],gate.link[1]);
+      label(gx+unit*.31,gy-unit*.31,gate.link[2]);
+      label(bx+unit*.31,by-unit*.31,gate.link[2]);
+    }
+    function piece(block,x,y,alpha=1,scale=1) {
+      const [cx,cy]=cellCenter(x,y),palette=colors[block.color];
+      ctx.save();ctx.translate(cx,cy);ctx.scale(scale,scale);ctx.globalAlpha=alpha;
+      const glow=selected===block.id||advice?.id===block.id;
+      if (glow) rect(-unit*.49,-unit*.49,unit*.98,unit*.98,unit*.15,'#fff5ca','#493a2d');
+      rect(-unit*.41,-unit*.35,unit*.82,unit*.80,unit*.14,palette.side);
+      rect(-unit*.41,-unit*.43,unit*.82,unit*.78,unit*.14,palette.top,palette.side);
+      font(.39);text(palette.symbol,0,-unit*.045,palette.ink);
+      font(.15,700);text(block.id,-unit*.25,-unit*.24,palette.ink);
+      ctx.restore();
+    }
+    const marked=advice?.move||preview;
+    if (marked?.next) {
+      const [x,y]=cellCenter(marked.x,marked.y);
+      rect(x-unit*.42,y-unit*.42,unit*.84,unit*.84,unit*.13,'#fff9e1','#80592a');
+    }
+    for (const block of state.blocks) {
+      if (motion?.block.id===block.id || drag?.id===block.id&&preview?.next) continue;
+      piece(block,block.x,block.y);
+    }
+    if (drag&&preview?.next) {
+      const block=state.blocks.find(p=>p.id===drag.id);
+      piece(block,preview.x,preview.y,.86);
+    }
+    if (motion) {
+      const {block,move,t,dragged}=motion;
+      const link=move.gate?.link;
+      const launchAt=dragged?0:.48;
+      const progress=link?Math.min(1,t/.48):t,ease=1-(1-progress)**3;
+      if (link&&t>=launchAt) {
+        const p=(t-launchAt)/(1-launchAt),x=move.x+(link[0]-move.x)*p,y=move.y+(link[1]-move.y)*p;
+        if (p<.82) piece(block,x,y,1,1-.38*p);
+        else { const [cx,cy]=cellCenter(link[0],link[1]);bridge(cx,cy,.7+.3*p); }
+      } else {
+        piece(block,block.x+(move.x-block.x)*ease,block.y+(move.y-block.y)*ease,move.gate&&!link?1-.65*progress:1);
+      }
+    }
+  }
+
+  function position(event) {
+    const bounds=canvas.getBoundingClientRect();
+    return {x:event.clientX-bounds.left,y:event.clientY-bounds.top};
+  }
+  canvas.addEventListener('pointerdown',event=>{
+    if (!event.isPrimary||event.button!==0||motion||!unit) return;
+    const p=position(event),x=Math.floor((p.x-left)/unit),y=Math.floor((p.y-top)/unit);
+    const block=state.blocks.find(b=>b.x===x&&b.y===y);
+    if (!block) return;
+    canvas.focus({preventScroll:true});canvas.setPointerCapture(event.pointerId);
+    selected=block.id;advice=null;
+    drag={...p,id:block.id,pointer:event.pointerId,axis:null};
+    draw();
+  });
+  function dragTo(event) {
+    if (drag?.pointer!==event.pointerId) return;
+    const p=position(event),dx=p.x-drag.x,dy=p.y-drag.y;
+    if (!drag.axis&&Math.max(Math.abs(dx),Math.abs(dy))>unit*.2) drag.axis=Math.abs(dx)>=Math.abs(dy)?'x':'y';
+    if (!drag.axis) return;
+    const amount=(drag.axis==='x'?dx:dy)/unit,steps=Math.abs(Math.round(amount));
+    preview=steps?travel(level,state,drag.id,drag.axis==='x'?Math.sign(amount):0,drag.axis==='y'?Math.sign(amount):0,steps):null;
+    draw();
+  }
+  canvas.addEventListener('pointermove',dragTo);
+  canvas.addEventListener('pointerup',event=>{
+    if (drag?.pointer!==event.pointerId) return;
+    dragTo(event);
+    const id=drag.id,move=preview;
+    drag=preview=null;
+    if (move) commit(id,move,true);else draw();
+  });
+  canvas.addEventListener('lostpointercapture',()=>{ if(drag){drag=preview=null;draw();} });
+  canvas.addEventListener('pointercancel',()=>{drag=preview=null;draw();});
+  canvas.addEventListener('keydown',event=>{
+    if (motion||drag) return;
+    const block=state.blocks.find(p=>String(p.id)===event.key);
+    if (block) {
+      event.preventDefault();selected=block.id;draw();return;
+    }
+    const delta={ArrowRight:[1,0],ArrowLeft:[-1,0],ArrowDown:[0,1],ArrowUp:[0,-1]}[event.key];
+    if (!delta||!state.blocks.length) return;
+    event.preventDefault();
+    if (!state.blocks.some(p=>p.id===selected)) selected=state.blocks[0].id;
+    commit(selected,travel(level,state,selected,...delta,1));
+  });
+  $('undo').addEventListener('click',()=>{
+    if (!history.length||motion) return;
+    state=history.pop();drag=preview=advice=null;
+    status('Đã hoàn tác. Thử kéo về một cổng khác.');update();
+  });
+  $('reset').addEventListener('click',()=>load(index));
+  $('next').addEventListener('click',()=>{ if(index+1<boards.length)load(index+1); });
+  $('hint').addEventListener('click',()=>{
+    if (motion) return;
+    const result=solve(level,state);
+    advice=result.move;
+    if (!result.solvable) status('Bàn này đã kẹt. Hoàn tác một lượt để thử lại.','stuck');
+    else if (advice) {
+      const p=state.blocks.find(block=>block.id===advice.id),n=advice.steps;
+      status('Kéo khối '+colors[p.color].label+' '+directionLabel(advice.dx,advice.dy)+' '+n+' ô tới vị trí sáng.');
+    }
+    draw();
+  });
+  new ResizeObserver(draw).observe(canvas);
+  load(0);
+})();
+</script>
+</body>
+</html>

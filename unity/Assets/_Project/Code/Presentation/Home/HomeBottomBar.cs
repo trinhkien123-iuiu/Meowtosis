@@ -35,6 +35,7 @@ namespace Meowtosis.Presentation
         private Vector2[] iconRestPositions = Array.Empty<Vector2>();
         private SkeletonGraphic[] animatedIcons = Array.Empty<SkeletonGraphic>();
         private int lastSelected = -1;
+        private HomeSettingsTabFeedback settingsFeedback;
 
         public event Action<int> TabClicked;
 
@@ -47,6 +48,10 @@ namespace Meowtosis.Presentation
                 var closeness = Mathf.SmoothStep(0f, 1f, 1f - Mathf.Abs(clamped - tab));
                 tabs[tab].icon.anchoredPosition = iconRestPositions[tab] + Vector2.up * (selectedIconLift * closeness);
                 tabs[tab].icon.localScale = Vector3.one * Mathf.Lerp(1f, selectedIconScale, closeness);
+                if ((HomeTab)tab == HomeTab.Settings)
+                    tabs[tab].icon.localScale *= 0.85f;
+                if ((HomeTab)tab == HomeTab.Settings && settingsFeedback != null)
+                    settingsFeedback.SetBaseScale(tabs[tab].icon.localScale);
                 tabs[tab].label.alpha = closeness;
                 if (selected != lastSelected && animatedIcons[tab] != null &&
                     (lastSelected < 0 || tab == selected || tab == lastSelected))
@@ -111,7 +116,18 @@ namespace Meowtosis.Presentation
             {
                 var index = tab;
                 iconRestPositions[tab] = tabs[tab].icon.anchoredPosition;
-                tabs[tab].button.onClick.AddListener(() => TabClicked?.Invoke(index));
+                if ((HomeTab)tab == HomeTab.Settings)
+                {
+                    settingsFeedback = tabs[tab].button.GetComponent<HomeSettingsTabFeedback>();
+                    if (settingsFeedback == null)
+                        settingsFeedback = tabs[tab].button.gameObject.AddComponent<HomeSettingsTabFeedback>();
+                    settingsFeedback.Bind(tabs[tab].icon);
+                }
+                tabs[tab].button.onClick.AddListener(() =>
+                {
+                    if ((HomeTab)index == HomeTab.Settings) settingsFeedback.PlayClick();
+                    TabClicked?.Invoke(index);
+                });
                 if (tabs[tab].animation != null && iconMaterial != null)
                     animatedIcons[tab] = CreateAnimatedIcon(tabs[tab]);
             }
